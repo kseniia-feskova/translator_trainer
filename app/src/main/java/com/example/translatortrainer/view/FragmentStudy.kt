@@ -1,0 +1,33 @@
+package com.example.translatortrainer.view
+
+import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import com.example.translatortrainer.R
+import com.example.translatortrainer.databinding.FragmentStudyBinding
+
+class FragmentStudy : Fragment() {
+
+    private lateinit var binding: FragmentStudyBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        // Inflate the layout for this fragment
+        binding = FragmentStudyBinding.inflate(layoutInflater)
+        return binding.root
+    }
+
+    companion object {
+        @JvmStatic
+        fun newInstance() =
+            FragmentStudy()
+    }
+}
