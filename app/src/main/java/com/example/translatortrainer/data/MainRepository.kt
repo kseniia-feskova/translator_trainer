@@ -5,10 +5,6 @@ import com.example.translatortrainer.utils.CustomTranslator
 import com.example.translatortrainer.utils.Language
 import io.reactivex.Observable
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.withContext
 
 class MainRepository(
@@ -20,20 +16,11 @@ class MainRepository(
         return translator.translate(text, Language.RUSSIAN, language).translatedText
     }
 
-    suspend fun addNewWord(newWord: WordEntity) = withContext(Dispatchers.IO){
+    suspend fun addNewWord(newWord: WordEntity) = withContext(Dispatchers.IO) {
         dao.insertAll(newWord)
     }
 
-    fun getAllWords(): List<WordEntity> {
-         return dao.getAll()
-    }
-
-    fun getFiveWords(): List<WordEntity> {
-        val all = getAllWords().shuffled()
-        return all.subList(0, 4)
-    }
-
-    fun getAllObservable(): Observable<List<WordEntity>> {
-        return dao.getAllObservable()
+    fun getLastWord(count: Int): Observable<List<WordEntity>> {
+        return dao.getLastWords(count)
     }
 }

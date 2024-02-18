@@ -9,15 +9,7 @@
         android:id="@+id/fragmentMain"
         android:name="com.example.translatortrainer.view.FragmentMain"
         android:label="fragment_main"
-        tools:layout="@layout/fragment_main">
-        <action
-            android:id="@+id/action_fragmentMain_to_fragmentStudy"
-            app:destination="@id/fragmentStudy"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
-    </fragment>
+        tools:layout="@layout/fragment_main" />
     <fragment
         android:id="@+id/fragmentStudy"
         android:name="com.example.translatortrainer.view.FragmentStudy"
@@ -26,13 +18,6 @@
         <action
             android:id="@+id/action_fragmentStudy_to_fragmentMapping"
             app:destination="@id/fragmentMapping"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
-        <action
-            android:id="@+id/action_fragmentStudy_to_fragmentMain"
-            app:destination="@id/fragmentMain"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"

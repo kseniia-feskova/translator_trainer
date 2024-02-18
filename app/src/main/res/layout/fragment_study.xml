@@ -49,11 +49,5 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dp"
             android:text="all words" />
-
-        <com.google.android.material.textview.MaterialTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Change language"
-            android:textAlignment="center" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 </FrameLayout>

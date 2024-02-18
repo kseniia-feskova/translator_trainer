@@ -12,22 +12,18 @@ class FragmentStudy : Fragment() {
 
     private lateinit var binding: FragmentStudyBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         binding = FragmentStudyBinding.inflate(layoutInflater)
+        handleNavigation()
         return binding.root
     }
 
-    companion object {
-        @JvmStatic
-        fun newInstance() =
-            FragmentStudy()
+    private fun handleNavigation(){
+        binding.mapping.setOnClickListener {
+            (requireActivity() as MainActivity).getNavigator().navigate(R.id.fragmentMapping)
+        }
     }
 }

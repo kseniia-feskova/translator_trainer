@@ -19,16 +19,7 @@ class FragmentMapping : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         binding = FragmentMappingBinding.inflate(layoutInflater)
         return binding.root
-    }
-
-    companion object {
-
-        @JvmStatic
-        fun newInstance() =
-            FragmentMapping()
-
     }
 }
