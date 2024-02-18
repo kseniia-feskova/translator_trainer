@@ -24,4 +24,7 @@ interface HistoryDAO {
 
     @Query("SELECT * FROM wordentity")
     fun getAll(): List<WordEntity>
+
+    @Query("SELECT * FROM wordentity ORDER BY id DESC LIMIT :count")
+    fun getLastWords(count: Int): Observable<List<WordEntity>>
 }

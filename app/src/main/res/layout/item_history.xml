@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     style="@style/Widget.Material3.CardView.Outlined"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     android:clickable="true"
+    android:focusable="true"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    android:focusable="true">
+    app:layout_constraintTop_toTopOf="parent">
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="wrap_content"
@@ -21,9 +22,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:gravity="bottom"
-            android:text="Deutsche"
             android:textColor="@color/design_default_color_primary_dark"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            tools:text="Deutsche" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/translation"
@@ -31,9 +32,19 @@
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/word"
             android:gravity="bottom"
-            android:text="немецкий"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            tools:text="немецкий" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
+    <TextView
+        android:id="@+id/sourceLanguage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="10dp"
+        android:gravity="bottom"
+        android:textColor="@color/lightGray"
+        android:textSize="12sp"
+        tools:text="German" />
 </androidx.cardview.widget.CardView>

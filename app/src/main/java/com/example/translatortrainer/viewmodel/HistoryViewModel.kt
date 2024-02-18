@@ -1,70 +1,61 @@
 package com.example.translatortrainer.viewmodel
 
-import androidx.appcompat.widget.SearchView
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.translatortrainer.data.MainRepository
 import com.example.translatortrainer.data.WordEntity
-import com.example.translatortrainer.room.HistoryDAO
-import com.example.translatortrainer.utils.ConstTest
-import com.example.translatortrainer.utils.CustomTranslator
+import com.example.translatortrainer.data.WordsRepository
 import com.example.translatortrainer.utils.Language
-import com.example.translatortrainer.utils.getQueryTextChangeStateFlow
+import io.ktor.util.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
-class HistoryViewModel(private val repository: MainRepository) : ViewModel() {
+class HistoryViewModel(private val repository: WordsRepository) : ViewModel() {
 
-    private val _allWords = MutableLiveData(ConstTest.getList())
+    private val _allWords = MutableLiveData(emptyList<WordEntity>())
     val allWords: LiveData<List<WordEntity>> = _allWords
 
-    fun startObserve() {
-        repository.getAllObservable().subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread()).map { _allWords.value = it }.subscribe()
-    }
-
-    private val _word = MutableSharedFlow<String>()
-    val word: SharedFlow<String> = _word.asSharedFlow()
-
-    private val _translation = MutableSharedFlow<String>()
+    private val _translation = MutableSharedFlow<String>(replay = 1)
     val translation: SharedFlow<String> = _translation.asSharedFlow()
 
-    fun getSearch(searchView: SearchView) {
-        viewModelScope.launch {
-            searchView.getQueryTextChangeStateFlow()
-                .debounce(300)
-                .filter { query ->
-                    if (query.isEmpty()) {
-                        _translation.tryEmit("")
-                        return@filter false
-                    } else {
-                        return@filter true
-                    }
-                }
-                .distinctUntilChanged()
-                .flowOn(Dispatchers.Default)
-                .collect { result ->
-                    _word.tryEmit(result)
-                }
-        }
+    private var _language = Language.GERMAN
+    fun startHistoryObserve() {
+        repository.getLastWord(5).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .map { _allWords.value = it }
+            .subscribe()
     }
 
     fun translate(text: String) {
         viewModelScope.launch {
-            val translation = repository.getTranslate(text, Language.GERMAN)
-            _translation.emit(translation)
-            addWord(text,translation)
+            try {
+                val translation = repository.getTranslate(text, _language)
+                _translation.emit(translation)
+                addWord(text, translation, _language.name)
+            } catch (e: Exception) {
+                Log.e("translate", "Error = ${e.message}")
+                _translation.emit("Error")
+            }
         }
     }
-    private fun addWord(text:String, translation:String){
+
+    fun setLanguage(language: String) {
+        when (language) {
+            Language.GERMAN.name.toLowerCasePreservingASCIIRules() -> _language = Language.GERMAN
+            Language.FRENCH.name.toLowerCasePreservingASCIIRules() -> _language = Language.FRENCH
+            Language.ENGLISH.name.toLowerCasePreservingASCIIRules() -> _language = Language.ENGLISH
+        }
+    }
+
+    private fun addWord(text: String, translation: String, language: String) {
         viewModelScope.launch {
-            repository.addNewWord(WordEntity(3, text, translation, "German"))
+            repository.addNewWord(WordEntity(3, text, translation, language))
         }
     }
 }
