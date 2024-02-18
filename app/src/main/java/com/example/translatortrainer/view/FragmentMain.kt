@@ -1,9 +1,11 @@
 package com.example.translatortrainer.view
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -46,6 +48,7 @@ class FragmentMain : Fragment() {
 
     private fun initView() {
         binding.translateBtn.setOnClickListener {
+            hideKeyboard()
             val text = binding.request.text.toString()
             viewModel.translate(text)
         }
@@ -87,5 +90,10 @@ class FragmentMain : Fragment() {
             )
         )
         binding.selectedTranslation.setSelection(0)
+    }
+
+    fun hideKeyboard() {
+        val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(binding.root.windowToken, 0)
     }
 }
