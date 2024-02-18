@@ -10,9 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:visibility="invisible"
         android:text="Sorry, you do not have any words in vocabulary"
-        />
+        android:visibility="invisible" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/grid"
@@ -33,13 +32,11 @@
                 android:id="@+id/first"
                 android:layout_width="128dp"
                 android:layout_height="wrap_content"
-                android:text="Word1"
                 android:layout_marginRight="56dp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/second"
                 android:layout_width="128dp"
-                android:text="Translation4"
                 android:layout_height="wrap_content" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
@@ -129,5 +126,17 @@
         </androidx.appcompat.widget.LinearLayoutCompat>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <FrameLayout
+        android:id="@+id/wipFL"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/wip"
+            layout="@layout/layout_work_in_progress"
+            />
+
+    </FrameLayout>
 
 </FrameLayout>

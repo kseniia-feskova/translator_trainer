@@ -11,24 +11,16 @@ import com.example.translatortrainer.databinding.FragmentMappingBinding
 class FragmentMapping : Fragment() {
 
     lateinit var binding: FragmentMappingBinding
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
+        (requireActivity() as MainActivity).hideBottomMenu()
         binding = FragmentMappingBinding.inflate(layoutInflater)
+        binding.wip.backBtn.setOnClickListener {
+            (requireActivity() as MainActivity).getNavigator().navigateUp()
+        }
         return binding.root
-    }
-
-    companion object {
-
-        @JvmStatic
-        fun newInstance() =
-            FragmentMapping()
-
     }
 }

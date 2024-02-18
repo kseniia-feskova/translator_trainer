@@ -20,7 +20,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="16dp"
-        android:background="@color/purple_200"
         app:itemTextColor="@color/design_default_color_primary_dark"
         android:textAlignment="center"
         app:itemIconSize="20dp"
