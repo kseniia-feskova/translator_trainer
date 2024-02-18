@@ -7,13 +7,13 @@ import io.reactivex.Observable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class MainRepository(
+class WordsRepository(
     private val dao: HistoryDAO,
     private val translator: CustomTranslator
 ) {
 
     suspend fun getTranslate(text: String, language: Language): String {
-        return translator.translate(text, Language.RUSSIAN, language).translatedText
+        return translator.translate(text, Language.UKRAINIAN, language).translatedText
     }
 
     suspend fun addNewWord(newWord: WordEntity) = withContext(Dispatchers.IO) {

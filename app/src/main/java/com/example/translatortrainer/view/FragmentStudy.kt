@@ -16,6 +16,7 @@ class FragmentStudy : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        (requireActivity() as MainActivity).showBottomMenu()
         binding = FragmentStudyBinding.inflate(layoutInflater)
         handleNavigation()
         return binding.root

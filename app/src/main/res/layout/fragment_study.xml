@@ -6,21 +6,12 @@
     tools:context=".view.FragmentStudy">
 
 
-
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:orientation="vertical"
         android:paddingHorizontal="64dp">
-
-        <com.google.android.material.textview.MaterialTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="32dp"
-            android:text="Language: Germany"
-
-            android:textAlignment="center" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/mapping"

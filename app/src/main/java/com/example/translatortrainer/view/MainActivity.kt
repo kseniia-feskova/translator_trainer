@@ -2,6 +2,7 @@ package com.example.translatortrainer.view
 
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -36,6 +37,14 @@ class MainActivity : AppCompatActivity() {
 
     fun getNavigator(): NavController {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-       return  navHostFragment.navController
+        return navHostFragment.navController
+    }
+
+    fun hideBottomMenu() {
+        binding.bottomNavigation.visibility = View.GONE
+    }
+
+    fun showBottomMenu() {
+        binding.bottomNavigation.visibility = View.VISIBLE
     }
 }

@@ -6,7 +6,6 @@ import io.ktor.client.plugins.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import kotlinx.coroutines.runBlocking
 
 
 class CustomTranslator(
@@ -15,13 +14,11 @@ class CustomTranslator(
             agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
         }
         HttpResponseValidator {
-            // This is run for all responses
             validateResponse { response ->
                 if (!response.status.isSuccess()) {
                     throw TranslationException("Error caught from HTTP request: ${response.status}")
                 }
             }
-            // This is run only when an exception is thrown, including our custom ones
             handleResponseExceptionWithRequest { cause, _ ->
                 if (cause !is TranslationException) {
                     throw TranslationException("Exception caught from HTTP request", cause)
@@ -49,29 +46,8 @@ class CustomTranslator(
         return Translation(target, text, response.bodyAsText(), response.request.url)
     }
 
-
-    suspend fun translateCatching(
-        text: String,
-        target: Language,
-        source: Language = Language.AUTO
-    ): Result<Translation> = runCatching { translate(text, target, source) }
-
-
-    @JvmOverloads
-    fun translateBlocking(
-        text: String,
-        target: Language,
-        source: Language = Language.AUTO
-    ): Translation = runBlocking { translate(text, target, source) }
-
-    fun translateBlockingCatching(
-        text: String,
-        target: Language,
-        source: Language = Language.AUTO
-    ): Result<Translation> = runBlocking { translateCatching(text, target, source) }
 }
 
-// I didn't find these myself, check out https://github.com/ssut/py-googletrans
 private val dtParams = arrayOf("at", "bd", "ex", "ld", "md", "qca", "rw", "rm", "ss", "t")
 
 // ^^^
@@ -86,7 +62,3 @@ private fun HttpRequestBuilder.constantParameters() {
     parameter("tk", "bushissocool")
 }
 
-/**
- * Indicates an exception/error relating to the translation's HTTP request.
- */
-class TranslationException(message: String, cause: Throwable? = null) : Exception(message, cause)

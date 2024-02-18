@@ -1,9 +1,11 @@
-package com.example.translatortrainer.data
+package com.example.translatortrainer.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.translatortrainer.data.WordDiffCallback
+import com.example.translatortrainer.data.WordEntity
 import com.example.translatortrainer.databinding.ItemHistoryBinding
 
 class HistoryListAdapter(
@@ -25,6 +27,7 @@ class HistoryListAdapter(
             with(_history[position]) {
                 binding.translation.text = this.translation
                 binding.word.text = this.word
+                binding.sourceLanguage.text = this.language
             }
         }
     }
