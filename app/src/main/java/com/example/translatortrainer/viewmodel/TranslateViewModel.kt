@@ -7,7 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.data.data.WordEntity
 import com.data.data.WordsRepository
-import com.data.utils.Language
+import com.data.translate.Language
+import com.data.translate.toWordEntity
 import io.ktor.util.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -16,7 +17,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
-class HistoryViewModel(private val repository: WordsRepository) : ViewModel() {
+class TranslateViewModel(private val repository: WordsRepository) : ViewModel() {
 
     private val _allWords = MutableLiveData(emptyList<WordEntity>())
     val allWords: LiveData<List<WordEntity>> = _allWords
@@ -36,8 +37,9 @@ class HistoryViewModel(private val repository: WordsRepository) : ViewModel() {
         viewModelScope.launch {
             try {
                 val translation = repository.getTranslate(text, _language)
-                _translation.emit(translation)
-                addWord(text, translation, _language.name)
+                _translation.emit(translation.translatedText)
+                //TODO: add new word only on save click
+                repository.addNewWord(translation.toWordEntity())
             } catch (e: Exception) {
                 Log.e("translate", "Error = ${e.message}")
                 _translation.emit("Error")
@@ -50,12 +52,6 @@ class HistoryViewModel(private val repository: WordsRepository) : ViewModel() {
             Language.GERMAN.name.toLowerCasePreservingASCIIRules() -> _language = Language.GERMAN
             Language.FRENCH.name.toLowerCasePreservingASCIIRules() -> _language = Language.FRENCH
             Language.ENGLISH.name.toLowerCasePreservingASCIIRules() -> _language = Language.ENGLISH
-        }
-    }
-
-    private fun addWord(text: String, translation: String, language: String) {
-        viewModelScope.launch {
-            repository.addNewWord(WordEntity(3, text, translation, language))
         }
     }
 }

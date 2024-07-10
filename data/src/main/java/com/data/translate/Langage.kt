@@ -1,4 +1,4 @@
-package com.data.utils
+package com.data.translate
 
 /**
  * All languages recognized by Google Translate.

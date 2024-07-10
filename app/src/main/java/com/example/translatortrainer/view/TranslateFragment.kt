@@ -10,19 +10,19 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.translatortrainer.adapters.HistoryListAdapter
 import com.example.translatortrainer.databinding.FragmentMainBinding
-import com.data.utils.Language
-import com.example.translatortrainer.viewmodel.HistoryViewModel
+import com.data.translate.Language
+import com.example.translatortrainer.viewmodel.TranslateViewModel
 import io.ktor.util.*
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class FragmentMain : Fragment() {
+class TranslateFragment : Fragment() {
 
     private lateinit var binding: FragmentMainBinding
     private val adapter: HistoryListAdapter = HistoryListAdapter(emptyList())
 
-    private val viewModel by viewModel<HistoryViewModel>()
+    private val viewModel by viewModel<TranslateViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -91,7 +91,8 @@ class FragmentMain : Fragment() {
     }
 
     private fun hideKeyboard() {
-        val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val imm =
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(binding.root.windowToken, 0)
     }
 }
