@@ -1,4 +1,4 @@
-package com.example.translatortrainer.utils
+package com.data.utils
 
 /**
  * All languages recognized by Google Translate.

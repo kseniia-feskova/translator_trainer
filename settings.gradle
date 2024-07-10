@@ -8,3 +8,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Translator Trainer"
 include ':app'
+include ':data'

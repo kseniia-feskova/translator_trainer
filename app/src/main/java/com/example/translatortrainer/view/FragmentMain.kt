@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.translatortrainer.adapters.HistoryListAdapter
 import com.example.translatortrainer.databinding.FragmentMainBinding
-import com.example.translatortrainer.utils.Language
+import com.data.utils.Language
 import com.example.translatortrainer.viewmodel.HistoryViewModel
 import io.ktor.util.*
 import kotlinx.coroutines.launch

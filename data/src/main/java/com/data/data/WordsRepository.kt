@@ -1,8 +1,8 @@
-package com.example.translatortrainer.data
+package com.data.data
 
-import com.example.translatortrainer.room.HistoryDAO
-import com.example.translatortrainer.utils.CustomTranslator
-import com.example.translatortrainer.utils.Language
+import com.data.room.HistoryDAO
+import com.data.utils.CustomTranslator
+import com.data.utils.Language
 import io.reactivex.Observable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

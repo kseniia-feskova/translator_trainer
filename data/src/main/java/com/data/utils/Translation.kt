@@ -1,18 +1,11 @@
-package com.example.translatortrainer.utils
-
+package com.data.utils
 
 import io.ktor.http.*
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.jsonArray
-import java.util.Objects.hash
+import java.util.Objects.*
 
-/**
- * A class containing the results of a translation request.
- *
- * @author bush
- * @since 1.0.0
- */
 class Translation internal constructor(
     val targetLanguage: Language,
     val sourceText: String,

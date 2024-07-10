@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.translatortrainer.data.WordDiffCallback
-import com.example.translatortrainer.data.WordEntity
+import com.data.data.WordDiffCallback
+import com.data.data.WordEntity
 import com.example.translatortrainer.databinding.ItemHistoryBinding
 
 class HistoryListAdapter(

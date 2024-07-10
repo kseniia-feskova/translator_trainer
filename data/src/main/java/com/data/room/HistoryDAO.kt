@@ -1,7 +1,7 @@
-package com.example.translatortrainer.room
+package com.data.room
 
 import androidx.room.*
-import com.example.translatortrainer.data.WordEntity
+import com.data.data.WordEntity
 import io.reactivex.Observable
 
 @Dao

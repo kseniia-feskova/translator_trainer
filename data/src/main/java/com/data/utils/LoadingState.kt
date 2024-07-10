@@ -1,4 +1,4 @@
-package com.example.translatortrainer.utils
+package com.data.utils
 
 data class LoadingState private constructor(val status: Status, val msg: String? = null) {
     companion object {

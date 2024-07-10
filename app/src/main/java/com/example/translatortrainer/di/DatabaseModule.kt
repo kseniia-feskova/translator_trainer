@@ -1,7 +1,7 @@
 package com.example.translatortrainer.di
 
 import android.app.Application
-import com.example.translatortrainer.room.HistoryDAO
+import com.data.room.HistoryDAO
 import com.example.translatortrainer.room.HistoryDatabase
 import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module

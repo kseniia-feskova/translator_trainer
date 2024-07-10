@@ -5,9 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.translatortrainer.data.WordEntity
-import com.example.translatortrainer.data.WordsRepository
-import com.example.translatortrainer.utils.Language
+import com.data.data.WordEntity
+import com.data.data.WordsRepository
+import com.data.utils.Language
 import io.ktor.util.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -28,7 +28,7 @@ class HistoryViewModel(private val repository: WordsRepository) : ViewModel() {
     fun startHistoryObserve() {
         repository.getLastWord(5).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .map { _allWords.value = it }
+            .map { _allWords.value = it.reversed() }
             .subscribe()
     }
 

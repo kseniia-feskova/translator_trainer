@@ -1,4 +1,4 @@
-package com.example.translatortrainer.utils
+package com.data.utils
 
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
@@ -61,4 +61,3 @@ private fun HttpRequestBuilder.constantParameters() {
     parameter("tsel", 0)
     parameter("tk", "bushissocool")
 }
-

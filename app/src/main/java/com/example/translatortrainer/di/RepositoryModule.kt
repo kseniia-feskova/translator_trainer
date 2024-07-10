@@ -1,8 +1,8 @@
 package com.example.translatortrainer.di
 
-import com.example.translatortrainer.data.WordsRepository
-import com.example.translatortrainer.room.HistoryDAO
-import com.example.translatortrainer.utils.CustomTranslator
+import com.data.data.WordsRepository
+import com.data.room.HistoryDAO
+import com.data.utils.CustomTranslator
 import org.koin.dsl.module
 
 val repositoryModule = module {

@@ -1,4 +1,4 @@
-package com.example.translatortrainer.data
+package com.data.data
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
