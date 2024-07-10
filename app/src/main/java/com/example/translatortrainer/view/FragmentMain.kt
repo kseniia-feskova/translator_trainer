@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.translatortrainer.adapters.HistoryListAdapter
 import com.example.translatortrainer.databinding.FragmentMainBinding
 import com.example.translatortrainer.utils.Language
@@ -21,7 +20,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class FragmentMain : Fragment() {
 
     private lateinit var binding: FragmentMainBinding
-    private lateinit var adapter: HistoryListAdapter
+    private val adapter: HistoryListAdapter = HistoryListAdapter(emptyList())
 
     private val viewModel by viewModel<HistoryViewModel>()
 
@@ -37,6 +36,7 @@ class FragmentMain : Fragment() {
         super.onResume()
         handleSourceLanguage()
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         handleSourceLanguage()
@@ -66,33 +66,31 @@ class FragmentMain : Fragment() {
     }
 
     private fun initAdapter() {
-        binding.historyList.layoutManager = LinearLayoutManager(context)
-        adapter = HistoryListAdapter(emptyList())
         binding.historyList.adapter = adapter
     }
 
     private fun handleSourceLanguage() {
-        binding.selectedLanguage.setSimpleItems(
-            arrayOf(
-                Language.GERMAN.name.toLowerCasePreservingASCIIRules(),
-                Language.FRENCH.name.toLowerCasePreservingASCIIRules(),
-                Language.ENGLISH.name.toLowerCasePreservingASCIIRules()
+        with(binding) {
+            selectedLanguage.setSimpleItems(
+                arrayOf(
+                    Language.GERMAN.name.toLowerCasePreservingASCIIRules(),
+                    Language.FRENCH.name.toLowerCasePreservingASCIIRules(),
+                    Language.ENGLISH.name.toLowerCasePreservingASCIIRules()
+                )
             )
-        )
-        binding.selectedLanguage.setSelection(0)
-        binding.selectedLanguage.setOnItemClickListener { parent, _, position, _ ->
-            val selectedItem = parent.getItemAtPosition(position) as String
-            viewModel.setLanguage(selectedItem)
+            selectedLanguage.setSelection(0)
+            selectedLanguage.setOnItemClickListener { parent, _, position, _ ->
+                val selectedItem = parent.getItemAtPosition(position) as String
+                viewModel.setLanguage(selectedItem)
+            }
+            selectedTranslation.setSimpleItems(
+                arrayOf(Language.UKRAINIAN.name.toLowerCasePreservingASCIIRules())
+            )
+            selectedTranslation.setSelection(0)
         }
-        binding.selectedTranslation.setSimpleItems(
-            arrayOf(
-                Language.UKRAINIAN.name.toLowerCasePreservingASCIIRules()
-            )
-        )
-        binding.selectedTranslation.setSelection(0)
     }
 
-    fun hideKeyboard() {
+    private fun hideKeyboard() {
         val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(binding.root.windowToken, 0)
     }

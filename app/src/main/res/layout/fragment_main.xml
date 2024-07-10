@@ -12,15 +12,15 @@
         android:layout_height="wrap_content">
 
         <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="48dp"
             android:gravity="center"
+            android:text="Input your word to translate"
             android:textColor="@color/purple_700"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:text="Input your word to translate"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/translationContainer"
