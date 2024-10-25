@@ -1,7 +1,7 @@
 package com.data.room
 
 import androidx.room.*
-import com.data.data.WordEntity
+import com.data.model.WordEntity
 import io.reactivex.Observable
 
 @Dao
@@ -21,6 +21,9 @@ interface HistoryDAO {
 
     @Delete
     fun delete(word: WordEntity)
+
+    @Query("DELETE FROM wordentity WHERE id = :id")
+    fun deleteById(id: Int)
 
     @Query("SELECT * FROM wordentity")
     fun getAll(): List<WordEntity>

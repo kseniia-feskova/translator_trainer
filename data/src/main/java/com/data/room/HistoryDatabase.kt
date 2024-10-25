@@ -1,11 +1,10 @@
-package com.example.translatortrainer.room
+package com.data.room
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.data.room.HistoryDAO
-import com.data.data.WordEntity
+import com.data.model.WordEntity
 
 @Database(entities = [WordEntity::class], version = 2)
 abstract class HistoryDatabase : RoomDatabase() {

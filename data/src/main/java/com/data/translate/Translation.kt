@@ -1,6 +1,6 @@
 package com.data.translate
 
-import com.data.data.WordEntity
+import com.data.model.WordEntity
 import io.ktor.http.*
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
