@@ -1,36 +1,31 @@
 package com.data.di
 
 import com.data.api.TranslateService
-import com.data.repository.translate.TranslateRepository
-import com.data.translate.CustomTranslator
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-val translatorModule = module {
-    single { CustomTranslator() }
-}
-
-// Создаем логгер для логирования тела запросов и ответов
-val logging = HttpLoggingInterceptor().apply {
-    level = HttpLoggingInterceptor.Level.BODY
-}
-
-val bankClient = OkHttpClient.Builder()
-    .addInterceptor(logging)
-    .build()
-
 
 val networkModule = module {
     single {
+        HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+    }
+    single {
+        OkHttpClient.Builder()
+            .addInterceptor(get<HttpLoggingInterceptor>())
+            .build()
+    }
+
+    single<TranslateService> {
         Retrofit.Builder()
-            .client(bankClient)
+            .client(get<OkHttpClient>())
             .baseUrl("https://api.mymemory.translated.net/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(TranslateService::class.java)
     }
-    single { TranslateRepository(get()) }
 }

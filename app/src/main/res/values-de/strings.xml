@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title">Reise nach dem Mittelpunkt der Erde</string>
+    <string name="uncle">Oheim</string>
+    <string name="Hurry">Eile</string>
+    <string name="house">heim</string>
+    <string name="district">Stadtviertels</string>
+    <string name="herd">Heerde</string>
+    <string name="cook">sieden</string>
+    <string name="impatient">ungeduldige</string>
+    <string name="zeter">Zeter</string>
+    <string name="cry">schreien</string>
+    <string name="confusion">Besturung</string>
+    <string name="to">indem</string>
+    <string name="dining_room">Speisezimmers</string>
+    <string name="beaten">geschlagen</string>
+    <string name="breaks_away">kommt ab</string>
+    <string name="supposedly">vermutlich</string>
+    <string name="understanding">Einsicht</string>
+    <string name="rushed">eilte</string>
+    <string name="angry">zornigen</string>
+    <string name="hesitating">schwankenden</string>
+    <string name="therefore">daher</string>
+    <string name="expression">Begriff</string>
+    <string name="smart">kluglich</string>
+    <string name="small_room">Zimmerchen</string>
+    <string name="up">hinauf</string>
+    <string name="went_on_board">begeben</string>
+    <string name="haustur">Hausthur</string>
+    <string name="creaked">knarrten</string>
+    <string name="hausbern">Hausberrn</string>
+    <string name="steps">schritten</string>
+    <string name="noisy">gerauschvoll</string>
+    <string name="wooden">holzerne</string>
+    <string name="stairs">Treppe</string>
+    <string name="through">quer</string>
+    <string name="more_hastily">hastiger</string>
+</resources>

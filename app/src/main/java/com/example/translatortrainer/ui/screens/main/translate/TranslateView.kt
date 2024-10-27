@@ -1,4 +1,4 @@
-package com.example.translatortrainer.ui.translate
+package com.example.translatortrainer.ui.screens.main.translate
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import com.example.translatortrainer.ui.secondaryColor
-import com.example.translatortrainer.ui.translate.model.TranslatorState
+import com.example.translatortrainer.ui.screens.main.translate.model.TranslatorState
 
 @Composable
 fun TranslateView(

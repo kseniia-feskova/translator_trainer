@@ -1,6 +1,7 @@
-package com.example.translatortrainer.ui.bottom
+package com.example.translatortrainer.ui.screens.main.bottom
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,10 +32,12 @@ import com.example.translatortrainer.ui.secondaryColor
 fun BottomView(
     modifier: Modifier = Modifier,
     text: String = "Новые слова",
-    backgroundColor: Color = Color(0xFFFDFDFD)
+    backgroundColor: Color = Color(0xFFFDFDFD),
+    onDeckSelect: (String) -> Unit = {}
 ) {
     Column(
         modifier = Modifier
+            .clickable { onDeckSelect(text) }
             .then(modifier)
             .height(300.dp)
             .background(
@@ -81,21 +84,27 @@ fun BottomView(
 }
 
 @Composable
-fun ThreeBottomView(modifier: Modifier) {
+fun ThreeBottomView(modifier: Modifier, onDeckSelect: (String) -> Unit = {}) {
     Box(modifier) {
-        BottomView(text = "Продолжить", backgroundColor = accentSecondColor)
+        BottomView(
+            text = "Продолжить",
+            backgroundColor = accentSecondColor,
+            onDeckSelect = onDeckSelect
+        )
         BottomView(
             modifier = Modifier
                 .padding(top = 64.dp)
                 .zIndex(1f),  // Низкий z-индекс,
-            backgroundColor = accentColor
+            backgroundColor = accentColor,
+            onDeckSelect = onDeckSelect
         )
         BottomView(
             text = "Все слова",
             modifier = Modifier
                 .padding(top = 128.dp)
                 .zIndex(2f),  // Низкий z-индекс,
-            backgroundColor = secondaryColor
+            backgroundColor = secondaryColor,
+            onDeckSelect = onDeckSelect
         )
     }
 }

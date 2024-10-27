@@ -1,22 +1,26 @@
-package com.example.translatortrainer.ui.translate
+package com.example.translatortrainer.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.translatortrainer.ui.translate.model.TranslatorIntent
-import com.example.translatortrainer.ui.translate.model.TranslatorState
-import kotlinx.coroutines.Job
+import com.data.repository.translate.ITranslateRepository
+import com.example.translatortrainer.ui.screens.main.translate.model.TranslatorIntent
+import com.example.translatortrainer.ui.screens.main.translate.model.TranslatorState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 
-class TranslatorViewModel : ViewModel() {
+
+class TranslatorViewModel(
+    private val translateRepository: ITranslateRepository
+) : ViewModel() {
     private val _inputText = MutableStateFlow("")
     private val _uiState = MutableStateFlow(TranslatorState())
     val uiState = _uiState.asStateFlow()
 
     init {
+        //TODO - refactor!!!
         viewModelScope.launch {
             _inputText
                 .debounce(3000) // Дебаунс с задержкой 3 секунды
@@ -28,8 +32,6 @@ class TranslatorViewModel : ViewModel() {
         }
     }
 
-    private var translateJob: Job? = null
-
     fun handleIntent(intent: TranslatorIntent) {
         when (intent) {
             is TranslatorIntent.EnterText -> {
@@ -39,9 +41,9 @@ class TranslatorViewModel : ViewModel() {
         }
     }
 
-    // Выполнение перевода с задержкой
+
     private suspend fun performTranslation(text: String): String {
-        return "text"
+        return translateRepository.getTranslate(text) ?: ""
     }
 
 }

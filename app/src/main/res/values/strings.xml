@@ -1,14 +1,38 @@
 <resources>
-    <string name="app_name">Translator Trainer</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_main">MainActivity</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
-
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="app_name" translatable="false">Translator Trainer</string>
+    <string name="title">Путешествие в центр земли</string>
+    <string name="uncle">Дядя</string>
+    <string name="Hurry">Торопиться</string>
+    <string name="house">дом</string>
+    <string name="district">округ</string>
+    <string name="herd">стадо</string>
+    <string name="cook">варить</string>
+    <string name="impatient">нетерпеливый</string>
+    <string name="zeter">Зетер</string>
+    <string name="cry">крик</string>
+    <string name="confusion">смятение</string>
+    <string name="to">к</string>
+    <string name="dining_room">столовая</string>
+    <string name="beaten">избитый</string>
+    <string name="breaks_away">отрывается</string>
+    <string name="supposedly">якобы</string>
+    <string name="understanding">понимание</string>
+    <string name="rushed">бросился</string>
+    <string name="angry">злой</string>
+    <string name="hesitating">колеблющийся</string>
+    <string name="therefore">поэтому</string>
+    <string name="expression">Выражение</string>
+    <string name="smart">умный</string>
+    <string name="small_room">маленькая комната</string>
+    <string name="up">вверх</string>
+    <string name="went_on_board">отправился на борт</string>
+    <string name="haustur">Хаустур</string>
+    <string name="creaked">скрипел</string>
+    <string name="hausbern">Хаусберн</string>
+    <string name="steps">шаги</string>
+    <string name="noisy">шумный</string>
+    <string name="wooden">деревянные</string>
+    <string name="stairs">Лестница</string>
+    <string name="through">через</string>
+    <string name="more_hastily">более поспешно</string>
 </resources>

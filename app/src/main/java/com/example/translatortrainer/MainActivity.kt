@@ -5,11 +5,10 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import com.data.di.coreModule
 import com.data.di.databaseModule
 import com.data.di.networkModule
 import com.data.di.repositoryModule
-import com.data.di.translatorModule
+import com.example.translatortrainer.di.appModule
 import com.example.translatortrainer.di.viewModelModule
 import com.example.translatortrainer.ui.core.TranslatorApp
 import org.koin.android.ext.koin.androidContext
@@ -27,12 +26,11 @@ class MainActivity : AppCompatActivity() {
             androidContext(applicationContext)
             modules(
                 listOf(
-                    coreModule,
+                    appModule,
+                    networkModule,
                     repositoryModule,
-                    viewModelModule,
                     databaseModule,
-                    translatorModule,
-                    networkModule
+                    viewModelModule,
                 )
             )
         }

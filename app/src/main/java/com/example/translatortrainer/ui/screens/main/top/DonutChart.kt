@@ -1,4 +1,4 @@
-package com.example.translatortrainer.ui.top
+package com.example.translatortrainer.ui.screens.main.top
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
@@ -38,7 +38,6 @@ fun DonutChart(
         Canvas(modifier = Modifier.fillMaxSize().padding(8.dp)) {
             // Размер холста
             val canvasSize = size.minDimension
-            val radius = (canvasSize / 2) - strokeWidth
 
             // Фон "пончика" (темный цвет)
             drawArc(

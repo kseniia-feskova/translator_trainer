@@ -1,4 +1,4 @@
-package com.example.translatortrainer.ui.translate.model
+package com.example.translatortrainer.ui.screens.main.translate.model
 
 
 data class TranslatorState(

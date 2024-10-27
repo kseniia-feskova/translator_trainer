@@ -14,7 +14,6 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/title_activity_main"
             android:theme="@style/Theme.TranslatorTrainer.NoActionBar"
             android:windowSoftInputMode = "adjustPan">
             <intent-filter>

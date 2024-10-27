@@ -1,4 +1,4 @@
-package com.example.translatortrainer.ui.top
+package com.example.translatortrainer.ui.screens.main.top
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import com.example.translatortrainer.ui.primaryColor
 import com.example.translatortrainer.ui.secondaryColor
 
-val allWordsCount = 30
+const val allWordsCount = 30
 
 @Composable
 fun TopView(

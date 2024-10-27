@@ -1,4 +1,4 @@
-package com.example.translatortrainer.ui.screens
+package com.example.translatortrainer.ui.screens.main
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -25,16 +25,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.translatortrainer.ui.bottom.ThreeBottomView
+import com.example.translatortrainer.ui.screens.main.bottom.ThreeBottomView
 import com.example.translatortrainer.ui.primaryColor
-import com.example.translatortrainer.ui.top.TopView
-import com.example.translatortrainer.ui.translate.TranslateView
-import com.example.translatortrainer.ui.translate.model.TranslatorState
+import com.example.translatortrainer.ui.screens.main.top.TopView
+import com.example.translatortrainer.ui.screens.main.translate.TranslateView
+import com.example.translatortrainer.ui.screens.main.translate.model.TranslatorState
 
 @Composable
 fun MainScreen(
     state: TranslatorState = TranslatorState(inputText = "Katze"),
-    onWordInput: (String) -> Unit = {}
+    onWordInput: (String) -> Unit = {},
+    onDeckSelect:(String) -> Unit = {}
 ) {
     var showTopView by remember { mutableStateOf(true) }
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
@@ -90,7 +91,8 @@ fun MainScreen(
             ) {
                 ThreeBottomView(
                     modifier = Modifier
-                        .height(bottomHeight)
+                        .height(bottomHeight),
+                    onDeckSelect
                 )
             }
 
