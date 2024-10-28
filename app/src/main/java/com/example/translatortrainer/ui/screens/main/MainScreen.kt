@@ -25,8 +25,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.translatortrainer.ui.screens.main.bottom.ThreeBottomView
 import com.example.translatortrainer.ui.primaryColor
+import com.example.translatortrainer.ui.screens.main.bottom.ThreeBottomView
 import com.example.translatortrainer.ui.screens.main.top.TopView
 import com.example.translatortrainer.ui.screens.main.translate.TranslateView
 import com.example.translatortrainer.ui.screens.main.translate.model.TranslatorState
@@ -35,13 +35,14 @@ import com.example.translatortrainer.ui.screens.main.translate.model.TranslatorS
 fun MainScreen(
     state: TranslatorState = TranslatorState(inputText = "Katze"),
     onWordInput: (String) -> Unit = {},
-    onDeckSelect:(String) -> Unit = {}
+    onDeckSelect: (String) -> Unit = {},
+    onEnterText: (String) -> Unit = {}
 ) {
     var showTopView by remember { mutableStateOf(true) }
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
 
     //val componentHeight = screenHeight * 0.2f
-    val donutSize = screenHeight*0.8f * 0.2f
+    val donutSize = screenHeight * 0.8f * 0.2f
     val bottomHeight = screenHeight * 0.3f
 
     Scaffold() { padding ->
@@ -54,7 +55,8 @@ fun MainScreen(
 
             // Animated top view
             AnimatedVisibility(
-                modifier = Modifier.wrapContentHeight()
+                modifier = Modifier
+                    .wrapContentHeight()
                     .align(Alignment.TopCenter),
                 visible = showTopView,
                 enter = slideInVertically(
@@ -73,7 +75,8 @@ fun MainScreen(
                     .align(Alignment.Center)
                     .padding(bottom = 100.dp),
                 state = state,
-                onTextChange = onWordInput
+                onTextChange = onWordInput,
+                onEnterText = onEnterText
             )
 
             AnimatedVisibility(

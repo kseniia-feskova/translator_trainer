@@ -7,40 +7,42 @@ import com.example.translatortrainer.ui.screens.main.translate.model.TranslatorI
 import com.example.translatortrainer.ui.screens.main.translate.model.TranslatorState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 
 class TranslatorViewModel(
     private val translateRepository: ITranslateRepository
 ) : ViewModel() {
-    private val _inputText = MutableStateFlow("")
+
     private val _uiState = MutableStateFlow(TranslatorState())
     val uiState = _uiState.asStateFlow()
 
-    init {
-        //TODO - refactor!!!
+    private fun translateText(inputText: String) {
         viewModelScope.launch {
-            _inputText
-                .debounce(3000) // Дебаунс с задержкой 3 секунды
-                .filter { it.isNotEmpty() } // Игнорируем пустые строки
-                .collect { text ->
-                    val translated = performTranslation(text)
-                    _uiState.value = _uiState.value.copy(translatedText = translated)
-                }
+            val translatedText = performTranslation(inputText) // Используем ваш метод перевода
+            _uiState.update { it.copy(translatedText = translatedText) }
         }
     }
 
+
     fun handleIntent(intent: TranslatorIntent) {
         when (intent) {
+            is TranslatorIntent.InputingText -> {
+                onTextChange(intent.text)
+            }
+
             is TranslatorIntent.EnterText -> {
-                _inputText.value = intent.text
-                _uiState.value = _uiState.value.copy(inputText = intent.text)
+                translateText(intent.text)
             }
         }
     }
 
+    private fun onTextChange(inputText: String) {
+        if (inputText != _uiState.value.inputText) {
+            _uiState.update { it.copy(inputText = inputText) }
+        }
+    }
 
     private suspend fun performTranslation(text: String): String {
         return translateRepository.getTranslate(text) ?: ""
