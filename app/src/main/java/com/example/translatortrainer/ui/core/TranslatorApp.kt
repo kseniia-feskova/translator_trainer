@@ -22,18 +22,19 @@ fun TranslatorApp() {
         startDestination = "main",
     ) {
         composable("main") {
-            val viewModel: TranslatorViewModel = koinViewModel()//<TranslatorViewModel>()
+            val viewModel: TranslatorViewModel = koinViewModel()
             val state by viewModel.uiState.collectAsState()
 
             MainScreen(
                 state = state,
-                onWordInput = { viewModel.handleIntent(TranslatorIntent.EnterText(it)) },
-                onDeckSelect = { navController.navigate("set") }
+                onWordInput = { viewModel.handleIntent(TranslatorIntent.InputingText(it)) },
+                onDeckSelect = { navController.navigate("set") },
+                onEnterText = { viewModel.handleIntent((TranslatorIntent.EnterText(it))) }
             )
         }
 
         composable("set") {
-            val viewModel: CardSetViewModel = koinViewModel()//<CardSetViewModel>()
+            val viewModel: CardSetViewModel = koinViewModel()
             val state by viewModel.uiState.collectAsState()
 
             CardSetScreen(

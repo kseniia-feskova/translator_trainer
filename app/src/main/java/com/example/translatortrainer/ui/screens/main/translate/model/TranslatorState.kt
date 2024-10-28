@@ -7,5 +7,6 @@ data class TranslatorState(
 )
 
 sealed class TranslatorIntent {
+    data class InputingText(val text: String) : TranslatorIntent()
     data class EnterText(val text: String) : TranslatorIntent()
 }

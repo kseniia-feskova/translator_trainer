@@ -17,7 +17,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.draw.shadow
@@ -28,18 +27,17 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
-import com.example.translatortrainer.ui.secondaryColor
+import com.example.translatortrainer.ui.core.ActionButton
 import com.example.translatortrainer.ui.screens.main.translate.model.TranslatorState
+import com.example.translatortrainer.ui.secondaryColor
 
 @Composable
 fun TranslateView(
     modifier: Modifier = Modifier,
     state: TranslatorState = TranslatorState(),
-    onTextChange: (String) -> Unit = {}
+    onTextChange: (String) -> Unit = {},
+    onEnterText: (String) -> Unit = {}
 ) {
-    var textField1 by remember { mutableStateOf(state.inputText) }
-    val textField2 by remember { mutableStateOf(state.translatedText) }
-
     Column(
         modifier = Modifier.then(modifier)
             .wrapContentHeight()
@@ -56,11 +54,8 @@ fun TranslateView(
             modifier = Modifier
                 .fillMaxWidth()
                 .clipToBounds(),
-            value = textField1,
-            onValueChange = {
-                onTextChange(it)
-                textField1 = it
-            },
+            value = state.inputText,
+            onValueChange = { onTextChange(it) },
             label = { Text("") },
             colors = TextFieldDefaults.colors().copy(
                 disabledContainerColor = secondaryColor,
@@ -70,7 +65,13 @@ fun TranslateView(
             shape = RoundedCornerShape(10.dp)
         )
 
-        Spacer(modifier = Modifier.height(48.dp))
+        Spacer(modifier = Modifier.height(32.dp))
+        ActionButton(
+            onClick = { onEnterText(state.inputText) },
+            modifier = Modifier.padding(horizontal = 64.dp)
+        ) {
+            Text(text = "Перевести")
+        }
 
         Text(
             text = "Русский",
@@ -80,7 +81,7 @@ fun TranslateView(
 
         val glowColor by remember { mutableStateOf(secondaryColor) } // Зеленый цвет свечения
         val animatedGlow by animateColorAsState(
-            targetValue = if (textField2.isNotEmpty()) glowColor else Color.Transparent,
+            targetValue = if (state.translatedText.isNotEmpty()) glowColor else Color.Transparent,
             animationSpec = tween(durationMillis = 500), label = "" // Длительность анимации 500 мс
         )
 
@@ -94,7 +95,7 @@ fun TranslateView(
                     ambientColor = animatedGlow,
                     spotColor = animatedGlow
                 ),
-            value = textField2,
+            value = state.translatedText,
             onValueChange = {},
             readOnly = true,
             label = { Text("") },
