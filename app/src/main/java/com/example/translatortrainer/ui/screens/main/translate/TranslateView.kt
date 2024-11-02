@@ -10,36 +10,40 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
-import com.example.translatortrainer.ui.core.ActionButton
 import com.example.translatortrainer.ui.screens.main.translate.model.TranslatorState
 import com.example.translatortrainer.ui.secondaryColor
+import kotlinx.coroutines.delay
 
 @Composable
 fun TranslateView(
     modifier: Modifier = Modifier,
     state: TranslatorState = TranslatorState(),
+    onFinishGlow: () -> Unit = {},
     onTextChange: (String) -> Unit = {},
     onEnterText: (String) -> Unit = {}
 ) {
     Column(
-        modifier = Modifier.then(modifier)
+        modifier = Modifier
+            .then(modifier)
             .wrapContentHeight()
             .fillMaxWidth()
             .padding(horizontal = 24.dp),
@@ -62,16 +66,18 @@ fun TranslateView(
                 unfocusedContainerColor = secondaryColor,
                 focusedContainerColor = secondaryColor,
             ),
-            shape = RoundedCornerShape(10.dp)
+            shape = RoundedCornerShape(10.dp),
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    onEnterText(state.inputText)
+                }
+            ),
         )
 
         Spacer(modifier = Modifier.height(32.dp))
-        ActionButton(
-            onClick = { onEnterText(state.inputText) },
-            modifier = Modifier.padding(horizontal = 64.dp)
-        ) {
-            Text(text = "Перевести")
-        }
 
         Text(
             text = "Русский",
@@ -79,21 +85,29 @@ fun TranslateView(
             fontSize = TextUnit(18f, TextUnitType.Sp)
         )
 
-        val glowColor by remember { mutableStateOf(secondaryColor) } // Зеленый цвет свечения
-        val animatedGlow by animateColorAsState(
-            targetValue = if (state.translatedText.isNotEmpty()) glowColor else Color.Transparent,
-            animationSpec = tween(durationMillis = 500), label = "" // Длительность анимации 500 мс
+
+        val targetColor by animateColorAsState(
+            targetValue = when {
+                state.showGlow -> secondaryColor
+                else -> Color.Transparent
+            },
+            animationSpec = tween(durationMillis = 300), label = ""
         )
+
+        LaunchedEffect(state.showGlow) {
+            delay(700)
+            onFinishGlow()
+        }
 
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
                 .shadow(
-                    elevation = 20.dp,
+                    elevation = 18.dp,
                     clip = false,
-                    shape = RoundedCornerShape(8.dp),
-                    ambientColor = animatedGlow,
-                    spotColor = animatedGlow
+                    shape = RoundedCornerShape(10.dp),
+                    ambientColor = targetColor,
+                    spotColor = targetColor
                 ),
             value = state.translatedText,
             onValueChange = {},

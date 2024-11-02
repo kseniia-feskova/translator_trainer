@@ -36,7 +36,8 @@ fun MainScreen(
     state: TranslatorState = TranslatorState(inputText = "Katze"),
     onWordInput: (String) -> Unit = {},
     onDeckSelect: (String) -> Unit = {},
-    onEnterText: (String) -> Unit = {}
+    onEnterText: (String) -> Unit = {},
+    onFinishGlow: () -> Unit = {},
 ) {
     var showTopView by remember { mutableStateOf(false) }
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
@@ -76,7 +77,8 @@ fun MainScreen(
                     .padding(bottom = 100.dp),
                 state = state,
                 onTextChange = onWordInput,
-                onEnterText = onEnterText
+                onEnterText = onEnterText,
+                onFinishGlow = onFinishGlow
             )
 
             AnimatedVisibility(

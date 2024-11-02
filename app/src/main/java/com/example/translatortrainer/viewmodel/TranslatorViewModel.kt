@@ -20,8 +20,8 @@ class TranslatorViewModel(
 
     private fun translateText(inputText: String) {
         viewModelScope.launch {
-            val translatedText = performTranslation(inputText) // Используем ваш метод перевода
-            _uiState.update { it.copy(translatedText = translatedText) }
+            val translatedText = performTranslation(inputText)
+            _uiState.update { it.copy(translatedText = translatedText, showGlow = true) }
         }
     }
 
@@ -35,6 +35,10 @@ class TranslatorViewModel(
             is TranslatorIntent.EnterText -> {
                 translateText(intent.text)
             }
+
+            is TranslatorIntent.HideGlow -> {
+                _uiState.update { it.copy(showGlow = false) }
+            }
         }
     }
 
@@ -45,7 +49,7 @@ class TranslatorViewModel(
     }
 
     private suspend fun performTranslation(text: String): String {
-        return translateRepository.getTranslate(text) ?: ""
+        return translateRepository.getTranslate(text)
     }
 
 }

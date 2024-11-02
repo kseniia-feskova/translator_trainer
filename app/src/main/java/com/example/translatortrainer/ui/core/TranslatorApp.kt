@@ -33,7 +33,8 @@ fun TranslatorApp() {
                 state = state,
                 onWordInput = { viewModel.handleIntent(TranslatorIntent.InputingText(it)) },
                 onDeckSelect = { navController.navigate("set") },
-                onEnterText = { viewModel.handleIntent((TranslatorIntent.EnterText(it))) }
+                onEnterText = { viewModel.handleIntent(TranslatorIntent.EnterText(it)) },
+                onFinishGlow = { viewModel.handleIntent(TranslatorIntent.HideGlow) }
             )
         }
 
@@ -45,7 +46,7 @@ fun TranslatorApp() {
                 state = state,
                 addWordToKnow = { viewModel.handleIntent(CardSetIntent.AddWordToKnow(it)) },
                 addWordToLearn = { viewModel.handleIntent(CardSetIntent.AddWordToLearn(it)) },
-                resetCardSet = {viewModel.handleIntent(CardSetIntent.ResetCardSet)},
+                resetCardSet = { viewModel.handleIntent(CardSetIntent.ResetCardSet) },
                 startCourse = {
                     viewModel.handleIntent(CardSetIntent.SaveSelected)
                     navController.navigate("course")
@@ -59,9 +60,11 @@ fun TranslatorApp() {
 
             CourseSelectTranslateScreen(
                 state = state,
-                onSelectedOption = {viewModel.handleIntent(SelectTranslationIntent.SelectTranslation(it))},
-                onDoNotKnowClick = {viewModel.handleIntent(SelectTranslationIntent.DoNotKnow)},
-                onExitClick = {navController.navigateUp()}
+                onSelectedOption = {
+                    viewModel.handleIntent(SelectTranslationIntent.SelectTranslation(it))
+                },
+                onDoNotKnowClick = { viewModel.handleIntent(SelectTranslationIntent.DoNotKnow) },
+                onExitClick = { navController.navigateUp() }
             )
         }
     }
