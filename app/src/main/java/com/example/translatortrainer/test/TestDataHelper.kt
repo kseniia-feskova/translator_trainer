@@ -2,29 +2,31 @@ package com.example.translatortrainer.test
 
 import com.example.translatortrainer.R
 import com.example.translatortrainer.test.model.Level
-import com.example.translatortrainer.test.model.Word
+import com.example.translatortrainer.test.model.WordUI
 
 interface ITestDataHelper {
-    fun getListOfWords(): List<Word>
-
+    fun getListOfWords(): List<WordUI>
+    fun updateList(newList: List<WordUI>)
+    fun getListForCourse(): List<WordUI>
 }
 
 class TestDataHelper : ITestDataHelper {
 
-    private val _listOfWords: MutableList<Word> = mutableListOf()
+    private val _listOfWords: MutableList<WordUI> = mutableListOf()
+    private val _listForCourse: MutableList<WordUI> = _listOfWords
 
     override fun getListOfWords() = _listOfWords.toList()
 
     val smallList = listOf(
-        Word.WordUI("deutsches Wort", "немецкое слово", Level.getRandom()),
-        Word.WordUI("Katze", "Котик", Level.getRandom()),
-        Word.WordUI("Mutter", "Мама", Level.getRandom()),
-        Word.WordUI("Vater", "Отец, папа", Level.getRandom()),
-        Word.WordUI("Spiegel", "Зеркало", Level.getRandom()),
-        Word.WordUI("Sprache", "Язык, речь", Level.getRandom()),
-        Word.WordUI("deutsches Wort", "немецкое слово", Level.getRandom()),
-        Word.WordUI("Katze", "Котик", Level.getRandom()),
-        Word.WordUI("Mutter", "Мама", Level.getRandom())
+        WordUI("deutsches Wort", "немецкое слово", Level.getRandom()),
+        WordUI("Katze", "Котик", Level.getRandom()),
+        WordUI("Mutter", "Мама", Level.getRandom()),
+        WordUI("Vater", "Отец, папа", Level.getRandom()),
+        WordUI("Spiegel", "Зеркало", Level.getRandom()),
+        WordUI("Sprache", "Язык, речь", Level.getRandom()),
+        WordUI("deutsches Wort", "немецкое слово", Level.getRandom()),
+        WordUI("Katze", "Котик", Level.getRandom()),
+        WordUI("Mutter", "Мама", Level.getRandom())
     )
 
     private val listOfResource: List<Int> = listOf(
@@ -61,17 +63,25 @@ class TestDataHelper : ITestDataHelper {
         initList()
     }
 
+    override fun updateList(newList: List<WordUI>) {
+        _listForCourse.clear()
+        _listForCourse.addAll(newList)
+    }
+
+    override fun getListForCourse(): List<WordUI> {
+        return _listForCourse.toList()
+    }
+
     private fun initList() {
         _listOfWords.clear()
-        val newList = mutableListOf<Word>()
-        listOfResource.map {
-            newList.add(
-                Word.WordUIFromRes(
-                    it,
-                    level = Level.getRandom()
-                )
-            )
-        }
-        _listOfWords.addAll(newList)
+        _listOfWords.addAll(smallList)
     }
 }
+
+val listOfDummyCards = listOf(
+    WordUI("Text", "Текст", Level.NEW),
+    WordUI("First word", "Первое слово", Level.NEW),
+    WordUI("Second word", "Второе слово", Level.NEW),
+    WordUI("Too loong word for translate", "Длинный текст для перевода", Level.NEW),
+    WordUI("And the other one", "И еще одно слово", Level.NEW)
+)

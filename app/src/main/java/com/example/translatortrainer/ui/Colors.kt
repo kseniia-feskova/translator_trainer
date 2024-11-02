@@ -11,3 +11,5 @@ val accentColor80 = Color(0xCCD9CDFD)
 val accentColor50 = Color(0x80D9CDFD)
 
 val greenColor = Color(0xFF2D7A32)
+val redColor = Color(0xFFF17575)
+val lightGreenColor = Color(0xFF83FFAD)

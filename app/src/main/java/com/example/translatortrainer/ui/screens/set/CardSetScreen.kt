@@ -3,9 +3,11 @@ package com.example.translatortrainer.ui.screens.set
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -19,18 +21,22 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import com.example.translatortrainer.test.model.Level
-import com.example.translatortrainer.test.model.Word
+import com.example.translatortrainer.test.model.WordUI
 import com.example.translatortrainer.ui.accentColor
 import com.example.translatortrainer.ui.core.ActionButton
+import com.example.translatortrainer.ui.core.SecondButton
 import com.example.translatortrainer.ui.primaryColor
+import com.example.translatortrainer.ui.secondaryColor
 import com.example.translatortrainer.viewmodel.CardSetState
 
 @Composable
 fun CardSetScreen(
     state: CardSetState,
-    addWordToKnow: (Word) -> Unit = {},
-    addWordToLearn: (Word) -> Unit = {},
+    addWordToKnow: (WordUI) -> Unit = {},
+    addWordToLearn: (WordUI) -> Unit = {},
+    resetCardSet: () -> Unit = {},
     startCourse: () -> Unit = {}
 ) {
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
@@ -76,6 +82,31 @@ fun CardSetScreen(
                         fontSize = TextUnit(16f, TextUnitType.Sp),
                     )
                 }
+            } else {
+                Column(
+                    modifier = Modifier
+                        .height(cardHeight)
+                        .align(Alignment.Center)
+                        .padding(16.dp)
+                        .fillMaxWidth()
+                        .zIndex(2f),
+                    verticalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    Text(
+                        text = "Вы отсортировали все слова",
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = secondaryColor,
+                        fontSize = TextUnit(22f, TextUnitType.Sp)
+                    )
+                    SecondButton(onClick = { resetCardSet() }) {
+                        Text(
+                            text = "Отсортировать заново",
+                            modifier = Modifier.padding(vertical = 8.dp),
+                        )
+                    }
+                }
             }
 
             ActionButton(
@@ -102,12 +133,23 @@ fun CardSetScreenPreview() {
     CardSetScreen(
         state = CardSetState(
             words = Pair(
-                Word.WordUI(
+                WordUI(
                     "Deutches Wort",
                     "Немецкое слово",
                     Level.NEW
                 ), null
             )
+        )
+    )
+}
+
+
+@Preview(showBackground = true, backgroundColor = 0xFF000999)
+@Composable
+fun EmptyCardSetScreenPreview() {
+    CardSetScreen(
+        state = CardSetState(
+            words = null
         )
     )
 }

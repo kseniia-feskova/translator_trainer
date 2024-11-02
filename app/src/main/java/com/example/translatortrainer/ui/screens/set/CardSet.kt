@@ -1,7 +1,9 @@
 package com.example.translatortrainer.ui.screens.set
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -11,7 +13,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.BlurEffect
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
@@ -19,25 +22,24 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.example.translatortrainer.test.TestDataHelper
-import com.example.translatortrainer.test.model.Word
-import com.example.translatortrainer.utils.getLocalizedString
+import com.example.translatortrainer.test.model.WordUI
 import com.example.translatortrainer.ui.accentColor50
 import com.example.translatortrainer.ui.accentColor80
+import com.example.translatortrainer.ui.core.SecondButton
 import com.example.translatortrainer.ui.primaryColor
-import java.util.Locale
+import com.example.translatortrainer.ui.secondaryColor
 
 @Composable
 fun CardsSet(
     modifier: Modifier = Modifier,
     cardHeight: Dp = 250.dp,
-    firstWordUI: Word,
-    secondWordUI: Word?,
-    showNextPair: () -> Unit = {},
-    onRightSwipe: (Word) -> Unit = {},
-    onLeftSwipe: (Word) -> Unit = {}
+    firstWordUI: WordUI,
+    secondWordUI: WordUI?,
+    onRightSwipe: (WordUI) -> Unit = {},
+    onLeftSwipe: (WordUI) -> Unit = {},
+    flipEnabled: Boolean = true,
+    swipeEnabled: Boolean = true
 ) {
-    val context = LocalContext.current
-
     Box(
         modifier = Modifier
             .then(modifier)
@@ -54,14 +56,14 @@ fun CardsSet(
                     .zIndex(2f),
             ) {
                 Text(
-                    text = when (secondWordUI) {
-                        is Word.WordUI -> secondWordUI.originalText
-                        is Word.WordUIFromRes -> context.getLocalizedString(
-                            secondWordUI.textRes,
-                            Locale("de")
-                        )
-                    },
+                    text = secondWordUI.originalText,
                     modifier = Modifier
+                        .graphicsLayer {
+                            renderEffect = BlurEffect(
+                                radiusX = 15f,
+                                radiusY = 15f
+                            )
+                        }
                         .align(Alignment.Center),
                     style = MaterialTheme.typography.bodyLarge,
                     color = primaryColor,
@@ -77,6 +79,31 @@ fun CardsSet(
                     .padding(top = 4.dp)
                     .background(color = accentColor80, shape = RoundedCornerShape(24.dp))
             ) {}
+        } else {
+            Column(
+                modifier = Modifier
+                    .height(cardHeight)
+                    .align(Alignment.Center)
+                    .padding(8.dp)
+                    .fillMaxWidth()
+                    .zIndex(2f),
+                verticalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Text(
+                    text = "Вы отсортировали все слова",
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = secondaryColor,
+                    fontSize = TextUnit(22f, TextUnitType.Sp)
+                )
+                SecondButton(onClick = {}) {
+                    Text(
+                        text = "Отсортировать заново",
+                        modifier = Modifier.padding(vertical = 8.dp),
+                    )
+                }
+            }
         }
 
         SwipeCard(
@@ -88,28 +115,16 @@ fun CardsSet(
                 .align(Alignment.BottomCenter),
             onSwipeRight = {
                 onRightSwipe(firstWordUI)
-                showNextPair()
             },
             onSwipeLeft = {
                 onLeftSwipe(firstWordUI)
-                showNextPair()
-            }
+            },
+            swipeEnabled = swipeEnabled
         ) {
             FlippableCard(
-                frontText = when (firstWordUI) {
-                    is Word.WordUI -> firstWordUI.originalText
-                    is Word.WordUIFromRes -> context.getLocalizedString(
-                        firstWordUI.textRes,
-                        Locale("de")
-                    )
-                },
-                backText = when (firstWordUI) {
-                    is Word.WordUI -> firstWordUI.resText
-                    is Word.WordUIFromRes -> context.getLocalizedString(
-                        firstWordUI.textRes,
-                        Locale("ru")
-                    )
-                },
+                frontText = firstWordUI.originalText,
+                backText = firstWordUI.resText,
+                flipEnabled = flipEnabled
             )
         }
 

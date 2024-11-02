@@ -38,7 +38,7 @@ fun MainScreen(
     onDeckSelect: (String) -> Unit = {},
     onEnterText: (String) -> Unit = {}
 ) {
-    var showTopView by remember { mutableStateOf(true) }
+    var showTopView by remember { mutableStateOf(false) }
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
 
     //val componentHeight = screenHeight * 0.2f

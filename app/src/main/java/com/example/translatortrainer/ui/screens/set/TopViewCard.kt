@@ -74,9 +74,10 @@ fun TopViewCardSet(knowWords: Int = 10, allWords: Int = 27) {
 }
 
 @Composable
-fun TopViewCard(name: String = "Набор слов №1") {
+fun TopViewCard(modifier: Modifier = Modifier, name: String = "Набор слов №1") {
     Row(
         modifier = Modifier
+            .then(modifier)
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .padding(top = 8.dp),

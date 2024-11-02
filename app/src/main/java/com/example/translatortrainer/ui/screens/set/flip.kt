@@ -37,7 +37,12 @@ import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
 
 @Composable
-fun FlippableCard(frontText: String, backText: String, modifier: Modifier = Modifier) {
+fun FlippableCard(
+    frontText: String,
+    backText: String,
+    modifier: Modifier = Modifier,
+    flipEnabled: Boolean = true
+) {
     var rotated by remember { mutableStateOf(false) }
     val rotation by animateFloatAsState(
         targetValue = if (rotated) 180f else 0f,
@@ -63,7 +68,11 @@ fun FlippableCard(frontText: String, backText: String, modifier: Modifier = Modi
                 cameraDistance = 8 * density
             }
             .clickable(indication = null, interactionSource = null)
-            { rotated = !rotated }
+            {
+                if (flipEnabled) {
+                    rotated = !rotated
+                }
+            }
             .height(300.dp)
             .background(color = accentColor, shape = RoundedCornerShape(24.dp))
     ) {
@@ -113,6 +122,7 @@ fun SwipeCard(
     onSwipeRight: () -> Unit = {},
     swipeThreshold: Float = 400f,
     sensitivityFactor: Float = 3f,
+    swipeEnabled: Boolean = true,
     content: @Composable () -> Unit
 ) {
     var offset by remember { mutableStateOf(0f) }
@@ -142,32 +152,34 @@ fun SwipeCard(
         modifier = modifier
             .offset { IntOffset(offset.roundToInt(), 0) }
             .pointerInput(Unit) {
-                detectHorizontalDragGestures(onDragEnd = {
-                    // Проверяем, прошла ли карточка порог
-                    if (offset > swipeThreshold) {
-                        dismissRight = true
-                    } else if (offset < -swipeThreshold) {
-                        dismissLeft = true
-                    }
+                if (swipeEnabled) {
+                    detectHorizontalDragGestures(onDragEnd = {
+                        // Проверяем, прошла ли карточка порог
+                        if (offset > swipeThreshold) {
+                            dismissRight = true
+                        } else if (offset < -swipeThreshold) {
+                            dismissLeft = true
+                        }
 
-                    // Возвращаем карточку на место, если не прошли порог
-                    if (!dismissRight && !dismissLeft) {
-                        offset = 0f
-                    } else {
-                        // Двигаем карточку за пределы экрана
-                        offset = if (dismissRight) 900f else -900f
-                    }
-                }) { change, dragAmount ->
-                    offset += (dragAmount / density) * sensitivityFactor
+                        // Возвращаем карточку на место, если не прошли порог
+                        if (!dismissRight && !dismissLeft) {
+                            offset = 0f
+                        } else {
+                            // Двигаем карточку за пределы экрана
+                            offset = if (dismissRight) 900f else -900f
+                        }
+                    }) { change, dragAmount ->
+                        offset += (dragAmount / density) * sensitivityFactor
 
-                    // Проверяем, прошла ли карточка порог
-                    if (offset > swipeThreshold) {
-                        dismissRight = true
-                    } else if (offset < -swipeThreshold) {
-                        dismissLeft = true
-                    }
+                        // Проверяем, прошла ли карточка порог
+                        if (offset > swipeThreshold) {
+                            dismissRight = true
+                        } else if (offset < -swipeThreshold) {
+                            dismissLeft = true
+                        }
 
-                    if (change.positionChange() != Offset.Zero) change.consume()
+                        if (change.positionChange() != Offset.Zero) change.consume()
+                    }
                 }
             }
             .graphicsLayer(
