@@ -49,7 +49,9 @@ class TranslatorViewModel(
                 _uiState.update {
                     it.copy(
                         originalLanguage = it.resLanguage,
-                        resLanguage = it.originalLanguage
+                        resLanguage = it.originalLanguage,
+                        inputText = it.translatedText,
+                        translatedText = it.inputText
                     )
                 }
             }

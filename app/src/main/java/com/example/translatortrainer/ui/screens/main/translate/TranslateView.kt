@@ -226,7 +226,15 @@ fun TranslateView(
                     unfocusedContainerColor = secondaryColor,
                     focusedContainerColor = secondaryColor,
                 ),
-                shape = RoundedCornerShape(10.dp)
+                shape = RoundedCornerShape(10.dp),
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        onEnterText(state.inputText, state.originalLanguage, state.resLanguage)
+                    }
+                ),
             )
         }
     }
