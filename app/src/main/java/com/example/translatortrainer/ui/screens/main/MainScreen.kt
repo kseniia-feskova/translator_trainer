@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.data.translate.Language
 import com.example.translatortrainer.ui.primaryColor
 import com.example.translatortrainer.ui.screens.main.bottom.ThreeBottomView
 import com.example.translatortrainer.ui.screens.main.top.TopView
@@ -36,8 +37,9 @@ fun MainScreen(
     state: TranslatorState = TranslatorState(inputText = "Katze"),
     onWordInput: (String) -> Unit = {},
     onDeckSelect: (String) -> Unit = {},
-    onEnterText: (String) -> Unit = {},
+    onEnterText: (String, Language, Language) -> Unit = { text, originalLanguage, resLanguage -> },
     onFinishGlow: () -> Unit = {},
+    onLanguageChange: () -> Unit = {}
 ) {
     var showTopView by remember { mutableStateOf(false) }
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
@@ -78,7 +80,8 @@ fun MainScreen(
                 state = state,
                 onTextChange = onWordInput,
                 onEnterText = onEnterText,
-                onFinishGlow = onFinishGlow
+                onFinishGlow = onFinishGlow,
+                onLanguageChange = onLanguageChange
             )
 
             AnimatedVisibility(

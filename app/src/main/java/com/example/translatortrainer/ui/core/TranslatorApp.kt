@@ -33,8 +33,9 @@ fun TranslatorApp() {
                 state = state,
                 onWordInput = { viewModel.handleIntent(TranslatorIntent.InputingText(it)) },
                 onDeckSelect = { navController.navigate("set") },
-                onEnterText = { viewModel.handleIntent(TranslatorIntent.EnterText(it)) },
-                onFinishGlow = { viewModel.handleIntent(TranslatorIntent.HideGlow) }
+                onEnterText = { text, originalLanguage, resLanguage -> viewModel.handleIntent(TranslatorIntent.EnterText(text, originalLanguage, resLanguage)) },
+                onFinishGlow = { viewModel.handleIntent(TranslatorIntent.HideGlow) },
+                onLanguageChange = {viewModel.handleIntent(TranslatorIntent.ChangeLanguages)}
             )
         }
 

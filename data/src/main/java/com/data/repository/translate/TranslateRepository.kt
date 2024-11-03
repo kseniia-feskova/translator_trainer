@@ -2,6 +2,7 @@ package com.data.repository.translate
 
 import com.data.api.TranslateService
 import com.data.model.TranslationResponse
+import com.data.translate.Language
 
 class TranslateRepository(
     private val service: TranslateService,
@@ -9,8 +10,10 @@ class TranslateRepository(
 
     override suspend fun getTranslate(
         text: String,
+        originalLanguage: Language,
+        resLanguage: Language
     ): String {
-        val response = service.translate(text, "de|ru")
+        val response = service.translate(text, "${originalLanguage.code}|${resLanguage.code}")
         if (response.isSuccessful && response.body() != null) {
             println(response.body())
             return getTranslation(response.body()!!)
