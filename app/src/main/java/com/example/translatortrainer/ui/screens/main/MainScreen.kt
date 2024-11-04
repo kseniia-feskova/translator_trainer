@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.data.mock.model.SetOfCards
 import com.data.translate.Language
 import com.example.translatortrainer.ui.primaryColor
 import com.example.translatortrainer.ui.screens.main.bottom.ThreeBottomView
@@ -35,17 +36,19 @@ import com.example.translatortrainer.ui.screens.main.translate.model.TranslatorS
 @Composable
 fun MainScreen(
     state: TranslatorState = TranslatorState(inputText = "Katze"),
+    setsOfCards:List<SetOfCards> = emptyList(),
     onWordInput: (String) -> Unit = {},
     onDeckSelect: (String) -> Unit = {},
     onEnterText: (String, Language, Language) -> Unit = { text, originalLanguage, resLanguage -> },
     onFinishGlow: () -> Unit = {},
-    onLanguageChange: () -> Unit = {}
+    onLanguageChange: () -> Unit = {},
+    onSaveClick: () -> Unit = {},
 ) {
     var showTopView by remember { mutableStateOf(false) }
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
 
     //val componentHeight = screenHeight * 0.2f
-    val donutSize = screenHeight * 0.8f * 0.2f
+    val donutSize = screenHeight * 0.7f * 0.2f
     val bottomHeight = screenHeight * 0.3f
 
     Scaffold() { padding ->
@@ -71,7 +74,7 @@ fun MainScreen(
                 TopView(18, donutSize = donutSize)
             }
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(100.dp))
 
             TranslateView(
                 modifier = Modifier
@@ -81,7 +84,8 @@ fun MainScreen(
                 onTextChange = onWordInput,
                 onEnterText = onEnterText,
                 onFinishGlow = onFinishGlow,
-                onLanguageChange = onLanguageChange
+                onLanguageChange = onLanguageChange,
+                onSaveClick = onSaveClick
             )
 
             AnimatedVisibility(
@@ -100,6 +104,7 @@ fun MainScreen(
                 ThreeBottomView(
                     modifier = Modifier
                         .height(bottomHeight),
+                    setsOfCards,
                     onDeckSelect
                 )
             }
@@ -119,3 +124,13 @@ fun MainScreenPreview() {
     MainScreen()
 }
 
+@Preview
+@Composable
+fun MainScreenWithButtonPreview() {
+    MainScreen(
+        state = TranslatorState().copy(
+            inputText = "Katze",
+            translatedText = "Котик"
+        )
+    )
+}

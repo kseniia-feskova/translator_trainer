@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import com.data.mock.model.SetOfCards
 import com.example.translatortrainer.ui.accentColor
 import com.example.translatortrainer.ui.accentSecondColor
 import com.example.translatortrainer.ui.primaryColor
@@ -32,6 +33,7 @@ import com.example.translatortrainer.ui.secondaryColor
 fun BottomView(
     modifier: Modifier = Modifier,
     text: String = "Новые слова",
+    countOfWord: Int = 12,
     backgroundColor: Color = Color(0xFFFDFDFD),
     onDeckSelect: (String) -> Unit = {}
 ) {
@@ -71,7 +73,7 @@ fun BottomView(
                     .padding(vertical = 4.dp, horizontal = 12.dp)
             ) {
                 Text(
-                    "28 слов",
+                    "$countOfWord слов",
                     modifier = Modifier
                         .align(Alignment.Center),
                     style = MaterialTheme.typography.bodyLarge,
@@ -84,28 +86,45 @@ fun BottomView(
 }
 
 @Composable
-fun ThreeBottomView(modifier: Modifier, onDeckSelect: (String) -> Unit = {}) {
+fun ThreeBottomView(
+    modifier: Modifier,
+    setsOfCards: List<SetOfCards> = emptyList(),
+    onDeckSelect: (String) -> Unit = {}
+) {
     Box(modifier) {
-        BottomView(
-            text = "Продолжить",
-            backgroundColor = accentSecondColor,
-            onDeckSelect = onDeckSelect
-        )
-        BottomView(
-            modifier = Modifier
-                .padding(top = 64.dp)
-                .zIndex(1f),  // Низкий z-индекс,
-            backgroundColor = accentColor,
-            onDeckSelect = onDeckSelect
-        )
-        BottomView(
-            text = "Все слова",
-            modifier = Modifier
-                .padding(top = 128.dp)
-                .zIndex(2f),  // Низкий z-индекс,
-            backgroundColor = secondaryColor,
-            onDeckSelect = onDeckSelect
-        )
+        if (setsOfCards.size > 2) {
+            val set = setsOfCards[2]
+            BottomView(
+                text = set.title,
+                backgroundColor = accentSecondColor,
+                onDeckSelect = onDeckSelect,
+                countOfWord = set.setOfWords.size
+            )
+        }
+        if (setsOfCards.size > 1) {
+            val set = setsOfCards[1]
+            BottomView(
+                text = set.title,
+                modifier = Modifier
+                    .padding(top = 64.dp)
+                    .zIndex(1f),
+                backgroundColor = accentColor,
+                onDeckSelect = onDeckSelect,
+                countOfWord = set.setOfWords.size
+            )
+        }
+        if (setsOfCards.isNotEmpty()) {
+            val set = setsOfCards.first()
+            BottomView(
+                text = set.title,
+                modifier = Modifier
+                    .padding(top = 128.dp)
+                    .zIndex(2f),
+                backgroundColor = secondaryColor,
+                onDeckSelect = onDeckSelect,
+                countOfWord = set.setOfWords.size
+            )
+        }
     }
 }
 

@@ -27,9 +27,7 @@ fun ActionButton(
     Button(
         onClick = { onClick() },
         modifier = Modifier.then(modifier)
-            .fillMaxWidth()
-            .padding(horizontal = 12.dp)
-            .padding(bottom = 24.dp),
+            .fillMaxWidth(),
         enabled = true,
         colors = ButtonDefaults.buttonColors().copy(
             containerColor = secondaryColor,
@@ -51,9 +49,7 @@ fun SecondButton(
         onClick = { onClick() },
         modifier = Modifier
             .then(modifier)
-            .fillMaxWidth()
-            .padding(horizontal = 12.dp)
-            .padding(bottom = 24.dp),
+            .fillMaxWidth(),
         enabled = true,
         colors = ButtonDefaults.buttonColors().copy(
             containerColor = accentColor50,

@@ -21,4 +21,5 @@ sealed class TranslatorIntent {
 
     object HideGlow : TranslatorIntent()
     object ChangeLanguages : TranslatorIntent()
+    object SaveWord: TranslatorIntent()
 }

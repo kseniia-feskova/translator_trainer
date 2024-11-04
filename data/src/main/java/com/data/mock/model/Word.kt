@@ -5,4 +5,10 @@ data class Word(
     val text: String,
     val translate: String,
     val status: Status
-)
+) {
+    companion object {
+        fun createId(text: String, translate: String): String {
+            return "$text/$translate"
+        }
+    }
+}

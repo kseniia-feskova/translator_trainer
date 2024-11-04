@@ -45,6 +45,7 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.data.translate.Language
+import com.example.translatortrainer.ui.core.ActionButton
 import com.example.translatortrainer.ui.screens.main.translate.model.TranslatorState
 import com.example.translatortrainer.ui.secondaryColor
 import kotlinx.coroutines.delay
@@ -57,7 +58,8 @@ fun TranslateView(
     onFinishGlow: () -> Unit = {},
     onTextChange: (String) -> Unit = {},
     onEnterText: (String, Language, Language) -> Unit = { text, originalLanguage, resLanguage -> },
-    onLanguageChange: () -> Unit = {}
+    onLanguageChange: () -> Unit = {},
+    onSaveClick: () -> Unit = {},
 ) {
     var isSwapped by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
@@ -237,6 +239,17 @@ fun TranslateView(
                 ),
             )
         }
+        Spacer(modifier = Modifier.height(32.dp))
+        if (state.translatedText.isNotEmpty() && state.inputText.isNotEmpty()) {
+            ActionButton(
+                modifier = Modifier.padding(horizontal = 72.dp),
+                onClick = { onSaveClick() }) {
+                Text("Сохранить")
+            }
+        } else {
+            Spacer(modifier = Modifier.height(56.dp))
+
+        }
     }
 }
 
@@ -251,7 +264,7 @@ private class PreviewProvider : PreviewParameterProvider<TranslatorState> {
 @Preview(backgroundColor = 0xFF5633D1, showBackground = true)
 @Composable
 fun TranslateViewPreview(@PreviewParameter(PreviewProvider::class) state: TranslatorState) {
-    Box(modifier = Modifier.padding(vertical = 16.dp)) {
+    Box(modifier = Modifier.padding(vertical = 12.dp)) {
         TranslateView(state = state)
     }
 }

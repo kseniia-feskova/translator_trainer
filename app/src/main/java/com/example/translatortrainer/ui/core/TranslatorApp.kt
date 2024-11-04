@@ -28,14 +28,17 @@ fun TranslatorApp() {
         composable("main") {
             val viewModel: TranslatorViewModel = koinViewModel()
             val state by viewModel.uiState.collectAsState()
+            val setsOfCards by viewModel.setsOfCards.collectAsState()
 
             MainScreen(
                 state = state,
+                setsOfCards = setsOfCards,
                 onWordInput = { viewModel.handleIntent(TranslatorIntent.InputingText(it)) },
                 onDeckSelect = { navController.navigate("set") },
                 onEnterText = { text, originalLanguage, resLanguage -> viewModel.handleIntent(TranslatorIntent.EnterText(text, originalLanguage, resLanguage)) },
                 onFinishGlow = { viewModel.handleIntent(TranslatorIntent.HideGlow) },
-                onLanguageChange = {viewModel.handleIntent(TranslatorIntent.ChangeLanguages)}
+                onLanguageChange = {viewModel.handleIntent(TranslatorIntent.ChangeLanguages)},
+                onSaveClick = {viewModel.handleIntent(TranslatorIntent.SaveWord)}
             )
         }
 

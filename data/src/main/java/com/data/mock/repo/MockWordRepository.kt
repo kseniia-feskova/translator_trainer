@@ -24,7 +24,7 @@ class MockWordRepository() : IMockWordRepository {
     override fun getSetOfWords(setId: String): SetOfCards {
         val set = listOfSets.find { it.id == setId }
         if (set == null) {
-            val newSet = SetOfCards(setId, "Набор №$setId", SetLevel.EASY, emptySet())
+            val newSet = SetOfCards(setId, "Набор $setId", SetLevel.EASY, emptySet())
             listOfSets.add(newSet)
             return newSet
         } else {
@@ -45,7 +45,8 @@ class MockWordRepository() : IMockWordRepository {
     }
 
     companion object{
-        private val listOfSets = mutableListOf(
+        private val listOfSets = mutableListOf<SetOfCards>()
+        private val listOfSetsMock = mutableListOf(
             SetOfCards(
                 id = "1",
                 title = "Первый набор",
