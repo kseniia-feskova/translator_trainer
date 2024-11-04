@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.data.di.databaseModule
 import com.data.di.networkModule
 import com.data.di.repositoryModule
+import com.domain.di.useCaseModule
 import com.example.translatortrainer.di.appModule
 import com.example.translatortrainer.di.viewModelModule
 import com.example.translatortrainer.ui.core.TranslatorApp
@@ -30,6 +31,7 @@ class MainActivity : AppCompatActivity() {
                     networkModule,
                     repositoryModule,
                     databaseModule,
+                    useCaseModule,
                     viewModelModule,
                 )
             )

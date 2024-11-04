@@ -2,17 +2,19 @@ package com.example.translatortrainer.viewmodel.courses
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.translatortrainer.test.listOfDummyCards
 import com.example.translatortrainer.test.model.WordUI
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class SelectTranslateViewModel() : ViewModel() {
 
     private val allWords = listOfDummyCards.toMutableSet()
     private val _index = MutableStateFlow(0)
-    val index = _index.asStateFlow()
 
     private val _uiState = MutableStateFlow(
         CourseData.SelectTranslationData(
@@ -39,11 +41,15 @@ class SelectTranslateViewModel() : ViewModel() {
     }
 
     private fun checkSelectedWord(selected: String) {
-        val word = _uiState.value.currentWord
-        if (selected == word.resText) {
-            handleSuccessSelect()
-        } else {
-            //можно ничего не делать. только UI будет отображаться
+        viewModelScope.launch {
+            _uiState.update { it.copy(selectedOption = selected) }
+            delay(1000)
+            val word = _uiState.value.currentWord
+            if (selected == word.resText) {
+                handleSuccessSelect()
+            } else {
+                //можно ничего не делать. только UI будет отображаться
+            }
         }
     }
 
@@ -73,6 +79,7 @@ class SelectTranslateViewModel() : ViewModel() {
                     nextWord = allWords.elementAtOrNull(1),
                     translations = listOfDummyCards.map { it.resText }.shuffled(),
                     currentWordIndex = _index.value,
+                    selectedOption = ""
                 )
             }
         } else {
