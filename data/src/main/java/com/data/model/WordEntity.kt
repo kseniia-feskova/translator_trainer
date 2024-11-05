@@ -1,26 +1,20 @@
 package com.data.model
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.util.Date
 
-@Entity
+@Entity(tableName = "words")
 data class WordEntity(
-    @ColumnInfo(name = "number")
-    var number: Int? = -1,
-
-    @ColumnInfo(name = "word")
-    var word: String? = "",
-
-    @ColumnInfo(name = "translation")
-    var translation: String? = "",
-
-    @ColumnInfo(name = "language")
-    val language: String? = "",
-
-    @ColumnInfo(name = "status")
-    var status: Boolean = false,
-
-    @PrimaryKey(autoGenerate = true)
-    val id: Int? = null
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    val original: String,
+    val translation: String,
+    val status: WordStatus,
+    val dateAdded: Date = Date() // по умолчанию дата текущая
 )
+
+enum class WordStatus {
+    NEW,
+    IN_PROGRESS,
+    LEARNED
+}
