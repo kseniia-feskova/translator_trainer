@@ -1,31 +1,50 @@
 package com.data.repository.words
 
+import com.data.model.SetOfWords
+import com.data.model.SetWordCrossRef
 import com.data.model.WordEntity
-import com.data.room.HistoryDAO
-import io.reactivex.Observable
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import com.data.room.WordDao
+import kotlinx.coroutines.flow.Flow
+import java.util.Date
 
 class WordsRepository(
-    private val dao: HistoryDAO
+    private val dao: WordDao
 ) : IWordsRepository {
 
-    override suspend fun addNewWord(newWord: WordEntity) = withContext(Dispatchers.IO) {
-        dao.insertAll(newWord)
+    override suspend fun addNewWord(newWord: WordEntity): Long {
+        return dao.insertWord(newWord)
     }
 
-    override fun getLastWord(count: Int): Observable<List<WordEntity>> {
-        return dao.getLastWords(count)
+    override suspend fun insertSet(setOfWords: SetOfWords) {
+        dao.insertSet(setOfWords)
     }
 
-    override suspend fun deleteWord(word: WordEntity) = withContext(Dispatchers.IO) {
-        dao.delete(word)
+    override suspend fun getSetByName(name: String): SetOfWords? {
+        return dao.getSetByName(name)
     }
 
-    override suspend fun deleteById(id: Int) = withContext(Dispatchers.IO) {
-        dao.deleteById(id)
+    override suspend fun getSetById(id: Int): SetOfWords? {
+        return dao.getSetById(id)
     }
 
+    override suspend fun addWordToAllWordsSet(word: WordEntity) {
+        dao.addWordToAllWordsSet(word)
+    }
+
+    override fun getWordsInSet(setId: Int): Flow<List<WordEntity>> {
+        return dao.getWordsInSet(setId)
+    }
+
+    override fun getWordsFilteredByDateOrStatus(
+        startDate: Date,
+        endDate: Date
+    ): Flow<List<WordEntity>> {
+        return dao.getWordsFilteredByDate(startDate, endDate)
+    }
+
+    override suspend fun insertSetWordCrossRef(crossRef: SetWordCrossRef) {
+        dao.insertSetWordCrossRef(crossRef)
+    }
 }
 
 

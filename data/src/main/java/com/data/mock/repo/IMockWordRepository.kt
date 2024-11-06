@@ -8,7 +8,7 @@ interface IMockWordRepository {
 
     val setsFlow: StateFlow<List<SetOfCards>>
 
-    fun addNewWord(setId: String, newWord: Word)
+    fun addNewWord(setId: Int, newWord: Word)
 
-    fun getSetOfWords(setId: String): SetOfCards
+    fun getSetOfWords(setId: Int): SetOfCards
 }

@@ -1,18 +1,24 @@
 package com.domain.usecase
 
-import com.data.mock.model.SetOfCards
-import com.data.mock.repo.MockWordRepository
+import com.data.model.SetOfWords
+import com.data.repository.words.IWordsRepository
 
 interface IGetSetOfCardsUseCase {
 
-    fun invoke(setId: String): SetOfCards
+    suspend fun invoke(setId: Int): SetOfWords?
+
+    suspend fun invoke(setName: String): SetOfWords?
 
 }
 
-class GetSetOfCardsUseCase(private val repo: MockWordRepository) : IGetSetOfCardsUseCase {
+class GetSetOfCardsUseCase(private val repo: IWordsRepository) : IGetSetOfCardsUseCase {
 
-    override fun invoke(setId: String): SetOfCards {
-        return repo.getSetOfWords(setId)
+    override suspend fun invoke(setId: Int): SetOfWords? {
+        return repo.getSetById(setId)
+    }
+
+    override suspend fun invoke(setName: String): SetOfWords? {
+        return repo.getSetByName(setName)
     }
 
 }

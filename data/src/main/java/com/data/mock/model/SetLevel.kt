@@ -1,7 +1,7 @@
 package com.data.mock.model
 
-enum class SetLevel {
-    EASY,
-    MEDIUM,
-    HARD;
-}
+//enum class SetLevel {
+//    EASY,
+//    MEDIUM,
+//    HARD;
+//}

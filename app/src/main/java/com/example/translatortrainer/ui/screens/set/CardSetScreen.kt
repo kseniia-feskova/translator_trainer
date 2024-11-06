@@ -111,7 +111,7 @@ fun CardSetScreen(
 
             ActionButton(
                 onClick = { startCourse() },
-                modifier = Modifier.align(Alignment.BottomCenter)
+                modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 24.dp).padding(horizontal = 16.dp)
             ) {
                 Text(
                     text = "Изучить набор",
