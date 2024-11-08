@@ -12,7 +12,7 @@ interface IWordsRepository {
     suspend fun addNewWord(newWord: WordEntity): Long
 
     //IAddSetOfWordsUseCase
-    suspend fun insertSet(setOfWords: SetOfWords)
+    suspend fun insertSet(setOfWords: SetOfWords): Long
 
     //IGetSetOfWordsUseCase
     suspend fun getSetByName(name: String): SetOfWords?
@@ -32,4 +32,8 @@ interface IWordsRepository {
     ): Flow<List<WordEntity>>
 
     suspend fun insertSetWordCrossRef(crossRef: SetWordCrossRef)
+
+    suspend fun updateWord(newWord: WordEntity)
+
+    suspend fun getWordById(wordId: Int): WordEntity?
 }

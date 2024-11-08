@@ -36,7 +36,8 @@ fun CourseFrameView(
                 .align(Alignment.TopCenter),
             currentWord = state.currentWordIndex,
             allWords = state.allWordsCount,
-            onExitClick = onExitClick
+            onExitClick = onExitClick,
+            name = state.setName
         )
 
         content()
@@ -60,17 +61,17 @@ fun CourseFrameViewPreview() {
     Box(modifier = Modifier.background(primaryColor)) {
         CourseFrameView(
             CourseData.SelectTranslationData(
-                WordUI("Text", "Текст", Level.KNOW),
+                WordUI(0, "Text", "Текст", Level.KNOW),
                 null,
                 emptyList(),
                 selectedOption = "",
-                1
+                currentWordIndex = 1
             )
         ) {
             SelectTranslationView(
                 modifier = Modifier.align(Alignment.Center),
                 state = CourseData.SelectTranslationData(
-                    WordUI("Text on Deutsch", "Текст", Level.KNOW),
+                    WordUI(0, "Text on Deutsch", "Текст", Level.KNOW),
                     null,
                     listOf(
                         "First word",
@@ -80,7 +81,7 @@ fun CourseFrameViewPreview() {
                         "And the other one"
                     ),
                     selectedOption = "",
-                    1
+                    currentWordIndex = 1
                 )
             )
         }

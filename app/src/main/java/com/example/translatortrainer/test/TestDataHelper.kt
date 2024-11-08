@@ -18,15 +18,15 @@ class TestDataHelper : ITestDataHelper {
     override fun getListOfWords() = _listOfWords.toList()
 
     val smallList = listOf(
-        WordUI("deutsches Wort", "немецкое слово", Level.getRandom()),
-        WordUI("Katze", "Котик", Level.getRandom()),
-        WordUI("Mutter", "Мама", Level.getRandom()),
-        WordUI("Vater", "Отец, папа", Level.getRandom()),
-        WordUI("Spiegel", "Зеркало", Level.getRandom()),
-        WordUI("Sprache", "Язык, речь", Level.getRandom()),
-        WordUI("deutsches Wort", "немецкое слово", Level.getRandom()),
-        WordUI("Katze", "Котик", Level.getRandom()),
-        WordUI("Mutter", "Мама", Level.getRandom())
+        WordUI(0,"deutsches Wort", "немецкое слово", Level.getRandom()),
+        WordUI(1,"Katze", "Котик", Level.getRandom()),
+        WordUI(2,"Mutter", "Мама", Level.getRandom()),
+        WordUI(3,"Vater", "Отец, папа", Level.getRandom()),
+        WordUI(4,"Spiegel", "Зеркало", Level.getRandom()),
+        WordUI(5,"Sprache", "Язык, речь", Level.getRandom()),
+        WordUI(6,"deutsches Wort", "немецкое слово", Level.getRandom()),
+        WordUI(7,"Katze", "Котик", Level.getRandom()),
+        WordUI(8,"Mutter", "Мама", Level.getRandom())
     )
 
     private val listOfResource: List<Int> = listOf(
@@ -79,9 +79,9 @@ class TestDataHelper : ITestDataHelper {
 }
 
 val listOfDummyCards = listOf(
-    WordUI("Text", "Текст", Level.NEW),
-    WordUI("First word", "Первое слово", Level.NEW),
-    WordUI("Second word", "Второе слово", Level.NEW),
-    WordUI("Too loong word for translate", "Длинный текст для перевода", Level.NEW),
-    WordUI("And the other one", "И еще одно слово", Level.NEW)
+    WordUI(0,"Text", "Текст", Level.NEW),
+    WordUI(1,"First word", "Первое слово", Level.NEW),
+    WordUI(2,"Second word", "Второе слово", Level.NEW),
+    WordUI(3,"Too loong word for translate", "Длинный текст для перевода", Level.NEW),
+    WordUI(4,"And the other one", "И еще одно слово", Level.NEW)
 )

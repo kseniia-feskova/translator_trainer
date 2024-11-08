@@ -47,6 +47,7 @@ fun Status.toWordStatus(): WordStatus {
         Status.NEW -> WordStatus.NEW
         Status.KNOW -> WordStatus.LEARNED
         Status.LEARNING -> WordStatus.IN_PROGRESS
+        Status.GOOD_LEARNING -> WordStatus.IN_GOOD_PROGRESS
     }
 }
 
@@ -55,5 +56,6 @@ fun WordStatus.toStatus(): Status {
         WordStatus.NEW -> Status.NEW
         WordStatus.LEARNED -> Status.KNOW
         WordStatus.IN_PROGRESS -> Status.LEARNING
+        WordStatus.IN_GOOD_PROGRESS -> Status.GOOD_LEARNING
     }
 }

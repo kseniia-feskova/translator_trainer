@@ -19,7 +19,6 @@ import com.example.translatortrainer.ui.screens.main.translate.model.TranslatorI
 import com.example.translatortrainer.ui.screens.main.translate.model.TranslatorState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -36,8 +35,12 @@ class TranslatorViewModel(
     val uiState = _uiState.asStateFlow()
 
 
-    private val _setsOfCards = MutableStateFlow<List<SetOfCards>>(emptyList())
-    val setsOfCards = _setsOfCards.asStateFlow()
+    private val _setsOfAllCards = MutableStateFlow<SetOfCards?>(null)
+    val setsOfAllCards = _setsOfAllCards.asStateFlow()
+
+    private val _setsOfNewCards = MutableStateFlow<SetOfCards?>(null)
+    val setsOfNewCards = _setsOfNewCards.asStateFlow()
+
     private var allSetID = ""
 
 
@@ -46,42 +49,42 @@ class TranslatorViewModel(
             val allSet = getAllWordsUseCase.invoke()
             val newWordsSet = getSetOfCards.invoke(NEW_WORDS)
             if (allSet != null) {
-                getWordsFromSetUseCase.invoke(allSet.id).collect { wordList ->
-                    allSetID = allSet.id.toString()
-                    if (wordList.isNotEmpty()) {
-                        _setsOfCards.update {
-                            listOf(
+                launch {
+                    getWordsFromSetUseCase.invoke(allSet.id).collect { wordList ->
+                        allSetID = allSet.id.toString()
+                        if (wordList.isNotEmpty()) {
+                            _setsOfAllCards.update {
                                 SetOfCards(
                                     allSet.id,
                                     allSet.name,
                                     allSet.level,
                                     wordList.toWords()
                                 )
-                            )
+                            }
                         }
+                        Log.e(TAG, "All words = ${_setsOfAllCards.value}")
                     }
-                    Log.e(TAG, "All words = ${_setsOfCards.value}")
                 }
-                if (newWordsSet != null) {
-                    Log.e(TAG, "New words set is not empty")
-                    val newWords = getWordsFromSetUseCase.invoke(newWordsSet.id).last()
-                    if (newWords.isNotEmpty()) {
-                        _setsOfCards.update {
-                            val new = _setsOfCards.value.toMutableSet()
-                            new.add(
+            }
+            Log.e(TAG, "NewWords $newWordsSet")
+            if (newWordsSet != null) {
+                Log.e(TAG, "New words set is not empty")
+                launch {
+                    getWordsFromSetUseCase.invoke(newWordsSet.id).collect { newWords ->
+                        if (newWords.isNotEmpty()) {
+                            _setsOfNewCards.update {
                                 SetOfCards(
                                     newWordsSet.id,
                                     newWordsSet.name,
                                     newWordsSet.level,
                                     newWords.toWords()
                                 )
-                            )
-                            new.toList()
+                            }
+                        } else {
+                            Log.e(TAG, "New all words = null")
                         }
                     }
                 }
-            } else {
-                Log.e(TAG, "New all words = null")
             }
         }
     }

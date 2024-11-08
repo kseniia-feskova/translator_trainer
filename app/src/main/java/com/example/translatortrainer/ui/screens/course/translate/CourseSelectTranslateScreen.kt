@@ -17,9 +17,14 @@ fun CourseSelectTranslateScreen(
     state: CourseData.SelectTranslationData,
     onSelectedOption: (String) -> Unit = {},
     onDoNotKnowClick: () -> Unit = {},
-    onExitClick: () -> Unit = {}
+    onExitClick: () -> Unit = {},
+    onFinishLevel: () -> Unit = {}
 ) {
     Box(modifier = Modifier.background(primaryColor)) {
+        if (state.finish) {
+            onExitClick()
+           // onFinishLevel()
+        }
         CourseFrameView(
             state = state,
             doNotKnowClicked = onDoNotKnowClick,
@@ -39,7 +44,7 @@ fun CourseSelectTranslateScreen(
 fun SelectPreview() {
     CourseSelectTranslateScreen(
         state = CourseData.SelectTranslationData(
-            WordUI("Text on Deutsch", "Текст", Level.KNOW),
+            WordUI(0, "Text on Deutsch", "Текст", Level.KNOW),
             null,
             listOf(
                 "First word",
@@ -49,7 +54,7 @@ fun SelectPreview() {
                 "And the other one"
             ),
             selectedOption = "",
-            1
+            currentWordIndex = 1
         )
     )
 }

@@ -15,8 +15,8 @@ class WordsRepository(
         return dao.insertWord(newWord)
     }
 
-    override suspend fun insertSet(setOfWords: SetOfWords) {
-        dao.insertSet(setOfWords)
+    override suspend fun insertSet(setOfWords: SetOfWords): Long {
+        return dao.insertSet(setOfWords)
     }
 
     override suspend fun getSetByName(name: String): SetOfWords? {
@@ -44,6 +44,14 @@ class WordsRepository(
 
     override suspend fun insertSetWordCrossRef(crossRef: SetWordCrossRef) {
         dao.insertSetWordCrossRef(crossRef)
+    }
+
+    override suspend fun updateWord(newWord: WordEntity) {
+        dao.updateWord(newWord)
+    }
+
+    override suspend fun getWordById(wordId: Int): WordEntity? {
+        return dao.getWordById(wordId)
     }
 }
 

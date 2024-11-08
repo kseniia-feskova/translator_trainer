@@ -49,7 +49,7 @@ fun CardSetScreen(
                 .padding(padding)
                 .background(color = primaryColor)
         ) {
-            TopViewCardSet(state.knowWords, state.allWords)
+            TopViewCardSet(state.knowWords, state.allWords, name = state.name)
 
             if (state.words != null) {
                 CardsSet(
@@ -111,7 +111,10 @@ fun CardSetScreen(
 
             ActionButton(
                 onClick = { startCourse() },
-                modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 24.dp).padding(horizontal = 16.dp)
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 24.dp)
+                    .padding(horizontal = 16.dp)
             ) {
                 Text(
                     text = "Изучить набор",
@@ -134,7 +137,7 @@ fun CardSetScreenPreview() {
         state = CardSetState(
             words = Pair(
                 WordUI(
-                    "Deutches Wort",
+                    0, "Deutches Wort",
                     "Немецкое слово",
                     Level.NEW
                 ), null

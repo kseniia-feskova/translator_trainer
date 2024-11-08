@@ -1,6 +1,7 @@
 package com.data.mock.repo
 
 import com.data.mock.model.SetOfCards
+import com.data.mock.model.Status
 import com.data.mock.model.Word
 import com.data.model.SetLevel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -46,12 +47,22 @@ class MockWordRepository() : IMockWordRepository {
 
     companion object {
         private val listOfSets = mutableListOf<SetOfCards>()
-        private val listOfSetsMock = mutableListOf(
+        val listOfSetsMock = mutableListOf(
             SetOfCards(
                 id = 1,
                 title = "Первый набор",
                 level = SetLevel.EASY,
-                emptySet()
+                setOfWords = setOf(
+                    Word("1", "Katze", "Кошка", Status.NEW),
+                    Word("2", "Mutter", "Мать", Status.NEW),
+                    Word("3", "Vater", "Отец", Status.LEARNING),
+                    Word("4", "Leben", "Жизнь", Status.GOOD_LEARNING),
+                    Word("5", "Liebe", "Любовь", Status.KNOW),
+                    Word("6", "Mutter", "Мать", Status.NEW),
+                    Word("7", "Vater", "Отец", Status.LEARNING),
+                    Word("8", "Leben", "Жизнь", Status.GOOD_LEARNING),
+                    Word("9", "Liebe", "Любовь", Status.KNOW),
+                ).sortedBy { it.status }.toSet()
             ),
             SetOfCards(
                 id = 2,

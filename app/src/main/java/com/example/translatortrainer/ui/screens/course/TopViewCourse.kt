@@ -30,6 +30,7 @@ fun TopViewCourse(
     modifier: Modifier = Modifier,
     currentWord: Int = 0,
     allWords: Int = 5,
+    name: String,
     onExitClick: () -> Unit = {},
 ) {
     Column(
@@ -37,7 +38,7 @@ fun TopViewCourse(
             .then(modifier)
             .fillMaxWidth()
     ) {
-        TopCourseTitle(onExitClick = onExitClick)
+        TopCourseTitle(onExitClick = onExitClick, name = name)
         Spacer(modifier = Modifier.height(16.dp))
         ProgressForCourse(current = currentWord, all = allWords)
         Spacer(modifier = Modifier.height(16.dp))
@@ -81,6 +82,6 @@ fun TopCourseTitle(
 @Preview
 fun TopViewCoursePreview() {
     Box(modifier = Modifier.background(primaryColor)) {
-        TopViewCourse(modifier = Modifier.padding(8.dp), 1, 5)
+        TopViewCourse(modifier = Modifier.padding(8.dp), 1, 5, name = "Все слова")
     }
 }

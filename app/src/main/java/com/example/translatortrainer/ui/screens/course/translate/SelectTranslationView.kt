@@ -115,11 +115,11 @@ fun CourseFrameViewPreview() {
     Box(modifier = Modifier.background(primaryColor)) {
         CourseFrameView(
             CourseData.SelectTranslationData(
-                WordUI("Text", "Текст", Level.KNOW),
+                WordUI(0,"Text", "Текст", Level.KNOW),
                 null,
                 emptyList(),
                 selectedOption = "",
-                wordIndex
+                currentWordIndex = wordIndex
             )
         ) {
             SelectTranslationPreview(modifier = Modifier.align(Alignment.Center), wordIndex) {

@@ -29,9 +29,15 @@ import com.example.translatortrainer.ui.primaryColor
 import com.example.translatortrainer.ui.secondaryColor
 
 @Composable
-fun TopViewCardSet(knowWords: Int = 10, allWords: Int = 27) {
+fun TopViewCardSet(
+    knowWords: Int = 10,
+    allWords: Int = 27,
+    modifier: Modifier = Modifier,
+    name: String = "Набор"
+) {
     Column(
         modifier = Modifier
+            .then(modifier)
             .fillMaxWidth()
             .background(
                 color = secondaryColor,
@@ -42,7 +48,7 @@ fun TopViewCardSet(knowWords: Int = 10, allWords: Int = 27) {
             ),
     ) {
         Spacer(modifier = Modifier.padding(6.dp))
-        TopViewCard()
+        TopViewCard(name = name)
         Text(
             "лёгкий", modifier = Modifier.align(Alignment.CenterHorizontally),
             style = MaterialTheme.typography.bodyLarge,

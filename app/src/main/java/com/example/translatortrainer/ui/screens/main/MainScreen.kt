@@ -36,9 +36,10 @@ import com.example.translatortrainer.ui.screens.main.translate.model.TranslatorS
 @Composable
 fun MainScreen(
     state: TranslatorState = TranslatorState(inputText = "Katze"),
-    setsOfCards:List<SetOfCards> = emptyList(),
+    setsOfAllCards: SetOfCards? = null,
+    setsOfNewCards: SetOfCards? = null,
     onWordInput: (String) -> Unit = {},
-    onDeckSelect: (String) -> Unit = {},
+    onDeckSelect: (Int) -> Unit = {},
     onEnterText: (String, Language, Language) -> Unit = { text, originalLanguage, resLanguage -> },
     onFinishGlow: () -> Unit = {},
     onLanguageChange: () -> Unit = {},
@@ -104,7 +105,8 @@ fun MainScreen(
                 ThreeBottomView(
                     modifier = Modifier
                         .height(bottomHeight),
-                    setsOfCards,
+                    setsOfAllCards,
+                    setsOfNewCards,
                     onDeckSelect
                 )
             }

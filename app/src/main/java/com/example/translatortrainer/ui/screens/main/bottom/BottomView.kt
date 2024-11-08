@@ -1,5 +1,6 @@
 package com.example.translatortrainer.ui.screens.main.bottom
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -24,23 +25,32 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.data.mock.model.SetOfCards
+import com.data.model.SetLevel
 import com.example.translatortrainer.ui.accentColor
 import com.example.translatortrainer.ui.accentSecondColor
 import com.example.translatortrainer.ui.primaryColor
 import com.example.translatortrainer.ui.secondaryColor
 
+val mockSetOfCard = SetOfCards(
+    0,
+    "Набор",
+    SetLevel.EASY,
+    emptySet()
+)
+
 @Composable
 fun BottomView(
     modifier: Modifier = Modifier,
-    text: String = "Новые слова",
-    countOfWord: Int = 12,
+    set: SetOfCards = mockSetOfCard,
     backgroundColor: Color = Color(0xFFFDFDFD),
-    onDeckSelect: (String) -> Unit = {}
+    onDeckSelect: (Int) -> Unit = {}
 ) {
     Column(
-        modifier = Modifier
-            .clickable { onDeckSelect(text) }
-            .then(modifier)
+        modifier = Modifier.then(modifier)
+            .clickable {
+                Log.e("BorromView", "Set ${set.id} , ${set.title}")
+                onDeckSelect(set.id)
+            }
             .height(300.dp)
             .background(
                 color = backgroundColor,
@@ -58,10 +68,10 @@ fun BottomView(
                 .padding(top = 18.dp)
         ) {
             Text(
-                text,
+                set.title,
                 modifier = Modifier
                     .align(Alignment.Start)
-                    .padding(bottom = 24.dp),
+                    .padding(bottom = 12.dp),
                 style = MaterialTheme.typography.bodyLarge,
                 fontSize = TextUnit(22f, TextUnitType.Sp)
             )
@@ -73,7 +83,7 @@ fun BottomView(
                     .padding(vertical = 4.dp, horizontal = 12.dp)
             ) {
                 Text(
-                    "$countOfWord слов",
+                    "${set.setOfWords.size} слов",
                     modifier = Modifier
                         .align(Alignment.Center),
                     style = MaterialTheme.typography.bodyLarge,
@@ -88,71 +98,71 @@ fun BottomView(
 @Composable
 fun ThreeBottomView(
     modifier: Modifier,
-    setsOfCards: List<SetOfCards> = emptyList(),
-    onDeckSelect: (String) -> Unit = {}
+    setsOfAllCards: SetOfCards? = null,
+    setsOfNewCards: SetOfCards? = null,
+    onDeckSelect: (Int) -> Unit = {}
 ) {
+    Log.e("THree Bottom View", "SetsOfCrads = $setsOfAllCards")
     Box(modifier) {
-        if (setsOfCards.size > 2) {
-            val set = setsOfCards[2]
+//        if (setsOfCards.size > 2) {
+//            val set = setsOfCards[2]
+//            BottomView(
+//                set = set,
+//                backgroundColor = accentSecondColor,
+//                onDeckSelect = onDeckSelect,
+//            )
+//        }
+        if (setsOfNewCards != null) {
             BottomView(
-                text = set.title,
-                backgroundColor = accentSecondColor,
-                onDeckSelect = onDeckSelect,
-                countOfWord = set.setOfWords.size
-            )
-        }
-        if (setsOfCards.size > 1) {
-            val set = setsOfCards[1]
-            BottomView(
-                text = set.title,
+                set = setsOfNewCards,
                 modifier = Modifier
                     .padding(top = 64.dp)
                     .zIndex(1f),
                 backgroundColor = accentColor,
                 onDeckSelect = onDeckSelect,
-                countOfWord = set.setOfWords.size
             )
         }
-        if (setsOfCards.isNotEmpty()) {
-            val set = setsOfCards.first()
+        if (setsOfAllCards != null) {
             BottomView(
-                text = set.title,
+                set = setsOfAllCards,
                 modifier = Modifier
-                    .padding(top = 128.dp)
+                    .padding(top = 160.dp)
                     .zIndex(2f),
                 backgroundColor = secondaryColor,
                 onDeckSelect = onDeckSelect,
-                countOfWord = set.setOfWords.size
             )
         }
     }
 }
 
 val listOfBottomView = listOf(
-    BottomInfo(text = "Продолжить", backgroundColor = accentSecondColor),
     BottomInfo(
-        text = "Новые слова",
+        set = mockSetOfCard.copy(title = " Продолжить"),
+        backgroundColor = accentSecondColor
+    ),
+    BottomInfo(
+        set = mockSetOfCard.copy(title = "Новые слова"),
         priority = 1f,
         backgroundColor = accentColor
     ),
     BottomInfo(
-        text = "Все слова",
+        set = mockSetOfCard.copy(title = "Все слова"),
         priority = 2f,
         backgroundColor = secondaryColor
     )
 )
 
 data class BottomInfo(
-    val text: String,
+    val set: SetOfCards = mockSetOfCard,
     val backgroundColor: Color,
     val priority: Float = 0f,
     val dimen: Dp = 64.dp
 )
 
-@Preview(backgroundColor = 0xFF8C58D4, showBackground = true)
+@Preview(backgroundColor = 0xFF271460, showBackground = true)
 @Composable
 fun BottomViewsPreview() {
-    ThreeBottomView(modifier = Modifier.height(300.dp))
+    ThreeBottomView(modifier = Modifier.height(300.dp), mockSetOfCard, mockSetOfCard)
 }
 
 private class PreviewProvider : PreviewParameterProvider<BottomInfo> {
@@ -165,8 +175,9 @@ private class PreviewProvider : PreviewParameterProvider<BottomInfo> {
 fun BottomViewPreview(@PreviewParameter(PreviewProvider::class) state: BottomInfo) {
     Box(modifier = Modifier.padding(vertical = 16.dp)) {
         BottomView(
-            text = state.text,
-            modifier = Modifier.align(Alignment.BottomCenter)
+            set = state.set,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
                 .padding(top = state.dimen * state.priority)
                 .zIndex(state.priority),
             backgroundColor = state.backgroundColor

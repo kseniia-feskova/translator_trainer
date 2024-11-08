@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Update
 import com.data.model.SetOfWords
 import com.data.model.SetWordCrossRef
 import com.data.model.WordEntity
@@ -53,4 +54,11 @@ interface WordDao {
         startDate: Date,
         endDate: Date,
     ): Flow<List<WordEntity>>
+
+    // Метод для обновления слова
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun updateWord(word: WordEntity)
+
+    @Query("SELECT * FROM words WHERE id = :id")
+    suspend fun getWordById(id: Int): WordEntity?
 }
