@@ -14,6 +14,7 @@ import java.util.Date
 
 const val ALL_WORDS = "Все слова"
 const val NEW_WORDS = "Новые слова"
+const val CURRENT_WORDS = "Текущий набор"
 
 @Dao
 interface WordDao {
@@ -61,4 +62,21 @@ interface WordDao {
 
     @Query("SELECT * FROM words WHERE id = :id")
     suspend fun getWordById(id: Int): WordEntity?
+
+    // Метод для удаления набора слов и связанных записей
+    @Transaction
+    suspend fun deleteSetWithWords(setId: Int) {
+        // Удаляем связи между набором и словами
+        deleteSetWordCrossRefs(setId)
+        // Удаляем сам набор
+        deleteSetById(setId)
+    }
+
+    // Удалить записи в set_word_cross_ref по setId
+    @Query("DELETE FROM set_word_cross_ref WHERE setId = :setId")
+    suspend fun deleteSetWordCrossRefs(setId: Int)
+
+    // Удалить набор по id
+    @Query("DELETE FROM sets_of_words WHERE id = :setId")
+    suspend fun deleteSetById(setId: Int)
 }

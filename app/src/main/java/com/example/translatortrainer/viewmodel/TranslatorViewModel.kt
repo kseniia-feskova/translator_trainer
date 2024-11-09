@@ -6,21 +6,29 @@ import androidx.lifecycle.viewModelScope
 import com.data.mock.model.SetOfCards
 import com.data.mock.model.Status
 import com.data.mock.model.Word
+import com.data.model.SetLevel
+import com.data.model.SetOfWords
 import com.data.model.WordEntity
 import com.data.repository.translate.ITranslateRepository
+import com.data.room.CURRENT_WORDS
 import com.data.room.NEW_WORDS
 import com.data.translate.Language
+import com.domain.usecase.IAddSetOfWordsUseCase
+import com.domain.usecase.IAddSetWordCrossRef
 import com.domain.usecase.IAddWordUseCase
+import com.domain.usecase.IGetFilteredWordsUseCase
 import com.domain.usecase.IGetSetOfAllCardsUseCase
 import com.domain.usecase.IGetSetOfCardsUseCase
 import com.domain.usecase.IGetWordsOfSetUseCase
 import com.domain.usecase.toStatus
 import com.example.translatortrainer.ui.screens.main.translate.model.TranslatorIntent
 import com.example.translatortrainer.ui.screens.main.translate.model.TranslatorState
+import com.example.translatortrainer.viewmodel.MainViewModel.Companion.allSetCards
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.Date
 
 
 class TranslatorViewModel(
@@ -28,7 +36,10 @@ class TranslatorViewModel(
     private val addWordUseCase: IAddWordUseCase,
     private val getAllWordsUseCase: IGetSetOfAllCardsUseCase,
     private val getWordsFromSetUseCase: IGetWordsOfSetUseCase,
-    private val getSetOfCards: IGetSetOfCardsUseCase
+    private val getSetOfCards: IGetSetOfCardsUseCase,
+    private val getNewWords: IGetFilteredWordsUseCase,
+    private val addSet: IAddSetOfWordsUseCase,
+    private val addWordToSet: IAddSetWordCrossRef
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(TranslatorState())
@@ -41,6 +52,9 @@ class TranslatorViewModel(
     private val _setsOfNewCards = MutableStateFlow<SetOfCards?>(null)
     val setsOfNewCards = _setsOfNewCards.asStateFlow()
 
+    private val _currentSet = MutableStateFlow<SetOfCards?>(null)
+    val currentSet = _currentSet.asStateFlow()
+
     private var allSetID = ""
 
 
@@ -48,6 +62,7 @@ class TranslatorViewModel(
         viewModelScope.launch {
             val allSet = getAllWordsUseCase.invoke()
             val newWordsSet = getSetOfCards.invoke(NEW_WORDS)
+            val currentSet = getSetOfCards.invoke(CURRENT_WORDS)
             if (allSet != null) {
                 launch {
                     getWordsFromSetUseCase.invoke(allSet.id).collect { wordList ->
@@ -65,6 +80,8 @@ class TranslatorViewModel(
                         Log.e(TAG, "All words = ${_setsOfAllCards.value}")
                     }
                 }
+            } else {
+                addSet.invoke(allSetCards)
             }
             Log.e(TAG, "NewWords $newWordsSet")
             if (newWordsSet != null) {
@@ -77,6 +94,47 @@ class TranslatorViewModel(
                                     newWordsSet.id,
                                     newWordsSet.name,
                                     newWordsSet.level,
+                                    newWords.toWords()
+                                )
+                            }
+                        } else {
+                            Log.e(TAG, "New all words = null")
+                        }
+                    }
+                }
+            } else {
+                getNewWords.getWordsFilteredByDateOrStatus(
+                    getPreviousDay(),
+                    Date()
+                ).collect { cards ->
+                    val newWords = getSetOfCards.invoke(NEW_WORDS)
+                    if (newWords == null) {
+                        Log.e(TAG, "New words = $cards")
+                        val newCradsSet = SetOfWords(
+                            name = NEW_WORDS,
+                            level = SetLevel.EASY,
+                            userId = allSet?.userId ?: 0
+                        )
+                        val setId = addSet.invoke(newCradsSet)
+                        if (setId != -1L) {
+                            Log.e("NEW CARDS", "Response = $setId")
+                            cards.forEach {
+                                addWordToSet.invoke(wordID = it.id, setID = setId.toInt())
+                            }
+                        }
+                    }
+                }
+            }
+            if (currentSet != null) {
+                Log.e(TAG, "currentSet is not empty")
+                launch {
+                    getWordsFromSetUseCase.invoke(currentSet.id).collect { newWords ->
+                        if (newWords.isNotEmpty()) {
+                            _currentSet.update {
+                                SetOfCards(
+                                    currentSet.id,
+                                    currentSet.name,
+                                    currentSet.level,
                                     newWords.toWords()
                                 )
                             }

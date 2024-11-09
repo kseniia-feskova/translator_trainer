@@ -46,7 +46,6 @@ fun CardSetScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding)
                 .background(color = primaryColor)
         ) {
             TopViewCardSet(state.knowWords, state.allWords, name = state.name)

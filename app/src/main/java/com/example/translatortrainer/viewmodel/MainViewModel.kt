@@ -57,7 +57,7 @@ class MainViewModel(
     }
 
     companion object {
-        private val allSetCards = SetOfWords(0, ALL_WORDS, SetLevel.EASY, 0)
+        val allSetCards = SetOfWords(0, ALL_WORDS, SetLevel.EASY, 0)
     }
 }
 

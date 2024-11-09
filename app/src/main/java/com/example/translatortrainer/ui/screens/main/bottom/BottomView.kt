@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -51,7 +52,6 @@ fun BottomView(
                 Log.e("BorromView", "Set ${set.id} , ${set.title}")
                 onDeckSelect(set.id)
             }
-            .height(300.dp)
             .background(
                 color = backgroundColor,
                 shape = RoundedCornerShape(
@@ -100,24 +100,26 @@ fun ThreeBottomView(
     modifier: Modifier,
     setsOfAllCards: SetOfCards? = null,
     setsOfNewCards: SetOfCards? = null,
+    setsOfCurrentCards: SetOfCards? = null,
     onDeckSelect: (Int) -> Unit = {}
 ) {
     Log.e("THree Bottom View", "SetsOfCrads = $setsOfAllCards")
-    Box(modifier) {
-//        if (setsOfCards.size > 2) {
-//            val set = setsOfCards[2]
-//            BottomView(
-//                set = set,
-//                backgroundColor = accentSecondColor,
-//                onDeckSelect = onDeckSelect,
-//            )
-//        }
+    Box(modifier = Modifier.then(modifier)) {
+        if (setsOfCurrentCards != null) {
+            BottomView(
+                modifier = Modifier.fillMaxHeight()
+                    .zIndex(1f),
+                set = setsOfCurrentCards,
+                backgroundColor = accentSecondColor,
+                onDeckSelect = onDeckSelect,
+            )
+        }
         if (setsOfNewCards != null) {
             BottomView(
                 set = setsOfNewCards,
-                modifier = Modifier
+                modifier = Modifier.fillMaxHeight()
                     .padding(top = 64.dp)
-                    .zIndex(1f),
+                    .zIndex(2f),
                 backgroundColor = accentColor,
                 onDeckSelect = onDeckSelect,
             )
@@ -125,9 +127,9 @@ fun ThreeBottomView(
         if (setsOfAllCards != null) {
             BottomView(
                 set = setsOfAllCards,
-                modifier = Modifier
-                    .padding(top = 160.dp)
-                    .zIndex(2f),
+                modifier = Modifier.fillMaxHeight()
+                    .padding(top = 128.dp)
+                    .zIndex(3f),
                 backgroundColor = secondaryColor,
                 onDeckSelect = onDeckSelect,
             )
@@ -162,7 +164,7 @@ data class BottomInfo(
 @Preview(backgroundColor = 0xFF271460, showBackground = true)
 @Composable
 fun BottomViewsPreview() {
-    ThreeBottomView(modifier = Modifier.height(300.dp), mockSetOfCard, mockSetOfCard)
+    ThreeBottomView(modifier = Modifier.height(450.dp), mockSetOfCard, mockSetOfCard, mockSetOfCard)
 }
 
 private class PreviewProvider : PreviewParameterProvider<BottomInfo> {

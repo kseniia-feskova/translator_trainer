@@ -20,6 +20,6 @@ val appModule = module {
 val viewModelModule = module {
     viewModel { MainViewModel(get(), get(), get(), get(), get()) }
     viewModelOf(::TranslatorViewModel)
-    viewModel { (setId: Int) -> CardSetViewModel(setId, get(), get(), get(), get()) }
+    viewModel { (setId: Int) -> CardSetViewModel(setId, get(), get(), get(), get(), get()) }
     viewModel { (setId: Int) -> SelectTranslateViewModel(setId, get(), get(), get()) }
 }

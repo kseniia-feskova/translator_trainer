@@ -29,6 +29,7 @@ import com.data.mock.model.SetOfCards
 import com.data.translate.Language
 import com.example.translatortrainer.ui.primaryColor
 import com.example.translatortrainer.ui.screens.main.bottom.ThreeBottomView
+import com.example.translatortrainer.ui.screens.main.bottom.mockSetOfCard
 import com.example.translatortrainer.ui.screens.main.top.TopView
 import com.example.translatortrainer.ui.screens.main.translate.TranslateView
 import com.example.translatortrainer.ui.screens.main.translate.model.TranslatorState
@@ -38,6 +39,7 @@ fun MainScreen(
     state: TranslatorState = TranslatorState(inputText = "Katze"),
     setsOfAllCards: SetOfCards? = null,
     setsOfNewCards: SetOfCards? = null,
+    setsOfCurrentCards: SetOfCards? = null,
     onWordInput: (String) -> Unit = {},
     onDeckSelect: (Int) -> Unit = {},
     onEnterText: (String, Language, Language) -> Unit = { text, originalLanguage, resLanguage -> },
@@ -50,13 +52,12 @@ fun MainScreen(
 
     //val componentHeight = screenHeight * 0.2f
     val donutSize = screenHeight * 0.7f * 0.2f
-    val bottomHeight = screenHeight * 0.3f
+    val bottomHeight = screenHeight * 0.35f
 
     Scaffold() { padding ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding)
                 .background(color = primaryColor)
         ) {
 
@@ -107,6 +108,7 @@ fun MainScreen(
                         .height(bottomHeight),
                     setsOfAllCards,
                     setsOfNewCards,
+                    setsOfCurrentCards,
                     onDeckSelect
                 )
             }
@@ -133,6 +135,9 @@ fun MainScreenWithButtonPreview() {
         state = TranslatorState().copy(
             inputText = "Katze",
             translatedText = "Котик"
-        )
+        ),
+        setsOfAllCards = mockSetOfCard,
+        setsOfNewCards = mockSetOfCard,
+        setsOfCurrentCards = mockSetOfCard
     )
 }

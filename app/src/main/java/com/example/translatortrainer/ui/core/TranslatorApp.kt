@@ -33,11 +33,13 @@ fun TranslatorApp() {
             val state by viewModel.uiState.collectAsState()
             val setsOfAllCards by viewModel.setsOfAllCards.collectAsState()
             val setsOfNewCards by viewModel.setsOfNewCards.collectAsState()
+            val currentSet by viewModel.currentSet.collectAsState()
 
             MainScreen(
                 state = state,
                 setsOfAllCards = setsOfAllCards,
                 setsOfNewCards = setsOfNewCards,
+                setsOfCurrentCards = currentSet,
                 onWordInput = { viewModel.handleIntent(TranslatorIntent.InputingText(it)) },
                 onDeckSelect = { setId -> navController.navigate("set/$setId") },
                 onEnterText = { text, originalLanguage, resLanguage ->
@@ -65,8 +67,9 @@ fun TranslatorApp() {
                 addWordToLearn = { viewModel.handleIntent(CardSetIntent.AddWordToLearn(it)) },
                 resetCardSet = { viewModel.handleIntent(CardSetIntent.ResetCardSet) },
                 startCourse = {
-                    viewModel.handleIntent(CardSetIntent.StartSelected)
-                    navController.navigate("course/$setId")
+                    viewModel.handleIntent(CardSetIntent.StartSelected { setId ->
+                        navController.navigate("course/$setId")
+                    })
                 }
             )
         }

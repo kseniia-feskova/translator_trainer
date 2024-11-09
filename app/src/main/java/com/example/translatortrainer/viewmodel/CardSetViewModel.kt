@@ -3,9 +3,14 @@ package com.example.translatortrainer.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.data.model.SetLevel
+import com.data.model.SetOfWords
+import com.data.model.WordEntity
 import com.data.model.WordStatus
+import com.data.room.CURRENT_WORDS
+import com.domain.usecase.IAddSetOfWordsUseCase
+import com.domain.usecase.IAddSetWordCrossRef
 import com.domain.usecase.IGetSetOfCardsUseCase
-import com.domain.usecase.IGetWordByIdUseCase
 import com.domain.usecase.IGetWordsOfSetUseCase
 import com.domain.usecase.IUpdateWordUseCase
 import com.example.translatortrainer.mapper.toWordUI
@@ -18,30 +23,33 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class CardSetViewModel(
-    setId: Int,
+    private val setId: Int,
     private val getCardSet: IGetSetOfCardsUseCase,
     private val gerWords: IGetWordsOfSetUseCase,
-    private val getWordById: IGetWordByIdUseCase,
-    private val updateWord: IUpdateWordUseCase
+    private val updateWord: IUpdateWordUseCase,
+    private val addSet: IAddSetOfWordsUseCase,
+    private val addWordsToSet: IAddSetWordCrossRef
 ) : ViewModel() {
 
     private var listOfCards: List<WordUI> = listOf()
+    private var setOfCards: SetOfWords? = null
+    private var setOFWords: Set<WordEntity> = setOf()
     private val _uiState = MutableStateFlow(CardSetState())
     val uiState = _uiState.asStateFlow()
 
     init {
         viewModelScope.launch {
-            val setOfCards = getCardSet.invoke(setId)
+            setOfCards = getCardSet.invoke(setId)
             Log.e(TAG, "set = ${setOfCards?.name}, id = $setId")
-            setOfCards?.id?.let {
-                gerWords.invoke(it).collect { words ->
-                    Log.e(TAG, "Words = ${words.size}, set = ${setOfCards.name}")
-//                    if (listOfCards.isEmpty()) {
+            setOfCards?.let { set ->
+                gerWords.invoke(set.id).collect { words ->
+                    setOFWords = words.toSet()
+                    Log.e(TAG, "Words = ${words.size}, set = ${set.name}")
                     if (listOfCards.isEmpty()) {
-                        listOfCards = words.map { it.toWordUI() }
+                        listOfCards = words.map { word -> word.toWordUI() }
                         _uiState.update {
                             it.copy(
-                                name = setOfCards.name,
+                                name = set.name,
                                 allWords = words.size,
                                 knowWords = words.filter { it.status == WordStatus.LEARNED }.size,
                                 words = Pair(listOfCards.first(), listOfCards.getOrNull(1))
@@ -65,12 +73,7 @@ class CardSetViewModel(
             is CardSetIntent.AddWordToLearn -> addWordToLearn(word = intent.word)
             is CardSetIntent.ResetCardSet -> resetCardSet()
             is CardSetIntent.StartSelected -> {
-                viewModelScope.launch {
-                    val word = _uiState.value.words?.first?.id?.let { getWordById.invoke(it) }
-                    word?.let {
-                        updateWord.invoke(it.copy(status = WordStatus.LEARNED))
-                    }
-                }
+                createCurrentSet() { intent.onSetCreated(it) }
             }
         }
     }
@@ -123,6 +126,33 @@ class CardSetViewModel(
         }
     }
 
+    private fun createCurrentSet(onSetCreated: (Int) -> Unit) {
+        viewModelScope.launch {
+            setOfCards?.let {
+                val current = SetOfWords(
+                    name = CURRENT_WORDS,
+                    level = SetLevel.EASY,
+                    userId = it.userId
+                )
+                val setID = addSet.invoke(current)
+                if (setID != -1L) {
+                    Log.e("NEW CARDS", "Response = $setId")
+                    val filtered = setOFWords.filter { it.status != WordStatus.LEARNED }.shuffled()
+                    if (filtered.size > 5) {
+                        filtered.take(5).forEach {
+                            addWordsToSet.invoke(wordID = it.id, setID = setID.toInt())
+                        }
+                    } else {
+                        filtered.forEach {
+                            addWordsToSet.invoke(wordID = it.id, setID = setID.toInt())
+                        }
+                    }
+                    onSetCreated(setID.toInt())
+                }
+            }
+        }
+    }
+
     private fun resetCardSet() {
         val words = Pair(listOfCards.firstOrNull(), listOfCards.getOrNull(1))
         _uiState.update { state ->
@@ -149,5 +179,5 @@ sealed class CardSetIntent {
     data class AddWordToKnow(val word: WordUI) : CardSetIntent()
     data class AddWordToLearn(val word: WordUI) : CardSetIntent()
     object ResetCardSet : CardSetIntent()
-    object StartSelected : CardSetIntent()
+    data class StartSelected(val onSetCreated: (Int) -> Unit = {}) : CardSetIntent()
 }
