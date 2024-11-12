@@ -5,6 +5,7 @@ import androidx.room.PrimaryKey
 import java.util.Calendar
 import java.util.Date
 
+
 @Entity(tableName = "words")
 data class WordEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
@@ -13,6 +14,7 @@ data class WordEntity(
     val status: WordStatus,
     val dateAdded: Date = Date() // по умолчанию дата текущая
 )
+
 
 enum class WordStatus {
     NEW,
