@@ -29,7 +29,7 @@ class TranslateRepository(
             return directTranslation
         }
 
-        val match = response.matches.firstOrNull { it.segment == "Katze" }
+        val match = response.matches.maxByOrNull { it.match }
         return match?.translation ?: "Перевод не найден"
     }
 }

@@ -44,4 +44,6 @@ dependencies {
     implementation 'io.insert-koin:koin-android:3.5.0'
 
     implementation project(':data')
+    implementation project(':presentation')
+
 }
