@@ -5,6 +5,7 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -18,8 +19,10 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.CompareArrows
+import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -36,15 +39,19 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import com.presentation.ui.core.ActionButton
+import com.presentation.ui.AppTheme
+import com.presentation.ui.AppTypography
+import com.presentation.ui.indicatorColorLight
+import com.presentation.ui.onPrimaryColorLight
+import com.presentation.ui.onSurfaceLight
+import com.presentation.ui.primaryColorLight
 import com.presentation.ui.screens.main.translate.model.TranslatorState
 import com.presentation.ui.secondaryColor
 import com.presentation.utils.Language
@@ -61,6 +68,8 @@ fun TranslateView(
     onLanguageChange: () -> Unit = {},
     onSaveClick: () -> Unit = {},
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     var isSwapped by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
 
@@ -138,8 +147,7 @@ fun TranslateView(
         ) {
             Text(
                 text = "Немецкий",
-                color = Color.White,
-                fontSize = TextUnit(18f, TextUnitType.Sp)
+                style = AppTypography.titleLarge,
             )
 
             OutlinedTextField(
@@ -161,10 +169,15 @@ fun TranslateView(
                 },
                 label = { Text("") },
                 colors = TextFieldDefaults.colors().copy(
-                    disabledContainerColor = secondaryColor,
-                    unfocusedContainerColor = secondaryColor,
-                    focusedContainerColor = secondaryColor,
+                    cursorColor = onSurfaceLight,
+                    unfocusedIndicatorColor = indicatorColorLight,
+                    unfocusedContainerColor = primaryColorLight,
+                    focusedIndicatorColor = indicatorColorLight,
+                    focusedContainerColor = primaryColorLight,
+                    unfocusedTextColor = onPrimaryColorLight,
+                    focusedTextColor = onPrimaryColorLight
                 ),
+                textStyle = AppTypography.bodyLarge,
                 shape = RoundedCornerShape(10.dp),
                 keyboardOptions = KeyboardOptions.Default.copy(
                     imeAction = ImeAction.Done
@@ -173,6 +186,7 @@ fun TranslateView(
                 keyboardActions = KeyboardActions(
                     onDone = {
                         onEnterText(state.inputText, state.originalLanguage, state.resLanguage)
+                        keyboardController?.hide()
                     }
                 ),
             )
@@ -183,15 +197,17 @@ fun TranslateView(
         Icon(
             Icons.AutoMirrored.Filled.CompareArrows,
             contentDescription = "Change",
-            tint = secondaryColor,
+            tint = onSurfaceLight,
             modifier = Modifier
                 .rotate(90f)
                 .padding(8.dp)
                 .scale(1.5f)
-                .clickable {
+                .clickable(indication = null,
+                    interactionSource = remember { MutableInteractionSource() }) {
                     isSwapped = !isSwapped
-                }
-        )
+                },
+
+            )
 
         Column(
             modifier = Modifier
@@ -201,20 +217,11 @@ fun TranslateView(
         ) {
             Text(
                 text = "Русский",
-                color = Color.White,
-                fontSize = TextUnit(18f, TextUnitType.Sp)
+                style = AppTypography.titleLarge,
             )
 
             OutlinedTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .shadow(
-                        elevation = 18.dp,
-                        clip = false,
-                        shape = RoundedCornerShape(10.dp),
-                        ambientColor = if (!isSwapped) targetColor else Color.Transparent,
-                        spotColor = if (!isSwapped) targetColor else Color.Transparent
-                    ),
+                modifier = Modifier.fillMaxWidth(),
                 value = if (!isSwapped) state.translatedText else state.inputText,
                 onValueChange = {
                     if (isSwapped) {
@@ -223,11 +230,6 @@ fun TranslateView(
                 },
                 readOnly = !isSwapped,
                 label = { Text("") },
-                colors = TextFieldDefaults.colors().copy(
-                    disabledContainerColor = secondaryColor,
-                    unfocusedContainerColor = secondaryColor,
-                    focusedContainerColor = secondaryColor,
-                ),
                 shape = RoundedCornerShape(10.dp),
                 keyboardOptions = KeyboardOptions.Default.copy(
                     imeAction = ImeAction.Done
@@ -237,19 +239,27 @@ fun TranslateView(
                         onEnterText(state.inputText, state.originalLanguage, state.resLanguage)
                     }
                 ),
-            )
+                colors = TextFieldDefaults.colors().copy(
+                    cursorColor = onSurfaceLight,
+                    unfocusedIndicatorColor = indicatorColorLight,
+                    unfocusedContainerColor = primaryColorLight,
+                    focusedIndicatorColor = indicatorColorLight,
+                    focusedContainerColor = primaryColorLight
+                ),
+                trailingIcon = {
+                    if (state.translatedText.isNotEmpty() && state.inputText.isNotEmpty()) {
+                        Icon(
+                            modifier = Modifier.clickable { onSaveClick() },
+                            imageVector = Icons.Default.Save,
+                            contentDescription = "Save",
+                            tint = indicatorColorLight
+                        )
+                    }
+                },
+
+                )
         }
         Spacer(modifier = Modifier.height(32.dp))
-        if (state.translatedText.isNotEmpty() && state.inputText.isNotEmpty()) {
-            ActionButton(
-                modifier = Modifier.padding(horizontal = 72.dp),
-                onClick = { onSaveClick() }) {
-                Text("Сохранить")
-            }
-        } else {
-            Spacer(modifier = Modifier.height(56.dp))
-
-        }
     }
 }
 
@@ -261,10 +271,15 @@ private class PreviewProvider : PreviewParameterProvider<TranslatorState> {
         get() = listOfStates.asSequence()
 }
 
-@Preview(backgroundColor = 0xFF5633D1, showBackground = true)
+@Preview()
 @Composable
 fun TranslateViewPreview(@PreviewParameter(PreviewProvider::class) state: TranslatorState) {
-    Box(modifier = Modifier.padding(vertical = 12.dp)) {
-        TranslateView(state = state)
+    AppTheme {
+        Surface {
+
+            Box(modifier = Modifier.padding(vertical = 12.dp)) {
+                TranslateView(state = state)
+            }
+        }
     }
 }

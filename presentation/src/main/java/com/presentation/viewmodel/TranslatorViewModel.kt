@@ -23,6 +23,7 @@ import com.presentation.utils.NEW_WORDS
 import com.presentation.viewmodel.MainViewModel.Companion.allSetCards
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.Date
@@ -62,23 +63,20 @@ class TranslatorViewModel(
             val newWordsSet = getSetOfCards.invoke(NEW_WORDS)
             val currentSet = getSetOfCards.invoke(CURRENT_WORDS)
             if (allSet?.id != null) {
-                launch {
-                    getWordsFromSetUseCase.invoke(allSet.id).collect { wordList ->
-                        allSetID = allSet.id.toString()
-                        if (wordList.isNotEmpty()) {
-                            _setsOfAllCards.update {
-                                SetOfCards(
-                                    allSet.id,
-                                    allSet.title,
-                                    allSet.level,
-                                    setOfWords = wordList.toSet(),
-                                    userId = allSet.userId
-                                )
-                            }
-                        }
-                        Log.e(TAG, "All words = ${_setsOfAllCards.value}")
+                val wordList = getWordsFromSetUseCase.invoke(allSet.id).first()
+                allSetID = allSet.id.toString()
+                if (wordList.isNotEmpty()) {
+                    _setsOfAllCards.update {
+                        SetOfCards(
+                            allSet.id,
+                            allSet.title,
+                            allSet.level,
+                            setOfWords = wordList.toSet(),
+                            userId = allSet.userId
+                        )
                     }
                 }
+                Log.e(TAG, "All words = ${_setsOfAllCards.value}")
             } else {
                 addSet.invoke(allSetCards)
             }

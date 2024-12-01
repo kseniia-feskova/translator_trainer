@@ -35,7 +35,7 @@ fun DonutChart(
         modifier = modifier
             .size(donutSize)
     ) {
-        Canvas(modifier = Modifier.fillMaxSize().padding(8.dp)) {
+        Canvas(modifier = Modifier.fillMaxSize()) {
             // Размер холста
             val canvasSize = size.minDimension
 

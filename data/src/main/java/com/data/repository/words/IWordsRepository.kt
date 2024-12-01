@@ -36,4 +36,6 @@ interface IWordsRepository {
     suspend fun updateWord(newWord: WordEntity)
 
     suspend fun getWordById(wordId: Int): WordEntity?
+
+    suspend fun deleteSetById(setId:Int)
 }

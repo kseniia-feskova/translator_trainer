@@ -17,6 +17,7 @@ import com.presentation.utils.Course
 import com.presentation.utils.selectLevel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -41,25 +42,24 @@ class CardSetViewModel(
             Log.e(TAG, "set = ${setOfCards?.title}, id = $setId")
             setOfCards?.run {
                 if (id != null) {
-                    gerWords.invoke(id).collect { words ->
-                        setOFWords = words.toSet()
-                        Log.e(TAG, "Words = ${words.size}, set = ${title}")
-                        if (listOfCards.isEmpty()) {
-                            listOfCards = words
-                            _uiState.update {
-                                it.copy(
-                                    name = title,
-                                    allWords = words.size,
-                                    knowWords = words.filter { it.level == Level.KNOW }.size,
-                                    words = Pair(listOfCards.first(), listOfCards.getOrNull(1))
-                                )
-                            }
-                        } else {
-                            _uiState.update {
-                                it.copy(
-                                    knowWords = words.filter { it.level == Level.KNOW }.size,
-                                )
-                            }
+                    val words = gerWords.invoke(id).first()
+                    setOFWords = words.toSet()
+                    Log.e(TAG, "Words = ${words.size}, set = ${title}")
+                    if (listOfCards.isEmpty()) {
+                        listOfCards = words
+                        _uiState.update {
+                            it.copy(
+                                name = title,
+                                allWords = words.size,
+                                knowWords = words.filter { it.level == Level.KNOW }.size,
+                                words = Pair(listOfCards.first(), listOfCards.getOrNull(1))
+                            )
+                        }
+                    } else {
+                        _uiState.update {
+                            it.copy(
+                                knowWords = words.filter { it.level == Level.KNOW }.size,
+                            )
                         }
                     }
                 }
@@ -75,19 +75,12 @@ class CardSetViewModel(
             is CardSetIntent.StartSelected -> {
                 viewModelScope.launch {
                     val currentSet = getCardSet.invoke(CURRENT_WORDS)
-                    Log.e("CArdSet", "Current = $currentSet")
+                    Log.e(TAG, "Current = $currentSet")
                     if (currentSet?.id == null) {
                         createCurrentSet { setId, course -> intent.onSetCreated(setId, course) }
                     } else {
-                        var needToCollect = true
-                        launch {
-                            gerWords.invoke(currentSet.id).collect { words ->
-                                if (needToCollect) {
-                                    needToCollect = false
-                                    intent.onSetCreated(currentSet.id, words.selectLevel())
-                                }
-                            }
-                        }
+                        val words = gerWords.invoke(currentSet.id).first()
+                        intent.onSetCreated(currentSet.id, words.selectLevel())
                     }
                 }
             }
@@ -144,7 +137,6 @@ class CardSetViewModel(
 
     private fun createCurrentSet(onSetCreated: (Int, Course) -> Unit) {
         viewModelScope.launch {
-//            if (setOfCards?.id != null) {
             setOfCards?.run {
                 if (id != null) {
                     val current = SetOfCards(
@@ -154,26 +146,23 @@ class CardSetViewModel(
                     )
                     val setID = addSet.invoke(current)
                     if (setID != -1L) {
-                        Log.e("CArdSet", "create set = $setID")
-                        launch {
-                            gerWords.invoke(id).collect { words ->
-                                val filtered =
-                                    words.filter { it.level != Level.KNOW }.shuffled()
-                                if (filtered.size > 5) {
-                                    val selected = filtered.take(5)
-                                    selected.forEach {
-                                        addWordsToSet.invoke(wordID = it.id, setID = setID.toInt())
-                                    }
-                                    Log.e("CArdSet", "selected = $selected")
-                                    onSetCreated(setID.toInt(), selected.selectLevel())
-                                } else {
-                                    filtered.forEach {
-                                        addWordsToSet.invoke(wordID = it.id, setID = setID.toInt())
-                                    }
-                                    Log.e("CArdSet", "filtered = $filtered")
-                                    onSetCreated(setID.toInt(), filtered.selectLevel())
-                                }
+                        Log.e(TAG, "create set = $setID")
+                        val words = gerWords.invoke(id).first()
+                        val filtered =
+                            words.filter { it.level != Level.KNOW }.shuffled()
+                        if (filtered.size > 5) {
+                            val selected = filtered.take(5)
+                            selected.forEach {
+                                addWordsToSet.invoke(wordID = it.id, setID = setID.toInt())
                             }
+                            Log.e(TAG, "selected = $selected")
+                            onSetCreated(setID.toInt(), selected.selectLevel())
+                        } else {
+                            filtered.forEach {
+                                addWordsToSet.invoke(wordID = it.id, setID = setID.toInt())
+                            }
+                            Log.e(TAG, "filtered = $filtered")
+                            onSetCreated(setID.toInt(), filtered.selectLevel())
                         }
                     }
                 }

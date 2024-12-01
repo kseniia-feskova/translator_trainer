@@ -76,7 +76,9 @@ dependencies {
     // Optional - Integration with LiveData
     implementation 'androidx.compose.runtime:runtime-livedata'
 
-    implementation "androidx.navigation:navigation-compose:2.8.3"
+    implementation 'androidx.compose.ui:ui:1.7.5'
+    implementation 'androidx.compose.material:material:1.7.5'
+    implementation "androidx.navigation:navigation-compose:2.8.4"
     implementation "androidx.hilt:hilt-navigation-compose:1.2.0" // если используешь Hilt
 
 

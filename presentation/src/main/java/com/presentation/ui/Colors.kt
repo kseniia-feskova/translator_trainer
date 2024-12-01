@@ -13,3 +13,12 @@ val accentColor50 = Color(0x80D9CDFD)
 val greenColor = Color(0xFF2D7A32)
 val redColor = Color(0xFFF17575)
 val lightGreenColor = Color(0xFF83FFAD)
+
+
+val surfaceLight = Color(0xFFEAEDFB)
+val onSurfaceLight = Color(0xFF271460)
+val primaryColorLight = Color(0xFFF9FAFB)
+val onPrimaryColorLight = Color(0xFF271460)
+
+val indicatorColorLight = Color(0xFFCDD4FD)
+val accentColorLight = Color(0xFFB9C3FF)

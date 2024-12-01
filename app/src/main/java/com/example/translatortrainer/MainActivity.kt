@@ -2,21 +2,25 @@ package com.example.translatortrainer
 
 
 import android.os.Bundle
+import android.util.Log
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
+import androidx.navigation.compose.rememberNavController
 import com.data.di.databaseModule
 import com.data.di.networkModule
 import com.data.di.repositoryModule
 import com.example.translatortrainer.di.useCaseModule
-import com.example.translatortrainer.di.appModule
 import com.example.translatortrainer.di.viewModelModule
+import com.presentation.navigation.BottomNavigationBar
+import com.presentation.ui.AppTheme
 import com.presentation.ui.core.TranslatorApp
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
@@ -35,16 +39,29 @@ class MainActivity : AppCompatActivity() {
         viewModel.checkAndAddAllWordsSet()
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        enableEdgeToEdge()
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.dark(
+                android.graphics.Color.TRANSPARENT
+            )
+        )
         setContent {
-            MaterialTheme {
-                Surface(
+            val navController = rememberNavController()
+            AppTheme {
+                Scaffold(
                     modifier = Modifier
                         .fillMaxSize()
-                        .systemBarsPadding()
-                ) {
-                    TranslatorApp()
-                }
+                        .systemBarsPadding(),
+                    content = { padding ->
+                        Log.e("Preview", "Padding  = $padding")
+                        Box() {
+                            TranslatorApp(navController)
+                        }
+                    },
+                    bottomBar = {
+                        BottomNavigationBar(navController = navController)
+                    }
+
+                )
             }
         }
     }
@@ -57,7 +74,6 @@ fun MainActivity.startKoin() {
         androidContext(applicationContext)
         modules(
             listOf(
-                appModule,
                 networkModule,
                 repositoryModule,
                 databaseModule,

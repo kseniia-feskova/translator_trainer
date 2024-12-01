@@ -11,6 +11,7 @@ import com.presentation.usecases.IUpdateWordUseCase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -34,15 +35,25 @@ class SelectSecondTranslateViewModel(
 // я по нему беру набор (айди, название и спислок слов)
     // из списка слов беру пять неизвестных и создаю allWords
     init {
+        Log.d(TAG, "SetId = $setId")
         viewModelScope.launch {
             setName = getSet.invoke(setId)?.title ?: ""
-            launch {
-                getWords.invoke(setId).collect { words ->
-                    Log.e("SELEct translate", "Words = $words")
-                    if (translations.isEmpty()) {
-                        allWords = words.toSet()
-                        translations = allWords?.map { it.originalText }?.toSet() ?: setOf()
-                        nextWord()
+            val words = getWords.invoke(setId).first()
+            if (translations.isEmpty()) {
+                allWords = words.toSet()
+                translations = allWords?.map { it.originalText }?.toSet() ?: setOf()
+                Log.e(TAG, "Words = $allWords, \ntranslations = $translations")
+                allWords?.let { allWords ->
+                    _uiState.update {
+                        it.copy(
+                            setName = setName,
+                            allWordsCount = translations.size,
+                            currentWord = allWords.elementAt(0),
+                            nextWord = allWords.elementAtOrNull(1),
+                            translations = translations.shuffled(),
+                            currentWordIndex = _index.value,
+                            selectedOption = ""
+                        )
                     }
                 }
             }
@@ -129,13 +140,10 @@ class SelectSecondTranslateViewModel(
         // можно завершать уровень и приподнимать словам уровень по знанию
         Log.e("SelectTranslateViewModel", "Уровень пройден")
         viewModelScope.launch {
-            launch {
-                getWords.invoke(setId).collect { words ->
-                    val firstFive = words.filter { translations.contains(it.resText) }
-                    firstFive.forEach {
-                        updateWord.invoke(it.copy(level = Level.LEARNING_GOOD))
-                    }
-                }
+            val firstFive =
+                getWords.invoke(setId).first().filter { translations.contains(it.resText) }
+            firstFive.forEach {
+                updateWord.invoke(it.copy(level = Level.LEARNING_GOOD))
             }
             _uiState.update {
                 it.copy(
@@ -143,6 +151,10 @@ class SelectSecondTranslateViewModel(
                 )
             }
         }
+    }
+
+    companion object {
+        private const val TAG = "SelectSecondTranslateViewModel"
     }
 
 }

@@ -7,10 +7,12 @@ import com.presentation.model.SetLevel
 import com.presentation.model.SetOfCards
 import com.presentation.usecases.IAddSetOfWordsUseCase
 import com.presentation.usecases.IAddSetWordCrossRefUseCase
+import com.presentation.usecases.IDeleteSetByIdUseCase
 import com.presentation.usecases.IGetFilteredWordsUseCase
 import com.presentation.usecases.IGetSetOfAllCardsUseCase
 import com.presentation.usecases.IGetSetOfCardsUseCase
 import com.presentation.utils.ALL_WORDS
+import com.presentation.utils.CURRENT_WORDS
 import com.presentation.utils.NEW_WORDS
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -21,7 +23,8 @@ class MainViewModel(
     private val getSet: IGetSetOfCardsUseCase,
     private val addSet: IAddSetOfWordsUseCase,
     private val getNewWords: IGetFilteredWordsUseCase,
-    private val addWordToSet: IAddSetWordCrossRefUseCase
+    private val addWordToSet: IAddSetWordCrossRefUseCase,
+    private val deleteSet: IDeleteSetByIdUseCase
 ) : ViewModel() {
 
     //создание массивов, если их нет
@@ -31,26 +34,34 @@ class MainViewModel(
             if (allCards == null) {
                 addSet.invoke(allSetCards)
             } else {
-                getNewWords.getWordsFilteredByDateOrStatus(
-                    getPreviousDay(),
-                    Date()
-                ).collect { cards ->
-                    val newWords = getSet.invoke(NEW_WORDS)
-                    if (newWords == null) {
-                        Log.e("MainViewModel", "New words = $cards")
-                        val newCardsSet = SetOfCards(
-                            title = NEW_WORDS,
-                            level = SetLevel.EASY,
-                            userId = allCards.userId
-                        )
-                        val setId = addSet.invoke(newCardsSet)
-                        if (setId != -1L) {
-                            Log.e("NEW CARDS", "Response = $setId")
-                            cards.forEach {
-                                addWordToSet.invoke(wordID = it.id, setID = setId.toInt())
+                launch {
+                    getNewWords.getWordsFilteredByDateOrStatus(
+                        getPreviousDay(),
+                        Date()
+                    ).collect { cards ->
+                        val newWords = getSet.invoke(NEW_WORDS)
+                        if (newWords == null) {
+                            Log.e("MainViewModel", "New words = $cards")
+                            val newCardsSet = SetOfCards(
+                                title = NEW_WORDS,
+                                level = SetLevel.EASY,
+                                userId = allCards.userId
+                            )
+                            val setId = addSet.invoke(newCardsSet)
+                            if (setId != -1L) {
+                                Log.e("NEW CARDS", "Response = $setId")
+                                cards.forEach {
+                                    addWordToSet.invoke(wordID = it.id, setID = setId.toInt())
+                                }
                             }
                         }
                     }
+                }
+
+                val currentSet = getSet.invoke(CURRENT_WORDS)
+                Log.e("MainViewModel", "Current = $currentSet")
+                if (currentSet?.id != null && currentSet.setOfWords.isEmpty()) {
+                    deleteSet.invoke(currentSet.id)
                 }
             }
         }

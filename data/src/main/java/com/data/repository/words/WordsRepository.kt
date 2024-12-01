@@ -53,6 +53,10 @@ class WordsRepository(
     override suspend fun getWordById(wordId: Int): WordEntity? {
         return dao.getWordById(wordId)
     }
+
+    override suspend fun deleteSetById(setId: Int) {
+        dao.deleteSetWithWords(setId)
+    }
 }
 
 

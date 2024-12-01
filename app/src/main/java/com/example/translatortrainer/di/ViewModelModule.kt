@@ -10,12 +10,8 @@ import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.dsl.module
 
 
-val appModule = module {
-    // singleOf(::TestDataHelper) bind ITestDataHelper::class
-}
-
 val viewModelModule = module {
-    viewModel { MainViewModel(get(), get(), get(), get(), get()) }
+    viewModel { MainViewModel(get(), get(), get(), get(), get(), get( )) }
     viewModelOf(::TranslatorViewModel)
     viewModel { (setId: Int) ->
         CardSetViewModel(
