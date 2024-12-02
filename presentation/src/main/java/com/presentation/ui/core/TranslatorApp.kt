@@ -9,10 +9,10 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.presentation.navigation.BottomNavItem
 import com.presentation.ui.screens.course.second_translate.CourseSelectSecondTranslateScreen
 import com.presentation.ui.screens.course.translate.CourseSelectTranslateScreen
-import com.presentation.ui.screens.main.HomeScreen
-import com.presentation.ui.screens.main.translate.model.TranslatorIntent
+import com.presentation.ui.screens.home.homeScreen
 import com.presentation.ui.screens.set.CardSetScreen
 import com.presentation.utils.Course
 import com.presentation.viewmodel.CardSetIntent
@@ -33,26 +33,9 @@ fun TranslatorApp(
 
     NavHost(
         navController = navController,
-        startDestination = "main",
+        startDestination = BottomNavItem.Home.route,
     ) {
-        composable("main") {
-            val viewModel: com.presentation.viewmodel.TranslatorViewModel = koinViewModel()
-            val state by viewModel.uiState.collectAsState()
-            Log.d(TAG, "Open MainScreen")
-
-            HomeScreen(
-                state = state,
-                onWordInput = { viewModel.handleIntent(TranslatorIntent.InputingText(it)) },
-                onEnterText = { text, originalLanguage, resLanguage ->
-                    viewModel.handleIntent(
-                        TranslatorIntent.EnterText(text, originalLanguage, resLanguage)
-                    )
-                },
-                onFinishGlow = { viewModel.handleIntent(TranslatorIntent.HideGlow) },
-                onLanguageChange = { viewModel.handleIntent(TranslatorIntent.ChangeLanguages) },
-                onSaveClick = { viewModel.handleIntent(TranslatorIntent.SaveWord) }
-            )
-        }
+        homeScreen()
 
         composable(
             route = "set/{setId}",

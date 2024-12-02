@@ -1,16 +1,15 @@
-package com.presentation.ui.screens.main
+package com.presentation.ui.screens.home
 
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -29,24 +28,22 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.presentation.navigation.BottomNavigationBar
 import com.presentation.ui.AppTheme
-import com.presentation.ui.screens.main.top.TopView
-import com.presentation.ui.screens.main.translate.TranslateView
-import com.presentation.ui.screens.main.translate.model.TranslatorState
-import com.presentation.utils.Language
+import com.presentation.ui.views.TopView
+import com.presentation.ui.views.TranslateView
 
 @Composable
 fun HomeScreen(
-    state: TranslatorState = TranslatorState(inputText = "Katze"),
+    state: HomeUIState,
     onWordInput: (String) -> Unit = {},
-    onEnterText: (String, Language, Language) -> Unit = { _, _, _ -> },
-    onFinishGlow: () -> Unit = {},
-    onLanguageChange: () -> Unit = {},
+    onEnterText: (String) -> Unit = { },
     onSaveClick: () -> Unit = {},
 ) {
     var showTopView by remember { mutableStateOf(false) }
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
-
     val donutSize = screenHeight * 0.17f
+
+    LaunchedEffect(Unit) { showTopView = true }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -70,34 +67,13 @@ fun HomeScreen(
 
         TranslateView(
             modifier = Modifier
+                .padding(24.dp)
                 .align(Alignment.Center),
             state = state,
             onTextChange = onWordInput,
             onEnterText = onEnterText,
-            onFinishGlow = onFinishGlow,
-            onLanguageChange = onLanguageChange,
             onSaveClick = onSaveClick
         )
-
-        AnimatedVisibility(
-            modifier = Modifier
-                .align(Alignment.BottomCenter),
-            visible = showTopView,
-            enter = fadeIn(tween(1000)) +
-                    slideInVertically(
-                        initialOffsetY = { it } // Начальная позиция - вне экрана (снизу)
-                    ),
-            exit = fadeOut(tween(500)) +
-                    slideOutVertically(
-                        targetOffsetY = { it } // Конечная позиция - вне экрана (снизу)
-                    )
-        ) {
-
-        }
-    }
-
-    LaunchedEffect(Unit) {
-        showTopView = true
     }
 }
 
@@ -106,7 +82,7 @@ fun HomeScreen(
 fun MainScreenPreview() {
     AppTheme {
         Surface {
-            HomeScreen()
+            HomeScreen(state = HomeUIState(inputText = "Katze"))
         }
     }
 }
@@ -118,7 +94,7 @@ fun MainScreenWithButtonPreview() {
         Scaffold(content = { paddings ->
             Log.e("Preview", "paddings $paddings")
             HomeScreen(
-                state = TranslatorState().copy(
+                state = HomeUIState().copy(
                     inputText = "Katze",
                     translatedText = "Котик"
                 )

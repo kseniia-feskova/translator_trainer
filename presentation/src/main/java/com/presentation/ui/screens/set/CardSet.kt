@@ -26,7 +26,6 @@ import com.presentation.ui.accentColor50
 import com.presentation.ui.accentColor80
 import com.presentation.ui.core.SecondButton
 import com.presentation.ui.primaryColor
-import com.presentation.ui.screens.main.bottom.mockSetOfCard
 import com.presentation.ui.secondaryColor
 
 

@@ -26,10 +26,11 @@ import com.presentation.ui.AppTheme
 import com.presentation.ui.accentColorLight
 import com.presentation.ui.onSurfaceLight
 import com.presentation.ui.primaryColorLight
+import com.presentation.ui.screens.home.homeScreen
 import com.presentation.ui.surfaceLight
 
 enum class BottomNavItem(val route: String, val iconRes: Int, val label: String) {
-    Home("main", R.drawable.ic_translate, "Home"),
+    Home(homeScreen, R.drawable.ic_translate, "Home"),
     Sets("sets", R.drawable.ic_sets, "Sets"),
     Profile("profile", R.drawable.ic_account, "Profile")
 }
@@ -53,8 +54,11 @@ fun BottomNavigationBar(navController: NavController) {
                 selected = currentRoute == item.route,
                 onClick = {
                     navController.navigate(item.route) {
-                        popUpTo(navController.graph.startDestinationId)
+                        popUpTo(navController.graph.startDestinationId) {
+                            saveState = true
+                        }
                         launchSingleTop = true
+                        restoreState = true
                     }
                 },
                 icon = { Icon(painterResource(item.iconRes), contentDescription = null) },
