@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -28,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.presentation.navigation.BottomNavigationBar
 import com.presentation.ui.AppTheme
+import com.presentation.ui.views.Loader
 import com.presentation.ui.views.TopView
 import com.presentation.ui.views.TranslateView
 
@@ -37,6 +39,7 @@ fun HomeScreen(
     onWordInput: (String) -> Unit = {},
     onEnterText: (String) -> Unit = { },
     onSaveClick: () -> Unit = {},
+    onLanguageChange: () -> Unit = {}
 ) {
     var showTopView by remember { mutableStateOf(false) }
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
@@ -62,7 +65,6 @@ fun HomeScreen(
         ) {
             TopView(18, donutSize = donutSize)
         }
-
         Spacer(modifier = Modifier.height(100.dp))
 
         TranslateView(
@@ -72,8 +74,16 @@ fun HomeScreen(
             state = state,
             onTextChange = onWordInput,
             onEnterText = onEnterText,
-            onSaveClick = onSaveClick
+            onSaveClick = onSaveClick,
+            onLanguageChange = onLanguageChange
         )
+        if (state.loading) {
+            Loader(
+                modifier = Modifier
+                    .width(80.dp)
+                    .align(Alignment.Center)
+            )
+        }
     }
 }
 

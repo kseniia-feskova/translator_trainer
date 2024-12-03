@@ -1,17 +1,23 @@
 package com.presentation.ui.views
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.CompareArrows
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -20,13 +26,17 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -44,6 +54,8 @@ import com.presentation.ui.onPrimaryColorLight
 import com.presentation.ui.onSurfaceLight
 import com.presentation.ui.primaryColorLight
 import com.presentation.ui.screens.home.HomeUIState
+import com.presentation.utils.Language
+import kotlinx.coroutines.launch
 
 @Composable
 fun TranslateView(
@@ -51,51 +63,50 @@ fun TranslateView(
     state: HomeUIState = HomeUIState(),
     onTextChange: (String) -> Unit = {},
     onEnterText: (String) -> Unit = { },
-    //onLanguageChange: () -> Unit = {},
+    onLanguageChange: () -> Unit = {},
     onSaveClick: () -> Unit = {},
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
 
-//    var isSwapped by remember { mutableStateOf(false) }
-//    val coroutineScope = rememberCoroutineScope()
-//
-//    val topFieldOffset by animateDpAsState(
-//        if (isSwapped) 140.dp else 0.dp,
-//        animationSpec = tween(600)
-//    )
-//    val bottomFieldOffset by animateDpAsState(
-//        if (isSwapped) (-140).dp else 0.dp,
-//        animationSpec = tween(600),
-//        finishedListener = { onLanguageChange() }
-//    )
-//
-//    // Анимируем масштаб верхнего поля
-//    val topFieldScale = remember { Animatable(1f) }
-//    val bottomFieldScale = remember { Animatable(1f) }
-//
-//    // Запуск анимации изменения масштаба при изменении `isSwapped`
-//    LaunchedEffect(isSwapped) {
-//        coroutineScope.launch {
-//            topFieldScale.animateTo(
-//                targetValue = 1.1f,
-//                animationSpec = tween(300)
-//            )
-//            topFieldScale.animateTo(
-//                targetValue = 1f,
-//                animationSpec = tween(300)
-//            )
-//        }
-//        coroutineScope.launch {
-//            bottomFieldScale.animateTo(
-//                targetValue = 0.9f,
-//                animationSpec = tween(300)
-//            )
-//            bottomFieldScale.animateTo(
-//                targetValue = 1f,
-//                animationSpec = tween(300)
-//            )
-//        }
-//    }
+    var isRussianOriginLanguage by remember { mutableStateOf(state.originalLanguage == Language.RUSSIAN) }
+    val coroutineScope = rememberCoroutineScope()
+
+    val topFieldOffset by animateDpAsState(
+        if (isRussianOriginLanguage) 140.dp else 0.dp,
+        animationSpec = tween(600)
+    )
+    val bottomFieldOffset by animateDpAsState(
+        if (isRussianOriginLanguage) (-140).dp else 0.dp,
+        animationSpec = tween(600)
+    )
+
+    // Анимируем масштаб полей
+    val topFieldScale = remember { Animatable(1f) }
+    val bottomFieldScale = remember { Animatable(1f) }
+
+    // Запуск анимации изменения масштаба при изменении `isRussianOriginLanguage`
+    LaunchedEffect(isRussianOriginLanguage) {
+        coroutineScope.launch {
+            topFieldScale.animateTo(
+                targetValue = 1.1f,
+                animationSpec = tween(300)
+            )
+            topFieldScale.animateTo(
+                targetValue = 1f,
+                animationSpec = tween(300)
+            )
+        }
+        coroutineScope.launch {
+            bottomFieldScale.animateTo(
+                targetValue = 0.9f,
+                animationSpec = tween(300)
+            )
+            bottomFieldScale.animateTo(
+                targetValue = 1f,
+                animationSpec = tween(300)
+            )
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -105,8 +116,8 @@ fun TranslateView(
     ) {
         Column(
             modifier = Modifier
-//                .scale(topFieldScale.value)
-//                .offset(y = topFieldOffset)
+                .scale(topFieldScale.value)
+                .offset(y = topFieldOffset)
                 .zIndex(1f)
         ) {
             Text(
@@ -115,9 +126,9 @@ fun TranslateView(
             )
 
             TranslateInput(
-                state = ButtonState.TOP, //else ButtonState.BOTTOM,
-                isSwapped = true,
-                text = state.inputText,
+                isOriginLanguage = !isRussianOriginLanguage,
+                text = if (!isRussianOriginLanguage) state.inputText else state.translatedText,
+                savedWord = state.savedWord,
                 onTextChange = onTextChange,
                 onEnterText = {
                     keyboardController?.hide()
@@ -129,25 +140,26 @@ fun TranslateView(
 
         Spacer(modifier = Modifier.height(32.dp))
 
-//        Icon(
-//            Icons.AutoMirrored.Filled.CompareArrows,
-//            contentDescription = "Change",
-//            tint = onSurfaceLight,
-//            modifier = Modifier
-//                .rotate(90f)
-//                .padding(8.dp)
-//                .scale(1.5f)
-//                .clickable(indication = null,
-//                    interactionSource = remember { MutableInteractionSource() }) {
-//                    isSwapped = !isSwapped
-//                },
-//
-//            )
+        Icon(
+            Icons.AutoMirrored.Filled.CompareArrows,
+            contentDescription = "Change",
+            tint = onSurfaceLight,
+            modifier = Modifier
+                .rotate(90f)
+                .padding(8.dp)
+                .scale(1.5f)
+                .clickable(indication = null,
+                    interactionSource = remember { MutableInteractionSource() }) {
+                    isRussianOriginLanguage = !isRussianOriginLanguage
+                    onLanguageChange()
+                },
+
+            )
 
         Column(
             modifier = Modifier
-//                .scale(bottomFieldScale.value)
-//                .offset(y = bottomFieldOffset)
+                .scale(bottomFieldScale.value)
+                .offset(y = bottomFieldOffset)
                 .zIndex(0f)
         ) {
             Text(
@@ -155,9 +167,9 @@ fun TranslateView(
                 style = AppTypography.titleLarge,
             )
             TranslateInput(
-                state = ButtonState.BOTTOM,
-                isSwapped = true,
-                text = state.translatedText,
+                isOriginLanguage = isRussianOriginLanguage,
+                text = if (isRussianOriginLanguage) state.inputText else state.translatedText,
+                savedWord = state.savedWord,
                 onTextChange = onTextChange,
                 onEnterText = {
                     keyboardController?.hide()
@@ -170,7 +182,7 @@ fun TranslateView(
 }
 
 private val listOfStates =
-    listOf(HomeUIState(), HomeUIState("Katze"), HomeUIState("Katze", "Кошка"))
+    listOf(HomeUIState(), HomeUIState(inputText = "Katze"), HomeUIState(inputText = "Katze", translatedText = "Кошка"))
 
 private class PreviewProvider : PreviewParameterProvider<HomeUIState> {
     override val values: Sequence<HomeUIState>
@@ -192,152 +204,94 @@ fun TranslateViewPreview(@PreviewParameter(PreviewProvider::class) state: HomeUI
 
 @Composable
 fun TranslateInput(
-    state: ButtonState,
-    isSwapped: Boolean,
+    isOriginLanguage: Boolean,
     text: String,
+    savedWord: Boolean,
     onTextChange: (String) -> Unit,
     onEnterText: (String) -> Unit,
     onSaveClick: () -> Unit
 ) {
-    when (state) {
-        ButtonState.TOP -> {
-            OutlinedTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clipToBounds()
-                    .shadow(
-                        elevation = 18.dp,
-                        clip = false,
-                        shape = RoundedCornerShape(10.dp),
-                        ambientColor = Color.Transparent,
-                        spotColor = Color.Transparent
-                    ),
-                value = text,
-                readOnly = !isSwapped,
-                onValueChange = {
-                    onTextChange(it)
-                },
-                colors = TextFieldDefaults.colors().copy(
-                    cursorColor = onSurfaceLight,
-                    unfocusedIndicatorColor = indicatorColorLight,
-                    unfocusedContainerColor = primaryColorLight,
-                    focusedIndicatorColor = indicatorColorLight,
-                    focusedContainerColor = primaryColorLight,
-                    unfocusedTextColor = onPrimaryColorLight,
-                    focusedTextColor = onPrimaryColorLight
-                ),
-                textStyle = AppTypography.bodyLarge,
+    OutlinedTextField(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clipToBounds()
+            .shadow(
+                elevation = 18.dp,
+                clip = false,
                 shape = RoundedCornerShape(10.dp),
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    imeAction = ImeAction.Done
-                ),
-                keyboardActions = KeyboardActions(
-                    onDone = {
-                        onEnterText(text)
-                    }
-                ),
-                trailingIcon = {
-                    if (text.isNotEmpty() && !isSwapped) {
-                        Icon(
-                            modifier = Modifier.clickable { onSaveClick() },
-                            imageVector = Icons.Default.Save,
-                            contentDescription = "Save",
-                            tint = indicatorColorLight
-                        )
-                    }
-                },
-            )
+                ambientColor = Color.Transparent,
+                spotColor = Color.Transparent
+            ),
+        value = text,
+        readOnly = !isOriginLanguage,
+        onValueChange = {
+            onTextChange(it)
+        },
+        colors = TextFieldDefaults.colors().copy(
+            cursorColor = onSurfaceLight,
+            unfocusedIndicatorColor = indicatorColorLight,
+            unfocusedContainerColor = primaryColorLight,
+            focusedIndicatorColor = indicatorColorLight,
+            focusedContainerColor = primaryColorLight,
+            unfocusedTextColor = onPrimaryColorLight,
+            focusedTextColor = onPrimaryColorLight
+        ),
+        textStyle = AppTypography.bodyLarge,
+        shape = RoundedCornerShape(10.dp),
+        keyboardOptions = KeyboardOptions.Default.copy(
+            imeAction = ImeAction.Done
+        ),
+        keyboardActions = KeyboardActions(
+            onDone = {
+                onEnterText(text)
+            }
+        ),
+        trailingIcon = {
+            if (text.isNotEmpty() && !isOriginLanguage) {
+                Icon(
+                    modifier = Modifier.clickable { if (!savedWord) onSaveClick() },
+                    imageVector = Icons.Default.Save,
+                    contentDescription = "Save",
+                    tint = if(savedWord) MaterialTheme.colorScheme.onPrimary else indicatorColorLight
+                )
+            }
         }
-
-        ButtonState.BOTTOM -> {
-            OutlinedTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clipToBounds()
-                    .shadow(
-                        elevation = 18.dp,
-                        clip = false,
-                        shape = RoundedCornerShape(10.dp),
-                        ambientColor = Color.Transparent,
-                        spotColor = Color.Transparent
-                    ),
-                value = text,
-                readOnly = isSwapped,
-                onValueChange = {
-                    //onTextChange(it)
-                },
-                colors = TextFieldDefaults.colors().copy(
-                    cursorColor = onSurfaceLight,
-                    unfocusedIndicatorColor = indicatorColorLight,
-                    unfocusedContainerColor = primaryColorLight,
-                    focusedIndicatorColor = indicatorColorLight,
-                    focusedContainerColor = primaryColorLight,
-                    unfocusedTextColor = onPrimaryColorLight,
-                    focusedTextColor = onPrimaryColorLight
-                ),
-                textStyle = AppTypography.bodyLarge,
-                shape = RoundedCornerShape(10.dp),
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    imeAction = ImeAction.Done
-                ),
-                keyboardActions = KeyboardActions(
-                    onDone = {
-                        onEnterText(text)
-                    }
-                ),
-                trailingIcon = {
-                    if (text.isNotEmpty() && isSwapped) {
-                        Icon(
-                            modifier = Modifier.clickable { onSaveClick() },
-                            imageVector = Icons.Default.Save,
-                            contentDescription = "Save",
-                            tint = indicatorColorLight
-                        )
-                    }
-                },
-            )
-        }
-
-    }
+    )
 }
+
 
 @Preview()
 @Composable
 fun TranslateViewNewPreview() {
     AppTheme {
         Surface {
-            var isOrigin by remember { mutableStateOf(false) }
+            var isOriginLanguage by remember { mutableStateOf(true) }
             Column(
                 modifier = Modifier.padding(12.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 TranslateInput(
-                    state = ButtonState.TOP,
-                    isSwapped =  !isOrigin,
+                    isOriginLanguage = isOriginLanguage,
                     text = "Wort",
+                    savedWord = false,
                     onTextChange = {},
                     onEnterText = {},
                     {}
                 )
 
                 TranslateInput(
-                    state =  ButtonState.BOTTOM,
-                    isSwapped = isOrigin,
+                    isOriginLanguage = !isOriginLanguage,
                     text = "Слово",
+                    savedWord = false,
                     onTextChange = { },
                     onEnterText = {},
                     {}
                 )
 
-                ActionButton(onClick = { isOrigin = !isOrigin }) {
+                ActionButton(onClick = { isOriginLanguage = !isOriginLanguage }) {
                     Text("Swipe")
                 }
             }
         }
     }
-}
-
-enum class ButtonState() {
-    TOP,
-    BOTTOM
 }

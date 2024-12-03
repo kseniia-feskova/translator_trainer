@@ -4,6 +4,8 @@ import com.domain.usecase.AddSetOfWordsUseCase
 import com.domain.usecase.AddSetWordCrossRef
 import com.domain.usecase.AddWordUseCase
 import com.domain.usecase.DeleteSetByIdUseCase
+import com.domain.usecase.FindWordByOriginUseCase
+import com.domain.usecase.FindWordByTranslatedUseCase
 import com.domain.usecase.GetFilteredWordsUseCase
 import com.domain.usecase.GetSetOfAllCardsUseCase
 import com.domain.usecase.GetSetOfCardsUseCase
@@ -16,6 +18,8 @@ import com.presentation.usecases.IAddSetOfWordsUseCase
 import com.presentation.usecases.IAddSetWordCrossRefUseCase
 import com.presentation.usecases.IAddWordUseCase
 import com.presentation.usecases.IDeleteSetByIdUseCase
+import com.presentation.usecases.IFindWordByOriginUseCase
+import com.presentation.usecases.IFindWordByTranslatedUseCase
 import com.presentation.usecases.IGetFilteredWordsUseCase
 import com.presentation.usecases.IGetSetOfAllCardsUseCase
 import com.presentation.usecases.IGetSetOfCardsUseCase
@@ -53,4 +57,9 @@ val useCaseModule = module {
     singleOf(::TranslateWordUseCase) bind ITranslateWordUseCase::class
 
     singleOf(::DeleteSetByIdUseCase) bind IDeleteSetByIdUseCase::class
+
+
+    singleOf(::FindWordByOriginUseCase) bind IFindWordByOriginUseCase::class
+
+    singleOf(::FindWordByTranslatedUseCase) bind IFindWordByTranslatedUseCase::class
 }

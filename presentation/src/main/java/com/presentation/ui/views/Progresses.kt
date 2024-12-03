@@ -2,9 +2,11 @@ package com.presentation.ui.views
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -24,6 +26,15 @@ import com.presentation.ui.AppTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+@Composable
+fun Loader(modifier: Modifier = Modifier) {
+    CircularProgressIndicator(
+        modifier = modifier,
+        color = MaterialTheme.colorScheme.onPrimary,
+        strokeWidth = 6.dp,
+        trackColor = MaterialTheme.colorScheme.primary,
+    )
+}
 
 @Composable
 fun CircleProgress(modifier: Modifier = Modifier, value: Int, maxValue: Int) {
@@ -71,16 +82,25 @@ suspend fun loadProgress(value: Int, maxValue: Int, updateProgress: (Float) -> U
 fun CircleProgressPreview() {
     AppTheme {
         Surface {
-            Box(modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.primary)) {
-                CircleProgress(
-                    modifier = Modifier
-                        .size(180.dp)
-                        .padding(24.dp),
-                    value = 3,
-                    maxValue = 10
-                )
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.primary)
+            ) {
+                Row() {
+                    CircleProgress(
+                        modifier = Modifier
+                            .size(180.dp)
+                            .padding(24.dp),
+                        value = 3,
+                        maxValue = 10
+                    )
+
+                    Loader(
+                        Modifier
+                            .width(80.dp)
+                            .align(Alignment.CenterVertically))
+                }
             }
         }
     }

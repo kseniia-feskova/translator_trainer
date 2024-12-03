@@ -37,5 +37,9 @@ interface IWordsRepository {
 
     suspend fun getWordById(wordId: Int): WordEntity?
 
-    suspend fun deleteSetById(setId:Int)
+    suspend fun deleteSetById(setId: Int)
+
+    suspend fun findWordByOrigin(origin: String): WordEntity?
+
+    suspend fun findWordByTranslated(translated: String): WordEntity?
 }

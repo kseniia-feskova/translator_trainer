@@ -57,6 +57,15 @@ class WordsRepository(
     override suspend fun deleteSetById(setId: Int) {
         dao.deleteSetWithWords(setId)
     }
+
+    override suspend fun findWordByOrigin(origin: String): WordEntity? {
+       return dao.getWordByOriginal(origin)
+    }
+
+    override suspend fun findWordByTranslated(translated: String): WordEntity? {
+        return dao.getWordByTranslated(translated)
+    }
+
 }
 
 

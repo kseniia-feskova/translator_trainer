@@ -28,6 +28,12 @@ interface WordDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSetWordCrossRef(crossRef: SetWordCrossRef)
 
+    @Query("SELECT * FROM words WHERE LOWER(original) = LOWER(:original) LIMIT 1")
+    suspend fun getWordByOriginal(original: String): WordEntity?
+
+    @Query("SELECT * FROM words WHERE LOWER(translation) = LOWER(:translated) LIMIT 1")
+    suspend fun getWordByTranslated(translated: String): WordEntity?
+
     @Transaction
     @Query("SELECT * FROM sets_of_words WHERE name = :name")
     suspend fun getSetByName(name: String): SetOfWords?

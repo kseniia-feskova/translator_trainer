@@ -1,10 +1,13 @@
 package com.presentation.ui.screens.home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.presentation.model.Level
 import com.presentation.model.WordUI
 import com.presentation.usecases.IAddWordUseCase
+import com.presentation.usecases.IFindWordByOriginUseCase
+import com.presentation.usecases.IFindWordByTranslatedUseCase
 import com.presentation.usecases.ITranslateWordUseCase
 import com.presentation.utils.Language
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,6 +18,8 @@ import java.util.Date
 
 
 class HomeViewModel(
+    private val findWordByOrigin: IFindWordByOriginUseCase,
+    private val findWordByTranslate: IFindWordByTranslatedUseCase,
     private val translateWord: ITranslateWordUseCase,
     private val addWordUseCase: IAddWordUseCase
 ) : ViewModel() {
@@ -29,29 +34,88 @@ class HomeViewModel(
             }
 
             is HomeIntent.EnterText -> {
-                //поискать слово в словаре пользователя
-                //если есть - то иконка цветная, сохранить нельзя
-                //если нет - то топаем в запрос, сохранить можно
-                translateText(
-                    intent.text,
-                    _uiState.value.originalLanguage,
-                    _uiState.value.resLanguage
-                )
+                _uiState.update { it.copy(loading = true) }
+                if (_uiState.value.originalLanguage == Language.RUSSIAN) {
+                    viewModelScope.launch {
+                        val word = findWordByOrigin.invoke(intent.text)
+                        Log.e(
+                            "handleIntent.Enter",
+                            "Find word by origin = ${intent.text}, word = $word"
+                        )
+                        if (word == null) {
+                            translateText(
+                                intent.text,
+                                _uiState.value.originalLanguage,
+                                _uiState.value.resLanguage
+                            )
+                        } else {
+                            _uiState.update {
+                                it.copy(
+                                    loading = false,
+                                    translatedText = word.resText,
+                                    savedWord = true
+                                )
+                            }
+                        }
+                    }
+                } else {
+                    viewModelScope.launch {
+                        val word = findWordByTranslate.invoke(intent.text)
+                        Log.e(
+                            "handleIntent.Enter",
+                            "Find word by translate = ${intent.text}, word = $word"
+                        )
+                        if (word == null) {
+                            translateText(
+                                intent.text,
+                                _uiState.value.originalLanguage,
+                                _uiState.value.resLanguage
+                            )
+                        } else {
+                            _uiState.update {
+                                it.copy(
+                                    loading = false,
+                                    translatedText = word.originalText,
+                                    savedWord = true
+                                )
+                            }
+                        }
+                    }
+
+                }
             }
 
             is HomeIntent.SaveWord -> {
                 viewModelScope.launch {
                     val word = _uiState.value
-                    addWordUseCase.invoke(
-                        newWord = WordUI(
-                            id = 0,
-                            originalText = word.inputText,
-                            resText = word.translatedText,
-                            level = Level.NEW,
-                            date = Date()
+                    Log.e("handleIntent.Save", "Save word")
+                    if (word.originalLanguage == Language.RUSSIAN) {
+                        addWordUseCase.invoke(
+                            newWord = WordUI(
+                                id = 0,
+                                originalText = word.inputText,
+                                resText = word.translatedText,
+                                level = Level.NEW,
+                                date = Date()
+                            )
                         )
-                    )
+                    } else {
+                        addWordUseCase.invoke(
+                            newWord = WordUI(
+                                id = 0,
+                                originalText = word.translatedText,
+                                resText = word.inputText,
+                                level = Level.NEW,
+                                date = Date()
+                            )
+                        )
+                    }
+                    _uiState.update { it.copy(savedWord = true) }
                 }
+            }
+
+            is HomeIntent.ChangeLanguages -> {
+                changeLanguages()
             }
         }
     }
@@ -63,7 +127,7 @@ class HomeViewModel(
     ) {
         viewModelScope.launch {
             val translatedText = performTranslation(inputText, originalLanguage, resLanguage)
-            _uiState.update { it.copy(translatedText = translatedText, showGlow = true) }
+            _uiState.update { it.copy(translatedText = translatedText, showGlow = true, loading = false) }
         }
     }
 
@@ -71,6 +135,7 @@ class HomeViewModel(
         if (inputText != _uiState.value.inputText) {
             _uiState.update {
                 it.copy(
+                    savedWord = false,
                     inputText = inputText,
                     translatedText = if (it.translatedText.isNotEmpty()) "" else it.translatedText
                 )
@@ -86,8 +151,19 @@ class HomeViewModel(
         return translateWord.invoke(text, originalLanguage, resLanguage)
     }
 
+    private fun changeLanguages() {
+        _uiState.update {
+            it.copy(
+                resLanguage = it.originalLanguage,
+                originalLanguage = it.resLanguage,
+                inputText = "",
+                translatedText = ""
+            )
+        }
+    }
+
     companion object {
-        private const val TAG = "TranslatorViewModel"
+        private const val TAG = "HomeViewModel"
     }
 }
 
