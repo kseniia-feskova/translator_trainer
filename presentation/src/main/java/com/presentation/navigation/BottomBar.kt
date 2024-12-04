@@ -3,8 +3,6 @@ package com.presentation.navigation
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomNavigation
@@ -27,19 +25,19 @@ import com.presentation.ui.accentColorLight
 import com.presentation.ui.onSurfaceLight
 import com.presentation.ui.primaryColorLight
 import com.presentation.ui.screens.home.homeScreen
+import com.presentation.ui.screens.set.setsScreen
 import com.presentation.ui.surfaceLight
 
-enum class BottomNavItem(val route: String, val iconRes: Int, val label: String) {
-    Home(homeScreen, R.drawable.ic_translate, "Home"),
-    Sets("sets", R.drawable.ic_sets, "Sets"),
-    Profile("profile", R.drawable.ic_account, "Profile")
+enum class BottomNavItem(val route: String, val iconRes: Int) {
+    Home(homeScreen, R.drawable.ic_translate),
+    Sets(setsScreen, R.drawable.ic_sets),
+    Profile("profile", R.drawable.ic_account)
 }
 
 @Composable
 fun BottomNavigationBar(navController: NavController) {
     BottomNavigation(
         modifier = Modifier
-            .height(36.dp)
             .clip(
                 shape = RoundedCornerShape(12.dp, 12.dp, 0.dp, 0.dp),
             ),
@@ -50,7 +48,6 @@ fun BottomNavigationBar(navController: NavController) {
 
         BottomNavItem.values().forEach { item ->
             BottomNavigationItem(
-                modifier = Modifier.padding(top = 12.dp),
                 selected = currentRoute == item.route,
                 onClick = {
                     navController.navigate(item.route) {

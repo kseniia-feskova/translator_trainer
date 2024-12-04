@@ -41,6 +41,9 @@ interface WordDao {
     @Query("SELECT * FROM sets_of_words WHERE id = :id")
     suspend fun getSetById(id: Int): SetOfWords?
 
+    @Query("SELECT * FROM sets_of_words")
+    suspend fun getAllSets(): List<SetOfWords>
+
     @Transaction
     @Query("SELECT * FROM words WHERE id IN (SELECT wordId FROM set_word_cross_ref WHERE setId = :setId)")
     fun getWordsInSet(setId: Int): Flow<List<WordEntity>>

@@ -30,7 +30,7 @@ import androidx.navigation.NavController
 import com.presentation.navigation.BottomNavigationBar
 import com.presentation.ui.AppTheme
 import com.presentation.ui.views.Loader
-import com.presentation.ui.views.TopView
+import com.presentation.ui.views.HomeTopView
 import com.presentation.ui.views.TranslateView
 
 @Composable
@@ -63,7 +63,7 @@ fun HomeScreen(
             ),
             exit = fadeOut(animationSpec = tween(500))
         ) {
-            TopView(18, donutSize = donutSize)
+            HomeTopView(18, donutSize = donutSize)
         }
         Spacer(modifier = Modifier.height(100.dp))
 

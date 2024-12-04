@@ -59,13 +59,16 @@ class WordsRepository(
     }
 
     override suspend fun findWordByOrigin(origin: String): WordEntity? {
-       return dao.getWordByOriginal(origin)
+        return dao.getWordByOriginal(origin)
     }
 
     override suspend fun findWordByTranslated(translated: String): WordEntity? {
         return dao.getWordByTranslated(translated)
     }
 
+    override suspend fun getAllSets(): List<SetOfWords> {
+        return dao.getAllSets()
+    }
 }
 
 

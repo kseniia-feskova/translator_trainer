@@ -20,5 +20,7 @@ val onSurfaceLight = Color(0xFF271460)
 val primaryColorLight = Color(0xFFF9FAFB)
 val onPrimaryColorLight = Color(0xFF271460)
 
+val tertiaryLight = Color(0xFFD9E1FF)
+
 val indicatorColorLight = Color(0xFFCDD4FD)
 val accentColorLight = Color(0xFFB9C3FF)

@@ -1,4 +1,4 @@
-package com.presentation.ui.core
+package com.presentation.navigation
 
 import android.util.Log
 import androidx.compose.runtime.Composable
@@ -9,11 +9,12 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.presentation.navigation.BottomNavItem
 import com.presentation.ui.screens.course.second_translate.CourseSelectSecondTranslateScreen
 import com.presentation.ui.screens.course.translate.CourseSelectTranslateScreen
 import com.presentation.ui.screens.home.homeScreen
+import com.presentation.ui.screens.home.navigateToHome
 import com.presentation.ui.screens.set.CardSetScreen
+import com.presentation.ui.screens.set.setsScreen
 import com.presentation.utils.Course
 import com.presentation.viewmodel.CardSetIntent
 import com.presentation.viewmodel.CardSetViewModel
@@ -36,6 +37,14 @@ fun TranslatorApp(
         startDestination = BottomNavItem.Home.route,
     ) {
         homeScreen()
+        setsScreen(
+            navigateToSelectedSet = {},
+            navigateToHome = navController::navigateToHome,
+            createNewSet = {},
+            createRandomLesson = {}
+        )
+
+
 
         composable(
             route = "set/{setId}",

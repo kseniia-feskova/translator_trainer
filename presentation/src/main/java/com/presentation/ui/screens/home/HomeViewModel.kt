@@ -4,11 +4,16 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.presentation.model.Level
+import com.presentation.model.SetLevel
+import com.presentation.model.SetOfCards
 import com.presentation.model.WordUI
+import com.presentation.usecases.IAddSetOfWordsUseCase
 import com.presentation.usecases.IAddWordUseCase
 import com.presentation.usecases.IFindWordByOriginUseCase
 import com.presentation.usecases.IFindWordByTranslatedUseCase
+import com.presentation.usecases.IGetSetOfAllCardsUseCase
 import com.presentation.usecases.ITranslateWordUseCase
+import com.presentation.utils.ALL_WORDS
 import com.presentation.utils.Language
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -21,11 +26,28 @@ class HomeViewModel(
     private val findWordByOrigin: IFindWordByOriginUseCase,
     private val findWordByTranslate: IFindWordByTranslatedUseCase,
     private val translateWord: ITranslateWordUseCase,
+    private val getAllCards: IGetSetOfAllCardsUseCase,
+    private val addSetOfCards: IAddSetOfWordsUseCase,
     private val addWordUseCase: IAddWordUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUIState())
     val uiState = _uiState.asStateFlow()
+    private var setId: Int? = null
+
+    init {
+        viewModelScope.launch {
+            val allCards = getAllCards.invoke()
+            if (allCards == null) {
+                addSetOfCards.invoke(
+                    SetOfCards(0, ALL_WORDS, SetLevel.EASY, emptySet(), 0)
+                )
+                setId = getAllCards.invoke()?.id
+            }else {
+                setId = allCards.id
+            }
+        }
+    }
 
     fun handleIntent(intent: HomeIntent) {
         when (intent) {
@@ -36,52 +58,9 @@ class HomeViewModel(
             is HomeIntent.EnterText -> {
                 _uiState.update { it.copy(loading = true) }
                 if (_uiState.value.originalLanguage == Language.RUSSIAN) {
-                    viewModelScope.launch {
-                        val word = findWordByOrigin.invoke(intent.text)
-                        Log.e(
-                            "handleIntent.Enter",
-                            "Find word by origin = ${intent.text}, word = $word"
-                        )
-                        if (word == null) {
-                            translateText(
-                                intent.text,
-                                _uiState.value.originalLanguage,
-                                _uiState.value.resLanguage
-                            )
-                        } else {
-                            _uiState.update {
-                                it.copy(
-                                    loading = false,
-                                    translatedText = word.resText,
-                                    savedWord = true
-                                )
-                            }
-                        }
-                    }
+                    translateFromOrigin(intent.text)
                 } else {
-                    viewModelScope.launch {
-                        val word = findWordByTranslate.invoke(intent.text)
-                        Log.e(
-                            "handleIntent.Enter",
-                            "Find word by translate = ${intent.text}, word = $word"
-                        )
-                        if (word == null) {
-                            translateText(
-                                intent.text,
-                                _uiState.value.originalLanguage,
-                                _uiState.value.resLanguage
-                            )
-                        } else {
-                            _uiState.update {
-                                it.copy(
-                                    loading = false,
-                                    translatedText = word.originalText,
-                                    savedWord = true
-                                )
-                            }
-                        }
-                    }
-
+                    translateFromTranslated(intent.text)
                 }
             }
 
@@ -91,6 +70,7 @@ class HomeViewModel(
                     Log.e("handleIntent.Save", "Save word")
                     if (word.originalLanguage == Language.RUSSIAN) {
                         addWordUseCase.invoke(
+                            setId = setId,
                             newWord = WordUI(
                                 id = 0,
                                 originalText = word.inputText,
@@ -101,6 +81,7 @@ class HomeViewModel(
                         )
                     } else {
                         addWordUseCase.invoke(
+                            setId = setId,
                             newWord = WordUI(
                                 id = 0,
                                 originalText = word.translatedText,
@@ -127,7 +108,13 @@ class HomeViewModel(
     ) {
         viewModelScope.launch {
             val translatedText = performTranslation(inputText, originalLanguage, resLanguage)
-            _uiState.update { it.copy(translatedText = translatedText, showGlow = true, loading = false) }
+            _uiState.update {
+                it.copy(
+                    translatedText = translatedText,
+                    showGlow = true,
+                    loading = false
+                )
+            }
         }
     }
 
@@ -150,6 +137,57 @@ class HomeViewModel(
     ): String {
         return translateWord.invoke(text, originalLanguage, resLanguage)
     }
+
+    private fun translateFromOrigin(origin: String) {
+        viewModelScope.launch {
+            val word = findWordByOrigin.invoke(origin)
+            Log.e(
+                "handleIntent.Enter",
+                "Find word by origin = ${origin}, word = $word"
+            )
+            if (word == null) {
+                translateText(
+                    origin,
+                    _uiState.value.originalLanguage,
+                    _uiState.value.resLanguage
+                )
+            } else {
+                _uiState.update {
+                    it.copy(
+                        loading = false,
+                        translatedText = word.resText,
+                        savedWord = true
+                    )
+                }
+            }
+        }
+    }
+
+    private fun translateFromTranslated(translated: String) {
+        viewModelScope.launch {
+            val word = findWordByTranslate.invoke(translated)
+            Log.e(
+                "handleIntent.Enter",
+                "Find word by translate = ${translated}, word = $word"
+            )
+            if (word == null) {
+                translateText(
+                    translated,
+                    _uiState.value.originalLanguage,
+                    _uiState.value.resLanguage
+                )
+            } else {
+                _uiState.update {
+                    it.copy(
+                        loading = false,
+                        translatedText = word.originalText,
+                        savedWord = true
+                    )
+                }
+            }
+        }
+    }
+
 
     private fun changeLanguages() {
         _uiState.update {

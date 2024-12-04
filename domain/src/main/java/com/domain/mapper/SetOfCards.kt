@@ -8,7 +8,8 @@ fun SetOfCards.toData(): SetOfWords {
     return SetOfWords(
         name = title,
         level = level.toData(),
-        userId = userId
+        userId = userId,
+
     )
 }
 

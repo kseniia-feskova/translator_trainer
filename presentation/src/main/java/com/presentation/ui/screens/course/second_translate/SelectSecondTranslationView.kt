@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.presentation.model.Level
 import com.presentation.model.WordUI
 import com.presentation.test.listOfDummyCards
-import com.presentation.ui.core.ChipSelector
+import com.presentation.ui.views.ChipSelector
 import com.presentation.ui.primaryColor
 import com.presentation.ui.screens.course.CourseFrameView
 import com.presentation.viewmodel.courses.CourseData

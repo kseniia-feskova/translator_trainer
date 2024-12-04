@@ -42,4 +42,6 @@ interface IWordsRepository {
     suspend fun findWordByOrigin(origin: String): WordEntity?
 
     suspend fun findWordByTranslated(translated: String): WordEntity?
+
+    suspend fun getAllSets(): List<SetOfWords>
 }

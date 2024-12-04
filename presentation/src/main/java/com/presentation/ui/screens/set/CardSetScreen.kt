@@ -26,8 +26,8 @@ import androidx.compose.ui.zIndex
 import com.presentation.model.Level
 import com.presentation.model.WordUI
 import com.presentation.ui.accentColor
-import com.presentation.ui.core.ActionButton
-import com.presentation.ui.core.SecondButton
+import com.presentation.ui.views.ActionButton
+import com.presentation.ui.views.SecondButton
 import com.presentation.ui.primaryColor
 import com.presentation.ui.secondaryColor
 import com.presentation.viewmodel.CardSetState

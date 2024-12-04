@@ -2,12 +2,20 @@ package com.presentation.ui.screens.home
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.presentation.navigation.BottomNavItem
 import org.koin.androidx.compose.koinViewModel
 
 const val homeScreen = "home_screen"
+
+fun NavController.navigateToHome(
+    navOptions: NavOptions? = null,
+) {
+    this.navigate(homeScreen, navOptions)
+}
 
 fun NavGraphBuilder.homeScreen(
 ) {
@@ -24,7 +32,7 @@ fun HomeRoute(
         onWordInput = { viewModel.handleIntent(HomeIntent.InputText(it)) },
         onEnterText = { viewModel.handleIntent(HomeIntent.EnterText(it)) },
         onSaveClick = { viewModel.handleIntent(HomeIntent.SaveWord) },
-        onLanguageChange = {viewModel.handleIntent(HomeIntent.ChangeLanguages)}
+        onLanguageChange = { viewModel.handleIntent(HomeIntent.ChangeLanguages) }
     )
 
 }

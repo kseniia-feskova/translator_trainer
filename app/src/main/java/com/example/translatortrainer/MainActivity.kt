@@ -21,7 +21,7 @@ import com.example.translatortrainer.di.useCaseModule
 import com.example.translatortrainer.di.viewModelModule
 import com.presentation.navigation.BottomNavigationBar
 import com.presentation.ui.AppTheme
-import com.presentation.ui.core.TranslatorApp
+import com.presentation.navigation.TranslatorApp
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger

@@ -22,9 +22,10 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.presentation.model.WordUI
+import com.presentation.test.mockSetOfCard
 import com.presentation.ui.accentColor50
 import com.presentation.ui.accentColor80
-import com.presentation.ui.core.SecondButton
+import com.presentation.ui.views.SecondButton
 import com.presentation.ui.primaryColor
 import com.presentation.ui.secondaryColor
 

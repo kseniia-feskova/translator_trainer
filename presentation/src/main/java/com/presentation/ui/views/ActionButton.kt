@@ -1,4 +1,4 @@
-package com.presentation.ui.core
+package com.presentation.ui.views
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

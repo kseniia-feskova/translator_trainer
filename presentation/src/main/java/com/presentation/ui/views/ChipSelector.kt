@@ -1,4 +1,4 @@
-package com.presentation.ui.core
+package com.presentation.ui.views
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween

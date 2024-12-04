@@ -31,21 +31,12 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import com.presentation.model.Level
-import com.presentation.model.SetLevel
-import com.presentation.model.SetOfCards
 import com.presentation.model.WordUI
+import com.presentation.test.mockSetOfCard
 import com.presentation.ui.accentColor
-import com.presentation.ui.core.ActionButton
 import com.presentation.ui.primaryColor
 import com.presentation.ui.secondaryColor
-
-val mockSetOfCard = SetOfCards(
-    0,
-    "Набор",
-    SetLevel.EASY,
-    emptySet(),
-    1
-)
+import com.presentation.ui.views.ActionButton
 
 private val mockAllCardsState = AllCardsState(
     allWords = mockSetOfCard.setOfWords.size,

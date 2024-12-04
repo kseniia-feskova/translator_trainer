@@ -33,23 +33,28 @@ val AppTypography = Typography(
         lineHeight = 28.sp,
         letterSpacing = 0.sp,
         color = onPrimaryColorLight
-    ) ,
+    ),
     bodyLarge = TextStyle(
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
         lineHeight = 24.sp,
-        letterSpacing = 0.15.sp
+        letterSpacing = 0.15.sp,
+        color = onPrimaryColorLight
+
     ),
     bodyMedium = TextStyle(
         fontWeight = FontWeight.Medium,
         fontSize = 14.sp,
         lineHeight = 20.sp,
-        letterSpacing = 0.25.sp
+        letterSpacing = 0.25.sp,
+        color = onPrimaryColorLight
+
     ),
     labelMedium = TextStyle(
         fontWeight = FontWeight.SemiBold,
         fontSize = 12.sp,
         lineHeight = 16.sp,
-        letterSpacing = 0.5.sp
+        letterSpacing = 0.5.sp,
+        color = onPrimaryColorLight
     )
 )
