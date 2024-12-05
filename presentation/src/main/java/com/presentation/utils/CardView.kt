@@ -21,7 +21,7 @@ import androidx.compose.ui.zIndex
 import com.presentation.ui.accentColor50
 import com.presentation.ui.accentColor80
 import com.presentation.ui.primaryColor
-import com.presentation.ui.screens.set.FlippableCard
+import com.presentation.ui.views.FlippableCard
 
 @Composable
 fun CardView(

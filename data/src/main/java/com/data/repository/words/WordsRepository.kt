@@ -1,6 +1,7 @@
 package com.data.repository.words
 
 import com.data.model.SetOfWords
+import com.data.model.SetWithWords
 import com.data.model.SetWordCrossRef
 import com.data.model.WordEntity
 import com.data.room.WordDao
@@ -31,8 +32,8 @@ class WordsRepository(
         dao.addWordToAllWordsSet(word)
     }
 
-    override fun getWordsInSet(setId: Int): Flow<List<WordEntity>> {
-        return dao.getWordsInSet(setId)
+    override fun getWordsInSet(setId: Int): Flow<SetWithWords> {
+        return dao.getSetWithWords(setId)
     }
 
     override fun getWordsFilteredByDateOrStatus(
@@ -66,7 +67,7 @@ class WordsRepository(
         return dao.getWordByTranslated(translated)
     }
 
-    override suspend fun getAllSets(): List<SetOfWords> {
+    override suspend fun getAllSets(): List<SetWithWords> {
         return dao.getAllSets()
     }
 }

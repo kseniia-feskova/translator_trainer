@@ -7,14 +7,13 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
 import com.data.model.SetOfWords
+import com.data.model.SetWithWords
 import com.data.model.SetWordCrossRef
 import com.data.model.WordEntity
 import kotlinx.coroutines.flow.Flow
 import java.util.Date
 
 const val ALL_WORDS = "Все слова"
-const val NEW_WORDS = "Новые слова"
-const val CURRENT_WORDS = "Текущий набор"
 
 @Dao
 interface WordDao {
@@ -42,11 +41,15 @@ interface WordDao {
     suspend fun getSetById(id: Int): SetOfWords?
 
     @Query("SELECT * FROM sets_of_words")
-    suspend fun getAllSets(): List<SetOfWords>
+    suspend fun getAllSets(): List<SetWithWords>
 
     @Transaction
     @Query("SELECT * FROM words WHERE id IN (SELECT wordId FROM set_word_cross_ref WHERE setId = :setId)")
     fun getWordsInSet(setId: Int): Flow<List<WordEntity>>
+
+    @Transaction
+    @Query("SELECT * FROM sets_of_words WHERE id = :setId")
+    fun getSetWithWords(setId: Int): Flow<SetWithWords>
 
     // Добавить слово в набор "Все слова"
     suspend fun addWordToAllWordsSet(word: WordEntity) {

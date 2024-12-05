@@ -7,4 +7,7 @@ interface IGetWordsOfSetUseCase {
 
     fun invoke(setId: Int): Flow<List<WordUI>>
 
+
+    suspend fun getSingleList(setId: Int):List<WordUI>
+
 }

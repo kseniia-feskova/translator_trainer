@@ -1,4 +1,4 @@
-package com.presentation.ui.screens.set
+package com.presentation.ui.screens.sets
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,7 +17,8 @@ class SetsViewModel(
 
     init {
         viewModelScope.launch {
-            _uiState.update { it.copy(sets = getAllSets.invoke()) }
+            val allSets = getAllSets.invoke().filter { it.setOfWords.isNotEmpty() }
+            _uiState.update { it.copy(sets = allSets) }
         }
     }
 }

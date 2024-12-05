@@ -1,7 +1,10 @@
 package com.data.model
 
+import androidx.room.Embedded
 import androidx.room.Entity
+import androidx.room.Junction
 import androidx.room.PrimaryKey
+import androidx.room.Relation
 
 @Entity(tableName = "sets_of_words")
 data class SetOfWords(
@@ -24,4 +27,18 @@ enum class SetLevel {
 data class SetWordCrossRef(
     val setId: Int,
     val wordId: Int
+)
+
+data class SetWithWords(
+    @Embedded val set: SetOfWords,
+    @Relation(
+        parentColumn = "id",
+        entityColumn = "id",
+        associateBy = Junction(
+            value = SetWordCrossRef::class,
+            parentColumn = "setId",
+            entityColumn = "wordId"
+        )
+    )
+    val words: List<WordEntity>
 )

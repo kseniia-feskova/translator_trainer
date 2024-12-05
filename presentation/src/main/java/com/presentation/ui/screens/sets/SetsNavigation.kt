@@ -1,4 +1,4 @@
-package com.presentation.ui.screens.set
+package com.presentation.ui.screens.sets
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -10,7 +10,7 @@ import org.koin.androidx.compose.koinViewModel
 const val setsScreen = "sets_screen"
 
 fun NavGraphBuilder.setsScreen(
-    navigateToSelectedSet: (String) -> Unit,
+    navigateToSelectedSet: (Int) -> Unit,
     navigateToHome: () -> Unit,
     createNewSet: () -> Unit,
     createRandomLesson: () -> Unit,
@@ -27,7 +27,7 @@ fun NavGraphBuilder.setsScreen(
 
 @Composable
 fun SetsRoute(
-    navigateToSelectedSet: (String) -> Unit,
+    navigateToSelectedSet: (Int) -> Unit,
     navigateToHome: () -> Unit,
     createNewSet: () -> Unit,
     createRandomLesson: () -> Unit,
@@ -36,7 +36,7 @@ fun SetsRoute(
     val state = viewModel.uiState.collectAsState()
     SetsScreen(
         state = state.value,
-        navigateToSelectedSet = { navigateToSelectedSet(it.id.toString()) },
+        navigateToSelectedSet = { navigateToSelectedSet(it) },
         navigateToHome = navigateToHome,
         createNewSet = createNewSet,
         createRandomLesson = createRandomLesson

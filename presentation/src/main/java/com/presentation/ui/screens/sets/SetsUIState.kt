@@ -1,4 +1,4 @@
-package com.presentation.ui.screens.set
+package com.presentation.ui.screens.sets
 
 import com.presentation.model.SetOfCards
 

@@ -1,6 +1,7 @@
 package com.data.repository.words
 
 import com.data.model.SetOfWords
+import com.data.model.SetWithWords
 import com.data.model.SetWordCrossRef
 import com.data.model.WordEntity
 import kotlinx.coroutines.flow.Flow
@@ -21,7 +22,7 @@ interface IWordsRepository {
     suspend fun getSetById(id: Int): SetOfWords?
 
     //IGetWordsOfSetUseCase
-    fun getWordsInSet(setId: Int): Flow<List<WordEntity>>
+    fun getWordsInSet(setId: Int): Flow<SetWithWords>
 
     //default in IAddWordUseCase
     suspend fun addWordToAllWordsSet(word: WordEntity)
@@ -43,5 +44,5 @@ interface IWordsRepository {
 
     suspend fun findWordByTranslated(translated: String): WordEntity?
 
-    suspend fun getAllSets(): List<SetOfWords>
+    suspend fun getAllSets(): List<SetWithWords>
 }

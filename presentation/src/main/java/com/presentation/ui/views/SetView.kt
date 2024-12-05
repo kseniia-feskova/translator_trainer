@@ -79,19 +79,20 @@ fun SetView(
 fun ListOfSetsView(
     modifier: Modifier = Modifier,
     listOfSets: List<SetOfCards>,
-    onSetSelected: (SetOfCards) -> Unit = {}
+    onSetSelected: (Int) -> Unit = {}
 ) {
     Box(
         modifier = modifier
     ) {
         var i = 0
         while (i < listOfSets.size) {
+            val set = listOfSets[i]
             SetView(
                 modifier = Modifier.padding(top = (56 * (i + 1)).dp),
-                title = listOfSets[i].title,
+                title = set.title,
                 color = if ((listOfSets.size - i) % 2 == 0) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.tertiary,
-                countOfWords = if (i == listOfSets.size - 1) listOfSets[i].setOfWords.size else null,
-                onSetSelected = { onSetSelected(listOfSets[i]) }
+                countOfWords = if (i == listOfSets.size - 1) set.setOfWords.size else null,
+                onSetSelected = { set.id?.let { onSetSelected(it) } }
             )
             i++
         }

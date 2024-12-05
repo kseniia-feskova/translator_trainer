@@ -37,6 +37,8 @@ import com.presentation.ui.accentColor
 import com.presentation.ui.primaryColor
 import com.presentation.ui.secondaryColor
 import com.presentation.ui.views.ActionButton
+import com.presentation.ui.views.BasicTopView
+import com.presentation.utils.ALL_WORDS
 
 private val mockAllCardsState = AllCardsState(
     allWords = mockSetOfCard.setOfWords.size,
@@ -52,11 +54,7 @@ fun AllCardsScreen(
 ) {
     Scaffold(
         topBar = {
-            TopViewCardSet(
-                state.knowWords,
-                state.allWords,
-                name = state.title
-            )
+            BasicTopView(title = ALL_WORDS)
         },
         bottomBar = {
             if (state.words.isNotEmpty()) {

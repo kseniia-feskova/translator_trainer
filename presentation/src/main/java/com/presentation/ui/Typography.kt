@@ -28,8 +28,8 @@ val AppTypography = Typography(
         color = onPrimaryColorLight
     ),
     titleMedium = TextStyle(
-        fontWeight = FontWeight.Normal,
-        fontSize = 18.sp,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 16.sp,
         lineHeight = 28.sp,
         letterSpacing = 0.sp,
         color = onPrimaryColorLight

@@ -13,11 +13,10 @@ import com.presentation.ui.screens.course.second_translate.CourseSelectSecondTra
 import com.presentation.ui.screens.course.translate.CourseSelectTranslateScreen
 import com.presentation.ui.screens.home.homeScreen
 import com.presentation.ui.screens.home.navigateToHome
-import com.presentation.ui.screens.set.CardSetScreen
-import com.presentation.ui.screens.set.setsScreen
+import com.presentation.ui.screens.set.navigateToSet
+import com.presentation.ui.screens.set.setScreen
+import com.presentation.ui.screens.sets.setsScreen
 import com.presentation.utils.Course
-import com.presentation.viewmodel.CardSetIntent
-import com.presentation.viewmodel.CardSetViewModel
 import com.presentation.viewmodel.courses.SelectSecondTranslateViewModel
 import com.presentation.viewmodel.courses.SelectSecondTranslationIntent
 import com.presentation.viewmodel.courses.SelectTranslateViewModel
@@ -38,38 +37,17 @@ fun TranslatorApp(
     ) {
         homeScreen()
         setsScreen(
-            navigateToSelectedSet = {},
+            navigateToSelectedSet = { navController.navigateToSet(it) },
             navigateToHome = navController::navigateToHome,
             createNewSet = {},
             createRandomLesson = {}
         )
 
-
-
-        composable(
-            route = "set/{setId}",
-            arguments = listOf(navArgument("setId") { type = NavType.IntType })
-        ) { backStackEntry ->
-            val setId = backStackEntry.arguments?.getInt("setId") ?: return@composable
-            val viewModel: CardSetViewModel = koinViewModel(parameters = { parametersOf(setId) })
-            val state by viewModel.uiState.collectAsState()
-            Log.d(TAG, "Open CardSetScreen setId = $setId")
-
-            CardSetScreen(
-                state = state,
-                addWordToKnow = { viewModel.handleIntent(CardSetIntent.AddWordToKnow(it)) },
-                addWordToLearn = { viewModel.handleIntent(CardSetIntent.AddWordToLearn(it)) },
-                resetCardSet = { viewModel.handleIntent(CardSetIntent.ResetCardSet) },
-                startCourse = {
-                    viewModel.handleIntent(CardSetIntent.StartSelected { _setId, course ->
-                        Log.d(TAG, "Call navigate to course ${course.route}")
-                        navController.navigate("${course.route}/$_setId") {
-                            popUpTo("set/${setId}") { inclusive = true }
-                        }
-                    })
-                }
-            )
-        }
+        setScreen(
+            navigateToLesson = {},
+            navigateToEdit = {},
+            navigateUp = { navController.navigateUp() },
+        )
 
         composable(
             route = "${Course.SELECT_RUSSIAN.route}/{setId}",

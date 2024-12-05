@@ -1,4 +1,4 @@
-package com.presentation.ui.screens.set
+package com.presentation.ui.screens.sets
 
 import android.util.Log
 import androidx.compose.foundation.layout.Box
@@ -18,7 +18,6 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.presentation.model.SetOfCards
 import com.presentation.navigation.BottomNavigationBar
 import com.presentation.test.mockListOfSets
 import com.presentation.ui.AppTheme
@@ -31,7 +30,7 @@ fun SetsScreen(
     state: SetsUIState,
     createNewSet: () -> Unit = {},
     navigateToHome: () -> Unit = {},
-    navigateToSelectedSet: (SetOfCards) -> Unit = {},
+    navigateToSelectedSet: (Int) -> Unit = {},
     createRandomLesson: () -> Unit = {},
 ) {
     Box(

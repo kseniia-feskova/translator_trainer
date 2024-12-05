@@ -22,8 +22,8 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import com.presentation.ui.primaryColor
-import com.presentation.ui.screens.set.ProgressForCourse
 import com.presentation.ui.secondaryColor
+import com.presentation.ui.views.ProgressForLesson
 
 @Composable
 fun TopViewCourse(
@@ -40,7 +40,7 @@ fun TopViewCourse(
     ) {
         TopCourseTitle(onExitClick = onExitClick, name = name)
         Spacer(modifier = Modifier.height(16.dp))
-        ProgressForCourse(current = currentWord, all = allWords)
+        ProgressForLesson(current = currentWord, all = allWords)
         Spacer(modifier = Modifier.height(16.dp))
     }
 

@@ -1,6 +1,7 @@
 package com.domain.mapper
 
 import com.data.model.SetOfWords
+import com.data.model.SetWithWords
 import com.presentation.model.SetLevel
 import com.presentation.model.SetOfCards
 
@@ -28,6 +29,16 @@ fun SetOfWords.toPresentation(): SetOfCards {
         title = name,
         level = level.toPresentation(),
         userId = userId
+    )
+}
+
+fun SetWithWords.toPresentation(): SetOfCards {
+    return SetOfCards(
+        id = set.id,
+        title = set.name,
+        level = set.level.toPresentation(),
+        userId = set.userId,
+        setOfWords = words.map { it.toWord() }.toSet()
     )
 }
 

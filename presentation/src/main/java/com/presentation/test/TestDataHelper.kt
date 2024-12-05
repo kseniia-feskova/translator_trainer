@@ -69,7 +69,7 @@ val mockSetOfCard = SetOfCards(
 val mockListOfSets = listOf(
     mockSetOfCard,
     mockSetOfCard.copy(title = "Новые слова"),
-    mockSetOfCard.copy(title = "Приключение к центру земли"),
+    mockSetOfCard.copy(title = "Приключение к центру земли", setOfWords = smallList.toSet()),
   //  mockSetOfCard.copy(title = "Набор для B2"),
     mockSetOfCard.copy(title = "Все слова"),
 )
