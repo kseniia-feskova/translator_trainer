@@ -6,20 +6,19 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import com.presentation.navigation.BottomNavItem
+import com.presentation.navigation.LeafScreen
+import com.presentation.navigation.RootScreen
 import org.koin.androidx.compose.koinViewModel
-
-const val homeScreen = "home_screen"
 
 fun NavController.navigateToHome(
     navOptions: NavOptions? = null,
 ) {
-    this.navigate(homeScreen, navOptions)
+    this.navigate(RootScreen.Home.route, navOptions)
 }
 
 fun NavGraphBuilder.homeScreen(
 ) {
-    composable(BottomNavItem.Home.route) { HomeRoute() }
+    composable(route = LeafScreen.Home.route) { HomeRoute() }
 }
 
 @Composable

@@ -8,18 +8,14 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import kotlinx.serialization.Serializable
+import com.presentation.navigation.LeafScreen
 import org.koin.androidx.compose.koinViewModel
-
-
-@Serializable
-class CardSetRoute(val setId: Int)
 
 fun NavController.navigateToSet(
     setId: Int,
     navOptions: NavOptions? = null
 ) {
-    this.navigate(CardSetRoute(setId), navOptions)
+    this.navigate(LeafScreen.Set(setId), navOptions)
 }
 
 fun NavGraphBuilder.setScreen(
@@ -27,7 +23,7 @@ fun NavGraphBuilder.setScreen(
     navigateToEdit: () -> Unit = {},
     navigateUp: () -> Unit = {},
 ) {
-    composable<CardSetRoute> {
+    composable<LeafScreen.Set> {
         CardSetRoute(
             navigateToLesson = navigateToLesson,
             navigateUp = navigateUp,
@@ -37,7 +33,7 @@ fun NavGraphBuilder.setScreen(
 }
 
 internal val SavedStateHandle.setId: Int
-    get() = toRoute<CardSetRoute>().setId
+    get() = toRoute<LeafScreen.Set>().setId
 
 @Composable
 fun CardSetRoute(

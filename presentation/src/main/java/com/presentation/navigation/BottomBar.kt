@@ -21,20 +21,29 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.presentation.R
 import com.presentation.ui.AppTheme
 import com.presentation.ui.accentColorLight
 import com.presentation.ui.onSurfaceLight
 import com.presentation.ui.primaryColorLight
-import com.presentation.ui.screens.home.homeScreen
-import com.presentation.ui.screens.sets.setsScreen
 import com.presentation.ui.surfaceLight
+import kotlinx.serialization.Serializable
 
-enum class BottomNavItem(val route: String, val iconRes: Int) {
-    Home(homeScreen, R.drawable.ic_translate),
-    Sets(setsScreen, R.drawable.ic_sets),
-    Profile("profile", R.drawable.ic_account)
+enum class RootScreen(val route: String, val iconRes: Int) {
+    Home("home_root", R.drawable.ic_translate),
+    Sets("sets_root", R.drawable.ic_sets),
+    Profile("profile_root", R.drawable.ic_account)
+}
+
+@Serializable
+sealed class LeafScreen(val route: String) {
+    object Home : LeafScreen("home")
+    object Sets : LeafScreen("sets")
+
+    @Serializable
+    data class Set(val setId: Int) : LeafScreen("set")
 }
 
 @Composable
@@ -47,11 +56,11 @@ fun BottomNavigationBar(navController: NavController) {
         containerColor = primaryColorLight
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentRoute = navBackStackEntry?.destination?.route
+        val currentDestination = navBackStackEntry?.destination
 
-        BottomNavItem.values().forEach { item ->
+        RootScreen.values().forEach { item ->
             NavigationBarItem(
-                selected = currentRoute == item.route,
+                selected = currentDestination?.matchDestination(item.route) ?: false,
                 onClick = {
                     navController.navigate(item.route) {
                         popUpTo(navController.graph.startDestinationId) {
@@ -89,4 +98,12 @@ fun BottomBarPreview() {
             }
         }
     }
+}
+
+fun NavDestination?.matchDestination(route: String): Boolean {
+    var currentDestination = this
+    while (currentDestination != null && currentDestination.route != route) {
+        currentDestination = currentDestination.parent
+    }
+    return currentDestination?.route == route
 }
