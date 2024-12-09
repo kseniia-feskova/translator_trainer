@@ -7,6 +7,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.navigation
 import com.presentation.ui.screens.home.homeScreen
 import com.presentation.ui.screens.home.navigateToHome
+import com.presentation.ui.screens.lesson.LessonType
+import com.presentation.ui.screens.lesson.lessonScreen
+import com.presentation.ui.screens.lesson.navigateToLesson
 import com.presentation.ui.screens.set.navigateToSet
 import com.presentation.ui.screens.set.setScreen
 import com.presentation.ui.screens.sets.setsScreen
@@ -46,9 +49,13 @@ fun NavGraphBuilder.SetsNav(navController: NavHostController) {
         )
 
         setScreen(
-            navigateToLesson = {},
+            navigateToLesson = { navController.navigateToLesson(it, LessonType.TRANSLATE) },
             navigateToEdit = {},
             navigateUp = { navController.navigateUp() },
         )
+
+        lessonScreen {
+            navController.navigateUp()
+        }
     }
 }

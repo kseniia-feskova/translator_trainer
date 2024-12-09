@@ -3,6 +3,7 @@ package com.presentation.ui.views
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,14 +27,12 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import com.presentation.ui.AppTheme
 import com.presentation.ui.greenColor
 import com.presentation.ui.lightGreenColor
 import com.presentation.ui.primaryColor
 import com.presentation.ui.redColor
-import com.presentation.ui.secondaryColor
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -46,12 +45,12 @@ fun ChipSelector(
     onOptionSelected: (String) -> Unit
 ) {
     Column(modifier = Modifier.then(modifier)) {
-        Text(
-            modifier = Modifier.padding(8.dp),
-            text = "Выберите перевод", style = MaterialTheme.typography.bodyLarge,
-            color = secondaryColor,
-            fontSize = TextUnit(18f, TextUnitType.Sp)
-        )
+//        Text(
+//            modifier = Modifier.padding(8.dp),
+//            text = "Выберите перевод", style = MaterialTheme.typography.bodyLarge,
+//            color = secondaryColor,
+//            fontSize = TextUnit(18f, TextUnitType.Sp)
+//        )
         FlowRow(
             modifier = Modifier
                 .fillMaxWidth()
@@ -116,7 +115,7 @@ fun AnimatedChip(
         animationSpec = tween(durationMillis = 300)
     )
 
-    Surface(
+    Box(
         modifier = Modifier
             .wrapContentHeight()
             .shadow(
@@ -125,9 +124,14 @@ fun AnimatedChip(
                 shape = RoundedCornerShape(24.dp),
                 ambientColor = targetColor,
                 spotColor = targetColor
-            ),
-        shape = RoundedCornerShape(18.dp),
-        onClick = { onClick() }
+            )
+            .background(
+                color = MaterialTheme.colorScheme.primary,
+                shape = RoundedCornerShape(18.dp)
+            )
+            .clickable {
+                onClick()
+            }
     ) {
         Text(
             text = text,
@@ -143,15 +147,20 @@ fun AnimatedChip(
 @Preview
 @Composable
 fun ChipSelectionDemo() {
-    Box(modifier = Modifier.background(primaryColor)) {
-        var selectedOption by remember { mutableStateOf("Option 1") }
-        val options = listOf("Option", "Option 2", "Option 3", "Option 4", "Option 5", "Option 6")
+    AppTheme {
+        Surface {
+            Box {
+                var selectedOption by remember { mutableStateOf("Option 1") }
+                val options =
+                    listOf("Option", "Option 2", "Option 3", "Option 4", "Option 5", "Option 6")
 
-        ChipSelector(
-            options = options,
-            selectedOption = selectedOption,
-            correctAnswer = "Option 2",
-            onOptionSelected = { selectedOption = it }
-        )
+                ChipSelector(
+                    options = options,
+                    selectedOption = selectedOption,
+                    correctAnswer = "Option 2",
+                    onOptionSelected = { selectedOption = it }
+                )
+            }
+        }
     }
 }

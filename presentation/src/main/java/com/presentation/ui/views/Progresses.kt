@@ -126,14 +126,13 @@ fun ProgressForSet(
 @Composable
 fun ProgressForLesson(
     modifier: Modifier = Modifier,
-    current: Int = 0,
+    current: Int = 1,
     all: Int = 5
 ) {
-    Box() {
+    Box(modifier = Modifier.then(modifier)) {
         Box(
             modifier = Modifier
                 .align(Alignment.Center)
-                .then(modifier)
                 .fillMaxWidth()
                 .background(color = secondaryColor, shape = RoundedCornerShape(8.dp))
                 .wrapContentHeight()

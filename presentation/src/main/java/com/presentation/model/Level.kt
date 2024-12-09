@@ -25,4 +25,13 @@ enum class Level {
             else -> listOf(false, false, false)
         }
     }
+
+    fun inc(): Level {
+        return when (this) {
+            KNOW -> KNOW
+            LEARNING_GOOD -> KNOW
+            LEARNING -> LEARNING_GOOD
+            else -> LEARNING
+        }
+    }
 }

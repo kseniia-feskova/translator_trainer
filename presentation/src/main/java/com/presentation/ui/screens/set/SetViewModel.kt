@@ -28,6 +28,8 @@ class SetViewModel(
     private val allWords: MutableList<WordUI> = mutableListOf()
     private var index = 0
 
+    fun getSetId() = setId
+
     init {
         viewModelScope.launch {
             getWords.invoke(setId)

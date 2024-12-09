@@ -19,7 +19,7 @@ fun NavController.navigateToSet(
 }
 
 fun NavGraphBuilder.setScreen(
-    navigateToLesson: () -> Unit = {},
+    navigateToLesson: (Int) -> Unit = {},
     navigateToEdit: () -> Unit = {},
     navigateUp: () -> Unit = {},
 ) {
@@ -37,7 +37,7 @@ internal val SavedStateHandle.setId: Int
 
 @Composable
 fun CardSetRoute(
-    navigateToLesson: () -> Unit = {},
+    navigateToLesson: (Int) -> Unit = {},
     navigateToEdit: () -> Unit = {},
     navigateUp: () -> Unit = {},
     viewModel: SetViewModel = koinViewModel()
@@ -48,7 +48,9 @@ fun CardSetRoute(
         addWordToKnow = { viewModel.handleIntent(CardSetIntent.AddWordToKnow(it)) },
         addWordToLearn = { viewModel.handleIntent(CardSetIntent.AddWordToLearn(it)) },
         resetCardSet = { viewModel.handleIntent(CardSetIntent.ResetCardSet) },
-        startCourse = navigateToLesson,
+        startCourse = {
+            navigateToLesson(viewModel.getSetId())
+        },
         navigateUp = navigateUp,
         navigateToEdit = navigateToEdit
     )

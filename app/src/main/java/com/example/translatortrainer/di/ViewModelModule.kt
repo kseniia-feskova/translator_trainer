@@ -1,6 +1,7 @@
 package com.example.translatortrainer.di
 
 import com.presentation.ui.screens.home.HomeViewModel
+import com.presentation.ui.screens.lesson.LessonViewModel
 import com.presentation.ui.screens.set.SetViewModel
 import com.presentation.ui.screens.sets.SetsViewModel
 import com.presentation.viewmodel.MainViewModel
@@ -16,6 +17,7 @@ val viewModelModule = module {
     viewModelOf(::HomeViewModel)
     viewModelOf(::SetsViewModel)
     viewModelOf(::SetViewModel)
+    viewModelOf(::LessonViewModel)
 
     viewModel { (setId: Int) ->
         SelectTranslateViewModel(
