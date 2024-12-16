@@ -70,34 +70,9 @@ class WordsRepository(
     override suspend fun getAllSets(): List<SetWithWords> {
         return dao.getAllSets()
     }
+
+    override suspend fun deleteWord(wordId: Int) {
+        dao.deleteWordWithRelations(wordId)
+    }
+
 }
-
-
-/*
-*   UseCases
-*   1. GetLastWords - 5 new words
-*   2. GetPageOfWords - 5-10 words?
-*   3. AddNewWord -
-*   4. TranslateWord - get Translation
-*   5. GetExercise - get Exercise by type
-*   6. DeleteWord
-* */
-
-/*
-*  ExerciseType{
-*   MAPPING, (word - translation selection)
-*   DICTATION, (word - translation write)
-*   MEMORIZE (word - translation rotation)
-* }
-*
-* Exercise{
-* map (word - translation),
-* type : ExerciseType,
-* }
-*
-* WordEntity{
-* exercises: map (type, passed)
-* }
-*
-* map (type, passed)
-* */

@@ -4,6 +4,7 @@ import com.domain.usecase.AddSetOfWordsUseCase
 import com.domain.usecase.AddSetWordCrossRef
 import com.domain.usecase.AddWordUseCase
 import com.domain.usecase.DeleteSetByIdUseCase
+import com.domain.usecase.DeleteWordUseCase
 import com.domain.usecase.FindWordByOriginUseCase
 import com.domain.usecase.FindWordByTranslatedUseCase
 import com.domain.usecase.GetAllSetsUseCase
@@ -19,6 +20,7 @@ import com.presentation.usecases.IAddSetOfWordsUseCase
 import com.presentation.usecases.IAddSetWordCrossRefUseCase
 import com.presentation.usecases.IAddWordUseCase
 import com.presentation.usecases.IDeleteSetByIdUseCase
+import com.presentation.usecases.IDeleteWordUseCase
 import com.presentation.usecases.IFindWordByOriginUseCase
 import com.presentation.usecases.IFindWordByTranslatedUseCase
 import com.presentation.usecases.IGetAllSetsUseCase
@@ -65,4 +67,6 @@ val useCaseModule = module {
     singleOf(::FindWordByTranslatedUseCase) bind IFindWordByTranslatedUseCase::class
 
     singleOf(::GetAllSetsUseCase) bind IGetAllSetsUseCase::class
+
+    singleOf(::DeleteWordUseCase) bind IDeleteWordUseCase::class
 }

@@ -45,4 +45,7 @@ interface IWordsRepository {
     suspend fun findWordByTranslated(translated: String): WordEntity?
 
     suspend fun getAllSets(): List<SetWithWords>
+
+    suspend fun deleteWord(wordId: Int)
+
 }

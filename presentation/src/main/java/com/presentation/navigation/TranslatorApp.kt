@@ -5,6 +5,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navigation
+import com.presentation.ui.screens.all.allWordsScreen
+import com.presentation.ui.screens.all.navigateToAllWords
 import com.presentation.ui.screens.home.homeScreen
 import com.presentation.ui.screens.home.navigateToHome
 import com.presentation.ui.screens.lesson.LessonType
@@ -43,6 +45,7 @@ fun NavGraphBuilder.SetsNav(navController: NavHostController) {
 
         setsScreen(
             navigateToSelectedSet = { navController.navigateToSet(it) },
+            navigateToAllWordsSet = { navController.navigateToAllWords(it) },
             navigateToHome = navController::navigateToHome,
             createNewSet = {},
             createRandomLesson = {}
@@ -55,6 +58,10 @@ fun NavGraphBuilder.SetsNav(navController: NavHostController) {
         )
 
         lessonScreen {
+            navController.navigateUp()
+        }
+
+        allWordsScreen {
             navController.navigateUp()
         }
     }

@@ -48,9 +48,7 @@ fun CardSetRoute(
         addWordToKnow = { viewModel.handleIntent(CardSetIntent.AddWordToKnow(it)) },
         addWordToLearn = { viewModel.handleIntent(CardSetIntent.AddWordToLearn(it)) },
         resetCardSet = { viewModel.handleIntent(CardSetIntent.ResetCardSet) },
-        startCourse = {
-            navigateToLesson(viewModel.getSetId())
-        },
+        startCourse = { navigateToLesson(viewModel.getSetId()) },
         navigateUp = navigateUp,
         navigateToEdit = navigateToEdit
     )

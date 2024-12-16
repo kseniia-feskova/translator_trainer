@@ -44,10 +44,6 @@ interface WordDao {
     suspend fun getAllSets(): List<SetWithWords>
 
     @Transaction
-    @Query("SELECT * FROM words WHERE id IN (SELECT wordId FROM set_word_cross_ref WHERE setId = :setId)")
-    fun getWordsInSet(setId: Int): Flow<List<WordEntity>>
-
-    @Transaction
     @Query("SELECT * FROM sets_of_words WHERE id = :setId")
     fun getSetWithWords(setId: Int): Flow<SetWithWords>
 
@@ -91,4 +87,17 @@ interface WordDao {
     // Удалить набор по id
     @Query("DELETE FROM sets_of_words WHERE id = :setId")
     suspend fun deleteSetById(setId: Int)
+
+
+
+    @Transaction
+    suspend fun deleteWordWithRelations(wordId: Int) {
+        deleteWordFromSets(wordId)
+        deleteWordById(wordId)
+    }
+    @Query("DELETE FROM words WHERE id = :wordId")
+    suspend fun deleteWordById(wordId: Int)
+
+    @Query("DELETE FROM set_word_cross_ref WHERE wordId = :wordId")
+    suspend fun deleteWordFromSets(wordId: Int)
 }

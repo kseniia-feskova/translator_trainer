@@ -9,6 +9,7 @@ import org.koin.androidx.compose.koinViewModel
 
 fun NavGraphBuilder.setsScreen(
     navigateToSelectedSet: (Int) -> Unit,
+    navigateToAllWordsSet: (Int) -> Unit,
     navigateToHome: () -> Unit,
     createNewSet: () -> Unit,
     createRandomLesson: () -> Unit,
@@ -16,6 +17,7 @@ fun NavGraphBuilder.setsScreen(
     composable(route = LeafScreen.Sets.route) {
         SetsRoute(
             navigateToSelectedSet,
+            navigateToAllWordsSet,
             navigateToHome,
             createNewSet,
             createRandomLesson
@@ -26,6 +28,7 @@ fun NavGraphBuilder.setsScreen(
 @Composable
 fun SetsRoute(
     navigateToSelectedSet: (Int) -> Unit,
+    navigateToAllWordsSet: (Int) -> Unit,
     navigateToHome: () -> Unit,
     createNewSet: () -> Unit,
     createRandomLesson: () -> Unit,
@@ -34,7 +37,13 @@ fun SetsRoute(
     val state = viewModel.uiState.collectAsState()
     SetsScreen(
         state = state.value,
-        navigateToSelectedSet = { navigateToSelectedSet(it) },
+        navigateToSelectedSet = {
+            if (viewModel.isAllWordsSelected(it)) {
+                navigateToAllWordsSet(it)
+            } else {
+                navigateToSelectedSet(it)
+            }
+        },
         navigateToHome = navigateToHome,
         createNewSet = createNewSet,
         createRandomLesson = createRandomLesson
