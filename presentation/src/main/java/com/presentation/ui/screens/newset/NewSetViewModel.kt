@@ -89,13 +89,15 @@ class NewSetViewModel(
     }
 
     private fun selectWord(word: WordUI) {
-        val updatedWords = allWords.toMutableMap()
+        val updatedWords = _uiState.value.words.toMutableMap()
         val oldValue = updatedWords[word]
         if (oldValue != null) {
+            val updatedAll = allWords.toMutableMap()
             updatedWords[word] = !oldValue
-            allWords = updatedWords
+            updatedAll[word] = !oldValue
+            allWords = updatedAll
             _uiState.update {
-                it.copy(words = allWords)
+                it.copy(words = updatedWords)
             }
         }
         checkActionButton()
