@@ -56,6 +56,11 @@ interface WordDao {
         }
     }
 
+    suspend fun addWordToAllWordsSet(wordId: Int) {
+        val allWordsSet = getSetByName(ALL_WORDS) ?: return
+        insertSetWordCrossRef(SetWordCrossRef(setId = allWordsSet.id, wordId = wordId))
+    }
+
     // Получить слова по фильтру даты или статуса
     @Transaction
     @Query("SELECT * FROM words WHERE dateAdded BETWEEN :startDate AND :endDate")

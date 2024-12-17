@@ -27,6 +27,8 @@ interface IWordsRepository {
     //default in IAddWordUseCase
     suspend fun addWordToAllWordsSet(word: WordEntity)
 
+    suspend fun addWordToAllWordsSet(wordId: Int)
+
     fun getWordsFilteredByDateOrStatus(
         startDate: Date,
         endDate: Date

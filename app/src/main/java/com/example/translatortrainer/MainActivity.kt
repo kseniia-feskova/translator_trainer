@@ -19,6 +19,7 @@ import androidx.navigation.compose.rememberNavController
 import com.data.di.databaseModule
 import com.data.di.networkModule
 import com.data.di.repositoryModule
+import com.example.translatortrainer.di.preferencesModule
 import com.example.translatortrainer.di.useCaseModule
 import com.example.translatortrainer.di.viewModelModule
 import com.presentation.navigation.BottomNavigationBar
@@ -64,9 +65,8 @@ class MainActivity : AppCompatActivity() {
                 }"
             )
             val shouldShowBottomBar = when {
-                currentRoute?.contains(LeafScreen.Lesson(0, LessonType.TRANSLATE).route)
-                    ?: true -> false
-
+                currentRoute?.contains(LeafScreen.Lesson(0, LessonType.TRANSLATE).route) ?: true -> false
+                currentRoute?.contains(LeafScreen.NewSet.route) ?: true -> false
                 else -> true
             }
             AppTheme {
@@ -104,6 +104,7 @@ fun MainActivity.startKoin() {
                 databaseModule,
                 useCaseModule,
                 viewModelModule,
+                preferencesModule
             )
         )
     }

@@ -1,6 +1,5 @@
 package com.domain.usecase
 
-import android.util.Log
 import com.data.model.SetWordCrossRef
 import com.data.repository.words.IWordsRepository
 import com.domain.mapper.toNewWordEntity
@@ -10,12 +9,10 @@ import com.presentation.usecases.IAddWordUseCase
 class AddWordUseCase(private val repo: IWordsRepository) : IAddWordUseCase {
 
     override suspend fun invoke(setId: Int?, newWord: WordUI) {
-        if (setId == null) {
-            Log.e("AddWordUseCase", "Add word to all words")
-            repo.addWordToAllWordsSet(newWord.toNewWordEntity())
-        } else {
-            val wordId = repo.addNewWord(newWord.toNewWordEntity())
-            if (wordId != -1L) {
+        val wordId = repo.addNewWord(newWord.toNewWordEntity())
+        if (wordId != -1L) {
+            repo.addWordToAllWordsSet(wordId.toInt())
+            if (setId != null) {
                 repo.insertSetWordCrossRef(
                     SetWordCrossRef(
                         setId = setId,
@@ -25,5 +22,4 @@ class AddWordUseCase(private val repo: IWordsRepository) : IAddWordUseCase {
             }
         }
     }
-
 }

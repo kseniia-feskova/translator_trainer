@@ -33,13 +33,13 @@ fun SetView(
         modifier = Modifier
             .fillMaxWidth()
             .then(modifier)
-            .clickable { onSetSelected() }
     ) {
         Box(
             modifier = Modifier.background(
-                color = color,
-                shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
-            )
+                    color = color,
+                    shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
+                )
+                .clickable { onSetSelected() }
         ) {
             Text(
                 text = title,
@@ -55,6 +55,7 @@ fun SetView(
                     color = color,
                     shape = RoundedCornerShape(topEnd = 24.dp)
                 )
+                .clickable { onSetSelected() }
                 .fillMaxWidth()
                 .height(160.dp)
                 .padding(horizontal = 12.dp, vertical = 16.dp)

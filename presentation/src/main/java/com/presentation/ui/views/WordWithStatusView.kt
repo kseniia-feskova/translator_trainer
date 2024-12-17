@@ -5,11 +5,15 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -80,12 +84,93 @@ fun WordWithStatusView(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun SelectingWordWithStatusView(
+    modifier: Modifier = Modifier,
+    word: WordUI,
+    isSelected: Boolean,
+    onClick: (WordUI) -> Unit = {},
+    onLongClicked: (WordUI, Offset) -> Unit = { _, _ -> }
+) {
+    var popupOffset by remember { mutableStateOf<Offset?>(null) }
+    Row(
+        modifier = Modifier
+            .then(modifier)
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Checkbox(
+            modifier = Modifier.background(color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(24.dp)),
+            checked = isSelected,
+            onCheckedChange = { onClick(word) },
+            colors = CheckboxDefaults.colors().copy(
+                uncheckedBoxColor = MaterialTheme.colorScheme.surface,
+                uncheckedBorderColor = MaterialTheme.colorScheme.tertiary,
+                checkedCheckmarkColor = MaterialTheme.colorScheme.onSurface,
+                checkedBoxColor = MaterialTheme.colorScheme.primary,
+                checkedBorderColor = MaterialTheme.colorScheme.onSurface
+            )
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(
+                    color = MaterialTheme.colorScheme.primary,
+                    shape = RoundedCornerShape(12.dp)
+                )
+                .onGloballyPositioned { layoutCoordinates ->
+                    val bounds = layoutCoordinates.boundsInRoot()
+                    popupOffset = Offset(bounds.left, bounds.bottom)
+                }
+                .combinedClickable(
+                    onClick = { onClick(word) },
+                    onLongClick = { popupOffset?.let { onLongClicked(word, it) } }
+                )
+        ) {
+
+            Column(
+                modifier = Modifier
+                    .align(Alignment.CenterStart)
+                    .padding(horizontal = 12.dp, vertical = 16.dp)
+            ) {
+                Text(text = word.originalText, style = MaterialTheme.typography.titleLarge)
+                Spacer(modifier = Modifier.height(6.dp))
+                Text(text = word.resText, style = MaterialTheme.typography.titleSmall)
+            }
+
+            StarsRow(
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+                    .padding(12.dp),
+                stars = word.level.convertToStars()
+            )
+        }
+    }
+}
+
+
 @Composable
 @Preview
 fun WordWithStatusPreview() {
     AppTheme {
         Surface {
-            WordWithStatusView(modifier = Modifier.padding(12.dp), word = smallList.first())
+            Column {
+                WordWithStatusView(modifier = Modifier.padding(12.dp), word = smallList.first())
+
+                SelectingWordWithStatusView(
+                    modifier = Modifier.padding(12.dp),
+                    word = smallList.first(),
+                    isSelected = false
+                )
+
+                SelectingWordWithStatusView(
+                    modifier = Modifier.padding(12.dp),
+                    word = smallList.first(),
+                    isSelected = true
+                )
+            }
         }
     }
 }

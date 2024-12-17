@@ -32,6 +32,10 @@ class WordsRepository(
         dao.addWordToAllWordsSet(word)
     }
 
+    override suspend fun addWordToAllWordsSet(wordId: Int) {
+        dao.addWordToAllWordsSet(wordId)
+    }
+
     override fun getWordsInSet(setId: Int): Flow<SetWithWords> {
         return dao.getSetWithWords(setId)
     }

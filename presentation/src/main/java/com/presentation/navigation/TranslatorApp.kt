@@ -12,6 +12,8 @@ import com.presentation.ui.screens.home.navigateToHome
 import com.presentation.ui.screens.lesson.LessonType
 import com.presentation.ui.screens.lesson.lessonScreen
 import com.presentation.ui.screens.lesson.navigateToLesson
+import com.presentation.ui.screens.newset.navigateToNewSet
+import com.presentation.ui.screens.newset.newSetScreen
 import com.presentation.ui.screens.set.navigateToSet
 import com.presentation.ui.screens.set.setScreen
 import com.presentation.ui.screens.sets.setsScreen
@@ -47,7 +49,7 @@ fun NavGraphBuilder.SetsNav(navController: NavHostController) {
             navigateToSelectedSet = { navController.navigateToSet(it) },
             navigateToAllWordsSet = { navController.navigateToAllWords(it) },
             navigateToHome = navController::navigateToHome,
-            createNewSet = {},
+            createNewSet = { navController.navigateToNewSet() },
             createRandomLesson = {}
         )
 
@@ -62,6 +64,10 @@ fun NavGraphBuilder.SetsNav(navController: NavHostController) {
         }
 
         allWordsScreen {
+            navController.navigateUp()
+        }
+
+        newSetScreen {
             navController.navigateUp()
         }
     }

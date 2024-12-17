@@ -50,7 +50,9 @@ sealed class LeafScreen(val route: String) {
     data class Lesson(val setId: Int, val type: LessonType) : LeafScreen("lesson")
 
     @Serializable
-    data class AllWords(val setId:Int): LeafScreen("allWords")
+    data class AllWords(val setId: Int) : LeafScreen("allWords")
+
+    object NewSet : LeafScreen("newset")
 }
 
 @Composable

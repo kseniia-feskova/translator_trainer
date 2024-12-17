@@ -3,6 +3,7 @@ package com.presentation.ui.screens.home
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.presentation.data.IDataStoreManager
 import com.presentation.model.Level
 import com.presentation.model.SetLevel
 import com.presentation.model.SetOfCards
@@ -17,6 +18,7 @@ import com.presentation.utils.ALL_WORDS
 import com.presentation.utils.Language
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.Date
@@ -28,7 +30,8 @@ class HomeViewModel(
     private val translateWord: ITranslateWordUseCase,
     private val getAllCards: IGetSetOfAllCardsUseCase,
     private val addSetOfCards: IAddSetOfWordsUseCase,
-    private val addWordUseCase: IAddWordUseCase
+    private val addWordUseCase: IAddWordUseCase,
+    private val prefs: IDataStoreManager
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUIState())
@@ -42,10 +45,8 @@ class HomeViewModel(
                 addSetOfCards.invoke(
                     SetOfCards(0, ALL_WORDS, SetLevel.EASY, emptySet(), 0)
                 )
-                setId = getAllCards.invoke()?.id
-            }else {
-                setId = allCards.id
             }
+            prefs.listenSelectedSetId().collectLatest { setId = it }
         }
     }
 
@@ -201,7 +202,7 @@ class HomeViewModel(
     }
 
     companion object {
-        private const val TAG = "HomeViewModel"
+      //  private const val TAG = "HomeViewModel"
     }
 }
 

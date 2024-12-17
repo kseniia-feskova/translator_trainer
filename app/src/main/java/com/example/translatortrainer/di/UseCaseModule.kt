@@ -2,6 +2,7 @@ package com.example.translatortrainer.di
 
 import com.domain.usecase.AddSetOfWordsUseCase
 import com.domain.usecase.AddSetWordCrossRef
+import com.domain.usecase.AddWordToSetUseCase
 import com.domain.usecase.AddWordUseCase
 import com.domain.usecase.DeleteSetByIdUseCase
 import com.domain.usecase.DeleteWordUseCase
@@ -18,6 +19,7 @@ import com.domain.usecase.TranslateWordUseCase
 import com.domain.usecase.UpdateWordUseCase
 import com.presentation.usecases.IAddSetOfWordsUseCase
 import com.presentation.usecases.IAddSetWordCrossRefUseCase
+import com.presentation.usecases.IAddWordToSetUseCase
 import com.presentation.usecases.IAddWordUseCase
 import com.presentation.usecases.IDeleteSetByIdUseCase
 import com.presentation.usecases.IDeleteWordUseCase
@@ -69,4 +71,6 @@ val useCaseModule = module {
     singleOf(::GetAllSetsUseCase) bind IGetAllSetsUseCase::class
 
     singleOf(::DeleteWordUseCase) bind IDeleteWordUseCase::class
+
+    singleOf(::AddWordToSetUseCase) bind IAddWordToSetUseCase::class
 }
