@@ -1,17 +1,20 @@
 package com.presentation.ui.views
 
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,12 +29,22 @@ fun SetView(
     modifier: Modifier = Modifier,
     title: String,
     color: Color,
+    secondColor: Color,
+    isElevated: Boolean = false,
     countOfWords: Int? = null,
-    onSetSelected: () -> Unit = {}
+    onSetClicked: () -> Unit = {},
+    onSetSelected: () -> Unit = {},
 ) {
+
+    val offsetY by animateDpAsState(
+        targetValue = if (isElevated) (-40).dp else 0.dp,
+        label = "offsetY"
+    )
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .offset(y = offsetY)
             .then(modifier)
     ) {
         Box(
@@ -39,13 +52,13 @@ fun SetView(
                     color = color,
                     shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
                 )
-                .clickable { onSetSelected() }
+                .clickable { onSetClicked() }
         ) {
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                    .padding(horizontal = 20.dp, vertical = 12.dp)
                     .align(Alignment.Center)
             )
         }
@@ -65,11 +78,11 @@ fun SetView(
                     text = "$countOfWords слов",
                     modifier = Modifier
                         .background(
-                            color = MaterialTheme.colorScheme.primary,
+                            color = secondColor,
                             shape = RoundedCornerShape(24.dp)
                         )
-                        .padding(horizontal = 12.dp, vertical = 8.dp),
-                    style = MaterialTheme.typography.bodyLarge
+                        .padding(horizontal = 12.dp, vertical = 4.dp),
+                    style = MaterialTheme.typography.titleSmall.copy(color = MaterialTheme.colorScheme.onPrimary)
                 )
             }
         }
@@ -80,7 +93,9 @@ fun SetView(
 fun ListOfSetsView(
     modifier: Modifier = Modifier,
     listOfSets: List<SetOfCards>,
-    onSetSelected: (Int) -> Unit = {}
+    selectedSetId: Int? = null,
+    onSetSelected: (Int) -> Unit = {},
+    onSetClicked: (Int?) -> Unit = {}
 ) {
     Box(
         modifier = modifier
@@ -91,9 +106,22 @@ fun ListOfSetsView(
             SetView(
                 modifier = Modifier.padding(top = (56 * (i + 1)).dp),
                 title = set.title,
+                isElevated = selectedSetId == set.id,
                 color = if ((listOfSets.size - i) % 2 == 0) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.tertiary,
-                countOfWords = if (i == listOfSets.size - 1) set.setOfWords.size else null,
-                onSetSelected = { set.id?.let { onSetSelected(it) } }
+                secondColor = if ((listOfSets.size - i) % 2 == 0) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.primary,
+                countOfWords = set.setOfWords.size,
+                onSetClicked = {
+                    if (selectedSetId == set.id) {
+                        onSetClicked(null)
+                    } else {
+                        onSetClicked(set.id)
+                    }
+                },
+                onSetSelected = {
+                    if (selectedSetId == set.id) {
+                        set.id?.let { onSetSelected(it) }
+                    }
+                }
             )
             i++
         }

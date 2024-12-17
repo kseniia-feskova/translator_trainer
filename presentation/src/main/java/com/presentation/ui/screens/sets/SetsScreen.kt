@@ -29,6 +29,7 @@ import com.presentation.ui.views.ListOfSetsView
 fun SetsScreen(
     state: SetsUIState,
     createNewSet: () -> Unit = {},
+    selectSet: (Int?) -> Unit = {},
     navigateToHome: () -> Unit = {},
     navigateToSelectedSet: (Int) -> Unit = {},
     createRandomLesson: () -> Unit = {},
@@ -54,6 +55,8 @@ fun SetsScreen(
                     .align(Alignment.BottomCenter)
                     .padding(bottom = 48.dp),
                 listOfSets = state.sets,
+                selectedSetId = state.selectedSetId,
+                onSetClicked = selectSet,
                 onSetSelected = navigateToSelectedSet
             )
         }
