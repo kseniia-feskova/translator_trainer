@@ -101,7 +101,7 @@ fun SpaceView() {
 
     var points by remember {
         mutableStateOf(
-            List(250) {
+            List(750) {
                 Star(
                     x = (0 until screenWidthPx.toInt()).random().toFloat(),
                     y = (0 until screenHeightPx.toInt()).random().toFloat(),

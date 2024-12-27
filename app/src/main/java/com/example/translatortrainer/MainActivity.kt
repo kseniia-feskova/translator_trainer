@@ -3,12 +3,12 @@ package com.example.translatortrainer
 
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.getValue
@@ -22,9 +22,9 @@ import com.data.di.repositoryModule
 import com.example.translatortrainer.di.preferencesModule
 import com.example.translatortrainer.di.useCaseModule
 import com.example.translatortrainer.di.viewModelModule
+import com.presentation.animation.stars.SpaceView
 import com.presentation.navigation.BottomNavigationBar
 import com.presentation.navigation.LeafScreen
-import com.presentation.navigation.TranslatorApp
 import com.presentation.ui.AppTheme
 import com.presentation.ui.screens.lesson.LessonType
 import org.koin.android.ext.android.inject
@@ -43,12 +43,7 @@ class MainActivity : AppCompatActivity() {
         startKoin()
         viewModel.checkAndAddAllWordsSet()
         WindowCompat.setDecorFitsSystemWindows(window, false)
-
-        enableEdgeToEdge(
-            statusBarStyle = SystemBarStyle.dark(
-                android.graphics.Color.TRANSPARENT
-            )
-        )
+        enableEdgeToEdge()
 
         setContent {
 
@@ -76,8 +71,8 @@ class MainActivity : AppCompatActivity() {
                         .systemBarsPadding(),
                     content = { padding ->
                         Log.e("Preview", "Padding  = $padding")
-                        Box() {
-                            TranslatorApp(navController)
+                        Box(Modifier.safeDrawingPadding()) {
+                            SpaceView()
                         }
                     },
                     bottomBar = {
