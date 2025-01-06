@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "83f59fc4c28f5da6546caf75eaca70c4",
+    "identityHash": "527ee947f8866e1d5164547044ba5255",
     "entities": [
       {
         "tableName": "words",
@@ -110,14 +110,24 @@
             "wordId"
           ]
         },
-        "indices": [],
+        "indices": [
+          {
+            "name": "index_set_word_cross_ref_wordId",
+            "unique": false,
+            "columnNames": [
+              "wordId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_set_word_cross_ref_wordId` ON `${TABLE_NAME}` (`wordId`)"
+          }
+        ],
         "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '83f59fc4c28f5da6546caf75eaca70c4')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '527ee947f8866e1d5164547044ba5255')"
     ]
   }
 }

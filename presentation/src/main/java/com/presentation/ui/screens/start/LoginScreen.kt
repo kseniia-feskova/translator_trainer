@@ -1,0 +1,454 @@
+package com.presentation.ui.screens.start
+
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.presentation.ui.AppTheme
+import com.presentation.ui.AppTypography
+import com.presentation.ui.indicatorColorLight
+import com.presentation.ui.onPrimaryColorLight
+import com.presentation.ui.onSurfaceLight
+import com.presentation.ui.primaryColorLight
+import com.presentation.ui.redDarkColor
+import com.presentation.ui.views.ActionButton
+
+@Composable
+fun LoginScreen(
+    state: LoginUIState,
+    onEmailChanged: (String) -> Unit = {},
+    onPasswordChanged: (String) -> Unit = {},
+    onSecondPasswordChanged: (String) -> Unit = {},
+    onSwitchAuth: () -> Unit = {},
+    onEnterClicked: () -> Unit = {}
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(vertical = 24.dp, horizontal = 12.dp)
+    ) {
+        Text(
+            text = "Добро пожаловать",
+            modifier = Modifier.align(Alignment.TopCenter),
+            style = MaterialTheme.typography.titleLarge
+        )
+        FlippableBox(
+            modifier = Modifier
+                .align(Alignment.Center)
+                .padding(bottom = 56.dp),
+            frontContent = { mod, flip ->
+                LoginContent(
+                    modifier = mod,
+                    email = state.email,
+                    password = state.password,
+                    switchAuth = {
+                        flip()
+                        onSwitchAuth()
+                    },
+                    onEmailChanged = onEmailChanged,
+                    onPasswordChanged = onPasswordChanged,
+                )
+
+            },
+            backContent = { mod, flip ->
+                SignUpContent(
+                    mod,
+                    email = state.email,
+                    password = state.password,
+                    repeatPassword = state.repeatPassword,
+                    switchAuth = {
+                        flip()
+                        onSwitchAuth()
+                    },
+                    onEmailChanged = onEmailChanged,
+                    onPasswordChanged = onPasswordChanged,
+                    onRepeatPasswordChanged = onSecondPasswordChanged
+                )
+            }
+        )
+
+        if (state.error != null) {
+            Text(
+                text = state.error,
+                style = MaterialTheme.typography.bodyMedium.copy(color = redDarkColor),
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .padding(top = 100.dp)
+            )
+        }
+
+        ActionButton(
+            onClick = { onEnterClicked() },
+            modifier = Modifier
+                .align(Alignment.BottomCenter),
+            enabled = state.isValid
+        ) {
+            Text(
+                text = "Войти",
+                modifier = Modifier.padding(vertical = 8.dp),
+                style = MaterialTheme.typography.titleMedium.copy(
+                    color = MaterialTheme.colorScheme.onPrimary
+                ),
+            )
+        }
+    }
+}
+
+@Composable
+fun LoginContent(
+    modifier: Modifier,
+    email: String,
+    password: String,
+    switchAuth: () -> Unit,
+    onEmailChanged: (String) -> Unit,
+    onPasswordChanged: (String) -> Unit
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceBetween,
+        modifier = modifier
+            .fillMaxSize()
+            .padding(horizontal = 12.dp, vertical = 18.dp)
+    ) {
+        var isPasswordVisible by remember { mutableStateOf(false) }
+
+        Text(text = "Войдите в систему", style = MaterialTheme.typography.titleMedium)
+
+        OutlinedTextField(
+            modifier = Modifier
+                .fillMaxWidth(),
+            value = email,
+            onValueChange = { onEmailChanged(it) },
+            colors = TextFieldDefaults.colors().copy(
+                cursorColor = onSurfaceLight,
+                unfocusedIndicatorColor = indicatorColorLight,
+                unfocusedContainerColor = primaryColorLight,
+                focusedIndicatorColor = indicatorColorLight,
+                focusedContainerColor = primaryColorLight,
+                unfocusedTextColor = onPrimaryColorLight,
+                focusedTextColor = onPrimaryColorLight
+            ),
+            textStyle = AppTypography.bodyLarge,
+            shape = RoundedCornerShape(10.dp),
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Done
+            ),
+            placeholder = {
+                Text(
+                    "Почта",
+                    style = MaterialTheme.typography.titleMedium.copy(color = MaterialTheme.colorScheme.tertiary)
+                )
+            }
+        )
+        OutlinedTextField(
+            modifier = Modifier
+                .fillMaxWidth(),
+            value = password,
+            onValueChange = { onPasswordChanged(it) },
+            colors = TextFieldDefaults.colors().copy(
+                cursorColor = onSurfaceLight,
+                unfocusedIndicatorColor = indicatorColorLight,
+                unfocusedContainerColor = primaryColorLight,
+                focusedIndicatorColor = indicatorColorLight,
+                focusedContainerColor = primaryColorLight,
+                unfocusedTextColor = onPrimaryColorLight,
+                focusedTextColor = onPrimaryColorLight
+            ),
+            visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            textStyle = AppTypography.bodyLarge,
+            shape = RoundedCornerShape(10.dp),
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Done
+            ),
+            trailingIcon = {
+                val image =
+                    if (isPasswordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff
+                val tint =
+                    if (isPasswordVisible) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.tertiary
+
+                IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
+                    Icon(
+                        imageVector = image,
+                        contentDescription = "Toggle password visibility",
+                        tint = tint
+                    )
+                }
+            },
+            placeholder = {
+                Text(
+                    "Пароль",
+                    style = MaterialTheme.typography.titleMedium.copy(color = MaterialTheme.colorScheme.tertiary)
+                )
+            }
+        )
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(
+                text = "или",
+                style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.tertiary)
+            )
+
+            Text(
+                modifier = Modifier.clickable { switchAuth() },
+                text = "Зарегестрироваться",
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
+    }
+}
+
+@Composable
+fun SignUpContent(
+    modifier: Modifier,
+    email: String,
+    password: String,
+    repeatPassword: String,
+    switchAuth: () -> Unit,
+    onEmailChanged: (String) -> Unit,
+    onPasswordChanged: (String) -> Unit,
+    onRepeatPasswordChanged: (String) -> Unit
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceBetween,
+        modifier = modifier
+            .fillMaxSize()
+            .padding(horizontal = 12.dp, vertical = 18.dp)
+    ) {
+        var isPasswordVisible by remember { mutableStateOf(false) }
+        var isRepeatPasswordVisible by remember { mutableStateOf(false) }
+
+        Text(text = "Зарегестрируйтесь", style = MaterialTheme.typography.titleMedium)
+
+        OutlinedTextField(
+            modifier = Modifier
+                .fillMaxWidth(),
+            value = email,
+            onValueChange = { onEmailChanged(it) },
+            colors = TextFieldDefaults.colors().copy(
+                cursorColor = onSurfaceLight,
+                unfocusedIndicatorColor = indicatorColorLight,
+                unfocusedContainerColor = primaryColorLight,
+                focusedIndicatorColor = indicatorColorLight,
+                focusedContainerColor = primaryColorLight,
+                unfocusedTextColor = onPrimaryColorLight,
+                focusedTextColor = onPrimaryColorLight
+            ),
+            textStyle = AppTypography.bodyLarge,
+            shape = RoundedCornerShape(10.dp),
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Done
+            ),
+            placeholder = {
+                Text(
+                    "Почта",
+                    style = MaterialTheme.typography.titleMedium.copy(color = MaterialTheme.colorScheme.tertiary)
+                )
+            }
+        )
+        OutlinedTextField(
+            modifier = Modifier
+                .fillMaxWidth(),
+            value = password,
+            onValueChange = { onPasswordChanged(it) },
+            colors = TextFieldDefaults.colors().copy(
+                cursorColor = onSurfaceLight,
+                unfocusedIndicatorColor = indicatorColorLight,
+                unfocusedContainerColor = primaryColorLight,
+                focusedIndicatorColor = indicatorColorLight,
+                focusedContainerColor = primaryColorLight,
+                unfocusedTextColor = onPrimaryColorLight,
+                focusedTextColor = onPrimaryColorLight
+            ),
+            visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            textStyle = AppTypography.bodyLarge,
+            shape = RoundedCornerShape(10.dp),
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Done
+            ),
+            trailingIcon = {
+                val image =
+                    if (isPasswordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff
+                val tint =
+                    if (isPasswordVisible) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.tertiary
+
+                IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
+                    Icon(
+                        imageVector = image,
+                        contentDescription = "Toggle password visibility",
+                        tint = tint
+                    )
+                }
+            },
+            placeholder = {
+                Text(
+                    "Пароль",
+                    style = MaterialTheme.typography.titleMedium.copy(color = MaterialTheme.colorScheme.tertiary)
+                )
+            }
+        )
+        OutlinedTextField(
+            modifier = Modifier
+                .fillMaxWidth(),
+            value = repeatPassword,
+            onValueChange = { onRepeatPasswordChanged(it) },
+            colors = TextFieldDefaults.colors().copy(
+                cursorColor = onSurfaceLight,
+                unfocusedIndicatorColor = indicatorColorLight,
+                unfocusedContainerColor = primaryColorLight,
+                focusedIndicatorColor = indicatorColorLight,
+                focusedContainerColor = primaryColorLight,
+                unfocusedTextColor = onPrimaryColorLight,
+                focusedTextColor = onPrimaryColorLight
+            ),
+            visualTransformation = if (isRepeatPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            textStyle = AppTypography.bodyLarge,
+            shape = RoundedCornerShape(10.dp),
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Done
+            ),
+            trailingIcon = {
+                val image =
+                    if (isRepeatPasswordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff
+                val tint =
+                    if (isRepeatPasswordVisible) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.tertiary
+
+                IconButton(onClick = { isRepeatPasswordVisible = !isRepeatPasswordVisible }) {
+                    Icon(
+                        imageVector = image,
+                        contentDescription = "Toggle password visibility",
+                        tint = tint
+                    )
+                }
+            },
+            placeholder = {
+                Text(
+                    "Повторите пароль",
+                    style = MaterialTheme.typography.titleMedium.copy(color = MaterialTheme.colorScheme.tertiary)
+                )
+            }
+        )
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(
+                text = "или",
+                style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.tertiary)
+            )
+            Text(
+                modifier = Modifier.clickable { switchAuth() },
+                text = "Войти с аккаунтом",
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
+    }
+}
+
+@Composable
+@Preview
+fun LoginScreenPreview() {
+    AppTheme {
+        Surface {
+            LoginScreen(
+                LoginUIState(
+
+                )
+            )
+        }
+    }
+}
+
+@Composable
+fun FlippableBox(
+    modifier: Modifier = Modifier,
+    isFrontVisible: Boolean = true,
+    frontContent: @Composable BoxScope.(modifier: Modifier, onFlip: () -> Unit) -> Unit,
+    backContent: @Composable BoxScope.(modifier: Modifier, onFlip: () -> Unit) -> Unit,
+) {
+    var flipped by remember { mutableStateOf(!isFrontVisible) } // Инвертируем начальное значение
+    val rotation by animateFloatAsState(
+        targetValue = if (flipped) 180f else 0f,
+        animationSpec = tween(800)
+    )
+
+    val animateFront by animateFloatAsState(
+        targetValue = if (!flipped) 1f else 0f,
+        animationSpec = tween(500)
+    )
+
+    val animateBack by animateFloatAsState(
+        targetValue = if (flipped) 1f else 0f,
+        animationSpec = tween(500)
+    )
+
+    Box(
+        modifier = Modifier
+            .then(modifier)
+            .fillMaxWidth()
+            .graphicsLayer {
+                rotationY = rotation
+                cameraDistance = 8 * density
+            }
+            .height(300.dp)
+            .background(
+                color = MaterialTheme.colorScheme.primary,
+                shape = RoundedCornerShape(24.dp)
+            )
+    ) {
+        Box(
+            modifier = Modifier.graphicsLayer {
+                alpha = animateFront
+                rotationY = 0f
+            }
+        ) {
+            frontContent(
+                Modifier.align(Alignment.Center)
+            ) {
+                flipped = !flipped
+            }
+        }
+
+        Box(
+            modifier = Modifier.graphicsLayer {
+                alpha = animateBack
+                scaleX = -1f
+            }
+        ) {
+            backContent(
+                Modifier.align(Alignment.Center)
+            ) {
+                flipped = !flipped
+            }
+        }
+    }
+}

@@ -17,15 +17,27 @@ import com.presentation.ui.screens.newset.newSetScreen
 import com.presentation.ui.screens.set.navigateToSet
 import com.presentation.ui.screens.set.setScreen
 import com.presentation.ui.screens.sets.setsScreen
+import com.presentation.ui.screens.start.loginScreen
 
 @Composable
-fun TranslatorApp(navController: NavHostController) {
+fun TranslatorApp(navController: NavHostController, isUserAuthorized: Boolean = false) {
+    val startDestination = if (isUserAuthorized) RootScreen.Home.route else LeafScreen.Login.route
+
     NavHost(
         navController = navController,
-        startDestination = RootScreen.Home.route
+        startDestination = startDestination
     ) {
+        LoginNav(navController)
         HomeNav()
         SetsNav(navController)
+    }
+}
+
+private fun NavGraphBuilder.LoginNav(navController: NavHostController) {
+    loginScreen {
+        navController.navigate(RootScreen.Home.route) {
+            popUpTo(LeafScreen.Login.route) { inclusive = true }
+        }
     }
 }
 

@@ -17,6 +17,8 @@ import com.domain.usecase.GetWordByIdUseCase
 import com.domain.usecase.GetWordsOfSetUseCase
 import com.domain.usecase.TranslateWordUseCase
 import com.domain.usecase.UpdateWordUseCase
+import com.domain.usecase.auth.LoginUseCase
+import com.domain.usecase.auth.RegisterUseCase
 import com.presentation.usecases.IAddSetOfWordsUseCase
 import com.presentation.usecases.IAddSetWordCrossRefUseCase
 import com.presentation.usecases.IAddWordToSetUseCase
@@ -34,11 +36,17 @@ import com.presentation.usecases.IGetWordByIdUseCase
 import com.presentation.usecases.IGetWordsOfSetUseCase
 import com.presentation.usecases.ITranslateWordUseCase
 import com.presentation.usecases.IUpdateWordUseCase
+import com.presentation.usecases.auth.ILoginUseCase
+import com.presentation.usecases.auth.IRegisterUseCase
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val useCaseModule = module {
+
+    singleOf(::RegisterUseCase) bind IRegisterUseCase::class
+
+    singleOf(::LoginUseCase) bind ILoginUseCase::class
 
     singleOf(::AddWordUseCase) bind IAddWordUseCase::class
 

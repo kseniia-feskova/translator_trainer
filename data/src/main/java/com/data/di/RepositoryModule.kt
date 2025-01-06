@@ -1,5 +1,7 @@
 package com.data.di
 
+import com.data.repository.auth.AuthRepository
+import com.data.repository.auth.IAuthRepository
 import com.data.repository.translate.ITranslateRepository
 import com.data.repository.translate.TranslateRepository
 import com.data.repository.words.IWordsRepository
@@ -12,5 +14,7 @@ val repositoryModule = module {
     singleOf(::TranslateRepository) bind ITranslateRepository::class
 
     singleOf(::WordsRepository) bind IWordsRepository::class
+
+    singleOf(::AuthRepository) bind IAuthRepository::class
 }
 

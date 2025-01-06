@@ -3,6 +3,7 @@ package com.presentation.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.presentation.data.IDataStoreManager
 import com.presentation.model.SetLevel
 import com.presentation.model.SetOfCards
 import com.presentation.usecases.IAddSetOfWordsUseCase
@@ -14,6 +15,11 @@ import com.presentation.usecases.IGetSetOfCardsUseCase
 import com.presentation.utils.ALL_WORDS
 import com.presentation.utils.CURRENT_WORDS
 import com.presentation.utils.NEW_WORDS
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.Date
@@ -24,9 +30,28 @@ class MainViewModel(
     private val addSet: IAddSetOfWordsUseCase,
     private val getNewWords: IGetFilteredWordsUseCase,
     private val addWordToSet: IAddSetWordCrossRefUseCase,
-    private val deleteSet: IDeleteSetByIdUseCase
+    private val deleteSet: IDeleteSetByIdUseCase,
+    private val dataStorage: IDataStoreManager
 ) : ViewModel() {
 
+    private val _isUserAuthorized = MutableStateFlow(false)
+    val isUserAuthorized: StateFlow<Boolean> = _isUserAuthorized.asStateFlow()
+
+    init {
+        observeUserId()
+    }
+
+    private fun observeUserId() {
+        viewModelScope.launch {
+            dataStorage.listenUserId()
+                .map { userId -> userId != null } // true, если userId не null
+                .distinctUntilChanged() // Отслеживаем только изменения
+                .collect { isAuthorized ->
+                    Log.e("MainViewModel", "IsAuthorized = $isAuthorized")
+                    _isUserAuthorized.value = isAuthorized
+                }
+        }
+    }
     //создание массивов, если их нет
     fun checkAndAddAllWordsSet() {
         viewModelScope.launch {

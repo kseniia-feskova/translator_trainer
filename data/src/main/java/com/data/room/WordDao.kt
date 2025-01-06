@@ -40,6 +40,7 @@ interface WordDao {
     @Query("SELECT * FROM sets_of_words WHERE id = :id")
     suspend fun getSetById(id: Int): SetOfWords?
 
+    @Transaction
     @Query("SELECT * FROM sets_of_words")
     suspend fun getAllSets(): List<SetWithWords>
 
