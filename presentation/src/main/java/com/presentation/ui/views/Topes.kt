@@ -2,6 +2,7 @@ package com.presentation.ui.views
 
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
@@ -23,14 +25,22 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import com.presentation.R
 import com.presentation.ui.AppTheme
+import java.net.URL
 
 private const val MAX_WORDS = 30
 
@@ -82,6 +92,70 @@ fun HomeTopView(
             }
         }
     }
+}
+
+@Composable
+fun AccountTopView(
+    name: String,
+    photo: URL? = null,
+    onEditClicked: () -> Unit = {},
+) {
+
+    val screenHeight = LocalConfiguration.current.screenHeightDp.dp
+    val imageSize = screenHeight * 0.12f
+
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .background(
+                color = MaterialTheme.colorScheme.primary,
+                shape = RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp)
+            )
+            .padding(bottom = 12.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Text(
+            text = "Профиль",
+            style = MaterialTheme.typography.headlineSmall,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 20.dp)
+        )
+
+        AsyncImage(
+            modifier = Modifier
+                .size(imageSize)
+                .background(
+                    MaterialTheme.colorScheme.tertiary.copy(alpha = 0.2f),
+                    shape = CircleShape
+                )
+                .border(
+                    width = 4.dp,
+                    color = MaterialTheme.colorScheme.tertiary,
+                    shape = CircleShape
+                )
+                .clip(CircleShape), // Делаем изображение круглым
+            placeholder = painterResource(id = R.drawable.user),
+            model = photo,
+            contentDescription = "Sample Image",
+            contentScale = ContentScale.Fit
+        )
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text = "Имя: ",
+                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Medium)
+            )
+            Text(text = name, style = MaterialTheme.typography.titleLarge)
+            Icon(
+                imageVector = Icons.Default.Edit,
+                contentDescription = "Edit",
+                modifier = Modifier
+                    .padding(horizontal = 8.dp)
+                    .clickable { onEditClicked() }
+            )
+        }
+    }
+
+
 }
 
 @Composable
@@ -150,7 +224,7 @@ fun TopViewPreview() {
             ) {
                 HomeTopView()
                 BasicTopView("Новые карточки")
-                BasicTopView("Новые карточки",rightIcon = Icons.Default.AddCircle)
+                BasicTopView("Новые карточки", rightIcon = Icons.Default.AddCircle)
                 BasicTopView(
                     "Набор карточек №1",
                     leftIcon = Icons.Default.ArrowBackIosNew,
@@ -160,6 +234,7 @@ fun TopViewPreview() {
                     "Статистика",
                     leftIcon = Icons.Default.ArrowBackIosNew,
                 )
+                AccountTopView(name = "test@gmail.com")
             }
         }
     }

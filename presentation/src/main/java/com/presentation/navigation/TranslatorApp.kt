@@ -5,6 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navigation
+import com.presentation.ui.screens.account.accountScreen
 import com.presentation.ui.screens.all.allWordsScreen
 import com.presentation.ui.screens.all.navigateToAllWords
 import com.presentation.ui.screens.home.homeScreen
@@ -30,6 +31,7 @@ fun TranslatorApp(navController: NavHostController, isUserAuthorized: Boolean = 
         LoginNav(navController)
         HomeNav()
         SetsNav(navController)
+        AccountNav()
     }
 }
 
@@ -50,8 +52,7 @@ private fun NavGraphBuilder.HomeNav() {
     }
 }
 
-
-fun NavGraphBuilder.SetsNav(navController: NavHostController) {
+private fun NavGraphBuilder.SetsNav(navController: NavHostController) {
     navigation(
         startDestination = LeafScreen.Sets.route, // Это для экрана
         route = RootScreen.Sets.route            // Это для графа
@@ -82,5 +83,14 @@ fun NavGraphBuilder.SetsNav(navController: NavHostController) {
         newSetScreen {
             navController.navigateUp()
         }
+    }
+}
+
+private fun NavGraphBuilder.AccountNav() {
+    navigation(
+        startDestination = LeafScreen.Account.route, // Это для экрана
+        route = RootScreen.Profile.route            // Это для графа
+    ) {
+        accountScreen()
     }
 }

@@ -94,6 +94,12 @@ class AuthRepository(
             Result(errorMsg = e.message.toString())
         }
     }
+
+    override suspend fun logout() {
+        tokenStorage.clearToken(ACCESS_TOKEN)
+        tokenStorage.clearToken(REFRESH_TOKEN)
+        tokenStorage.clearUserId()
+    }
 }
 
 fun <T> extractErrorMessage(response: Response<T>): String? {

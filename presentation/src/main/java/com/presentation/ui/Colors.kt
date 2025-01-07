@@ -15,12 +15,12 @@ val redDarkColor = Color(0xFFC02D2D)
 val lightGreenColor = Color(0xFF83FFAD)
 
 
-val surfaceLight = Color(0xFFEAEDFB)
+val surfaceLight = Color(0xFFE7EBFF)
 val onSurfaceLight = Color(0xFF271460)
 val primaryColorLight = Color(0xFFF9FAFB)
 val onPrimaryColorLight = Color(0xFF271460)
 
-val tertiaryLight = Color(0xFFD9E1FF)
+val tertiaryLight = Color(0xFFC6CEFD)
 
 val indicatorColorLight = Color(0xFFCDD4FD)
-val accentColorLight = Color(0xFFB9C3FF)
+val accentColorLight = Color(0xFFC0D0FF)

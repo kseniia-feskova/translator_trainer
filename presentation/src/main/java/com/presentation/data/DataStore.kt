@@ -55,8 +55,14 @@ class DataStoreManager(private val context: Context) : IDataStoreManager {
     }
 
     override suspend fun saveUserId(id: UUID?) {
-        context.dataStore.edit { preferences ->
-            preferences[USER_ID] = id.toString()
+        if (id == null) {
+            context.dataStore.edit { preferences ->
+                preferences.remove(USER_ID)
+            }
+        } else {
+            context.dataStore.edit { preferences ->
+                preferences[USER_ID] = id.toString()
+            }
         }
     }
 }

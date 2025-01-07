@@ -1,5 +1,6 @@
 package com.example.translatortrainer.di
 
+import com.presentation.ui.screens.account.AccountViewModel
 import com.presentation.ui.screens.all.AllWordsViewModel
 import com.presentation.ui.screens.home.HomeViewModel
 import com.presentation.ui.screens.lesson.LessonViewModel
@@ -17,6 +18,7 @@ val viewModelModule = module {
     viewModelOf(::LoginViewModel)
     viewModelOf(::HomeViewModel)
     viewModelOf(::SetsViewModel)
+    viewModelOf(::AccountViewModel)
     viewModelOf(::SetViewModel)
     viewModelOf(::LessonViewModel)
     viewModelOf(::AllWordsViewModel)

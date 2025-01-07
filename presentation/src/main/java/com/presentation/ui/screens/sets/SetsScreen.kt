@@ -53,7 +53,7 @@ fun SetsScreen(
             ListOfSetsView(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .padding(bottom = 48.dp),
+                ,
                 listOfSets = state.sets,
                 selectedSetId = state.selectedSetId,
                 onSetClicked = selectSet,
@@ -64,8 +64,7 @@ fun SetsScreen(
         ActionButton(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .padding(bottom = 72.dp)
-                .padding(horizontal = 12.dp),
+                .padding(12.dp),
             onClick = {
                 if (state.sets.isEmpty()) {
                     navigateToHome()
@@ -94,9 +93,11 @@ fun SetsScreenEmptyPreview() {
     AppTheme {
         Scaffold(content = { paddings ->
             Log.e("Preview", "paddings $paddings")
-            SetsScreen(
-                SetsUIState(emptyList())
-            )
+            Box(modifier = Modifier.padding(paddings)) {
+                SetsScreen(
+                    SetsUIState(emptyList())
+                )
+            }
         }, bottomBar = {
             val context = LocalContext.current
             BottomNavigationBar(navController = NavController(context))
@@ -111,9 +112,11 @@ fun SetsScreenPreview() {
     AppTheme {
         Scaffold(content = { paddings ->
             Log.e("Preview", "paddings $paddings")
-            SetsScreen(
-                SetsUIState(mockListOfSets)
-            )
+            Box(modifier = Modifier.padding(paddings)) {
+                SetsScreen(
+                    SetsUIState(mockListOfSets)
+                )
+            }
         }, bottomBar = {
             val context = LocalContext.current
             BottomNavigationBar(navController = NavController(context))

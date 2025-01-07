@@ -149,8 +149,7 @@ fun SetScreen(
             onClick = { startCourse() },
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .padding(horizontal = 12.dp)
-                .padding(bottom = 72.dp)
+                .padding(12.dp)
         ) {
             Text(
                 text = "Изучить набор",
@@ -168,14 +167,16 @@ fun CardSetScreenPreview() {
     AppTheme {
         Scaffold(content = { paddings ->
             Log.e("CardSetScreenPreview", "paddings = $paddings")
-            SetScreen(
-                state = SetUIState(
-                    words = Pair(
-                        mockListOfSets[2].setOfWords.last(),
-                        mockListOfSets[2].setOfWords.first()
+            Box(modifier = Modifier.padding(paddings)) {
+                SetScreen(
+                    state = SetUIState(
+                        words = Pair(
+                            mockListOfSets[2].setOfWords.last(),
+                            mockListOfSets[2].setOfWords.first()
+                        )
                     )
                 )
-            )
+            }
         }, bottomBar = {
             BottomNavigationBar(navController = NavController(LocalContext.current))
         })
@@ -189,11 +190,13 @@ fun EmptyCardSetScreenPreview() {
     AppTheme {
         Scaffold(content = { paddings ->
             Log.e("CardSetScreenPreview", "paddings = $paddings")
-            SetScreen(
-                state = SetUIState(
-                    words = null
+            Box(modifier = Modifier.padding(paddings)) {
+                SetScreen(
+                    state = SetUIState(
+                        words = null
+                    )
                 )
-            )
+            }
         }, bottomBar = {
             BottomNavigationBar(navController = NavController(LocalContext.current))
         })
