@@ -7,8 +7,8 @@ import java.util.UUID
 
 class LoginUseCase(private val repo: IAuthRepository) : ILoginUseCase {
 
-    override suspend fun invoke(email: String, password: String): Result<UUID?> {
-        val response = repo.login(email, password)
+    override suspend fun invoke(email: String, username: String, password: String): Result<UUID?> {
+        val response = repo.login(email, username, password)
         Log.e("LoginUseCase", "response = ${response.errorMsg}")
         return if (response.errorMsg.isNotEmpty()) {
             Log.e("LoginUseCase", "Exception = ${Exception(response.errorMsg)}")

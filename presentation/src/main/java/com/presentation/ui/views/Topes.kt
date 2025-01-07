@@ -1,6 +1,7 @@
 package com.presentation.ui.views
 
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -104,6 +105,7 @@ fun AccountTopView(
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
     val imageSize = screenHeight * 0.12f
 
+    Log.e("AccountTopView", "Photo = $photo")
     Column(
         Modifier
             .fillMaxWidth()
@@ -134,10 +136,10 @@ fun AccountTopView(
                     shape = CircleShape
                 )
                 .clip(CircleShape), // Делаем изображение круглым
-            placeholder = painterResource(id = R.drawable.user),
+            placeholder = painterResource(id = R.drawable.ic_account),
             model = photo,
             contentDescription = "Sample Image",
-            contentScale = ContentScale.Fit
+            contentScale = ContentScale.Crop
         )
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(

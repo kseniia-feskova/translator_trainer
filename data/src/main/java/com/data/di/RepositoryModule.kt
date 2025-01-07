@@ -4,6 +4,8 @@ import com.data.repository.auth.AuthRepository
 import com.data.repository.auth.IAuthRepository
 import com.data.repository.translate.ITranslateRepository
 import com.data.repository.translate.TranslateRepository
+import com.data.repository.user.IUserRepository
+import com.data.repository.user.UserRepository
 import com.data.repository.words.IWordsRepository
 import com.data.repository.words.WordsRepository
 import org.koin.core.module.dsl.singleOf
@@ -16,5 +18,7 @@ val repositoryModule = module {
     singleOf(::WordsRepository) bind IWordsRepository::class
 
     singleOf(::AuthRepository) bind IAuthRepository::class
+
+    singleOf(::UserRepository) bind IUserRepository::class
 }
 

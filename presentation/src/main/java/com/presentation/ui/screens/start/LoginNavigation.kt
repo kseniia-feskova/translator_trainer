@@ -29,6 +29,7 @@ fun LoginRoute(
     val state = viewModel.uiState.collectAsState()
     LoginScreen(
         state = state.value,
+        onUsernameChanged = { viewModel.handleIntent(LoginIntent.UsernameChanged(it)) },
         onEmailChanged = { viewModel.handleIntent(LoginIntent.EmailChanged(it)) },
         onPasswordChanged = { viewModel.handleIntent(LoginIntent.PasswordChanged(it)) },
         onSecondPasswordChanged = { viewModel.handleIntent(LoginIntent.RepeatPasswordChanged(it)) },

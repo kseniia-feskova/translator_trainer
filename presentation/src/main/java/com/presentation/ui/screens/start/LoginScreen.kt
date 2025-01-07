@@ -32,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -49,6 +50,7 @@ import com.presentation.ui.views.ActionButton
 @Composable
 fun LoginScreen(
     state: LoginUIState,
+    onUsernameChanged: (String) -> Unit = {},
     onEmailChanged: (String) -> Unit = {},
     onPasswordChanged: (String) -> Unit = {},
     onSecondPasswordChanged: (String) -> Unit = {},
@@ -67,11 +69,12 @@ fun LoginScreen(
         )
         FlippableBox(
             modifier = Modifier
-                .align(Alignment.Center)
-                .padding(bottom = 56.dp),
+                .align(Alignment.Center),
+            isFrontVisible = state.isLogin,
             frontContent = { mod, flip ->
                 LoginContent(
                     modifier = mod,
+                    username = state.username,
                     email = state.email,
                     password = state.password,
                     switchAuth = {
@@ -79,6 +82,7 @@ fun LoginScreen(
                         onSwitchAuth()
                     },
                     onEmailChanged = onEmailChanged,
+                    onUsernameChanged = onUsernameChanged,
                     onPasswordChanged = onPasswordChanged,
                 )
 
@@ -87,12 +91,14 @@ fun LoginScreen(
                 SignUpContent(
                     mod,
                     email = state.email,
+                    username = state.username,
                     password = state.password,
                     repeatPassword = state.repeatPassword,
                     switchAuth = {
                         flip()
                         onSwitchAuth()
                     },
+                    onUsernameChanged = onUsernameChanged,
                     onEmailChanged = onEmailChanged,
                     onPasswordChanged = onPasswordChanged,
                     onRepeatPasswordChanged = onSecondPasswordChanged
@@ -130,27 +136,56 @@ fun LoginScreen(
 @Composable
 fun LoginContent(
     modifier: Modifier,
+    username: String,
     email: String,
     password: String,
     switchAuth: () -> Unit,
+    onUsernameChanged: (String) -> Unit,
     onEmailChanged: (String) -> Unit,
     onPasswordChanged: (String) -> Unit
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceBetween,
+        verticalArrangement = Arrangement.spacedBy(18.dp),
         modifier = modifier
-            .fillMaxSize()
-            .padding(horizontal = 12.dp, vertical = 18.dp)
+            .padding(horizontal = 12.dp, vertical = 24.dp)
     ) {
         var isPasswordVisible by remember { mutableStateOf(false) }
 
         Text(text = "Войдите в систему", style = MaterialTheme.typography.titleMedium)
+        OutlinedTextField(
+            modifier = Modifier
+                .fillMaxWidth(),
+            value = username,
+            maxLines = 1,
+            onValueChange = { onUsernameChanged(it) },
+            colors = TextFieldDefaults.colors().copy(
+                cursorColor = onSurfaceLight,
+                unfocusedIndicatorColor = indicatorColorLight,
+                unfocusedContainerColor = primaryColorLight,
+                focusedIndicatorColor = indicatorColorLight,
+                focusedContainerColor = primaryColorLight,
+                unfocusedTextColor = onPrimaryColorLight,
+                focusedTextColor = onPrimaryColorLight
+            ),
+            textStyle = AppTypography.bodyLarge,
+            shape = RoundedCornerShape(10.dp),
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Done
+            ),
+            placeholder = {
+                Text(
+                    "Имя пользователя",
+                    style = MaterialTheme.typography.titleMedium.copy(color = MaterialTheme.colorScheme.tertiary)
+                )
+            }
+        )
 
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth(),
             value = email,
+            maxLines = 1,
             onValueChange = { onEmailChanged(it) },
             colors = TextFieldDefaults.colors().copy(
                 cursorColor = onSurfaceLight,
@@ -177,6 +212,7 @@ fun LoginContent(
             modifier = Modifier
                 .fillMaxWidth(),
             value = password,
+            maxLines = 1,
             onValueChange = { onPasswordChanged(it) },
             colors = TextFieldDefaults.colors().copy(
                 cursorColor = onSurfaceLight,
@@ -233,19 +269,21 @@ fun LoginContent(
 fun SignUpContent(
     modifier: Modifier,
     email: String,
+    username: String,
     password: String,
     repeatPassword: String,
     switchAuth: () -> Unit,
+    onUsernameChanged: (String) -> Unit,
     onEmailChanged: (String) -> Unit,
     onPasswordChanged: (String) -> Unit,
     onRepeatPasswordChanged: (String) -> Unit
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceBetween,
+        verticalArrangement = Arrangement.spacedBy(18.dp),
         modifier = modifier
             .fillMaxSize()
-            .padding(horizontal = 12.dp, vertical = 18.dp)
+            .padding(horizontal = 12.dp, vertical = 24.dp)
     ) {
         var isPasswordVisible by remember { mutableStateOf(false) }
         var isRepeatPasswordVisible by remember { mutableStateOf(false) }
@@ -255,7 +293,36 @@ fun SignUpContent(
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth(),
+            value = username,
+            maxLines = 1,
+            onValueChange = { onUsernameChanged(it) },
+            colors = TextFieldDefaults.colors().copy(
+                cursorColor = onSurfaceLight,
+                unfocusedIndicatorColor = indicatorColorLight,
+                unfocusedContainerColor = primaryColorLight,
+                focusedIndicatorColor = indicatorColorLight,
+                focusedContainerColor = primaryColorLight,
+                unfocusedTextColor = onPrimaryColorLight,
+                focusedTextColor = onPrimaryColorLight
+            ),
+            textStyle = AppTypography.bodyLarge,
+            shape = RoundedCornerShape(10.dp),
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Done
+            ),
+            placeholder = {
+                Text(
+                    "Имя пользователя",
+                    style = MaterialTheme.typography.titleMedium.copy(color = MaterialTheme.colorScheme.tertiary)
+                )
+            }
+        )
+
+        OutlinedTextField(
+            modifier = Modifier
+                .fillMaxWidth(),
             value = email,
+            maxLines = 1,
             onValueChange = { onEmailChanged(it) },
             colors = TextFieldDefaults.colors().copy(
                 cursorColor = onSurfaceLight,
@@ -282,6 +349,7 @@ fun SignUpContent(
             modifier = Modifier
                 .fillMaxWidth(),
             value = password,
+            maxLines = 1,
             onValueChange = { onPasswordChanged(it) },
             colors = TextFieldDefaults.colors().copy(
                 cursorColor = onSurfaceLight,
@@ -322,6 +390,7 @@ fun SignUpContent(
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth(),
+            maxLines = 1,
             value = repeatPassword,
             onValueChange = { onRepeatPasswordChanged(it) },
             colors = TextFieldDefaults.colors().copy(
@@ -389,6 +458,23 @@ fun LoginScreenPreview() {
 }
 
 @Composable
+@Preview
+fun LoginScreenBackPreview() {
+    val state = remember { mutableStateOf(LoginUIState(isLogin = false)) }
+    AppTheme {
+        Surface {
+            LoginScreen(
+                state = state.value,
+                onSwitchAuth = {
+                    state.value = state.value.copy(isLogin = !state.value.isLogin)
+                }
+            )
+        }
+    }
+}
+
+
+@Composable
 fun FlippableBox(
     modifier: Modifier = Modifier,
     isFrontVisible: Boolean = true,
@@ -410,7 +496,8 @@ fun FlippableBox(
         targetValue = if (flipped) 1f else 0f,
         animationSpec = tween(500)
     )
-
+    val screenHeight = LocalConfiguration.current.screenHeightDp.dp
+    val cardSize = screenHeight * 0.5f
     Box(
         modifier = Modifier
             .then(modifier)
@@ -419,17 +506,19 @@ fun FlippableBox(
                 rotationY = rotation
                 cameraDistance = 8 * density
             }
-            .height(300.dp)
+            .height(cardSize)
             .background(
                 color = MaterialTheme.colorScheme.primary,
                 shape = RoundedCornerShape(24.dp)
             )
     ) {
         Box(
-            modifier = Modifier.graphicsLayer {
-                alpha = animateFront
-                rotationY = 0f
-            }
+            modifier = Modifier
+                .align(Alignment.Center)
+                .graphicsLayer {
+                    alpha = animateFront
+                    rotationY = 0f
+                }
         ) {
             frontContent(
                 Modifier.align(Alignment.Center)
@@ -439,10 +528,12 @@ fun FlippableBox(
         }
 
         Box(
-            modifier = Modifier.graphicsLayer {
-                alpha = animateBack
-                scaleX = -1f
-            }
+            modifier = Modifier
+                .align(Alignment.Center)
+                .graphicsLayer {
+                    alpha = animateBack
+                    scaleX = -1f
+                }
         ) {
             backContent(
                 Modifier.align(Alignment.Center)

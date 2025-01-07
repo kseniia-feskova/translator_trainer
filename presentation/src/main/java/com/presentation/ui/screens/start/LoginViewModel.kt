@@ -27,6 +27,7 @@ class LoginViewModel(
             is LoginIntent.PasswordChanged -> onPasswordChanged(intent.newPassword)
             is LoginIntent.RepeatPasswordChanged -> onRepeatPasswordChanged(intent.newRepeatPassword)
             LoginIntent.SwitchAuth -> onSwitchAuth()
+            is LoginIntent.UsernameChanged -> onUserNameChanged(intent.newUsername)
         }
     }
 
@@ -36,8 +37,8 @@ class LoginViewModel(
         viewModelScope.launch {
             val state = _uiState.value
             val response = if (state.isLogin) {
-                login.invoke(state.email, state.password)
-            } else register.invoke(state.email, state.password)
+                login.invoke(state.email, state.username, state.password)
+            } else register.invoke(state.email, state.username, state.password)
             if (response.isSuccess) {
                 val id = response.getOrNull()
                 dataStorage.saveUserId(id)
@@ -58,6 +59,13 @@ class LoginViewModel(
             it.copy(
                 email = newEmail, error = null
             )
+        }
+        validate()
+    }
+
+    private fun onUserNameChanged(newUsername:String){
+        _uiState.update {
+            it.copy(username = newUsername, error = null)
         }
         validate()
     }
@@ -103,7 +111,7 @@ class LoginViewModel(
     }
 
     private fun checkForLogin(state: LoginUIState): Boolean {
-        return state.email.isNotEmpty() && state.password.isNotEmpty()
+        return state.email.isNotEmpty() && state.password.isNotEmpty() && state.username.isNotEmpty()
     }
 
     private fun checkForSignUp(state: LoginUIState): Boolean {
@@ -112,13 +120,14 @@ class LoginViewModel(
                 it.copy(error = "Passwords don't match")
             }
         }
-        return state.email.isNotEmpty() && state.password.isNotEmpty() && state.repeatPassword.isNotEmpty() && state.password == state.repeatPassword
+        return state.email.isNotEmpty() && state.password.isNotEmpty() && state.repeatPassword.isNotEmpty() && state.password == state.repeatPassword && state.username.isNotEmpty()
 
     }
 
 }
 
 sealed class LoginIntent {
+    data class UsernameChanged(val newUsername: String) : LoginIntent()
     data class EmailChanged(val newEmail: String) : LoginIntent()
     data class PasswordChanged(val newPassword: String) : LoginIntent()
     data class RepeatPasswordChanged(val newRepeatPassword: String) : LoginIntent()

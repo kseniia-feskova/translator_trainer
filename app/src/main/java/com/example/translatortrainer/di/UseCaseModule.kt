@@ -8,6 +8,7 @@ import com.domain.usecase.DeleteSetByIdUseCase
 import com.domain.usecase.DeleteWordUseCase
 import com.domain.usecase.FindWordByOriginUseCase
 import com.domain.usecase.FindWordByTranslatedUseCase
+import com.domain.usecase.GetAccountUseCase
 import com.domain.usecase.GetAllSetsUseCase
 import com.domain.usecase.GetFilteredWordsUseCase
 import com.domain.usecase.GetSetOfAllCardsUseCase
@@ -29,6 +30,7 @@ import com.presentation.usecases.IDeleteSetByIdUseCase
 import com.presentation.usecases.IDeleteWordUseCase
 import com.presentation.usecases.IFindWordByOriginUseCase
 import com.presentation.usecases.IFindWordByTranslatedUseCase
+import com.presentation.usecases.IGetAccountUseCase
 import com.presentation.usecases.IGetAllSetsUseCase
 import com.presentation.usecases.IGetFilteredWordsUseCase
 import com.presentation.usecases.IGetSetOfAllCardsUseCase
@@ -89,5 +91,7 @@ val useCaseModule = module {
     singleOf(::LogoutUseCase) bind ILogoutUseCase::class
 
     singleOf(::DeleteUseCase) bind IDeleteUseCase::class
+
+    singleOf(::GetAccountUseCase) bind IGetAccountUseCase::class
 
 }
