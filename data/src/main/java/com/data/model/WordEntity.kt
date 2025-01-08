@@ -4,11 +4,12 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.Calendar
 import java.util.Date
+import java.util.UUID
 
 
 @Entity(tableName = "words")
 data class WordEntity(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @PrimaryKey val id: UUID = UUID.randomUUID(),
     val original: String,
     val translation: String,
     val status: WordStatus,
@@ -17,17 +18,14 @@ data class WordEntity(
 
 
 enum class WordStatus {
-    NEW,
-    IN_PROGRESS,
-    IN_GOOD_PROGRESS,
-    LEARNED;
+    New, Learning, GoodLearning, Known;
 
     fun inc(): WordStatus {
         return when (this) {
-            NEW -> IN_PROGRESS
-            IN_PROGRESS -> IN_GOOD_PROGRESS
-            IN_GOOD_PROGRESS -> LEARNED
-            LEARNED -> LEARNED
+            New -> Learning
+            Learning -> GoodLearning
+            GoodLearning -> Known
+            Known -> Known
         }
     }
 }

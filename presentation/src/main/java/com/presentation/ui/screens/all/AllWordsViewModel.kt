@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.presentation.model.WordUI
 import com.presentation.ui.screens.set.setId
-import com.presentation.usecases.IDeleteWordUseCase
-import com.presentation.usecases.IGetWordsOfSetUseCase
+import com.presentation.usecases.words.IDeleteWordUseCase
+import com.presentation.usecases.words.IGetWordsOfSetUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -83,7 +83,7 @@ class AllWordsViewModel(
 
     private fun deleteWord(word: WordUI) {
         _uiState.update { it.copy(loading = true) }
-        viewModelScope.launch { deleteWord.invoke(word.id) }
+        viewModelScope.launch { deleteWord.invoke(word.id)  }
     }
 
     private fun selectWord(word: WordUI?, offset: Offset?) {

@@ -9,11 +9,11 @@ import com.presentation.model.SetLevel
 import com.presentation.model.SetOfCards
 import com.presentation.model.WordUI
 import com.presentation.usecases.IAddSetOfWordsUseCase
-import com.presentation.usecases.IAddWordUseCase
-import com.presentation.usecases.IFindWordByOriginUseCase
-import com.presentation.usecases.IFindWordByTranslatedUseCase
 import com.presentation.usecases.IGetSetOfAllCardsUseCase
 import com.presentation.usecases.ITranslateWordUseCase
+import com.presentation.usecases.words.IAddWordUseCase
+import com.presentation.usecases.words.IFindWordByOriginUseCase
+import com.presentation.usecases.words.IFindWordByTranslatedUseCase
 import com.presentation.utils.ALL_WORDS
 import com.presentation.utils.Language
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.Date
+import java.util.UUID
 
 
 class HomeViewModel(
@@ -40,6 +41,8 @@ class HomeViewModel(
 
     init {
         viewModelScope.launch {
+            prefs.setOriginalLanguage(_uiState.value.originalLanguage)
+            prefs.setResultLanguage(_uiState.value.resLanguage)
             val allCards = getAllCards.invoke()
             if (allCards == null) {
                 addSetOfCards.invoke(
@@ -68,12 +71,17 @@ class HomeViewModel(
             is HomeIntent.SaveWord -> {
                 viewModelScope.launch {
                     val word = _uiState.value
+                    _uiState.update {
+                        it.copy(
+                            loading = true
+                        )
+                    }
                     Log.e("handleIntent.Save", "Save word")
-                    if (word.originalLanguage == Language.RUSSIAN) {
+                    val response = if (word.originalLanguage == Language.RUSSIAN) {
                         addWordUseCase.invoke(
                             setId = setId,
                             newWord = WordUI(
-                                id = 0,
+                                id = UUID.randomUUID(),
                                 originalText = word.inputText,
                                 resText = word.translatedText,
                                 level = Level.NEW,
@@ -84,7 +92,7 @@ class HomeViewModel(
                         addWordUseCase.invoke(
                             setId = setId,
                             newWord = WordUI(
-                                id = 0,
+                                id = UUID.randomUUID(),
                                 originalText = word.translatedText,
                                 resText = word.inputText,
                                 level = Level.NEW,
@@ -92,7 +100,21 @@ class HomeViewModel(
                             )
                         )
                     }
-                    _uiState.update { it.copy(savedWord = true) }
+                    if (response.isSuccess) {
+                        val savedWord = response.getOrNull()
+                        if (savedWord != null) {
+                            _uiState.update {
+                                it.copy(
+                                    loading = false,
+                                    savedWord = true
+                                )
+                            }
+                        } else {
+                            Log.e("AccountViewModel", "User is null")
+                        }
+                    } else {
+                        Log.e("AccountViewModel", "response is failed")
+                    }
                 }
             }
 
@@ -199,10 +221,14 @@ class HomeViewModel(
                 translatedText = ""
             )
         }
+        viewModelScope.launch {
+            prefs.setOriginalLanguage(_uiState.value.originalLanguage)
+            prefs.setResultLanguage(_uiState.value.resLanguage)
+        }
     }
 
     companion object {
-      //  private const val TAG = "HomeViewModel"
+        //  private const val TAG = "HomeViewModel"
     }
 }
 

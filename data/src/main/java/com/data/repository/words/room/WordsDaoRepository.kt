@@ -1,4 +1,4 @@
-package com.data.repository.words
+package com.data.repository.words.room
 
 import com.data.model.SetOfWords
 import com.data.model.SetWithWords
@@ -7,10 +7,11 @@ import com.data.model.WordEntity
 import com.data.room.WordDao
 import kotlinx.coroutines.flow.Flow
 import java.util.Date
+import java.util.UUID
 
-class WordsRepository(
+class WordsDaoRepository(
     private val dao: WordDao
-) : IWordsRepository {
+) : IWordsDaoRepository {
 
     override suspend fun addNewWord(newWord: WordEntity): Long {
         return dao.insertWord(newWord)
@@ -32,7 +33,7 @@ class WordsRepository(
         dao.addWordToAllWordsSet(word)
     }
 
-    override suspend fun addWordToAllWordsSet(wordId: Int) {
+    override suspend fun addWordToAllWordsSet(wordId: UUID) {
         dao.addWordToAllWordsSet(wordId)
     }
 
@@ -55,7 +56,7 @@ class WordsRepository(
         dao.updateWord(newWord)
     }
 
-    override suspend fun getWordById(wordId: Int): WordEntity? {
+    override suspend fun getWordById(wordId: UUID): WordEntity? {
         return dao.getWordById(wordId)
     }
 
@@ -75,7 +76,7 @@ class WordsRepository(
         return dao.getAllSets()
     }
 
-    override suspend fun deleteWord(wordId: Int) {
+    override suspend fun deleteWord(wordId: UUID) {
         dao.deleteWordWithRelations(wordId)
     }
 

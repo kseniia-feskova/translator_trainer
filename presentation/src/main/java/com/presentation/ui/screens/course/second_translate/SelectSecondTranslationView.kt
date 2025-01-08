@@ -26,6 +26,7 @@ import com.presentation.ui.screens.course.CourseFrameView
 import com.presentation.viewmodel.courses.CourseData
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 @Composable
 fun SelectSecondTranslationView(
@@ -112,7 +113,7 @@ fun CourseFrameViewPreview() {
     Box(modifier = Modifier.background(primaryColor)) {
         CourseFrameView(
             CourseData.SelectTranslationData(
-                WordUI(0, "Text", "Текст", Level.KNOW),
+                WordUI(UUID.fromString("0"), "Text", "Текст", Level.KNOW),
                 null,
                 emptyList(),
                 selectedOption = "",

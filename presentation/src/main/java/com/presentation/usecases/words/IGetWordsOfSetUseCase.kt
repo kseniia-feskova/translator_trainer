@@ -1,4 +1,4 @@
-package com.presentation.usecases
+package com.presentation.usecases.words
 
 import com.presentation.model.WordUI
 import kotlinx.coroutines.flow.Flow

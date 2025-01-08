@@ -6,8 +6,10 @@ import com.data.repository.translate.ITranslateRepository
 import com.data.repository.translate.TranslateRepository
 import com.data.repository.user.IUserRepository
 import com.data.repository.user.UserRepository
-import com.data.repository.words.IWordsRepository
-import com.data.repository.words.WordsRepository
+import com.data.repository.words.api.IWordsApiRepository
+import com.data.repository.words.api.WordsApiRepository
+import com.data.repository.words.room.IWordsDaoRepository
+import com.data.repository.words.room.WordsDaoRepository
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
@@ -15,7 +17,9 @@ import org.koin.dsl.module
 val repositoryModule = module {
     singleOf(::TranslateRepository) bind ITranslateRepository::class
 
-    singleOf(::WordsRepository) bind IWordsRepository::class
+    singleOf(::WordsApiRepository) bind IWordsApiRepository::class
+
+    singleOf(::WordsDaoRepository) bind IWordsDaoRepository::class
 
     singleOf(::AuthRepository) bind IAuthRepository::class
 

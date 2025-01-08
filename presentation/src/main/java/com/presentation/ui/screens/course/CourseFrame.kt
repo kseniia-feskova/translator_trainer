@@ -20,6 +20,7 @@ import com.presentation.model.WordUI
 import com.presentation.ui.primaryColor
 import com.presentation.ui.screens.course.translate.SelectTranslationView
 import com.presentation.ui.secondaryColor
+import java.util.UUID
 
 @Composable
 fun CourseFrameView(
@@ -60,7 +61,7 @@ fun CourseFrameViewPreview() {
     Box(modifier = Modifier.background(primaryColor)) {
         CourseFrameView(
             com.presentation.viewmodel.courses.CourseData.SelectTranslationData(
-                WordUI(0, "Text", "Текст", Level.KNOW),
+                WordUI(UUID.fromString("0"), "Text", "Текст", Level.KNOW),
                 null,
                 emptyList(),
                 selectedOption = "",
@@ -70,7 +71,7 @@ fun CourseFrameViewPreview() {
             SelectTranslationView(
                 modifier = Modifier.align(Alignment.Center),
                 state = com.presentation.viewmodel.courses.CourseData.SelectTranslationData(
-                    WordUI(0, "Text on Deutsch", "Текст", com.presentation.model.Level.KNOW),
+                    WordUI(UUID.fromString("0"), "Text on Deutsch", "Текст", com.presentation.model.Level.KNOW),
                     null,
                     listOf(
                         "First word",

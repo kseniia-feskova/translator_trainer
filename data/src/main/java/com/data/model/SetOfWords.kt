@@ -6,6 +6,7 @@ import androidx.room.Index
 import androidx.room.Junction
 import androidx.room.PrimaryKey
 import androidx.room.Relation
+import java.util.UUID
 
 @Entity(tableName = "sets_of_words")
 data class SetOfWords(
@@ -28,7 +29,7 @@ enum class SetLevel {
 )
 data class SetWordCrossRef(
     val setId: Int,
-    val wordId: Int
+    val wordId: UUID
 )
 data class SetWithWords(
     @Embedded val set: SetOfWords,

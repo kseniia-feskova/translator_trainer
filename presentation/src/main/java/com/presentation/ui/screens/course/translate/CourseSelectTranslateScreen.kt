@@ -11,6 +11,7 @@ import com.presentation.model.WordUI
 import com.presentation.ui.primaryColor
 import com.presentation.ui.screens.course.CourseFrameView
 import com.presentation.viewmodel.courses.CourseData
+import java.util.UUID
 
 @Composable
 fun CourseSelectTranslateScreen(
@@ -43,7 +44,7 @@ fun CourseSelectTranslateScreen(
 fun SelectPreview() {
     CourseSelectTranslateScreen(
         state = CourseData.SelectTranslationData(
-            WordUI(0, "Text on Deutsch", "Текст", Level.KNOW),
+            WordUI(UUID.fromString("0"), "Text on Deutsch", "Текст", Level.KNOW),
             null,
             listOf(
                 "First word",

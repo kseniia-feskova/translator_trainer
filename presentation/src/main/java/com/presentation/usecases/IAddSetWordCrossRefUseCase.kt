@@ -1,5 +1,7 @@
 package com.presentation.usecases
 
+import java.util.UUID
+
 interface IAddSetWordCrossRefUseCase {
-    suspend fun invoke(wordID: Int, setID: Int)
+    suspend fun invoke(wordID: UUID, setID: Int)
 }

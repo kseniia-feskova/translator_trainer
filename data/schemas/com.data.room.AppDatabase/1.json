@@ -2,16 +2,16 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "527ee947f8866e1d5164547044ba5255",
+    "identityHash": "85a570f36176fb37d9886b81b786fb41",
     "entities": [
       {
         "tableName": "words",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `original` TEXT NOT NULL, `translation` TEXT NOT NULL, `status` TEXT NOT NULL, `dateAdded` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` BLOB NOT NULL, `original` TEXT NOT NULL, `translation` TEXT NOT NULL, `status` TEXT NOT NULL, `dateAdded` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
-            "affinity": "INTEGER",
+            "affinity": "BLOB",
             "notNull": true
           },
           {
@@ -40,7 +40,7 @@
           }
         ],
         "primaryKey": {
-          "autoGenerate": true,
+          "autoGenerate": false,
           "columnNames": [
             "id"
           ]
@@ -88,7 +88,7 @@
       },
       {
         "tableName": "set_word_cross_ref",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`setId` INTEGER NOT NULL, `wordId` INTEGER NOT NULL, PRIMARY KEY(`setId`, `wordId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`setId` INTEGER NOT NULL, `wordId` BLOB NOT NULL, PRIMARY KEY(`setId`, `wordId`))",
         "fields": [
           {
             "fieldPath": "setId",
@@ -99,7 +99,7 @@
           {
             "fieldPath": "wordId",
             "columnName": "wordId",
-            "affinity": "INTEGER",
+            "affinity": "BLOB",
             "notNull": true
           }
         ],
@@ -127,7 +127,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '527ee947f8866e1d5164547044ba5255')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '85a570f36176fb37d9886b81b786fb41')"
     ]
   }
 }

@@ -12,6 +12,7 @@ import com.data.model.SetWordCrossRef
 import com.data.model.WordEntity
 import kotlinx.coroutines.flow.Flow
 import java.util.Date
+import java.util.UUID
 
 const val ALL_WORDS = "Все слова"
 
@@ -53,11 +54,11 @@ interface WordDao {
         val allWordsSet = getSetByName(ALL_WORDS) ?: return
         val wordId = insertWord(word)
         if (wordId != -1L) {
-            insertSetWordCrossRef(SetWordCrossRef(setId = allWordsSet.id, wordId = wordId.toInt()))
+            insertSetWordCrossRef(SetWordCrossRef(setId = allWordsSet.id, wordId = word.id))
         }
     }
 
-    suspend fun addWordToAllWordsSet(wordId: Int) {
+    suspend fun addWordToAllWordsSet(wordId: UUID) {
         val allWordsSet = getSetByName(ALL_WORDS) ?: return
         insertSetWordCrossRef(SetWordCrossRef(setId = allWordsSet.id, wordId = wordId))
     }
@@ -75,7 +76,7 @@ interface WordDao {
     suspend fun updateWord(word: WordEntity)
 
     @Query("SELECT * FROM words WHERE id = :id")
-    suspend fun getWordById(id: Int): WordEntity?
+    suspend fun getWordById(id: UUID): WordEntity?
 
     // Метод для удаления набора слов и связанных записей
     @Transaction
@@ -97,13 +98,13 @@ interface WordDao {
 
 
     @Transaction
-    suspend fun deleteWordWithRelations(wordId: Int) {
+    suspend fun deleteWordWithRelations(wordId: UUID) {
         deleteWordFromSets(wordId)
         deleteWordById(wordId)
     }
     @Query("DELETE FROM words WHERE id = :wordId")
-    suspend fun deleteWordById(wordId: Int)
+    suspend fun deleteWordById(wordId: UUID)
 
     @Query("DELETE FROM set_word_cross_ref WHERE wordId = :wordId")
-    suspend fun deleteWordFromSets(wordId: Int)
+    suspend fun deleteWordFromSets(wordId: UUID)
 }

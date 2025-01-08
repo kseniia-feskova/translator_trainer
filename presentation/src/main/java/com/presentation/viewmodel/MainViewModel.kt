@@ -9,7 +9,7 @@ import com.presentation.model.SetOfCards
 import com.presentation.usecases.IAddSetOfWordsUseCase
 import com.presentation.usecases.IAddSetWordCrossRefUseCase
 import com.presentation.usecases.IDeleteSetByIdUseCase
-import com.presentation.usecases.IGetFilteredWordsUseCase
+import com.presentation.usecases.words.IGetFilteredWordsUseCase
 import com.presentation.usecases.IGetSetOfAllCardsUseCase
 import com.presentation.usecases.IGetSetOfCardsUseCase
 import com.presentation.utils.ALL_WORDS

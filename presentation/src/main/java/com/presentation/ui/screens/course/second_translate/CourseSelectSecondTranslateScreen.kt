@@ -12,6 +12,7 @@ import com.presentation.ui.primaryColor
 import com.presentation.ui.screens.course.CourseFrameView
 import com.presentation.viewmodel.courses.CourseData
 import java.util.Date
+import java.util.UUID
 
 @Composable
 fun CourseSelectSecondTranslateScreen(
@@ -44,7 +45,7 @@ fun CourseSelectSecondTranslateScreen(
 fun SelectPreview() {
     CourseSelectSecondTranslateScreen(
         state = CourseData.SelectSecondTranslationData(
-            WordUI(0, "Text on Deutsch", "Текст", Level.LEARNING, date = Date()),
+            WordUI(UUID.fromString("0"), "Text on Deutsch", "Текст", Level.LEARNING, date = Date()),
             null,
             listOf(
                 "First word",

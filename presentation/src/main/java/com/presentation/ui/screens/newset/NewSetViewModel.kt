@@ -9,7 +9,7 @@ import com.presentation.model.WordUI
 import com.presentation.usecases.IAddSetOfWordsUseCase
 import com.presentation.usecases.IAddWordToSetUseCase
 import com.presentation.usecases.IGetSetOfWordsUseCase
-import com.presentation.usecases.IGetWordsOfSetUseCase
+import com.presentation.usecases.words.IGetWordsOfSetUseCase
 import com.presentation.utils.ALL_WORDS
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

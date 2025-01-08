@@ -4,6 +4,8 @@ import com.data.model.UserEntity
 import com.data.model.auth.AuthRequest
 import com.data.model.auth.AuthResponse
 import com.data.model.auth.TokenRequest
+import com.data.model.words.AddWordRequest
+import com.data.model.words.AddWordResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -24,6 +26,9 @@ interface ApiService {
 
     @GET("user/{uuid}")
     suspend fun getUserById(@Path("uuid") uuid: String): Response<UserEntity>
+
+    @POST("words/add")
+    suspend fun saveWorld(@Body addWordRequest:AddWordRequest):Response<AddWordResponse>
 }
 
 data class ErrorDetails(

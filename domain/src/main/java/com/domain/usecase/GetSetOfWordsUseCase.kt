@@ -1,12 +1,11 @@
 package com.domain.usecase
 
-import com.data.model.SetOfWords
-import com.data.repository.words.IWordsRepository
+import com.data.repository.words.room.IWordsDaoRepository
 import com.domain.mapper.toPresentation
 import com.presentation.model.SetOfCards
 import com.presentation.usecases.IGetSetOfWordsUseCase
 
-class GetSetOfWordsUseCase(private val repo: IWordsRepository) :
+class GetSetOfWordsUseCase(private val repo: IWordsDaoRepository) :
     IGetSetOfWordsUseCase {
 
     override suspend fun invoke(id: Int): SetOfCards? {

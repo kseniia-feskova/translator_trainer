@@ -1,4 +1,4 @@
-package com.data.repository.words
+package com.data.repository.words.room
 
 import com.data.model.SetOfWords
 import com.data.model.SetWithWords
@@ -6,8 +6,9 @@ import com.data.model.SetWordCrossRef
 import com.data.model.WordEntity
 import kotlinx.coroutines.flow.Flow
 import java.util.Date
+import java.util.UUID
 
-interface IWordsRepository {
+interface IWordsDaoRepository {
 
     //IAddWordUseCase
     suspend fun addNewWord(newWord: WordEntity): Long
@@ -27,7 +28,7 @@ interface IWordsRepository {
     //default in IAddWordUseCase
     suspend fun addWordToAllWordsSet(word: WordEntity)
 
-    suspend fun addWordToAllWordsSet(wordId: Int)
+    suspend fun addWordToAllWordsSet(wordId: UUID)
 
     fun getWordsFilteredByDateOrStatus(
         startDate: Date,
@@ -38,7 +39,7 @@ interface IWordsRepository {
 
     suspend fun updateWord(newWord: WordEntity)
 
-    suspend fun getWordById(wordId: Int): WordEntity?
+    suspend fun getWordById(wordId: UUID): WordEntity?
 
     suspend fun deleteSetById(setId: Int)
 
@@ -48,6 +49,6 @@ interface IWordsRepository {
 
     suspend fun getAllSets(): List<SetWithWords>
 
-    suspend fun deleteWord(wordId: Int)
+    suspend fun deleteWord(wordId: UUID)
 
 }

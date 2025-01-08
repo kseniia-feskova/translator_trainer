@@ -5,7 +5,10 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.presentation.utils.Language
+import com.presentation.utils.getLanguageByCode
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import java.util.UUID
 
@@ -17,12 +20,19 @@ interface IDataStoreManager {
     suspend fun saveSelectedSetId(id: Int)
     suspend fun clearSelectedSetId()
     suspend fun saveUserId(id: UUID?)
+
+    suspend fun setOriginalLanguage(language: Language)
+    suspend fun setResultLanguage(language: Language)
+    suspend fun getOriginalLanguage(): Language?
+    suspend fun getResultLanguage(): Language?
 }
 
 class DataStoreManager(private val context: Context) : IDataStoreManager {
 
     private val SELECTED_SET_ID = intPreferencesKey("selected_set_id")
     private val USER_ID = stringPreferencesKey("user_id")
+    private val ORIGINAL_LANGUAGE = stringPreferencesKey("original_language")
+    private val RESULT_LANGUAGE = stringPreferencesKey("result_language")
 
     private val selectedSetId: Flow<Int?> = context.dataStore.data
         .map { preferences ->
@@ -64,5 +74,29 @@ class DataStoreManager(private val context: Context) : IDataStoreManager {
                 preferences[USER_ID] = id.toString()
             }
         }
+    }
+
+    override suspend fun setOriginalLanguage(language: Language) {
+        context.dataStore.edit { preferences ->
+            preferences[ORIGINAL_LANGUAGE] = language.code
+        }
+    }
+
+    override suspend fun setResultLanguage(language: Language) {
+        context.dataStore.edit { preferences ->
+            preferences[RESULT_LANGUAGE] = language.code
+        }
+    }
+
+    override suspend fun getOriginalLanguage(): Language? {
+        return context.dataStore.data.map { preferences ->
+            preferences[ORIGINAL_LANGUAGE]
+        }.firstOrNull().getLanguageByCode()
+    }
+
+    override suspend fun getResultLanguage(): Language? {
+        return context.dataStore.data.map { preferences ->
+            preferences[RESULT_LANGUAGE]
+        }.firstOrNull().getLanguageByCode()
     }
 }

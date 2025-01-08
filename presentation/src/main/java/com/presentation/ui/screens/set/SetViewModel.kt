@@ -6,8 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.presentation.model.Level
 import com.presentation.model.WordUI
 import com.presentation.usecases.IGetSetOfCardsUseCase
-import com.presentation.usecases.IGetWordsOfSetUseCase
-import com.presentation.usecases.IUpdateWordUseCase
+import com.presentation.usecases.words.IGetWordsOfSetUseCase
+import com.presentation.usecases.words.IUpdateWordUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
