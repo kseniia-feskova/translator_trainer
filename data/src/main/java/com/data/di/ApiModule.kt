@@ -9,6 +9,7 @@ import com.data.api.AuthInterceptor
 import com.data.prefs.ITokenStorage
 import com.data.prefs.TokenStorage
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -17,7 +18,11 @@ import java.util.concurrent.TimeUnit
 private const val BASE_URL = "http://10.0.2.2:8080/api/"
 
 fun provideOkHttpClient(tokenProvider: ITokenStorage): OkHttpClient {
+    val loggingInterceptor = HttpLoggingInterceptor().apply {
+        level = HttpLoggingInterceptor.Level.BODY // Логировать тело запросов и ответов
+    }
     return OkHttpClient.Builder()
+        .addInterceptor(loggingInterceptor)
         .addInterceptor(AuthInterceptor(tokenProvider))
         .connectTimeout(30, TimeUnit.SECONDS)
         .readTimeout(30, TimeUnit.SECONDS)

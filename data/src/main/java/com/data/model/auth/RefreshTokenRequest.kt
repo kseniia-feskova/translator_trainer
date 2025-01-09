@@ -1,5 +1,5 @@
 package com.data.model.auth
 
-data class TokenRequest(
+data class RefreshTokenRequest(
     val token: String
 )

@@ -5,11 +5,11 @@ import com.data.api.ApiService
 import com.data.api.Result
 import com.data.model.auth.AuthRequest
 import com.data.model.auth.AuthResponse
-import com.data.model.auth.TokenRequest
+import com.data.model.auth.RefreshTokenRequest
 import com.data.prefs.ITokenStorage
 import com.data.prefs.TokenStorage.Companion.ACCESS_TOKEN
 import com.data.prefs.TokenStorage.Companion.REFRESH_TOKEN
-import com.data.repository.user.saveCall
+import com.data.safeCall
 
 class AuthRepository(
     private val service: ApiService,
@@ -21,7 +21,7 @@ class AuthRepository(
         username: String,
         password: String
     ): Result<AuthResponse> {
-        return saveCall({
+        return safeCall({
             service.register(AuthRequest(email = email, username = username, password = password))
         }, onSuccess = { body ->
             tokenStorage.saveToken(ACCESS_TOKEN, body.accessToken)
@@ -41,7 +41,7 @@ class AuthRepository(
         username: String,
         password: String
     ): Result<AuthResponse> {
-        return saveCall({
+        return safeCall({
             service.login(AuthRequest(email = email, username = username, password = password))
         }, onSuccess = { body ->
             tokenStorage.saveToken(ACCESS_TOKEN, body.accessToken)
@@ -56,23 +56,9 @@ class AuthRepository(
     }
 
     override suspend fun refreshToken(token: String): Result<AuthResponse> {
-        return try {
-            val response = service.refreshToken(TokenRequest(token))
-            if (response.isSuccessful) {
-                val body = response.body()
-                if (body != null) {
-                    tokenStorage.saveToken(ACCESS_TOKEN, body.accessToken)
-                    tokenStorage.saveToken(REFRESH_TOKEN, body.refreshToken)
-                    Result(data = body)
-                } else {
-                    Result(errorMsg = "Empty data")
-                }
-            } else {
-                Result(errorMsg = response.errorBody()?.toString().toString())
-            }
-        } catch (e: Exception) {
-            Result(errorMsg = e.message.toString())
-        }
+        return safeCall({
+            service.refreshToken(RefreshTokenRequest(token))
+        })
     }
 
     override suspend fun logout() {

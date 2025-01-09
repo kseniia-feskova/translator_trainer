@@ -4,14 +4,14 @@ import com.data.api.ApiService
 import com.data.api.Result
 import com.data.model.words.AddWordRequest
 import com.data.model.words.AddWordResponse
-import com.data.repository.user.saveCall
+import com.data.safeCall
 
 class WordsApiRepository(
     private val apiService: ApiService
 ) : IWordsApiRepository {
 
     override suspend fun addWord(request: AddWordRequest): Result<AddWordResponse> {
-        return saveCall(request = { apiService.saveWorld(request) })
+        return safeCall(request = { apiService.saveWorld(request) })
     }
 
 }

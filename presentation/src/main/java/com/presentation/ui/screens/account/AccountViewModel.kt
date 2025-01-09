@@ -36,14 +36,14 @@ class AccountViewModel(
                                 it.copy(
                                     loading = false,
                                     name = user.username,
-                                    image = URL(user.photo)
+                                    image = if (user.photo == null) null else URL(user.photo)
                                 )
                             }
                         } else {
                             Log.e("AccountViewModel", "User is null")
                         }
                     } else {
-                        Log.e("AccountViewModel", "response is failed")
+                        Log.e("AccountViewModel", "response is failed, ${response.exceptionOrNull()}")
                     }
                 }
             }

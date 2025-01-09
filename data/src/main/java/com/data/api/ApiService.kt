@@ -3,7 +3,7 @@ package com.data.api
 import com.data.model.UserEntity
 import com.data.model.auth.AuthRequest
 import com.data.model.auth.AuthResponse
-import com.data.model.auth.TokenRequest
+import com.data.model.auth.RefreshTokenRequest
 import com.data.model.words.AddWordRequest
 import com.data.model.words.AddWordResponse
 import retrofit2.Response
@@ -21,8 +21,8 @@ interface ApiService {
     @POST("auth/login")
     suspend fun login(@Body authRequest: AuthRequest): Response<AuthResponse>
 
-    @POST("auth/refresh}")
-    suspend fun refreshToken(@Body tokenRequest: TokenRequest): Response<AuthResponse>
+    @POST("auth/refresh")
+    suspend fun refreshToken(@Body tokenRequest: RefreshTokenRequest): Response<AuthResponse>
 
     @GET("user/{uuid}")
     suspend fun getUserById(@Path("uuid") uuid: String): Response<UserEntity>
