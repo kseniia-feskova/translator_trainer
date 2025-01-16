@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
                 "MainActivity",
                 "Current route = $currentRoute, lesson = ${
                     LeafScreen.Lesson(
-                        0,
+                        setId = "0",
                         LessonType.TRANSLATE
                     ).route
                 }"
@@ -85,7 +85,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             val shouldShowBottomBar = when {
-                currentRoute?.contains(LeafScreen.Lesson(0, LessonType.TRANSLATE).route) ?: true -> false
+                currentRoute?.contains(LeafScreen.Lesson("0", LessonType.TRANSLATE).route) ?: true -> false
                 currentRoute?.contains(LeafScreen.NewSet.route) ?: true -> false
                 currentRoute?.contains(LeafScreen.Login.route) ?: true -> false
                 else -> true

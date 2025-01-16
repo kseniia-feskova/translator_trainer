@@ -4,7 +4,7 @@ import com.data.repository.user.IUserRepository
 import com.domain.mapper.toUI
 import com.domain.token.ITokenRefresher
 import com.domain.token.safeApiCallWithRefresh
-import com.presentation.model.User
+import com.presentation.model.UserUI
 import com.presentation.usecases.IGetAccountUseCase
 import java.util.UUID
 
@@ -12,7 +12,7 @@ class GetAccountUseCase(
     private val repo: IUserRepository,
     private val tokenRefresher: ITokenRefresher
 ) : IGetAccountUseCase {
-    override suspend fun invoke(userId: UUID): Result<User> {
+    override suspend fun invoke(userId: UUID): Result<UserUI> {
         val response = safeApiCallWithRefresh(
             call = { repo.getUserById(userId) },
             onTokenExpired = { tokenRefresher.refreshToken() })

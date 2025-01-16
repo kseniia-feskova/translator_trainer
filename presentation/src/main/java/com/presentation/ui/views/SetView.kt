@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.presentation.model.SetOfCards
 import com.presentation.test.mockListOfSets
 import com.presentation.ui.AppTheme
+import java.util.UUID
 
 @Composable
 fun SetView(
@@ -93,9 +94,9 @@ fun SetView(
 fun ListOfSetsView(
     modifier: Modifier = Modifier,
     listOfSets: List<SetOfCards>,
-    selectedSetId: Int? = null,
-    onSetSelected: (Int) -> Unit = {},
-    onSetClicked: (Int?) -> Unit = {}
+    selectedSetId: UUID? = null,
+    onSetSelected: (UUID) -> Unit = {},
+    onSetClicked: (UUID?) -> Unit = {}
 ) {
     Box(
         modifier = modifier
@@ -119,7 +120,7 @@ fun ListOfSetsView(
                 },
                 onSetSelected = {
                     if (selectedSetId == set.id) {
-                        set.id?.let { onSetSelected(it) }
+                        onSetSelected(set.id)
                     }
                 }
             )

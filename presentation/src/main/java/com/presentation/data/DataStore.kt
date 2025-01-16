@@ -20,9 +20,13 @@ interface IDataStoreManager {
     suspend fun saveSelectedSetId(id: Int)
     suspend fun clearSelectedSetId()
     suspend fun saveUserId(id: UUID?)
+    suspend fun saveCourseId(id: UUID?)
+    suspend fun getCourseId(): UUID?
 
     suspend fun setOriginalLanguage(language: Language)
     suspend fun setResultLanguage(language: Language)
+    suspend fun setAllWordsSetId(id: UUID?)
+    suspend fun getAllWordsSetId(): UUID?
     suspend fun getOriginalLanguage(): Language?
     suspend fun getResultLanguage(): Language?
 }
@@ -31,8 +35,10 @@ class DataStoreManager(private val context: Context) : IDataStoreManager {
 
     private val SELECTED_SET_ID = intPreferencesKey("selected_set_id")
     private val USER_ID = stringPreferencesKey("user_id")
+    private val COURSE_ID = stringPreferencesKey("course_id")
     private val ORIGINAL_LANGUAGE = stringPreferencesKey("original_language")
     private val RESULT_LANGUAGE = stringPreferencesKey("result_language")
+    private val ALL_WORDS_ID = stringPreferencesKey("all_words_id")
 
     private val selectedSetId: Flow<Int?> = context.dataStore.data
         .map { preferences ->
@@ -76,6 +82,26 @@ class DataStoreManager(private val context: Context) : IDataStoreManager {
         }
     }
 
+    override suspend fun saveCourseId(id: UUID?) {
+        if (id == null) {
+            context.dataStore.edit { preferences ->
+                preferences.remove(COURSE_ID)
+            }
+        } else {
+            context.dataStore.edit { preferences ->
+                preferences[COURSE_ID] = id.toString()
+            }
+        }
+    }
+
+    override suspend fun getCourseId(): UUID? = context.dataStore.data.map { preferences ->
+        if (preferences[COURSE_ID].isNullOrEmpty()) {
+            null
+        } else {
+            UUID.fromString(preferences[COURSE_ID])
+        }
+    }.firstOrNull()
+
     override suspend fun setOriginalLanguage(language: Language) {
         context.dataStore.edit { preferences ->
             preferences[ORIGINAL_LANGUAGE] = language.code
@@ -88,13 +114,33 @@ class DataStoreManager(private val context: Context) : IDataStoreManager {
         }
     }
 
-    override suspend fun getOriginalLanguage(): Language? {
+    override suspend fun setAllWordsSetId(id: UUID?) {
+        if (id == null) {
+            context.dataStore.edit { preferences ->
+                preferences.remove(ALL_WORDS_ID)
+            }
+        } else {
+            context.dataStore.edit { preferences ->
+                preferences[ALL_WORDS_ID] = id.toString()
+            }
+        }
+    }
+
+    override suspend fun getAllWordsSetId(): UUID?  = context.dataStore.data.map { preferences ->
+        if (preferences[ALL_WORDS_ID].isNullOrEmpty()) {
+            null
+        } else {
+            UUID.fromString(preferences[ALL_WORDS_ID])
+        }
+    }.firstOrNull()
+
+    override suspend fun getOriginalLanguage(): Language {
         return context.dataStore.data.map { preferences ->
             preferences[ORIGINAL_LANGUAGE]
         }.firstOrNull().getLanguageByCode()
     }
 
-    override suspend fun getResultLanguage(): Language? {
+    override suspend fun getResultLanguage(): Language {
         return context.dataStore.data.map { preferences ->
             preferences[RESULT_LANGUAGE]
         }.firstOrNull().getLanguageByCode()

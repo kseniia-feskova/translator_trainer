@@ -2,12 +2,7 @@ package com.presentation.ui.screens.newset
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.presentation.data.IDataStoreManager
-import com.presentation.model.SetLevel
-import com.presentation.model.SetOfCards
 import com.presentation.model.WordUI
-import com.presentation.usecases.IAddSetOfWordsUseCase
-import com.presentation.usecases.IAddWordToSetUseCase
 import com.presentation.usecases.IGetSetOfWordsUseCase
 import com.presentation.usecases.words.IGetWordsOfSetUseCase
 import com.presentation.utils.ALL_WORDS
@@ -20,9 +15,6 @@ import kotlinx.coroutines.launch
 class NewSetViewModel(
     private val getAllWordsSet: IGetSetOfWordsUseCase,
     private val getAllWords: IGetWordsOfSetUseCase,
-    private val addSetOfCards: IAddSetOfWordsUseCase,
-    private val addWordToSet: IAddWordToSetUseCase,
-    private val prefs: IDataStoreManager
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(NewSetUIState(loading = true))
@@ -62,15 +54,15 @@ class NewSetViewModel(
         _uiState.update { it.copy(loading = true) }
         viewModelScope.launch {
             val data = _uiState.value
-            val set = SetOfCards(0, data.name, SetLevel.EASY, emptySet(), 0)
-            val setId = addSetOfCards.invoke(set).toInt()
-
-            data.words.filter { it.value }.keys.forEach {
-                addWordToSet.invoke(setId = setId, wordId = it.id)
-            }
-            if (data.isSaveChecked) {
-                prefs.saveSelectedSetId(setId)
-            }
+//            val set = SetOfCards(data.name, emptySet(), 0)
+//            val setId = addSetOfCards.invoke(set).toInt()
+//
+//            data.words.filter { it.value }.keys.forEach {
+//                addWordToSet.invoke(setId = setId, wordId = it.id)
+//            }
+//            if (data.isSaveChecked) {
+//                prefs.saveSelectedSetId(setId)
+//            }
             _uiState.update { it.copy(loading = false) }
             onSetSaved()
         }

@@ -10,10 +10,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.presentation.navigation.LeafScreen
 import org.koin.androidx.compose.koinViewModel
+import java.util.UUID
 
 
 fun NavController.navigateToAllWords(
-    setId: Int,
+    setId: String,
     navOptions: NavOptions? = null
 ) {
     this.navigate(LeafScreen.AllWords(setId), navOptions)
@@ -28,8 +29,8 @@ fun NavGraphBuilder.allWordsScreen(
     }
 }
 
-internal val SavedStateHandle.setId: Int
-    get() = toRoute<LeafScreen.AllWords>().setId
+internal val SavedStateHandle.setId: UUID
+    get() = UUID.fromString(toRoute<LeafScreen.AllWords>().setId)
 
 @Composable
 fun AllWordsRoute(

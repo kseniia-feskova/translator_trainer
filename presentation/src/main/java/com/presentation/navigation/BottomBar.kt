@@ -46,13 +46,13 @@ sealed class LeafScreen(val route: String) {
     object Account:LeafScreen("account")
 
     @Serializable
-    data class Set(val setId: Int) : LeafScreen("set")
+    data class Set(val setId: String) : LeafScreen("set")
 
     @Serializable
-    data class Lesson(val setId: Int, val type: LessonType) : LeafScreen("lesson")
+    data class Lesson(val setId: String, val type: LessonType) : LeafScreen("lesson")
 
     @Serializable
-    data class AllWords(val setId: Int) : LeafScreen("allWords")
+    data class AllWords(val setId: String) : LeafScreen("allWords")
 
     object NewSet : LeafScreen("newset")
 }

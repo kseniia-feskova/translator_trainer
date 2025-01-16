@@ -10,16 +10,17 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.presentation.navigation.LeafScreen
 import org.koin.androidx.compose.koinViewModel
+import java.util.UUID
 
 fun NavController.navigateToSet(
-    setId: Int,
+    setId: String,
     navOptions: NavOptions? = null
 ) {
     this.navigate(LeafScreen.Set(setId), navOptions)
 }
 
 fun NavGraphBuilder.setScreen(
-    navigateToLesson: (Int) -> Unit = {},
+    navigateToLesson: (UUID) -> Unit = {},
     navigateToEdit: () -> Unit = {},
     navigateUp: () -> Unit = {},
 ) {
@@ -32,12 +33,12 @@ fun NavGraphBuilder.setScreen(
     }
 }
 
-internal val SavedStateHandle.setId: Int
-    get() = toRoute<LeafScreen.Set>().setId
+internal val SavedStateHandle.setId: UUID
+    get() = UUID.fromString(toRoute<LeafScreen.Set>().setId)
 
 @Composable
 fun CardSetRoute(
-    navigateToLesson: (Int) -> Unit = {},
+    navigateToLesson: (UUID) -> Unit = {},
     navigateToEdit: () -> Unit = {},
     navigateUp: () -> Unit = {},
     viewModel: SetViewModel = koinViewModel()

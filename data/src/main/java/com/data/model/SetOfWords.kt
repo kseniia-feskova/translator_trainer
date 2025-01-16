@@ -13,7 +13,8 @@ data class SetOfWords(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val name: String,
     val level: SetLevel,
-    val userId: Int // Внешний ключ на пользователя
+    val isDefault:Boolean,
+    val courseId: Int // Внешний ключ на пользователя
 )
 
 enum class SetLevel {

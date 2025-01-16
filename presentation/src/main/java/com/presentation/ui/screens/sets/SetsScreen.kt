@@ -24,14 +24,15 @@ import com.presentation.ui.AppTheme
 import com.presentation.ui.views.ActionButton
 import com.presentation.ui.views.BasicTopView
 import com.presentation.ui.views.ListOfSetsView
+import java.util.UUID
 
 @Composable
 fun SetsScreen(
     state: SetsUIState,
     createNewSet: () -> Unit = {},
-    selectSet: (Int?) -> Unit = {},
+    selectSet: (UUID?) -> Unit = {},
     navigateToHome: () -> Unit = {},
-    navigateToSelectedSet: (Int) -> Unit = {},
+    navigateToSelectedSet: (UUID) -> Unit = {},
     createRandomLesson: () -> Unit = {},
 ) {
     Box(

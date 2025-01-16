@@ -8,6 +8,7 @@ import com.domain.usecase.AddWordToSetUseCase
 import com.domain.usecase.DeleteSetByIdUseCase
 import com.domain.usecase.GetAccountUseCase
 import com.domain.usecase.GetAllSetsUseCase
+import com.domain.usecase.course.GetCourseUseCase
 import com.domain.usecase.GetSetOfAllCardsUseCase
 import com.domain.usecase.GetSetOfCardsUseCase
 import com.domain.usecase.GetSetOfWordsUseCase
@@ -23,6 +24,7 @@ import com.domain.usecase.words.FindWordByOriginUseCase
 import com.domain.usecase.words.FindWordByTranslatedUseCase
 import com.domain.usecase.words.GetFilteredWordsUseCase
 import com.domain.usecase.words.GetWordByIdUseCase
+import com.domain.usecase.words.GetWordByTranslated
 import com.domain.usecase.words.GetWordsOfSetUseCase
 import com.domain.usecase.words.UpdateWordUseCase
 import com.presentation.usecases.IAddSetOfWordsUseCase
@@ -31,6 +33,7 @@ import com.presentation.usecases.IAddWordToSetUseCase
 import com.presentation.usecases.IDeleteSetByIdUseCase
 import com.presentation.usecases.IGetAccountUseCase
 import com.presentation.usecases.IGetAllSetsUseCase
+import com.presentation.usecases.course.IGetCourseUseCase
 import com.presentation.usecases.IGetSetOfAllCardsUseCase
 import com.presentation.usecases.IGetSetOfCardsUseCase
 import com.presentation.usecases.IGetSetOfWordsUseCase
@@ -45,6 +48,7 @@ import com.presentation.usecases.words.IFindWordByOriginUseCase
 import com.presentation.usecases.words.IFindWordByTranslatedUseCase
 import com.presentation.usecases.words.IGetFilteredWordsUseCase
 import com.presentation.usecases.words.IGetWordByIdUseCase
+import com.presentation.usecases.words.IGetWordByTranslated
 import com.presentation.usecases.words.IGetWordsOfSetUseCase
 import com.presentation.usecases.words.IUpdateWordUseCase
 import org.koin.core.module.dsl.singleOf
@@ -98,5 +102,9 @@ val useCaseModule = module {
     singleOf(::GetAccountUseCase) bind IGetAccountUseCase::class
 
     singleOf(::TokenRefresher) bind ITokenRefresher::class
+
+    singleOf(::GetCourseUseCase) bind IGetCourseUseCase::class
+
+    singleOf(::GetWordByTranslated) bind IGetWordByTranslated::class
 
 }

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "85a570f36176fb37d9886b81b786fb41",
+    "identityHash": "6bb4289f4d49410a9f719288a19bddc0",
     "entities": [
       {
         "tableName": "words",
@@ -50,7 +50,7 @@
       },
       {
         "tableName": "sets_of_words",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `level` TEXT NOT NULL, `userId` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `level` TEXT NOT NULL, `isDefault` INTEGER NOT NULL, `courseId` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -71,8 +71,14 @@
             "notNull": true
           },
           {
-            "fieldPath": "userId",
-            "columnName": "userId",
+            "fieldPath": "isDefault",
+            "columnName": "isDefault",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "courseId",
+            "columnName": "courseId",
             "affinity": "INTEGER",
             "notNull": true
           }
@@ -127,7 +133,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '85a570f36176fb37d9886b81b786fb41')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6bb4289f4d49410a9f719288a19bddc0')"
     ]
   }
 }

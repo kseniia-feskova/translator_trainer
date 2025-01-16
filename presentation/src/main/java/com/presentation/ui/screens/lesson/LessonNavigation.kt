@@ -10,9 +10,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.presentation.navigation.LeafScreen
 import org.koin.androidx.compose.koinViewModel
+import java.util.UUID
 
 fun NavController.navigateToLesson(
-    setId: Int,
+    setId: String,
     lessonType: LessonType,
     navOptions: NavOptions? = null,
 ) {
@@ -29,8 +30,8 @@ fun NavGraphBuilder.lessonScreen(
     }
 }
 
-internal val SavedStateHandle.setId: Int
-    get() = toRoute<LeafScreen.Lesson>().setId
+internal val SavedStateHandle.setId: UUID
+    get() = UUID.fromString(toRoute<LeafScreen.Lesson>().setId)
 
 
 internal val SavedStateHandle.type: LessonType

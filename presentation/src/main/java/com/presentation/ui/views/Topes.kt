@@ -126,10 +126,6 @@ fun AccountTopView(
         AsyncImage(
             modifier = Modifier
                 .size(imageSize)
-                .background(
-                    MaterialTheme.colorScheme.tertiary.copy(alpha = 0.2f),
-                    shape = CircleShape
-                )
                 .border(
                     width = 4.dp,
                     color = MaterialTheme.colorScheme.tertiary,

@@ -1,12 +1,15 @@
 package com.presentation.model
 
+import java.util.UUID
+
 // пока хз
 data class SetOfCards(
-    val id: Int? = null,
+    val id: UUID,
     val title: String,
-    val level: SetLevel,
+    val isDefault: Boolean,
+    //val level: SetLevel,
     val setOfWords: Set<WordUI> = emptySet(),
-    val userId: Int
+    val courseId: UUID
 )
 
 enum class SetLevel {

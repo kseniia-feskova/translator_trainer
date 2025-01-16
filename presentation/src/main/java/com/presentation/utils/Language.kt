@@ -1,5 +1,6 @@
 package com.presentation.utils
 
+import android.util.Log
 import com.presentation.utils.Language.ARABIC
 import com.presentation.utils.Language.CHINESE_TRADITIONAL
 import com.presentation.utils.Language.ENGLISH
@@ -28,15 +29,20 @@ enum class Language(val code: String) {
 private val languageToEnum = mutableMapOf<String, Language>()
 private val codeToEnum = mutableMapOf<String, Language>()
 
-fun String?.getLanguageByCode(): Language? {
-    return when (this) {
-        GERMAN.code -> GERMAN
-        ENGLISH.code -> ENGLISH
-        RUSSIAN.code -> RUSSIAN
-        UKRAINIAN.code -> UKRAINIAN
-        FRENCH.code -> FRENCH
-        ARABIC.code -> ARABIC
-        CHINESE_TRADITIONAL.code -> CHINESE_TRADITIONAL
-        else -> null
+fun String?.getLanguageByCode(): Language {
+    return try {
+        when (this) {
+            GERMAN.code -> GERMAN
+            ENGLISH.code -> ENGLISH
+            RUSSIAN.code -> RUSSIAN
+            UKRAINIAN.code -> UKRAINIAN
+            FRENCH.code -> FRENCH
+            ARABIC.code -> ARABIC
+            CHINESE_TRADITIONAL.code -> CHINESE_TRADITIONAL
+            else -> throw Exception("Can not parse language")
+        }
+    } catch (e: Exception) {
+        Log.e("getLanguageByCode", "Error = ${e.message}")
+        RUSSIAN
     }
 }

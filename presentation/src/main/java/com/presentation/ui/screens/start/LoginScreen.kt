@@ -38,6 +38,8 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.presentation.model.CoursePreview
+import com.presentation.model.ruDeCourse
 import com.presentation.ui.AppTheme
 import com.presentation.ui.AppTypography
 import com.presentation.ui.indicatorColorLight
@@ -46,6 +48,7 @@ import com.presentation.ui.onSurfaceLight
 import com.presentation.ui.primaryColorLight
 import com.presentation.ui.redDarkColor
 import com.presentation.ui.views.ActionButton
+import com.presentation.ui.views.CourseSelector
 
 @Composable
 fun LoginScreen(
@@ -55,7 +58,8 @@ fun LoginScreen(
     onPasswordChanged: (String) -> Unit = {},
     onSecondPasswordChanged: (String) -> Unit = {},
     onSwitchAuth: () -> Unit = {},
-    onEnterClicked: () -> Unit = {}
+    onEnterClicked: () -> Unit = {},
+    onCourseSelected: (CoursePreview) -> Unit = {}
 ) {
     Box(
         modifier = Modifier
@@ -115,21 +119,40 @@ fun LoginScreen(
                     .padding(top = 100.dp)
             )
         }
-
-        ActionButton(
-            onClick = { onEnterClicked() },
+        Column(
             modifier = Modifier
-                .align(Alignment.BottomCenter),
-            enabled = state.isValid
+                .align(Alignment.BottomCenter)
         ) {
-            Text(
-                text = "Войти",
-                modifier = Modifier.padding(vertical = 8.dp),
-                style = MaterialTheme.typography.titleMedium.copy(
-                    color = MaterialTheme.colorScheme.onPrimary
-                ),
-            )
+            if (!state.isLogin) {
+                Text("Оберiть курс")
+                SelectCourse(state.selectedCourse) {
+                    onCourseSelected(it)
+                }
+            }
+            ActionButton(
+                onClick = { onEnterClicked() },
+                enabled = state.isValid
+            ) {
+                Text(
+                    text = "Войти",
+                    modifier = Modifier.padding(vertical = 8.dp),
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        color = MaterialTheme.colorScheme.onPrimary
+                    ),
+                )
+            }
         }
+    }
+}
+
+@Composable
+fun SelectCourse(selectedCourse: CoursePreview?, onSelect: (CoursePreview) -> Unit) {
+    Column (modifier = Modifier.fillMaxWidth()) {
+        CourseSelector(
+            checked = selectedCourse == ruDeCourse,
+            course = ruDeCourse,
+            onCheckedChange = { onSelect(ruDeCourse) }
+        )
     }
 }
 

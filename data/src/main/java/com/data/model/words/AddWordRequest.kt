@@ -9,5 +9,5 @@ data class AddWordRequest(
     val sourceLanguage: String,
     val targetLanguage: String,
     val status: WordStatus = WordStatus.New,
-    val userId: UUID
+    val courseId: UUID
 )

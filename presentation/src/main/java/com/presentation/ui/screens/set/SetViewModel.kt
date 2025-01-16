@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 class SetViewModel(
     savedStateHandle: SavedStateHandle,
@@ -20,7 +21,7 @@ class SetViewModel(
     private val updateWord: IUpdateWordUseCase
 ) : ViewModel() {
 
-    private val setId = savedStateHandle.setId
+    private val setId: UUID = savedStateHandle.setId
 
     private val _uiState = MutableStateFlow(SetUIState())
     val uiState = _uiState.asStateFlow()

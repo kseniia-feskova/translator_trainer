@@ -6,10 +6,11 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.presentation.navigation.LeafScreen
 import org.koin.androidx.compose.koinViewModel
+import java.util.UUID
 
 fun NavGraphBuilder.setsScreen(
-    navigateToSelectedSet: (Int) -> Unit,
-    navigateToAllWordsSet: (Int) -> Unit,
+    navigateToSelectedSet: (UUID) -> Unit,
+    navigateToAllWordsSet: (UUID) -> Unit,
     navigateToHome: () -> Unit,
     createNewSet: () -> Unit,
     createRandomLesson: () -> Unit,
@@ -27,8 +28,8 @@ fun NavGraphBuilder.setsScreen(
 
 @Composable
 fun SetsRoute(
-    navigateToSelectedSet: (Int) -> Unit,
-    navigateToAllWordsSet: (Int) -> Unit,
+    navigateToSelectedSet: (UUID) -> Unit,
+    navigateToAllWordsSet: (UUID) -> Unit,
     navigateToHome: () -> Unit,
     createNewSet: () -> Unit,
     createRandomLesson: () -> Unit,
