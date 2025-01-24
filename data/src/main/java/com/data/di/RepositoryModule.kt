@@ -7,7 +7,7 @@ import com.data.repository.sets.SetRepository
 import com.data.repository.translate.ITranslateRepository
 import com.data.repository.translate.TranslateRepository
 import com.data.repository.course.CourseRepository
-import com.data.repository.user.ICourseRepository
+import com.data.repository.course.ICourseRepository
 import com.data.repository.user.IUserRepository
 import com.data.repository.user.UserRepository
 import com.data.repository.words.api.IWordsApiRepository

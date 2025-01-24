@@ -8,16 +8,16 @@ import com.domain.usecase.AddWordToSetUseCase
 import com.domain.usecase.DeleteSetByIdUseCase
 import com.domain.usecase.GetAccountUseCase
 import com.domain.usecase.GetAllSetsUseCase
-import com.domain.usecase.course.GetCourseUseCase
 import com.domain.usecase.GetSetOfAllCardsUseCase
 import com.domain.usecase.GetSetOfCardsUseCase
 import com.domain.usecase.GetSetOfWordsUseCase
-
 import com.domain.usecase.TranslateWordUseCase
 import com.domain.usecase.auth.DeleteUseCase
 import com.domain.usecase.auth.LoginUseCase
 import com.domain.usecase.auth.LogoutUseCase
 import com.domain.usecase.auth.RegisterUseCase
+import com.domain.usecase.course.GetAllCoursesUseCase
+import com.domain.usecase.course.GetCourseUseCase
 import com.domain.usecase.words.AddWordUseCase
 import com.domain.usecase.words.DeleteWordUseCase
 import com.domain.usecase.words.FindWordByOriginUseCase
@@ -33,7 +33,6 @@ import com.presentation.usecases.IAddWordToSetUseCase
 import com.presentation.usecases.IDeleteSetByIdUseCase
 import com.presentation.usecases.IGetAccountUseCase
 import com.presentation.usecases.IGetAllSetsUseCase
-import com.presentation.usecases.course.IGetCourseUseCase
 import com.presentation.usecases.IGetSetOfAllCardsUseCase
 import com.presentation.usecases.IGetSetOfCardsUseCase
 import com.presentation.usecases.IGetSetOfWordsUseCase
@@ -42,6 +41,8 @@ import com.presentation.usecases.auth.IDeleteUseCase
 import com.presentation.usecases.auth.ILoginUseCase
 import com.presentation.usecases.auth.ILogoutUseCase
 import com.presentation.usecases.auth.IRegisterUseCase
+import com.presentation.usecases.course.IGetAllCoursesUseCase
+import com.presentation.usecases.course.IGetCourseUseCase
 import com.presentation.usecases.words.IAddWordUseCase
 import com.presentation.usecases.words.IDeleteWordUseCase
 import com.presentation.usecases.words.IFindWordByOriginUseCase
@@ -106,5 +107,7 @@ val useCaseModule = module {
     singleOf(::GetCourseUseCase) bind IGetCourseUseCase::class
 
     singleOf(::GetWordByTranslated) bind IGetWordByTranslated::class
+
+    singleOf(::GetAllCoursesUseCase) bind IGetAllCoursesUseCase::class
 
 }

@@ -59,7 +59,8 @@ fun LoginScreen(
     onSecondPasswordChanged: (String) -> Unit = {},
     onSwitchAuth: () -> Unit = {},
     onEnterClicked: () -> Unit = {},
-    onCourseSelected: (CoursePreview) -> Unit = {}
+    onCourseSelected: (CoursePreview) -> Unit = {},
+    onHideCourses: () -> Unit = {}
 ) {
     Box(
         modifier = Modifier
@@ -129,6 +130,7 @@ fun LoginScreen(
                     onCourseSelected(it)
                 }
             }
+
             ActionButton(
                 onClick = { onEnterClicked() },
                 enabled = state.isValid
@@ -136,18 +138,43 @@ fun LoginScreen(
                 Text(
                     text = "Войти",
                     modifier = Modifier.padding(vertical = 8.dp),
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        color = MaterialTheme.colorScheme.onPrimary
-                    ),
+                    style = MaterialTheme.typography.titleMedium.copy(color = MaterialTheme.colorScheme.onPrimary),
                 )
             }
+//            if (state.listOfCourses != null) {
+//                Column(
+//                    Modifier.background(
+//                        shape = RoundedCornerShape(12.dp, 12.dp, 0.dp, 0.dp),
+//                        color = MaterialTheme.colorScheme.primary
+//                    )
+//                ) {
+//                    Box(modifier = Modifier.fillMaxWidth()) {
+//                        Text("Оберiть курс", modifier = Modifier.align(Alignment.Center))
+//                        Icon(
+//                            modifier = Modifier
+//                                .align(Alignment.CenterEnd)
+//                                .clickable { onHideCourses() }
+//                                .padding(16.dp),
+//                            imageVector = Icons.Default.Close,
+//                            tint = MaterialTheme.colorScheme.onPrimary,
+//                            contentDescription = "Close"
+//                        )
+//                    }
+//                    LazyColumn() {
+//                        items(state.listOfCourses.toList()) {
+//                            SelectCourse(state.selectedCourse) {
+//                                onCourseSelected(it)
+//                            }
+//                        }
+//                    }
+//                }
         }
     }
 }
 
 @Composable
 fun SelectCourse(selectedCourse: CoursePreview?, onSelect: (CoursePreview) -> Unit) {
-    Column (modifier = Modifier.fillMaxWidth()) {
+    Column(modifier = Modifier.fillMaxWidth()) {
         CourseSelector(
             checked = selectedCourse == ruDeCourse,
             course = ruDeCourse,
@@ -473,7 +500,7 @@ fun LoginScreenPreview() {
         Surface {
             LoginScreen(
                 LoginUIState(
-
+                    // listOfCourses = emptyList()
                 )
             )
         }

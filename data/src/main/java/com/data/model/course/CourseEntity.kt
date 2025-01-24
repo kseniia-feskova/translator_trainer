@@ -7,7 +7,7 @@ data class CourseEntity(
     var id: UUID,
     val sourceLanguage: String,
     val targetLanguage: String,
-    val user_id: UserEntity,
-    var all_words_id: UUID? = null,
-    var selected_set_id: UUID? = null,
+    val user: UserEntity,
+    var allWordsId: UUID? = null,
+    var selectedSetId: UUID? = null,
 )

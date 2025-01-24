@@ -11,5 +11,6 @@ data class LoginUIState(
     val repeatPassword: String = "",
     val selectedCourse: CoursePreview? = null,
     val isValid: Boolean = false,
-    val error: String? = null
+    val error: String? = null,
+    val listOfCourses: List<CoursePreview>? = null
 )

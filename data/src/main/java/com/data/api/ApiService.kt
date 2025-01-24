@@ -6,6 +6,7 @@ import com.data.model.auth.AuthRequest
 import com.data.model.auth.AuthResponse
 import com.data.model.auth.LoginRequest
 import com.data.model.auth.RefreshTokenRequest
+import com.data.model.course.get.GetAllCoursesRequest
 import com.data.model.sets.AddSetRequest
 import com.data.model.sets.SetResponse
 import com.data.model.words.AddWordRequest
@@ -46,6 +47,9 @@ interface ApiService {
 
     @GET("course/{uuid}")
     suspend fun getCourseById(@Path("uuid") uuid: String): Response<CourseEntity>
+
+    @POST("course/get_all")
+    suspend fun getAllCourses(@Body request: GetAllCoursesRequest): Response<List<CourseEntity>>
 
     //end of region
 

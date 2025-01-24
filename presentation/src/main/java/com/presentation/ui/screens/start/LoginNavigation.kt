@@ -35,7 +35,8 @@ fun LoginRoute(
         onSecondPasswordChanged = { viewModel.handleIntent(LoginIntent.RepeatPasswordChanged(it)) },
         onSwitchAuth = { viewModel.handleIntent(LoginIntent.SwitchAuth) },
         onEnterClicked = { viewModel.handleIntent(LoginIntent.EnterClicked(onLoginSuccess)) },
-        onCourseSelected = {viewModel.handleIntent(LoginIntent.SelectCourse(it))}
+        onCourseSelected = {viewModel.handleIntent(LoginIntent.SelectCourse(it))},
+        onHideCourses = {viewModel.handleIntent(LoginIntent.HideCourses)}
     )
 
 }
