@@ -29,7 +29,7 @@ class MainViewModel(
                 .distinctUntilChanged() // Отслеживаем только изменения
                 .collect { isAuthorized ->
                     Log.e("MainViewModel", "IsAuthorized = $isAuthorized")
-                    _isUserAuthorized.value = isAuthorized
+                    _isUserAuthorized.value = isAuthorized && dataStorage.getCourseId() != null
                 }
         }
     }

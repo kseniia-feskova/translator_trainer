@@ -7,7 +7,9 @@ data class CourseUI(
     val id: UUID,
     val originalLanguage: Language,
     val translateLanguage: Language,
+    val originalFlag: Int,
+    val translatedFlag: Int,
     val allWordsId: UUID?,
     val selectedSetId: UUID?,
-    val user: UserUI
+    val userId: UUID
 )

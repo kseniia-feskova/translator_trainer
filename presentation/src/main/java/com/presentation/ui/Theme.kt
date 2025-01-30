@@ -41,12 +41,14 @@ fun AppTheme(
 }
 
 private val LightColors = lightColorScheme(
-    primary = primaryColorLight,
-    onPrimary = onPrimaryColorLight,
-    surface = surfaceLight,
-    background = surfaceLight,
-    onSurface = onSurfaceLight,
-    tertiary = tertiaryLight
+    primary = bgColor,
+    surface = bgColor,
+    background = bgColor
+//    onPrimary = onPrimaryColorLight,
+//    surface = bgColor,
+//    background = bgColor,
+//    onSurface = onSurfaceLight,
+//    tertiary = tertiaryLight
 //    primaryContainer = md_theme_light_primaryContainer,
 //    onPrimaryContainer = md_theme_light_onPrimaryContainer,
 //    secondary = md_theme_light_secondary,

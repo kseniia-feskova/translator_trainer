@@ -14,7 +14,7 @@ import java.util.Date
 
 @Database(
     entities = [WordEntity::class, SetOfWords::class, SetWordCrossRef::class],
-    version = 1
+    version = 2
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
@@ -30,7 +30,7 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "app_database"
-                ).build()
+                ).fallbackToDestructiveMigration().build()
                 INSTANCE = instance
                 instance
             }
@@ -41,7 +41,7 @@ abstract class AppDatabase : RoomDatabase() {
 class Converters {
     @TypeConverter
     fun fromTimestamp(value: Long?): Date {
-        return if(value == null){
+        return if (value == null) {
             Date()
         } else {
             Date(value)

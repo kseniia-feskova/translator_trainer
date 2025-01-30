@@ -7,5 +7,5 @@ data class UserUI(
     val username: String,
     val email: String,
     val photo: String? = null,
-    val courses: List<UUID> = emptyList()
+    val courses: List<CourseUI> = emptyList()
 )

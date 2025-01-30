@@ -9,6 +9,6 @@ fun UserEntity.toUI(): UserUI {
         username = username ?: email,
         email = email,
         photo = photoUrl,
-        courses = courses
+        courses = courses.map { it.toUI() }
     )
 }

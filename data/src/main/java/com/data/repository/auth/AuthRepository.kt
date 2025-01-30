@@ -38,7 +38,6 @@ class AuthRepository(
                 if (body.uuid == null) {
                     Result(errorMsg = "Empty uuid")
                 } else {
-                    tokenStorage.saveUserId(body.uuid)
                     Result(data = body)
                 }
             })
@@ -58,7 +57,6 @@ class AuthRepository(
             if (body.uuid == null) {
                 Result(errorMsg = "Empty user id")
             } else {
-                tokenStorage.saveUserId(body.uuid)
                 Result(data = body)
             }
         })
@@ -71,6 +69,5 @@ class AuthRepository(
     override suspend fun logout() {
         tokenStorage.clearToken(ACCESS_TOKEN)
         tokenStorage.clearToken(REFRESH_TOKEN)
-        tokenStorage.clearUserId()
     }
 }

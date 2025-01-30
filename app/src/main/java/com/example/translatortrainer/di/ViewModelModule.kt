@@ -15,7 +15,6 @@ import org.koin.dsl.module
 
 val viewModelModule = module {
     viewModelOf(::MainViewModel)
-    viewModelOf(::LoginViewModel)
     viewModelOf(::HomeViewModel)
     viewModelOf(::SetsViewModel)
     viewModelOf(::AccountViewModel)
@@ -23,4 +22,5 @@ val viewModelModule = module {
     viewModelOf(::LessonViewModel)
     viewModelOf(::AllWordsViewModel)
     viewModelOf(::NewSetViewModel)
+    viewModelOf(::LoginViewModel)
 }

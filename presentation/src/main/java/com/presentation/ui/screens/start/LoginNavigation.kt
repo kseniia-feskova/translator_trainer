@@ -23,20 +23,16 @@ fun NavGraphBuilder.loginScreen(
 
 @Composable
 fun LoginRoute(
+    //TODO: onLoginSuccess we need to check courseId in prefs and navigate to CourseSelection or to HomeScreen
     onLoginSuccess: () -> Unit,
     viewModel: LoginViewModel = koinViewModel()
 ) {
     val state = viewModel.uiState.collectAsState()
     LoginScreen(
         state = state.value,
-        onUsernameChanged = { viewModel.handleIntent(LoginIntent.UsernameChanged(it)) },
-        onEmailChanged = { viewModel.handleIntent(LoginIntent.EmailChanged(it)) },
-        onPasswordChanged = { viewModel.handleIntent(LoginIntent.PasswordChanged(it)) },
-        onSecondPasswordChanged = { viewModel.handleIntent(LoginIntent.RepeatPasswordChanged(it)) },
-        onSwitchAuth = { viewModel.handleIntent(LoginIntent.SwitchAuth) },
-        onEnterClicked = { viewModel.handleIntent(LoginIntent.EnterClicked(onLoginSuccess)) },
-        onCourseSelected = {viewModel.handleIntent(LoginIntent.SelectCourse(it))},
-        onHideCourses = {viewModel.handleIntent(LoginIntent.HideCourses)}
+        onEmailChanged = { viewModel.handleIntent(LoginIntent.OnLoginChanged(it)) },
+        onPasswordChanged = { viewModel.handleIntent(LoginIntent.OnPasswordChanged(it)) },
+        onLoginClicked = { viewModel.handleIntent(LoginIntent.Login) },
     )
 
 }

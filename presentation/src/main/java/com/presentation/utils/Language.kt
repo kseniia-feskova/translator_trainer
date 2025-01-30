@@ -1,6 +1,7 @@
 package com.presentation.utils
 
 import android.util.Log
+import com.presentation.R
 import com.presentation.utils.Language.ARABIC
 import com.presentation.utils.Language.CHINESE_TRADITIONAL
 import com.presentation.utils.Language.ENGLISH
@@ -46,3 +47,17 @@ fun String?.getLanguageByCode(): Language {
         RUSSIAN
     }
 }
+
+fun String?.getResourceByCode(): Int {
+    return try {
+        when (this) {
+            GERMAN.code -> R.drawable.germany
+            RUSSIAN.code -> R.drawable.russia
+            else -> throw Exception("Can not fund the drawable for language")
+        }
+    } catch (e: Exception) {
+        Log.e("getLanguageByCode", "Error = ${e.message}")
+        R.drawable.ic_account
+    }
+}
+

@@ -51,7 +51,8 @@ class MainActivity : AppCompatActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         enableEdgeToEdge(
-            statusBarStyle = SystemBarStyle.dark(
+            statusBarStyle = SystemBarStyle.auto(
+                android.graphics.Color.TRANSPARENT,
                 android.graphics.Color.TRANSPARENT
             )
         )
@@ -73,6 +74,7 @@ class MainActivity : AppCompatActivity() {
 
             LaunchedEffect(isUserAuthorized) {
                 if (!isUserAuthorized) {
+                    //TODO: we need to call logout flow
                     navController.navigateToLogin(
                         NavOptions.Builder()
                             .setPopUpTo(

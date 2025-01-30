@@ -3,6 +3,7 @@ package com.domain.mapper
 import com.data.model.course.CourseEntity
 import com.presentation.model.CourseUI
 import com.presentation.utils.getLanguageByCode
+import com.presentation.utils.getResourceByCode
 
 fun CourseEntity.toUI(): CourseUI {
     return CourseUI(
@@ -11,6 +12,8 @@ fun CourseEntity.toUI(): CourseUI {
         allWordsId = allWordsId,
         translateLanguage = targetLanguage.getLanguageByCode(),
         originalLanguage = sourceLanguage.getLanguageByCode(),
-        user = user.toUI()
+        originalFlag = sourceLanguage.getResourceByCode(),
+        translatedFlag = targetLanguage.getResourceByCode(),
+        userId = userId
     )
 }

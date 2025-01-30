@@ -18,16 +18,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.presentation.R
+import com.presentation.model.CourseUI
+import com.presentation.model.ruDeCourse
 import com.presentation.ui.AppTheme
-import com.presentation.model.CoursePreview
-import com.presentation.utils.Language
 
 @Composable
 fun CourseSelector(
     checked: Boolean = false,
     onCheckedChange: (Boolean) -> Unit = {},
-    course: CoursePreview
+    course: CourseUI
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -65,12 +64,7 @@ fun CourseSelectorPreview() {
     AppTheme {
         Surface {
             CourseSelector(
-                course = CoursePreview(
-                    originalFlag = R.drawable.russia,
-                    translatedFlag = R.drawable.germany,
-                    originalLanguage = Language.RUSSIAN,
-                    translateLanguage = Language.GERMAN
-                )
+                course = ruDeCourse
             )
         }
     }
