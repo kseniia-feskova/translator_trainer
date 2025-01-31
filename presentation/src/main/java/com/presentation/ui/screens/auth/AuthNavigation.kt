@@ -1,4 +1,4 @@
-package com.presentation.ui.screens.start
+package com.presentation.ui.screens.auth
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -9,30 +9,31 @@ import androidx.navigation.compose.composable
 import com.presentation.navigation.LeafScreen
 import org.koin.androidx.compose.koinViewModel
 
-fun NavController.navigateToLogin(
+fun NavController.navigateToAuth(
     navOptions: NavOptions? = null,
 ) {
     this.navigate(LeafScreen.Login.route, navOptions)
 }
 
-fun NavGraphBuilder.loginScreen(
-    onLoginSuccess: () -> Unit
+fun NavGraphBuilder.authScreen(
+    onAuth: () -> Unit
 ) {
-    composable(route = LeafScreen.Login.route) { LoginRoute(onLoginSuccess) }
+    composable(route = LeafScreen.Login.route) { AuthRoute(onAuth) }
 }
 
 @Composable
-fun LoginRoute(
+fun AuthRoute(
     //TODO: onLoginSuccess we need to check courseId in prefs and navigate to CourseSelection or to HomeScreen
-    onLoginSuccess: () -> Unit,
-    viewModel: LoginViewModel = koinViewModel()
+    onAuth: () -> Unit,
+    viewModel: AuthViewModel = koinViewModel()
 ) {
     val state = viewModel.uiState.collectAsState()
-    LoginScreen(
+    AuthScreen(
         state = state.value,
-        onEmailChanged = { viewModel.handleIntent(LoginIntent.OnLoginChanged(it)) },
-        onPasswordChanged = { viewModel.handleIntent(LoginIntent.OnPasswordChanged(it)) },
-        onLoginClicked = { viewModel.handleIntent(LoginIntent.Login) },
+        onEmailChanged = { viewModel.handleIntent(AuthIntent.OnEmailChanged(it)) },
+        onPasswordChanged = { viewModel.handleIntent(AuthIntent.OnPasswordChanged(it)) },
+        onAuthStateChanged = { viewModel.handleIntent(AuthIntent.ChangeScreen) },
+        onAuthClicked = { viewModel.handleIntent(AuthIntent.Auth) },
     )
 
 }

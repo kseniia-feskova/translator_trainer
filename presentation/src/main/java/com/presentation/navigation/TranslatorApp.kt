@@ -18,7 +18,7 @@ import com.presentation.ui.screens.newset.newSetScreen
 import com.presentation.ui.screens.set.navigateToSet
 import com.presentation.ui.screens.set.setScreen
 import com.presentation.ui.screens.sets.setsScreen
-import com.presentation.ui.screens.start.loginScreen
+import com.presentation.ui.screens.auth.authScreen
 
 @Composable
 fun TranslatorApp(navController: NavHostController, isUserAuthorized: Boolean = false) {
@@ -36,7 +36,7 @@ fun TranslatorApp(navController: NavHostController, isUserAuthorized: Boolean = 
 }
 
 private fun NavGraphBuilder.LoginNav(navController: NavHostController) {
-    loginScreen {
+    authScreen {
         navController.navigate(RootScreen.Home.route) {
             popUpTo(LeafScreen.Login.route) { inclusive = true }
         }

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name" translatable="false">Translator Trainer</string>
-    <string name="login_marquee">WELCOME BACK! </string>
-    <string name="login_subtitle">LOGIN WITH ACCOUNT</string>
+    <string name="login_marquee">Welcome back!</string>
+    <string name="login_subtitle">Login with account</string>
     <string name="email_label">E-mail</string>
     <string name="password_label">Password</string>
     <string name="forgot_password_label">Forgot password?</string>
@@ -12,5 +12,11 @@
     <string name="empty_fields_error">Enter all fields</string>
     <string name="user_does_not_exist_error">User does not exist</string>
     <string name="wrong_password_error">Wrong password</string>
+    <string name="taken_email_error">User with this e-mail is already exist</string>
     <string name="default_error">Something went wrong</string>
+
+    <string name="register_marquee">Nice to meet you!</string>
+    <string name="register_subtitle">Signup with e-mail</string>
+    <string name="signup_button">Sign up</string>
+
 </resources>

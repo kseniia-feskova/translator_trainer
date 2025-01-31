@@ -7,7 +7,7 @@ import com.presentation.ui.screens.lesson.LessonViewModel
 import com.presentation.ui.screens.newset.NewSetViewModel
 import com.presentation.ui.screens.set.SetViewModel
 import com.presentation.ui.screens.sets.SetsViewModel
-import com.presentation.ui.screens.start.LoginViewModel
+import com.presentation.ui.screens.auth.AuthViewModel
 import com.presentation.viewmodel.MainViewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.dsl.module
@@ -22,5 +22,5 @@ val viewModelModule = module {
     viewModelOf(::LessonViewModel)
     viewModelOf(::AllWordsViewModel)
     viewModelOf(::NewSetViewModel)
-    viewModelOf(::LoginViewModel)
+    viewModelOf(::AuthViewModel)
 }

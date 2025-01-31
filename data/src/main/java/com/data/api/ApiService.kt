@@ -2,9 +2,8 @@ package com.data.api
 
 import com.data.model.course.CourseEntity
 import com.data.model.UserEntity
-import com.data.model.auth.AuthRequest
 import com.data.model.auth.AuthResponse
-import com.data.model.auth.LoginRequest
+import com.data.model.auth.AuthRequest
 import com.data.model.auth.RefreshTokenRequest
 import com.data.model.course.get.GetAllCoursesRequest
 import com.data.model.sets.AddSetRequest
@@ -29,7 +28,7 @@ interface ApiService {
     suspend fun register(@Body authRequest: AuthRequest): Response<AuthResponse>
 
     @POST("auth/login")
-    suspend fun login(@Body authRequest: LoginRequest): Response<AuthResponse>
+    suspend fun login(@Body authRequest: AuthRequest): Response<AuthResponse>
 
     @POST("auth/refresh")
     suspend fun refreshToken(@Body tokenRequest: RefreshTokenRequest): Response<AuthResponse>

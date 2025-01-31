@@ -2,9 +2,8 @@ package com.data.repository.auth
 
 import com.data.api.ApiService
 import com.data.api.Result
-import com.data.model.auth.AuthRequest
 import com.data.model.auth.AuthResponse
-import com.data.model.auth.LoginRequest
+import com.data.model.auth.AuthRequest
 import com.data.model.auth.RefreshTokenRequest
 import com.data.prefs.ITokenStorage
 import com.data.prefs.TokenStorage.Companion.ACCESS_TOKEN
@@ -19,16 +18,12 @@ class AuthRepository(
     override suspend fun register(
         email: String,
         username: String,
-        password: String,
-        originalLanguage: String,
-        translateLanguage: String
+        password: String
     ): Result<AuthResponse> {
         val request = AuthRequest(
             email = email,
             username = username,
-            password = password,
-            originalLanguage = originalLanguage,
-            translateLanguage = translateLanguage
+            password = password
         )
         return safeCall(
             request = { service.register(request) },
@@ -48,7 +43,7 @@ class AuthRepository(
         username: String,
         password: String
     ): Result<AuthResponse> {
-        val request = LoginRequest(email = email, username = username, password = password)
+        val request = AuthRequest(email = email, username = username, password = password)
         return safeCall({
             service.login(request)
         }, onSuccess = { body ->

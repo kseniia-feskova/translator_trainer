@@ -32,7 +32,7 @@ import com.presentation.navigation.LeafScreen
 import com.presentation.navigation.TranslatorApp
 import com.presentation.ui.AppTheme
 import com.presentation.ui.screens.lesson.LessonType
-import com.presentation.ui.screens.start.navigateToLogin
+import com.presentation.ui.screens.auth.navigateToAuth
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity() {
             LaunchedEffect(isUserAuthorized) {
                 if (!isUserAuthorized) {
                     //TODO: we need to call logout flow
-                    navController.navigateToLogin(
+                    navController.navigateToAuth(
                         NavOptions.Builder()
                             .setPopUpTo(
                                 navController.graph.startDestinationId,
