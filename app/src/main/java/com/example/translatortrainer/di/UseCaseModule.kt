@@ -16,6 +16,7 @@ import com.domain.usecase.auth.DeleteUseCase
 import com.domain.usecase.auth.LoginUseCase
 import com.domain.usecase.auth.LogoutUseCase
 import com.domain.usecase.auth.RegisterUseCase
+import com.domain.usecase.course.AddCourseUseCase
 import com.domain.usecase.course.GetAllCoursesUseCase
 import com.domain.usecase.course.GetCourseUseCase
 import com.domain.usecase.words.AddWordUseCase
@@ -41,6 +42,7 @@ import com.presentation.usecases.auth.IDeleteUseCase
 import com.presentation.usecases.auth.ILoginUseCase
 import com.presentation.usecases.auth.ILogoutUseCase
 import com.presentation.usecases.auth.IRegisterUseCase
+import com.presentation.usecases.course.IAddCourseUseCase
 import com.presentation.usecases.course.IGetAllCoursesUseCase
 import com.presentation.usecases.course.IGetCourseUseCase
 import com.presentation.usecases.words.IAddWordUseCase
@@ -61,6 +63,8 @@ val useCaseModule = module {
     singleOf(::RegisterUseCase) bind IRegisterUseCase::class
 
     singleOf(::LoginUseCase) bind ILoginUseCase::class
+
+    singleOf(::AddCourseUseCase) bind IAddCourseUseCase::class
 
     singleOf(::AddWordUseCase) bind IAddWordUseCase::class
 

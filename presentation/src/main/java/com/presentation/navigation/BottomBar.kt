@@ -41,6 +41,7 @@ enum class RootScreen(val route: String, val iconRes: Int) {
 @Serializable
 sealed class LeafScreen(val route: String) {
     object Login: LeafScreen("login")
+    object SelectCourse: LeafScreen("select_course")
     object Home : LeafScreen("home")
     object Sets : LeafScreen("sets")
     object Account:LeafScreen("account")

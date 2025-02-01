@@ -11,7 +11,11 @@ data class AuthUIState(
 )
 
 sealed class AuthIntent {
-    object Auth : AuthIntent()
+    data class Auth(
+        val goToCourses: () -> Unit,
+        val goToHome: () -> Unit
+    ) : AuthIntent()
+
     object ChangeScreen : AuthIntent()
     data class OnEmailChanged(val login: String) : AuthIntent()
     data class OnPasswordChanged(val password: String) : AuthIntent()

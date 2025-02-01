@@ -1,30 +1,27 @@
 package com.presentation.test
 
+import com.presentation.R
+import com.presentation.model.CourseUI
 import com.presentation.model.Level
 import com.presentation.model.SetOfCards
 import com.presentation.model.WordUI
+import com.presentation.utils.Language
 import java.util.UUID
 
 
 // не самая полезная вещь, но вдруг нужны будут тестовые наборы, хотя они тут очень неудобно собираються
 val smallList = listOf(
-    WordUI(UUID.fromString("0"), "deutsches Wort", "немецкое слово", Level.getRandom()),
-    WordUI(UUID.fromString("1"), "Katze", "Котик", Level.getRandom()),
-    WordUI(UUID.fromString("2"), "Mutter", "Мама", Level.getRandom()),
-    WordUI(UUID.fromString("3"), "Vater", "Отец, папа", Level.getRandom()),
-    WordUI(UUID.fromString("4"), "Spiegel", "Зеркало", Level.getRandom()),
-    WordUI(UUID.fromString("5"), "Sprache", "Язык, речь", Level.getRandom()),
-    WordUI(UUID.fromString("6"), "deutsches Wort", "немецкое слово", Level.getRandom()),
-    WordUI(UUID.fromString("7"), "Katze", "Котик", Level.getRandom()),
-    WordUI(UUID.fromString("8"), "Mutter", "Мама", Level.getRandom())
+    WordUI(UUID.randomUUID(), "deutsches Wort", "немецкое слово", Level.getRandom()),
+    WordUI(UUID.randomUUID(), "Katze", "Котик", Level.getRandom()),
+    WordUI(UUID.randomUUID(), "Mutter", "Мама", Level.getRandom())
 )
 
 val mockSetOfCard = SetOfCards(
-    UUID.fromString("0"),
+    UUID.randomUUID(),
     "Набор",
     isDefault = false,
     emptySet(),
-    UUID.fromString("1")
+    UUID.randomUUID()
 )
 
 val mockListOfSets = listOf(
@@ -32,4 +29,37 @@ val mockListOfSets = listOf(
     mockSetOfCard.copy(title = "Новые слова"),
     mockSetOfCard.copy(title = "Приключение к центру земли", setOfWords = smallList.toSet()),
     mockSetOfCard.copy(title = "Все слова"),
+)
+
+val dummyCourses = listOf(
+    CourseUI(
+        originalLanguage = Language.RUSSIAN,
+        translateLanguage = Language.GERMAN,
+        originalFlag = R.drawable.ic_ru,
+        translatedFlag = R.drawable.ic_de,
+        userId = UUID.randomUUID(),
+        id = UUID.randomUUID(),
+        allWordsId = null,
+        selectedSetId = null
+    ),
+    CourseUI(
+        originalLanguage = Language.FRENCH,
+        translateLanguage = Language.GERMAN,
+        originalFlag = R.drawable.ic_fr,
+        translatedFlag = R.drawable.ic_de,
+        userId = UUID.randomUUID(),
+        id = UUID.randomUUID(),
+        allWordsId = null,
+        selectedSetId = null
+    ),
+    CourseUI(
+        originalLanguage = Language.RUSSIAN,
+        translateLanguage = Language.FRENCH,
+        originalFlag = R.drawable.ic_ru,
+        translatedFlag = R.drawable.ic_fr,
+        userId = UUID.randomUUID(),
+        id = UUID.randomUUID(),
+        allWordsId = null,
+        selectedSetId = null
+    )
 )

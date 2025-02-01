@@ -90,6 +90,7 @@ class MainActivity : AppCompatActivity() {
                 currentRoute?.contains(LeafScreen.Lesson("0", LessonType.TRANSLATE).route) ?: true -> false
                 currentRoute?.contains(LeafScreen.NewSet.route) ?: true -> false
                 currentRoute?.contains(LeafScreen.Login.route) ?: true -> false
+                currentRoute?.contains(LeafScreen.SelectCourse.route) ?: true -> false
                 else -> true
             }
             AppTheme {

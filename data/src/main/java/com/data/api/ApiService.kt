@@ -1,18 +1,19 @@
 package com.data.api
 
-import com.data.model.course.CourseEntity
 import com.data.model.UserEntity
-import com.data.model.auth.AuthResponse
 import com.data.model.auth.AuthRequest
+import com.data.model.auth.AuthResponse
 import com.data.model.auth.RefreshTokenRequest
+import com.data.model.course.CourseEntity
+import com.data.model.course.add.AddCourseRequest
 import com.data.model.course.get.GetAllCoursesRequest
 import com.data.model.sets.AddSetRequest
 import com.data.model.sets.SetResponse
+import com.data.model.sets.get.all.GetAllRequest
 import com.data.model.words.AddWordRequest
 import com.data.model.words.WordResponse
 import com.data.model.words.get.bytranslate.WordByOriginalRequest
 import com.data.model.words.get.bytranslate.WordByTranslatedRequest
-import com.data.model.sets.get.all.GetAllRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -47,8 +48,12 @@ interface ApiService {
     @GET("course/{uuid}")
     suspend fun getCourseById(@Path("uuid") uuid: String): Response<CourseEntity>
 
-    @POST("course/get_all")
+    @POST("course/get_for_user")
     suspend fun getAllCourses(@Body request: GetAllCoursesRequest): Response<List<CourseEntity>>
+
+    @POST("course/add")
+    suspend fun addCourse(@Body request: AddCourseRequest): Response<CourseEntity>
+
 
     //end of region
 

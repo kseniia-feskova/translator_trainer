@@ -16,15 +16,16 @@ fun NavController.navigateToAuth(
 }
 
 fun NavGraphBuilder.authScreen(
-    onAuth: () -> Unit
+    goToCourses: () -> Unit,
+    goToHome: () -> Unit
 ) {
-    composable(route = LeafScreen.Login.route) { AuthRoute(onAuth) }
+    composable(route = LeafScreen.Login.route) { AuthRoute(goToCourses, goToHome) }
 }
 
 @Composable
 fun AuthRoute(
-    //TODO: onLoginSuccess we need to check courseId in prefs and navigate to CourseSelection or to HomeScreen
-    onAuth: () -> Unit,
+    goToCourses: () -> Unit,
+    goToHome: () -> Unit,
     viewModel: AuthViewModel = koinViewModel()
 ) {
     val state = viewModel.uiState.collectAsState()
@@ -33,7 +34,7 @@ fun AuthRoute(
         onEmailChanged = { viewModel.handleIntent(AuthIntent.OnEmailChanged(it)) },
         onPasswordChanged = { viewModel.handleIntent(AuthIntent.OnPasswordChanged(it)) },
         onAuthStateChanged = { viewModel.handleIntent(AuthIntent.ChangeScreen) },
-        onAuthClicked = { viewModel.handleIntent(AuthIntent.Auth) },
+        onAuthClicked = { viewModel.handleIntent(AuthIntent.Auth(goToCourses, goToHome)) },
     )
 
 }

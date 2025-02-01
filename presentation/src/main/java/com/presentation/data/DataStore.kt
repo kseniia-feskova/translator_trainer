@@ -5,6 +5,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.presentation.model.CourseUI
 import com.presentation.utils.Language
 import com.presentation.utils.getLanguageByCode
 import kotlinx.coroutines.flow.Flow
@@ -29,6 +30,9 @@ interface IDataStoreManager {
     suspend fun getAllWordsSetId(): UUID?
     suspend fun getOriginalLanguage(): Language?
     suspend fun getResultLanguage(): Language?
+
+    fun saveCourses(courses: List<CourseUI>)
+    fun getCourses(): List<CourseUI>
 }
 
 class DataStoreManager(private val context: Context) : IDataStoreManager {
@@ -53,6 +57,8 @@ class DataStoreManager(private val context: Context) : IDataStoreManager {
                 UUID.fromString(preferences[USER_ID])
             }
         }
+
+    private val coursesList = mutableListOf<CourseUI>()
 
     override fun listenUserId(): Flow<UUID?> = userId
 
@@ -126,7 +132,7 @@ class DataStoreManager(private val context: Context) : IDataStoreManager {
         }
     }
 
-    override suspend fun getAllWordsSetId(): UUID?  = context.dataStore.data.map { preferences ->
+    override suspend fun getAllWordsSetId(): UUID? = context.dataStore.data.map { preferences ->
         if (preferences[ALL_WORDS_ID].isNullOrEmpty()) {
             null
         } else {
@@ -145,4 +151,12 @@ class DataStoreManager(private val context: Context) : IDataStoreManager {
             preferences[RESULT_LANGUAGE]
         }.firstOrNull().getLanguageByCode()
     }
+
+    override fun saveCourses(courses: List<CourseUI>) {
+        coursesList.clear()
+        coursesList.addAll(courses)
+    }
+
+    override fun getCourses(): List<CourseUI> = coursesList.toList()
+
 }

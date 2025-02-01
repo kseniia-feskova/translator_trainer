@@ -8,6 +8,7 @@ import androidx.navigation.navigation
 import com.presentation.ui.screens.account.accountScreen
 import com.presentation.ui.screens.all.allWordsScreen
 import com.presentation.ui.screens.all.navigateToAllWords
+import com.presentation.ui.screens.auth.authScreen
 import com.presentation.ui.screens.home.homeScreen
 import com.presentation.ui.screens.home.navigateToHome
 import com.presentation.ui.screens.lesson.LessonType
@@ -15,10 +16,10 @@ import com.presentation.ui.screens.lesson.lessonScreen
 import com.presentation.ui.screens.lesson.navigateToLesson
 import com.presentation.ui.screens.newset.navigateToNewSet
 import com.presentation.ui.screens.newset.newSetScreen
+import com.presentation.ui.screens.select_course.selectCourseScreen
 import com.presentation.ui.screens.set.navigateToSet
 import com.presentation.ui.screens.set.setScreen
 import com.presentation.ui.screens.sets.setsScreen
-import com.presentation.ui.screens.auth.authScreen
 
 @Composable
 fun TranslatorApp(navController: NavHostController, isUserAuthorized: Boolean = false) {
@@ -36,11 +37,25 @@ fun TranslatorApp(navController: NavHostController, isUserAuthorized: Boolean = 
 }
 
 private fun NavGraphBuilder.LoginNav(navController: NavHostController) {
-    authScreen {
-        navController.navigate(RootScreen.Home.route) {
-            popUpTo(LeafScreen.Login.route) { inclusive = true }
+    authScreen(
+        goToCourses = {
+            navController.navigate(LeafScreen.SelectCourse.route) {
+                popUpTo(LeafScreen.Login.route) { inclusive = true }
+            }
+        },
+        goToHome = {
+            navController.navigate(RootScreen.Home.route) {
+                popUpTo(LeafScreen.Login.route) { inclusive = true }
+            }
         }
-    }
+    )
+    selectCourseScreen(
+        goToHome = {
+            navController.navigate(RootScreen.Home.route) {
+                popUpTo(LeafScreen.Login.route) { inclusive = true }
+            }
+        }
+    )
 }
 
 private fun NavGraphBuilder.HomeNav() {
