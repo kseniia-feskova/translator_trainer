@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name" translatable="false">Translator Trainer</string>
+    <string name="login_marquee">Добро пожаловать!</string>
+    <string name="login_subtitle">Войти с аккаунтом</string>
+    <string name="email_label">Почта</string>
+    <string name="password_label">Пароль</string>
+    <string name="forgot_password_label">Забыли пароль?</string>
+    <string name="guest_button">Я гость</string>
+    <string name="create_account_button">Создать аккаунт</string>
+    <string name="login_button">Войти</string>
+    <string name="or_view">или</string>
+    <string name="empty_fields_error">Заполните все поля</string>
+    <string name="user_does_not_exist_error">Пользователя не существует</string>
+    <string name="wrong_password_error">Неправильный пароль</string>
+    <string name="taken_email_error">Пользователь с такой почтой уже существует</string>
+    <string name="default_error">Что-то пошло не так</string>
+
+    <string name="register_marquee">Рады вас видеть!</string>
+    <string name="register_subtitle">Зарегестрироваться с почтой</string>
+    <string name="signup_button">Войти</string>
+
+</resources>

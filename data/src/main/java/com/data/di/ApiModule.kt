@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
+import com.data.BuildConfig
 import com.data.api.ApiService
 import com.data.api.AuthInterceptor
 import com.data.prefs.ITokenStorage
@@ -15,7 +16,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-private const val BASE_URL = "http://10.0.2.2:8080/api/"
+private const val BASE_URL = BuildConfig.BASE_URL
 
 fun provideOkHttpClient(tokenProvider: ITokenStorage): OkHttpClient {
     val loggingInterceptor = HttpLoggingInterceptor().apply {

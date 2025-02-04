@@ -9,6 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.translatortrainer"
+        android.buildFeatures.buildConfig true
         minSdk 26
         targetSdk 34
         versionCode 2
@@ -41,6 +42,17 @@ android {
     kapt {
         arguments {
             arg("room.schemaLocation", "$projectDir/schemas")
+        }
+    }
+
+    flavorDimensions += "version"
+    productFlavors {
+        create("dev") {
+            buildConfigField("String", "BASE_URL", "\"https://10.0.2.2:8080/api/\"")
+        }
+
+        create("qa") {
+            buildConfigField("String", "BASE_URL", "\"https://18.193.113.17:8080/api/\"")
         }
     }
 }
