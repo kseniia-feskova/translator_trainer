@@ -17,7 +17,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
-import androidx.navigation.NavOptions
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.data.di.databaseModule
@@ -32,7 +31,6 @@ import com.presentation.navigation.LeafScreen
 import com.presentation.navigation.TranslatorApp
 import com.presentation.ui.AppTheme
 import com.presentation.ui.screens.lesson.LessonType
-import com.presentation.ui.screens.auth.navigateToAuth
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -74,16 +72,16 @@ class MainActivity : AppCompatActivity() {
 
             LaunchedEffect(isUserAuthorized) {
                 if (!isUserAuthorized) {
-                    //TODO: we need to call logout flow
-                    navController.navigateToAuth(
-                        NavOptions.Builder()
-                            .setPopUpTo(
-                                navController.graph.startDestinationId,
-                                inclusive = true
-                            )
-                            .setLaunchSingleTop(true)
-                            .build()
-                    )
+//                    //TODO: we need to call logout flow
+//                    navController.navigateToAuth(
+//                        NavOptions.Builder()
+//                            .setPopUpTo(
+//                                navController.graph.startDestinationId,
+//                                inclusive = true
+//                            )
+//                            .setLaunchSingleTop(true)
+//                            .build()
+//                    )
                 }
             }
             val shouldShowBottomBar = when {

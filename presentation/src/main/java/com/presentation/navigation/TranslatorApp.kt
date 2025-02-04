@@ -3,12 +3,14 @@ package com.presentation.navigation
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navigation
 import com.presentation.ui.screens.account.accountScreen
 import com.presentation.ui.screens.all.allWordsScreen
 import com.presentation.ui.screens.all.navigateToAllWords
 import com.presentation.ui.screens.auth.authScreen
+import com.presentation.ui.screens.auth.navigateToAuth
 import com.presentation.ui.screens.home.homeScreen
 import com.presentation.ui.screens.home.navigateToHome
 import com.presentation.ui.screens.lesson.LessonType
@@ -50,6 +52,17 @@ private fun NavGraphBuilder.LoginNav(navController: NavHostController) {
         }
     )
     selectCourseScreen(
+        navigateUp = {
+            navController.navigateToAuth(
+                NavOptions.Builder()
+                    .setPopUpTo(
+                        navController.graph.startDestinationId,
+                        inclusive = true
+                    )
+                    .setLaunchSingleTop(true)
+                    .build()
+            )
+        },
         goToHome = {
             navController.navigate(RootScreen.Home.route) {
                 popUpTo(LeafScreen.Login.route) { inclusive = true }

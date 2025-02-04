@@ -45,6 +45,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
@@ -87,7 +88,7 @@ fun AuthScreen(
 ) {
 
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize().background(bgColor)
     ) {
         Spacer(Modifier.height(24.dp))
         MarqueeText(
@@ -448,8 +449,8 @@ fun OrView() {
 }
 
 @Composable
-fun CustomShadowButton(text: String, icon: Painter? = null, onClick: () -> Unit = {}) {
-    Box() {
+fun CustomShadowButton(text: String, icon: Painter? = null, onClick: () -> Unit = {}, modifier: Modifier = Modifier) {
+    Box(modifier = modifier) {
         Spacer(
             modifier = Modifier
                 .padding(top = 5.dp)
@@ -464,6 +465,9 @@ fun CustomShadowButton(text: String, icon: Painter? = null, onClick: () -> Unit 
             onClick = { onClick() },
             modifier = Modifier
                 .fillMaxWidth()
+                .height(42.dp)
+                .clip(shape = RoundedCornerShape(30.dp))
+                .background(Color.White)
                 .border(
                     1.dp,
                     color = fieldBorderColor,

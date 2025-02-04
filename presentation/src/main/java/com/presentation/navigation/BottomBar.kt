@@ -27,7 +27,6 @@ import com.presentation.R
 import com.presentation.ui.AppTheme
 import com.presentation.ui.accentColorLight
 import com.presentation.ui.onSurfaceLight
-import com.presentation.ui.primaryColorLight
 import com.presentation.ui.screens.lesson.LessonType
 import com.presentation.ui.surfaceLight
 import kotlinx.serialization.Serializable
@@ -65,7 +64,7 @@ fun BottomNavigationBar(navController: NavController) {
             .clip(
                 shape = RoundedCornerShape(12.dp, 12.dp, 0.dp, 0.dp),
             ),
-        containerColor = primaryColorLight
+        containerColor = Color.White
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination

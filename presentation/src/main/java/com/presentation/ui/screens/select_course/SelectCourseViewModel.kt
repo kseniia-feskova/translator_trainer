@@ -38,15 +38,16 @@ class SelectCourseViewModel(
     fun handleIntent(intent: SelectCourseIntent) {
         when (intent) {
             is SelectCourseIntent.OnContinueClicked -> handleContinue(intent.goToHome)
-            SelectCourseIntent.OnBackClicked -> handleBackClicked()
+            is SelectCourseIntent.OnBackClicked -> handleBackClicked(intent.navigateUp)
             is SelectCourseIntent.OnCourseSelected -> handleSelectedCourse(intent.courseUI)
         }
     }
 
-    private fun handleBackClicked() {
+    private fun handleBackClicked(navigateUp: () -> Unit) {
         viewModelScope.launch {
             logout.invoke()
             dataStore.saveUserId(null)
+            navigateUp()
         }
     }
 

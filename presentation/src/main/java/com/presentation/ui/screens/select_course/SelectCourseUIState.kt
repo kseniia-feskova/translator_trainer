@@ -10,5 +10,5 @@ data class SelectCourseUIState(
 sealed class SelectCourseIntent {
     data class OnCourseSelected(val courseUI: CourseUI) : SelectCourseIntent()
     data class OnContinueClicked(val goToHome: () -> Unit) : SelectCourseIntent()
-    object OnBackClicked : SelectCourseIntent()
+    data class OnBackClicked(val navigateUp: () -> Unit) : SelectCourseIntent()
 }

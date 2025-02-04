@@ -16,23 +16,25 @@ fun NavController.navigateToSelectCourse(
 }
 
 fun NavGraphBuilder.selectCourseScreen(
+    navigateUp: () -> Unit,
     goToHome: () -> Unit
-){
+) {
     composable(route = LeafScreen.SelectCourse.route) {
-        SelectCourseRoute(goToHome)
+        SelectCourseRoute(goToHome, navigateUp)
     }
 }
 
 @Composable
 fun SelectCourseRoute(
-    goToHome:()->Unit,
+    goToHome: () -> Unit,
+    navigateUp: () -> Unit,
     viewModel: SelectCourseViewModel = koinViewModel()
-){
+) {
     val state = viewModel.uiState.collectAsState()
     SelectCourseScreen(
         state = state.value,
-        onCourseSelected = {viewModel.handleIntent(SelectCourseIntent.OnCourseSelected(it))},
-        onContinueClicked = {viewModel.handleIntent(SelectCourseIntent.OnContinueClicked(goToHome))},
-        onBackClicked = {viewModel.handleIntent(SelectCourseIntent.OnBackClicked)}
+        onCourseSelected = { viewModel.handleIntent(SelectCourseIntent.OnCourseSelected(it)) },
+        onContinueClicked = { viewModel.handleIntent(SelectCourseIntent.OnContinueClicked(goToHome)) },
+        onBackClicked = { viewModel.handleIntent(SelectCourseIntent.OnBackClicked(navigateUp)) }
     )
 }

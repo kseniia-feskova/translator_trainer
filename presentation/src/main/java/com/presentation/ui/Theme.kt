@@ -6,6 +6,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
@@ -27,8 +28,8 @@ fun AppTheme(
         SideEffect {
             val window = (view.context as Activity).window
             val insetsController = WindowCompat.getInsetsController(window, view)
-            window.statusBarColor = colors.primary.toArgb()
-            window.navigationBarColor = colors.primary.toArgb()
+            window.statusBarColor = Color.Transparent.toArgb()//primary.toArgb()
+            window.navigationBarColor = Color.Transparent.toArgb()
             insetsController.isAppearanceLightStatusBars = !darkTheme
             insetsController.isAppearanceLightNavigationBars = !darkTheme
         }
@@ -41,9 +42,9 @@ fun AppTheme(
 }
 
 private val LightColors = lightColorScheme(
-    primary = bgColor,
-    surface = bgColor,
-    background = bgColor
+    primary = whiteColor,
+    surface = whiteColor,
+    background = whiteColor
 //    onPrimary = onPrimaryColorLight,
 //    surface = bgColor,
 //    background = bgColor,

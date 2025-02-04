@@ -56,7 +56,7 @@ fun SelectCourseScreen(
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
 
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize().background(bgColor)
     )
     {
         BackgroundDecorAnimated()
