@@ -7,7 +7,7 @@ import java.util.UUID
 
 class AddWordToSetUseCase(private val repo: IWordsDaoRepository) : IAddWordToSetUseCase {
 
-    override suspend fun invoke(setId: Int, wordId: UUID) {
+    override suspend fun invoke(setId: UUID, wordId: UUID) {
         repo.insertSetWordCrossRef(SetWordCrossRef(setId, wordId))
     }
 

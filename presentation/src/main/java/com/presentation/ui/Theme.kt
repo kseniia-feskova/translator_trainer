@@ -28,7 +28,7 @@ fun AppTheme(
         SideEffect {
             val window = (view.context as Activity).window
             val insetsController = WindowCompat.getInsetsController(window, view)
-            window.statusBarColor = Color.Transparent.toArgb()//primary.toArgb()
+            window.statusBarColor = bgColor.toArgb()//primary.toArgb()
             window.navigationBarColor = Color.Transparent.toArgb()
             insetsController.isAppearanceLightStatusBars = !darkTheme
             insetsController.isAppearanceLightNavigationBars = !darkTheme

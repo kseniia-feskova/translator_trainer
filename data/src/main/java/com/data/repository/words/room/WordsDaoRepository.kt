@@ -6,7 +6,6 @@ import com.data.model.SetWordCrossRef
 import com.data.model.WordEntity
 import com.data.room.WordDao
 import kotlinx.coroutines.flow.Flow
-import java.util.Date
 import java.util.UUID
 
 class WordsDaoRepository(
@@ -39,13 +38,6 @@ class WordsDaoRepository(
 
     override fun getWordsInSet(setId: Int): Flow<SetWithWords> {
         return dao.getSetWithWords(setId)
-    }
-
-    override fun getWordsFilteredByDateOrStatus(
-        startDate: Date,
-        endDate: Date
-    ): Flow<List<WordEntity>> {
-        return dao.getWordsFilteredByDate(startDate, endDate)
     }
 
     override suspend fun insertSetWordCrossRef(crossRef: SetWordCrossRef) {

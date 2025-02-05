@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "6bb4289f4d49410a9f719288a19bddc0",
+    "identityHash": "07db26d9c8b1072d6b8387052e64d85f",
     "entities": [
       {
         "tableName": "words",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` BLOB NOT NULL, `original` TEXT NOT NULL, `translation` TEXT NOT NULL, `status` TEXT NOT NULL, `dateAdded` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` BLOB NOT NULL, `originalText` TEXT NOT NULL, `translatedText` TEXT NOT NULL, `status` TEXT NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -15,14 +15,14 @@
             "notNull": true
           },
           {
-            "fieldPath": "original",
-            "columnName": "original",
+            "fieldPath": "originalText",
+            "columnName": "originalText",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "translation",
-            "columnName": "translation",
+            "fieldPath": "translatedText",
+            "columnName": "translatedText",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -30,12 +30,6 @@
             "fieldPath": "status",
             "columnName": "status",
             "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "dateAdded",
-            "columnName": "dateAdded",
-            "affinity": "INTEGER",
             "notNull": true
           }
         ],
@@ -50,12 +44,12 @@
       },
       {
         "tableName": "sets_of_words",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `level` TEXT NOT NULL, `isDefault` INTEGER NOT NULL, `courseId` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` BLOB NOT NULL, `name` TEXT NOT NULL, `level` TEXT NOT NULL, `isDefault` INTEGER NOT NULL, `courseId` BLOB NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
-            "affinity": "INTEGER",
+            "affinity": "BLOB",
             "notNull": true
           },
           {
@@ -79,12 +73,12 @@
           {
             "fieldPath": "courseId",
             "columnName": "courseId",
-            "affinity": "INTEGER",
+            "affinity": "BLOB",
             "notNull": true
           }
         ],
         "primaryKey": {
-          "autoGenerate": true,
+          "autoGenerate": false,
           "columnNames": [
             "id"
           ]
@@ -94,12 +88,12 @@
       },
       {
         "tableName": "set_word_cross_ref",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`setId` INTEGER NOT NULL, `wordId` BLOB NOT NULL, PRIMARY KEY(`setId`, `wordId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`setId` BLOB NOT NULL, `wordId` BLOB NOT NULL, PRIMARY KEY(`setId`, `wordId`))",
         "fields": [
           {
             "fieldPath": "setId",
             "columnName": "setId",
-            "affinity": "INTEGER",
+            "affinity": "BLOB",
             "notNull": true
           },
           {
@@ -133,7 +127,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6bb4289f4d49410a9f719288a19bddc0')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '07db26d9c8b1072d6b8387052e64d85f')"
     ]
   }
 }

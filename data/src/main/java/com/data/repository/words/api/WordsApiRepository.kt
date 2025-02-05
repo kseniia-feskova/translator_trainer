@@ -4,6 +4,7 @@ import com.data.api.ApiService
 import com.data.api.Result
 import com.data.model.words.AddWordRequest
 import com.data.model.words.WordResponse
+import com.data.model.words.get.bytranslate.WordByOriginalRequest
 import com.data.model.words.get.bytranslate.WordByTranslatedRequest
 import com.data.safeCall
 
@@ -17,6 +18,10 @@ class WordsApiRepository(
 
     override suspend fun getWordByTranslated(request: WordByTranslatedRequest): Result<WordResponse> {
         return safeCall(request = { apiService.getWordByTranslated(request) })
+    }
+
+    override suspend fun getWordByOriginal(request: WordByOriginalRequest): Result<WordResponse> {
+        return safeCall(request = { apiService.getWordByOriginal(request) })
     }
 
 }

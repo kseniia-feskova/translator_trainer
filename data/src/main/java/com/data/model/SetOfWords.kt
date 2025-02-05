@@ -10,11 +10,11 @@ import java.util.UUID
 
 @Entity(tableName = "sets_of_words")
 data class SetOfWords(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @PrimaryKey val id: UUID = UUID.randomUUID(),
     val name: String,
     val level: SetLevel,
     val isDefault:Boolean,
-    val courseId: Int // Внешний ключ на пользователя
+    val courseId: UUID // Внешний ключ на пользователя
 )
 
 enum class SetLevel {
@@ -29,7 +29,7 @@ enum class SetLevel {
     indices = [Index(value = ["wordId"])]
 )
 data class SetWordCrossRef(
-    val setId: Int,
+    val setId: UUID,
     val wordId: UUID
 )
 data class SetWithWords(

@@ -20,7 +20,6 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
 
-
 interface ApiService {
 
     //auth region
@@ -59,7 +58,7 @@ interface ApiService {
 
     //set region
 
-    @GET("sets/get_all")
+    @POST("sets/get_all")
     suspend fun getAllSets(@Body request: GetAllRequest): Response<List<SetResponse>>
 
     @POST("sets/add")
@@ -75,11 +74,10 @@ interface ApiService {
     @POST("words/check_by_translated")
     suspend fun getWordByTranslated(@Body request: WordByTranslatedRequest): Response<WordResponse>
 
-    @POST("words/check_by_original")
+    @POST("words/check_by_origin")
     suspend fun getWordByOriginal(@Body request: WordByOriginalRequest): Response<WordResponse>
 
     //end of region
-
 }
 
 data class ErrorDetails(

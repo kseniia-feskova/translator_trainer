@@ -8,29 +8,29 @@ import java.util.UUID
 
 fun WordUI.toNewWordEntity(): WordEntity {
     return WordEntity(
-        original = originalText,
-        translation = resText,
+        originalText = originalText,
+        translatedText = resText,
         status = level.toStatus(),
-        dateAdded = date
+//        dateAdded = date
     )
 }
 fun WordUI.toWordEntity(): WordEntity {
     return WordEntity(
         id = id,
-        original = originalText,
-        translation = resText,
+        originalText = originalText,
+        translatedText = resText,
         status = level.toStatus(),
-        dateAdded = date
+//        dateAdded = date
     )
 }
 
 fun WordEntity.toWord(): WordUI {
     return WordUI(
         id = id,
-        originalText = original,
-        resText = translation,
+        originalText = originalText,
+        resText = translatedText,
         level = status.toLevel(),
-        date = dateAdded
+//        date = dateAdded
     )
 }
 

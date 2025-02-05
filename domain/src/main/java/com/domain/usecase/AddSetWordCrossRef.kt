@@ -8,7 +8,7 @@ class AddSetWordCrossRef(
     private val repository: IWordsDaoRepository
 ) : com.presentation.usecases.IAddSetWordCrossRefUseCase {
 
-    override suspend fun invoke(wordID: UUID, setID: Int) {
+    override suspend fun invoke(wordID: UUID, setID: UUID) {
         repository.insertSetWordCrossRef(
             SetWordCrossRef(
                 setId = setID,

@@ -1,15 +1,16 @@
 package com.presentation.model
 
 import com.presentation.utils.Language
-import java.util.UUID
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class CourseUI(
-    val id: UUID,
+    val id: String,
     val originalLanguage: Language,
     val translateLanguage: Language,
     val originalFlag: Int,
     val translatedFlag: Int,
-    val allWordsId: UUID?,
-    val selectedSetId: UUID?,
-    val userId: UUID
+    val allWordsId: String?,
+    val selectedSetId: String?,
+    val userId: String
 )

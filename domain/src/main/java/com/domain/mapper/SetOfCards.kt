@@ -13,7 +13,7 @@ fun SetResponse.toUI(): SetOfCards {
     return SetOfCards(
         id = id,
         title = name,
-        isDefault = is_default,
-        courseId = course.id
+        isDefault = isDefault,
+        words = words.map { it.toWord() },
     )
 }

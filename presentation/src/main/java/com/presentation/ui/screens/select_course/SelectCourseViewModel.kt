@@ -66,7 +66,7 @@ class SelectCourseViewModel(
             if (state.courses == dummyCourses) {
                 createNewCourse(userId, state.selectedCourse)
             } else {
-                dataStore.saveCourseId(state.selectedCourse.id)
+                dataStore.saveCourse(state.selectedCourse)
             }
             goToHome()
         }
@@ -77,7 +77,7 @@ class SelectCourseViewModel(
         if (addCourseResponse.isSuccess) {
             val savedCourse = addCourseResponse.getOrNull()
             if (savedCourse != null) {
-                dataStore.saveCourseId(savedCourse.id)
+                dataStore.saveCourse(savedCourse)
             } else {
                 Log.e("createNewCourse", "savedCourse is null")
             }

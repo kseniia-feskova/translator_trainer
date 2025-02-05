@@ -1,5 +1,6 @@
 package com.presentation.ui.screens.sets
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.presentation.data.IDataStoreManager
@@ -21,9 +22,10 @@ class SetsViewModel(
 
     init {
         viewModelScope.launch {
-            val courseId = prefs.getCourseId()
-            if (courseId != null) {
-                val response = getAllSets.invoke(courseId)
+            val course = prefs.getCourse()
+            Log.e("SetsViewModel", "init, course = ${course?.id} ")
+            if (course != null) {
+                val response = getAllSets.invoke(UUID.fromString(course.id))
                 if (response.isSuccess) {
                     _uiState.update { it.copy(sets = response.getOrNull() ?: emptyList()) }
                 }

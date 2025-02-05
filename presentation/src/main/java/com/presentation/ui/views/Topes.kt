@@ -53,7 +53,7 @@ fun HomeTopView(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(LocalConfiguration.current.screenHeightDp.dp / 6)
+            .height(LocalConfiguration.current.screenHeightDp.dp / 7)
             .background(
                 color = bgColor,
                 shape = RoundedCornerShape(bottomStart = 32.dp, bottomEnd = 32.dp)
@@ -65,7 +65,7 @@ fun HomeTopView(
             color = whiteColor,
             modifier = Modifier
                 .align(Alignment.CenterStart)
-                .padding(24.dp)
+                .padding(horizontal = 24.dp, vertical = 12.dp)
                 .width(LocalConfiguration.current.screenWidthDp.dp / 2)
         )
 

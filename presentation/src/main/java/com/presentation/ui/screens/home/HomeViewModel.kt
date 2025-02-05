@@ -4,20 +4,20 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.presentation.data.IDataStoreManager
+import com.presentation.model.CourseUI
 import com.presentation.usecases.ITranslateWordUseCase
 import com.presentation.usecases.words.IAddWordUseCase
-import com.presentation.usecases.words.IFindWordByOriginUseCase
+import com.presentation.usecases.words.IGetWordByOriginal
 import com.presentation.usecases.words.IGetWordByTranslated
 import com.presentation.utils.Language
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 
 class HomeViewModel(
-    private val findWordByOrigin: IFindWordByOriginUseCase,
+    private val findWordByOrigin: IGetWordByOriginal,
     private val findWordByTranslate: IGetWordByTranslated,
     private val translateWord: ITranslateWordUseCase,
     private val addWordUseCase: IAddWordUseCase,
@@ -26,75 +26,71 @@ class HomeViewModel(
 
     private val _uiState = MutableStateFlow(HomeUIState())
     val uiState = _uiState.asStateFlow()
-    private var setId: Int? = null
-
-    private var originalLanguage: Language? = null
-    private var translatedLanguage: Language? = null
+    private var course: CourseUI? = null
 
     init {
         viewModelScope.launch {
-            originalLanguage = prefs.getOriginalLanguage()
-            translatedLanguage = prefs.getResultLanguage()
-            originalLanguage?.let { original ->
-                _uiState.update { it.copy(originalLanguage = original) }
+            course = prefs.getCourse()
+            course?.let { course ->
+                _uiState.update {
+                    it.copy(
+                        originalLanguage = course.originalLanguage,
+                        resLanguage = course.translateLanguage
+                    )
+                }
             }
-            translatedLanguage?.let { translated ->
-                _uiState.update { it.copy(resLanguage = translated) }
-            }
-            prefs.listenSelectedSetId().collectLatest { setId = it }
         }
     }
 
     fun handleIntent(intent: HomeIntent) {
         when (intent) {
-            is HomeIntent.InputText -> {
-                onTextChange(intent.text)
-            }
+            is HomeIntent.InputText -> onTextChange(intent.text)
+            is HomeIntent.EnterText -> translateInput()
+            is HomeIntent.SaveWord -> saveWord()
+            is HomeIntent.ChangeLanguages -> changeLanguages(intent.selectedLang)
+        }
+    }
 
-            is HomeIntent.EnterText -> {
-                _uiState.update { it.copy(loading = true) }
-                if (_uiState.value.originalLanguage == originalLanguage) {
-                    translateFromOrigin(intent.text)
-                } else {
-                    translateFromTranslated(intent.text)
-                }
-            }
-
-            is HomeIntent.SaveWord -> {
-                viewModelScope.launch {
-                    val word = _uiState.value
-                    _uiState.update { it.copy(loading = true) }
-                    val response = if (word.originalLanguage == originalLanguage) {
-                        addWordUseCase.invoke(setId, word.inputText, word.translatedText)
-                    } else {
-                        addWordUseCase.invoke(setId, word.translatedText, word.inputText)
-                    }
-                    if (response.isSuccess) {
-                        val savedWord = response.getOrNull()
-                        if (savedWord != null) {
-                            _uiState.update { it.copy(loading = false, savedWord = true) }
-                        } else {
-                            Log.e(TAG, "savedWord is null")
-                        }
-                    } else {
-                        Log.e(TAG, "SaveWord response is failed")
-                    }
-                }
-            }
-
-            is HomeIntent.ChangeLanguages -> {
-                changeLanguages()
+    private fun translateInput() {
+        if (_uiState.value.inputText.isNotEmpty()) {
+            _uiState.update { it.copy(loading = true) }
+            if (_uiState.value.originalLanguage == course?.originalLanguage) {
+                translateFromOrigin(_uiState.value.inputText)
+            } else {
+                translateFromTranslated(_uiState.value.inputText)
             }
         }
     }
 
-    private fun translateText(
-        text: String,
-        originalLanguage: Language,
-        resLanguage: Language
-    ) {
+    private fun saveWord() {
         viewModelScope.launch {
-            val translatedText = translateWord.invoke(text, originalLanguage, resLanguage)
+            val word = _uiState.value
+            _uiState.update { it.copy(loading = true) }
+            val response = if (word.originalLanguage == course?.originalLanguage) {
+                addWordUseCase.invoke(word.inputText, word.translatedText)
+            } else {
+                addWordUseCase.invoke(word.translatedText, word.inputText)
+            }
+            if (response.isSuccess) {
+                val savedWord = response.getOrNull()
+                if (savedWord != null) {
+                    _uiState.update { it.copy(loading = false, isWordSaved = true) }
+                } else {
+                    Log.e(TAG, "savedWord is null")
+                }
+            } else {
+                Log.e(TAG, "SaveWord response is failed")
+            }
+        }
+    }
+
+    private fun translateText(text: String) {
+        viewModelScope.launch {
+            val translatedText = translateWord.invoke(
+                text,
+                _uiState.value.originalLanguage,
+                _uiState.value.resLanguage
+            )
             _uiState.update {
                 it.copy(
                     translatedText = translatedText,
@@ -109,7 +105,7 @@ class HomeViewModel(
         if (inputText != _uiState.value.inputText) {
             _uiState.update {
                 it.copy(
-                    savedWord = false,
+                    isWordSaved = false,
                     inputText = inputText,
                     translatedText = if (it.translatedText.isNotEmpty()) "" else it.translatedText
                 )
@@ -119,20 +115,26 @@ class HomeViewModel(
 
     private fun translateFromOrigin(origin: String) {
         viewModelScope.launch {
-            val word = findWordByOrigin.invoke(origin)
-            if (word == null) {
-                translateText(
-                    origin,
-                    _uiState.value.originalLanguage,
-                    _uiState.value.resLanguage
-                )
+            val wordResult = findWordByOrigin.invoke(origin)
+            if (wordResult.isSuccess) {
+                val word = wordResult.getOrNull()
+                if (word == null) {
+                    translateText(origin)
+                } else {
+                    _uiState.update {
+                        it.copy(
+                            loading = false,
+                            translatedText = word.resText,
+                            isWordSaved = true
+                        )
+                    }
+                }
             } else {
-                _uiState.update {
-                    it.copy(
-                        loading = false,
-                        translatedText = word.resText,
-                        savedWord = true
-                    )
+                val error = wordResult.exceptionOrNull()?.message
+                if (error == NEW_WORD) {
+                    translateText(origin)
+                } else {
+                    Log.e("translateFromTranslated", "Error = $error")
                 }
             }
         }
@@ -144,28 +146,20 @@ class HomeViewModel(
             if (wordResult.isSuccess) {
                 val word = wordResult.getOrNull()
                 if (word == null) {
-                    translateText(
-                        translated,
-                        _uiState.value.originalLanguage,
-                        _uiState.value.resLanguage
-                    )
+                    translateText(translated)
                 } else {
                     _uiState.update {
                         it.copy(
                             loading = false,
                             translatedText = word.originalText,
-                            savedWord = true
+                            isWordSaved = true
                         )
                     }
                 }
             } else {
                 val error = wordResult.exceptionOrNull()?.message
                 if (error == NEW_WORD) {
-                    translateText(
-                        translated,
-                        _uiState.value.originalLanguage,
-                        _uiState.value.resLanguage
-                    )
+                    translateText(translated)
                 } else {
                     Log.e("translateFromTranslated", "Error = $error")
                 }
@@ -173,15 +167,17 @@ class HomeViewModel(
         }
     }
 
-
-    private fun changeLanguages() {
-        _uiState.update {
-            it.copy(
-                resLanguage = it.originalLanguage,
-                originalLanguage = it.resLanguage,
-                inputText = "",
-                translatedText = ""
-            )
+    private fun changeLanguages(selected: Language) {
+        if (_uiState.value.originalLanguage != selected) {
+            _uiState.update {
+                it.copy(
+                    resLanguage = it.originalLanguage,
+                    originalLanguage = it.resLanguage,
+                    inputText = "",
+                    translatedText = "",
+                    isWordSaved = false
+                )
+            }
         }
     }
 

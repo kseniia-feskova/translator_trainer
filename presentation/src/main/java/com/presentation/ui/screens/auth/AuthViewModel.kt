@@ -89,7 +89,7 @@ class AuthViewModel(
                 dataStore.saveCourses(courses)
                 goToCourses()
             } else {
-                dataStore.saveCourseId(courses.first().id)
+                dataStore.saveCourse(courses.first())
                 goToHome()
             }
         }

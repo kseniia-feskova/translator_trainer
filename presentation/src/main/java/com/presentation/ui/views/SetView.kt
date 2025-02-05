@@ -19,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import com.presentation.model.Level
 import com.presentation.model.SetOfCards
 import com.presentation.test.mockListOfSets
 import com.presentation.ui.AppTheme
@@ -49,7 +50,7 @@ fun SetOfCardsView(set: SetOfCards, background: Color) {
         Spacer(modifier = Modifier.height(18.dp))
         Text(
             modifier = Modifier.padding(horizontal = 24.dp),
-            text = "Learned: ${set.learnedWords}/${set.allWordsCount}",
+            text = "Learned: ${set.words.filter { it.level == Level.KNOW }.size}/${set.words.size}",
             style = AppTypography.titleLarge.copy(
                 color = darkColor,
                 fontSize = TextUnit(18f, TextUnitType.Sp)

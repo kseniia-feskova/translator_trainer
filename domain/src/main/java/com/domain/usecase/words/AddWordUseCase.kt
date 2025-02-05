@@ -12,6 +12,7 @@ import com.domain.token.safeApiCallWithRefresh
 import com.presentation.data.IDataStoreManager
 import com.presentation.model.WordUI
 import com.presentation.usecases.words.IAddWordUseCase
+import java.util.UUID
 
 class AddWordUseCase(
     private val repo: IWordsDaoRepository,
@@ -21,23 +22,17 @@ class AddWordUseCase(
 ) : IAddWordUseCase {
 
     override suspend fun invoke(
-        setId: Int?,
         originalText: String,
         translatedText: String
     ): Result<WordUI> {
-        val sourceLanguage = prefs.getOriginalLanguage()
-        val targetLanguage = prefs.getResultLanguage()
-        val courseId = prefs.getCourseId()
-        val allWordsId = prefs.getAllWordsSetId()
-        if (sourceLanguage == null || targetLanguage == null || courseId == null || allWordsId == null) {
-            return Result.failure(Exception("Prefs are empty. Check them, please"))
-        }
+        val course = prefs.getCourse()
+            ?: return Result.failure(Exception("Prefs are empty. Check them, please"))
         val request = AddWordRequest(
             originalText = originalText,
             translatedText = translatedText,
-            sourceLanguage = sourceLanguage.code,
-            targetLanguage = targetLanguage.code,
-            courseId = courseId
+            sourceLanguage = course.originalLanguage.code,
+            targetLanguage = course.translateLanguage.code,
+            courseId = UUID.fromString(course.id)
         )
         val response = safeApiCallWithRefresh(
             call = { apiRepo.addWord(request) },
@@ -49,19 +44,24 @@ class AddWordUseCase(
         } else if (data == null) {
             Result.failure(Exception("Empty user data"))
         } else {
-            addWordToDao(setId = setId, newWord = data.toDao())
+            course.selectedSetId?.let {
+                addWordToDao(setId = it, newWord = data.toDao())
+            }
             Result.success(data.toUI())
         })
     }
 
-    private suspend fun addWordToDao(setId: Int?, newWord: WordUI) {
+    private suspend fun addWordToDao(setId: String, newWord: WordUI) {
         //TODO refactor dao
         val wordId = repo.addNewWord(newWord.toNewWordEntity())
         if (wordId != -1L) {
             repo.addWordToAllWordsSet(newWord.id)
-            if (setId != null) {
-                repo.insertSetWordCrossRef(SetWordCrossRef(setId = setId, wordId = newWord.id))
-            }
+            repo.insertSetWordCrossRef(
+                SetWordCrossRef(
+                    setId = UUID.fromString(setId),
+                    wordId = newWord.id
+                )
+            )
         }
     }
 }

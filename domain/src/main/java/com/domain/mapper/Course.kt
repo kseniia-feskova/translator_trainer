@@ -7,13 +7,13 @@ import com.presentation.utils.getResourceByCode
 
 fun CourseEntity.toUI(): CourseUI {
     return CourseUI(
-        id = id,
-        selectedSetId = selectedSetId,
-        allWordsId = allWordsId,
+        id = id.toString(),
+        selectedSetId = selectedSetId?.toString(),
+        allWordsId = allWordsId?.toString(),
         translateLanguage = targetLanguage.getLanguageByCode(),
         originalLanguage = sourceLanguage.getLanguageByCode(),
         originalFlag = sourceLanguage.getResourceByCode(),
         translatedFlag = targetLanguage.getResourceByCode(),
-        userId = userId
+        userId = userId.toString()
     )
 }

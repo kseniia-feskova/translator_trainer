@@ -29,9 +29,9 @@ fun HomeRoute(
     HomeScreen(
         state = state.value,
         onWordInput = { viewModel.handleIntent(HomeIntent.InputText(it)) },
-        onEnterText = { viewModel.handleIntent(HomeIntent.EnterText(it)) },
+        onEnterText = { viewModel.handleIntent(HomeIntent.EnterText) },
         onSaveClick = { viewModel.handleIntent(HomeIntent.SaveWord) },
-        onLanguageChange = { viewModel.handleIntent(HomeIntent.ChangeLanguages) }
+        onLanguageChange = { viewModel.handleIntent(HomeIntent.ChangeLanguages(it)) }
     )
 
 }

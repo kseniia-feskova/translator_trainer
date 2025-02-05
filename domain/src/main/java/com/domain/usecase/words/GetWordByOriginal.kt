@@ -1,31 +1,30 @@
 package com.domain.usecase.words
 
-import com.data.model.words.get.bytranslate.WordByTranslatedRequest
+import com.data.model.words.get.bytranslate.WordByOriginalRequest
 import com.data.repository.words.api.IWordsApiRepository
 import com.domain.mapper.toUI
 import com.domain.token.ITokenRefresher
 import com.domain.token.safeApiCallWithRefresh
 import com.presentation.data.IDataStoreManager
 import com.presentation.model.WordUI
-import com.presentation.usecases.words.IGetWordByTranslated
+import com.presentation.usecases.words.IGetWordByOriginal
 import java.util.UUID
 
-class GetWordByTranslated(
+class GetWordByOriginal(
     private val repo: IWordsApiRepository,
     private val prefs: IDataStoreManager,
     private val tokenRefresher: ITokenRefresher
-) : IGetWordByTranslated {
-
-    override suspend fun invoke(translated: String): Result<WordUI> {
+) : IGetWordByOriginal {
+    override suspend fun invoke(original: String): Result<WordUI> {
         val course = prefs.getCourse() ?: return Result.failure(Exception("No course selected"))
 
-        val request = WordByTranslatedRequest(
+        val request = WordByOriginalRequest(
             courseId = UUID.fromString(course.id),
-            translate = translated
+            original = original
         )
 
         val response = safeApiCallWithRefresh(
-            call = { repo.getWordByTranslated(request) },
+            call = { repo.getWordByOriginal(request) },
             onTokenExpired = { tokenRefresher.refreshToken() })
 
         val data = response.data
@@ -35,6 +34,5 @@ class GetWordByTranslated(
         } else if (data == null) {
             Result.failure(Exception("Empty user data"))
         } else Result.success(data.toUI())
-
     }
 }

@@ -21,10 +21,8 @@ import com.domain.usecase.course.GetAllCoursesUseCase
 import com.domain.usecase.course.GetCourseUseCase
 import com.domain.usecase.words.AddWordUseCase
 import com.domain.usecase.words.DeleteWordUseCase
-import com.domain.usecase.words.FindWordByOriginUseCase
-import com.domain.usecase.words.FindWordByTranslatedUseCase
-import com.domain.usecase.words.GetFilteredWordsUseCase
 import com.domain.usecase.words.GetWordByIdUseCase
+import com.domain.usecase.words.GetWordByOriginal
 import com.domain.usecase.words.GetWordByTranslated
 import com.domain.usecase.words.GetWordsOfSetUseCase
 import com.domain.usecase.words.UpdateWordUseCase
@@ -47,10 +45,8 @@ import com.presentation.usecases.course.IGetAllCoursesUseCase
 import com.presentation.usecases.course.IGetCourseUseCase
 import com.presentation.usecases.words.IAddWordUseCase
 import com.presentation.usecases.words.IDeleteWordUseCase
-import com.presentation.usecases.words.IFindWordByOriginUseCase
-import com.presentation.usecases.words.IFindWordByTranslatedUseCase
-import com.presentation.usecases.words.IGetFilteredWordsUseCase
 import com.presentation.usecases.words.IGetWordByIdUseCase
+import com.presentation.usecases.words.IGetWordByOriginal
 import com.presentation.usecases.words.IGetWordByTranslated
 import com.presentation.usecases.words.IGetWordsOfSetUseCase
 import com.presentation.usecases.words.IUpdateWordUseCase
@@ -78,8 +74,6 @@ val useCaseModule = module {
 
     singleOf(::GetSetOfWordsUseCase) bind IGetSetOfWordsUseCase::class
 
-    singleOf(::GetFilteredWordsUseCase) bind IGetFilteredWordsUseCase::class
-
     singleOf(::AddSetWordCrossRef) bind IAddSetWordCrossRefUseCase::class
 
     singleOf(::UpdateWordUseCase) bind IUpdateWordUseCase::class
@@ -89,10 +83,6 @@ val useCaseModule = module {
     singleOf(::TranslateWordUseCase) bind ITranslateWordUseCase::class
 
     singleOf(::DeleteSetByIdUseCase) bind IDeleteSetByIdUseCase::class
-
-    singleOf(::FindWordByOriginUseCase) bind IFindWordByOriginUseCase::class
-
-    singleOf(::FindWordByTranslatedUseCase) bind IFindWordByTranslatedUseCase::class
 
     singleOf(::GetAllSetsUseCase) bind IGetAllSetsUseCase::class
 
@@ -111,6 +101,8 @@ val useCaseModule = module {
     singleOf(::GetCourseUseCase) bind IGetCourseUseCase::class
 
     singleOf(::GetWordByTranslated) bind IGetWordByTranslated::class
+
+    singleOf(::GetWordByOriginal) bind IGetWordByOriginal::class
 
     singleOf(::GetAllCoursesUseCase) bind IGetAllCoursesUseCase::class
 

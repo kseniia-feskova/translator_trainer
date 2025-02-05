@@ -11,7 +11,6 @@ import com.data.model.SetWithWords
 import com.data.model.SetWordCrossRef
 import com.data.model.WordEntity
 import kotlinx.coroutines.flow.Flow
-import java.util.Date
 import java.util.UUID
 
 const val ALL_WORDS = "Все слова"
@@ -28,10 +27,10 @@ interface WordDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSetWordCrossRef(crossRef: SetWordCrossRef)
 
-    @Query("SELECT * FROM words WHERE LOWER(original) = LOWER(:original) LIMIT 1")
+    @Query("SELECT * FROM words WHERE LOWER(originalText) = LOWER(:original) LIMIT 1")
     suspend fun getWordByOriginal(original: String): WordEntity?
 
-    @Query("SELECT * FROM words WHERE LOWER(translation) = LOWER(:translated) LIMIT 1")
+    @Query("SELECT * FROM words WHERE LOWER(translatedText) = LOWER(:translated) LIMIT 1")
     suspend fun getWordByTranslated(translated: String): WordEntity?
 
     @Transaction
@@ -62,14 +61,6 @@ interface WordDao {
         val allWordsSet = getSetByName(ALL_WORDS) ?: return
         insertSetWordCrossRef(SetWordCrossRef(setId = allWordsSet.id, wordId = wordId))
     }
-
-    // Получить слова по фильтру даты или статуса
-    @Transaction
-    @Query("SELECT * FROM words WHERE dateAdded BETWEEN :startDate AND :endDate")
-    fun getWordsFilteredByDate(
-        startDate: Date,
-        endDate: Date,
-    ): Flow<List<WordEntity>>
 
     // Метод для обновления слова
     @Update(onConflict = OnConflictStrategy.REPLACE)

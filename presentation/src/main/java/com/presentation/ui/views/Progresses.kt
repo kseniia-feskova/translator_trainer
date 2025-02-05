@@ -28,11 +28,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.presentation.ui.AppTheme
 import com.presentation.ui.accentColor
+import com.presentation.ui.bgColor
 import com.presentation.ui.secondaryColor
+import com.presentation.ui.whiteColor
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -40,9 +43,9 @@ import kotlinx.coroutines.launch
 fun Loader(modifier: Modifier = Modifier) {
     CircularProgressIndicator(
         modifier = modifier,
-        color = MaterialTheme.colorScheme.onPrimary,
+        color = bgColor,
         strokeWidth = 6.dp,
-        trackColor = MaterialTheme.colorScheme.primary,
+        trackColor = Color.White,
     )
 }
 
@@ -184,7 +187,7 @@ fun CircleProgressPreview() {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.primary)
+                    .background(whiteColor)
             ) {
                 Row() {
                     CircleProgress(

@@ -89,7 +89,7 @@ class AccountViewModel(
                     viewModelScope.launch {
                         logout.invoke()
                         dataStoreManager.saveUserId(null)
-                        dataStoreManager.saveCourseId(null)
+                        dataStoreManager.saveCourse(null)
                         _uiState.update {
                             it.copy(showLogoutDialog = false)
                         }

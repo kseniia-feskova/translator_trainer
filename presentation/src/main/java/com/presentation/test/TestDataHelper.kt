@@ -20,7 +20,7 @@ val mockSetOfCard = SetOfCards(
     UUID.randomUUID(),
     "Набор",
     isDefault = false,
-    courseId = UUID.randomUUID()
+    words = emptyList()
 )
 
 val mockListOfSets = listOf(
@@ -39,8 +39,8 @@ val dummyCourses = listOf(
         translateLanguage = Language.GERMAN,
         originalFlag = R.drawable.ic_ru,
         translatedFlag = R.drawable.ic_de,
-        userId = UUID.randomUUID(),
-        id = UUID.randomUUID(),
+        userId = UUID.randomUUID().toString(),
+        id = UUID.randomUUID().toString(),
         allWordsId = null,
         selectedSetId = null
     ),
@@ -49,8 +49,8 @@ val dummyCourses = listOf(
         translateLanguage = Language.GERMAN,
         originalFlag = R.drawable.ic_fr,
         translatedFlag = R.drawable.ic_de,
-        userId = UUID.randomUUID(),
-        id = UUID.randomUUID(),
+        userId = UUID.randomUUID().toString(),
+        id = UUID.randomUUID().toString(),
         allWordsId = null,
         selectedSetId = null
     ),
@@ -59,8 +59,8 @@ val dummyCourses = listOf(
         translateLanguage = Language.FRENCH,
         originalFlag = R.drawable.ic_ru,
         translatedFlag = R.drawable.ic_fr,
-        userId = UUID.randomUUID(),
-        id = UUID.randomUUID(),
+        userId = UUID.randomUUID().toString(),
+        id = UUID.randomUUID().toString(),
         allWordsId = null,
         selectedSetId = null
     )

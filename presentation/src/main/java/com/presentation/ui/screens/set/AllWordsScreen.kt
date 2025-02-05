@@ -41,9 +41,7 @@ import com.presentation.ui.views.BaseTopView
 import com.presentation.utils.ALL_WORDS
 
 private val mockAllCardsState = AllCardsState(
-    allWords = mockSetOfCard.allWordsCount,
     title = mockSetOfCard.title,
-    knowWords = mockSetOfCard.learnedWords,
     words = smallList.toSet()
 )
 
