@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.presentation.model.WordUI
-import com.presentation.test.mockListOfSets
+import com.presentation.test.smallList
 import com.presentation.ui.AppTheme
 import com.presentation.ui.primaryColor
 import com.presentation.ui.secondaryColor
@@ -132,8 +132,8 @@ fun CardSetPreview() {
         Surface {
             CardsSet(
                 modifier = Modifier.padding(8.dp),
-                firstWordUI = mockListOfSets[2].setOfWords.first(),
-                secondWordUI = mockListOfSets[2].setOfWords.lastOrNull(),
+                firstWordUI = smallList.first(),
+                secondWordUI = smallList.lastOrNull(),
             )
         }
     }

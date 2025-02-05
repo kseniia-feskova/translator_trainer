@@ -44,7 +44,7 @@ import com.presentation.ui.onPrimaryColorLight
 import com.presentation.ui.onSurfaceLight
 import com.presentation.ui.primaryColorLight
 import com.presentation.ui.views.ActionButton
-import com.presentation.ui.views.BasicTopView
+import com.presentation.ui.views.BaseTopView
 import com.presentation.ui.views.Loader
 import com.presentation.ui.views.SearchBarView
 import com.presentation.ui.views.SelectingWordWithStatusView
@@ -78,7 +78,7 @@ fun NewSetScreen(
         Column(
             modifier = Modifier.padding(bottom = 64.dp)
         ) {
-            BasicTopView(
+            BaseTopView(
                 title = "Новый набор",
                 leftIcon = Icons.Default.ArrowBackIosNew,
                 onLeftClick = navigateUp

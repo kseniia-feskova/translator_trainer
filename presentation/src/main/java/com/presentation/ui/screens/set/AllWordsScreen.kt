@@ -30,21 +30,21 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
-import com.presentation.model.Level
 import com.presentation.model.WordUI
 import com.presentation.test.mockSetOfCard
+import com.presentation.test.smallList
 import com.presentation.ui.accentColor
 import com.presentation.ui.primaryColor
 import com.presentation.ui.secondaryColor
 import com.presentation.ui.views.ActionButton
-import com.presentation.ui.views.BasicTopView
+import com.presentation.ui.views.BaseTopView
 import com.presentation.utils.ALL_WORDS
 
 private val mockAllCardsState = AllCardsState(
-    allWords = mockSetOfCard.setOfWords.size,
+    allWords = mockSetOfCard.allWordsCount,
     title = mockSetOfCard.title,
-    knowWords = mockSetOfCard.setOfWords.toList().filter { it.level == Level.KNOW }.size,
-    words = mockSetOfCard.setOfWords
+    knowWords = mockSetOfCard.learnedWords,
+    words = smallList.toSet()
 )
 
 @Composable
@@ -54,7 +54,7 @@ fun AllCardsScreen(
 ) {
     Scaffold(
         topBar = {
-            BasicTopView(title = ALL_WORDS)
+            BaseTopView(title = ALL_WORDS)
         },
         bottomBar = {
             if (state.words.isNotEmpty()) {

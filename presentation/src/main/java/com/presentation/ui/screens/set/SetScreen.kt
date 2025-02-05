@@ -30,11 +30,11 @@ import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import com.presentation.model.WordUI
 import com.presentation.navigation.BottomNavigationBar
-import com.presentation.test.mockListOfSets
+import com.presentation.test.smallList
 import com.presentation.ui.AppTheme
 import com.presentation.ui.accentColorLight
 import com.presentation.ui.views.ActionButton
-import com.presentation.ui.views.BasicTopView
+import com.presentation.ui.views.BaseTopView
 import com.presentation.ui.views.CardsSet
 import com.presentation.ui.views.ProgressForSet
 
@@ -56,7 +56,7 @@ fun SetScreen(
             .fillMaxSize()
     ) {
         Column() {
-            BasicTopView(
+            BaseTopView(
                 title = state.name,
                 rightIcon = Icons.Default.Edit,
                 leftIcon = Icons.Default.ArrowBackIosNew,
@@ -171,8 +171,8 @@ fun CardSetScreenPreview() {
                 SetScreen(
                     state = SetUIState(
                         words = Pair(
-                            mockListOfSets[2].setOfWords.last(),
-                            mockListOfSets[2].setOfWords.first()
+                            smallList.last(),
+                            smallList.first()
                         )
                     )
                 )

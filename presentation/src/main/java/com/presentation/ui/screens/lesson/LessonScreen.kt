@@ -28,7 +28,7 @@ import com.presentation.R
 import com.presentation.test.smallList
 import com.presentation.ui.AppTheme
 import com.presentation.ui.accentColorLight
-import com.presentation.ui.views.BasicTopView
+import com.presentation.ui.views.BaseTopView
 import com.presentation.ui.views.ChipSelector
 import com.presentation.ui.views.Loader
 import com.presentation.ui.views.ProgressForLesson
@@ -92,7 +92,7 @@ fun LessonStepView(
     val cardHeight = screenHeight * 0.25f
     Box(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.align(Alignment.TopCenter)) {
-            BasicTopView(
+            BaseTopView(
                 title = title,
                 rightIcon = Icons.Default.Close,
                 onRightClick = { onCloseClicked() })

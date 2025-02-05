@@ -7,8 +7,8 @@ data class SetOfCards(
     val id: UUID,
     val title: String,
     val isDefault: Boolean,
-    //val level: SetLevel,
-    val setOfWords: Set<WordUI> = emptySet(),
+    val learnedWords: Int = 0,
+    val allWordsCount: Int = 0,
     val courseId: UUID
 )
 

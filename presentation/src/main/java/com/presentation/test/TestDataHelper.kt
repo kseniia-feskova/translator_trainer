@@ -20,14 +20,16 @@ val mockSetOfCard = SetOfCards(
     UUID.randomUUID(),
     "Набор",
     isDefault = false,
-    emptySet(),
-    UUID.randomUUID()
+    courseId = UUID.randomUUID()
 )
 
 val mockListOfSets = listOf(
     mockSetOfCard,
     mockSetOfCard.copy(title = "Новые слова"),
-    mockSetOfCard.copy(title = "Приключение к центру земли", setOfWords = smallList.toSet()),
+    mockSetOfCard.copy(title = "Приключение к центру земли"),
+    mockSetOfCard.copy(title = "Повторить"),
+    mockSetOfCard.copy(title = "Example"),
+    mockSetOfCard.copy(title = "Все сложные глаголы"),
     mockSetOfCard.copy(title = "Все слова"),
 )
 

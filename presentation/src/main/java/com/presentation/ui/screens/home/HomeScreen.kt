@@ -35,11 +35,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.presentation.R
 import com.presentation.navigation.BottomNavigationBar
 import com.presentation.ui.AppTheme
 import com.presentation.ui.AppTypography
@@ -79,7 +81,7 @@ fun HomeScreen(
             ),
             exit = fadeOut(animationSpec = tween(500))
         ) {
-            HomeTopView("Let's translate words")
+            HomeTopView(stringResource(R.string.home_title))
         }
 
         Column(
@@ -123,22 +125,12 @@ fun HomeScreen(
 
         }
         CustomShadowButton(
-            "Save word",
+            stringResource(R.string.save_word_btn),
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(horizontal = 20.dp, vertical = 16.dp)
         )
 
-//        TranslateView(
-//            modifier = Modifier
-//                .padding(24.dp)
-//                .align(Alignment.Center),
-//            state = state,
-//            onTextChange = onWordInput,
-//            onEnterText = onEnterText,
-//            onSaveClick = onSaveClick,
-//            onLanguageChange = onLanguageChange
-//        )
         if (state.loading) {
             Loader(
                 modifier = Modifier

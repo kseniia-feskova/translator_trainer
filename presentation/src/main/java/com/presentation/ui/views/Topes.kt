@@ -17,9 +17,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.LibraryAdd
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -63,7 +63,8 @@ fun HomeTopView(
             text = title,
             style = AppTypography.displayLarge,
             color = whiteColor,
-            modifier = Modifier.align(Alignment.CenterStart)
+            modifier = Modifier
+                .align(Alignment.CenterStart)
                 .padding(24.dp)
                 .width(LocalConfiguration.current.screenWidthDp.dp / 2)
         )
@@ -167,7 +168,7 @@ fun AccountTopView(
 }
 
 @Composable
-fun BasicTopView(
+fun BaseTopView(
     title: String,
     leftIcon: ImageVector? = null,
     rightIcon: ImageVector? = null,
@@ -178,8 +179,8 @@ fun BasicTopView(
         modifier = Modifier
             .fillMaxWidth()
             .background(
-                color = MaterialTheme.colorScheme.primary,
-                shape = RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp)
+                color = bgColor,
+                shape = RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp)
             ),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
@@ -196,7 +197,8 @@ fun BasicTopView(
 
         Text(
             text = title,
-            style = MaterialTheme.typography.headlineSmall,
+            style = AppTypography.displayLarge,
+            color = whiteColor,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 20.dp)
         )
 
@@ -231,14 +233,14 @@ fun TopViewPreview() {
                 verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
                 HomeTopView("Let's translate words")
-                BasicTopView("Новые карточки")
-                BasicTopView("Новые карточки", rightIcon = Icons.Default.AddCircle)
-                BasicTopView(
+                BaseTopView("Новые карточки")
+                BaseTopView("Новые карточки", rightIcon = Icons.Default.LibraryAdd)
+                BaseTopView(
                     "Набор карточек №1",
                     leftIcon = Icons.Default.ArrowBackIosNew,
                     rightIcon = Icons.Default.Edit
                 )
-                BasicTopView(
+                BaseTopView(
                     "Статистика",
                     leftIcon = Icons.Default.ArrowBackIosNew,
                 )

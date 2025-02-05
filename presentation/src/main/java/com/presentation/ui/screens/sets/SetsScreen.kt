@@ -1,28 +1,33 @@
 package com.presentation.ui.screens.sets
 
-import android.util.Log
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.LibraryAdd
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.presentation.R
 import com.presentation.navigation.BottomNavigationBar
 import com.presentation.test.mockListOfSets
 import com.presentation.ui.AppTheme
-import com.presentation.ui.views.ActionButton
-import com.presentation.ui.views.BasicTopView
+import com.presentation.ui.darkColor
+import com.presentation.ui.screens.auth.CustomShadowButton
+import com.presentation.ui.views.BackgroundDecorAnimated
+import com.presentation.ui.views.BaseTopView
 import com.presentation.ui.views.ListOfSetsView
 import java.util.UUID
 
@@ -39,61 +44,67 @@ fun SetsScreen(
         modifier = Modifier.fillMaxSize()
     ) {
 
-        BasicTopView(
-            title = "Наборы карточек",
-            rightIcon = Icons.Default.Add,
-            onRightClick = { createNewSet() })
-
         if (state.sets.isEmpty()) {
-            Text(
-                text = "У Вас нет сохранённых слов",
-                modifier = Modifier.align(Alignment.Center),
-                style = MaterialTheme.typography.titleLarge
-            )
-        } else {
-            ListOfSetsView(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                ,
-                listOfSets = state.sets,
-                selectedSetId = state.selectedSetId,
-                onSetClicked = selectSet,
-                onSetSelected = navigateToSelectedSet
-            )
+            BackgroundDecorAnimated()
         }
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            BaseTopView(
+                title = stringResource(R.string.card_sets_title),
+                rightIcon = Icons.Default.LibraryAdd,
+                onRightClick = { createNewSet() }
+            )
 
-        ActionButton(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(12.dp),
+            if (state.sets.isEmpty()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = stringResource(R.string.empty_sets_description),
+                        style = MaterialTheme.typography.titleLarge.copy(color = darkColor)
+                    )
+                }
+            } else {
+                ListOfSetsView(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 72.dp)
+                        .weight(1f)
+                        .clip(shape = RoundedCornerShape(20.dp)), // Занимает всё свободное пространство между верхней и нижней частью
+                    listOfSets = state.sets,
+                    selectedSetId = state.selectedSetId,
+                    onSetClicked = selectSet,
+                    onSetSelected = navigateToSelectedSet
+                )
+            }
+        }
+        CustomShadowButton(
+            text = if (state.sets.isEmpty()) stringResource(R.string.to_translator_btn)
+            else stringResource(R.string.random_lesson_btn),
             onClick = {
                 if (state.sets.isEmpty()) {
                     navigateToHome()
                 } else {
                     createRandomLesson()
                 }
-            }) {
-            Text(
-                text = if (state.sets.isEmpty()) "Начать перевод" else "Случайный урок",
-                modifier = Modifier.padding(6.dp),
-                style = MaterialTheme.typography.titleLarge.copy(
-                    fontSize = TextUnit(
-                        16f,
-                        TextUnitType.Sp
-                    )
-                )
-            )
-        }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp, vertical = 16.dp)
+                .align(Alignment.BottomCenter)
+        )
     }
 }
-
 
 @Preview
 @Composable
 fun SetsScreenEmptyPreview() {
     AppTheme {
         Scaffold(content = { paddings ->
-            Log.e("Preview", "paddings $paddings")
             Box(modifier = Modifier.padding(paddings)) {
                 SetsScreen(
                     SetsUIState(emptyList())
@@ -112,7 +123,6 @@ fun SetsScreenEmptyPreview() {
 fun SetsScreenPreview() {
     AppTheme {
         Scaffold(content = { paddings ->
-            Log.e("Preview", "paddings $paddings")
             Box(modifier = Modifier.padding(paddings)) {
                 SetsScreen(
                     SetsUIState(mockListOfSets)

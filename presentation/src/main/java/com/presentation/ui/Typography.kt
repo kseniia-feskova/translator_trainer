@@ -50,9 +50,10 @@ val AppTypography = Typography(
         color = onPrimaryColorLight
     ),
     titleLarge = TextStyle(
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 18.sp,
-        lineHeight = 28.sp,
+        fontFamily = NunitoFont,
+        fontWeight = FontWeight.Normal,
+        fontSize = 24.sp,
+        lineHeight = 24.sp,
         letterSpacing = 0.sp,
         color = onPrimaryColorLight
     ),

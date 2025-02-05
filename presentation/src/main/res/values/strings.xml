@@ -19,4 +19,14 @@
     <string name="register_subtitle">Signup with e-mail</string>
     <string name="signup_button">Sign up</string>
 
+    <!-- Home page -->
+    <string name="home_title">Let\'s translate words!</string>
+    <string name="save_word_btn">Save word</string>
+
+    <!-- Card sets -->
+    <string name="card_sets_title">Card sets</string>
+    <string name="empty_sets_description">You do not have any sets</string>
+    <string name="to_translator_btn">To translator</string>
+    <string name="random_lesson_btn">Random lesson</string>
+
 </resources>

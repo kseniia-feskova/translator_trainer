@@ -33,7 +33,7 @@ import com.presentation.model.Level
 import com.presentation.model.WordUI
 import com.presentation.test.smallList
 import com.presentation.ui.AppTheme
-import com.presentation.ui.views.BasicTopView
+import com.presentation.ui.views.BaseTopView
 import com.presentation.ui.views.Loader
 import com.presentation.ui.views.SearchBarView
 import com.presentation.ui.views.WordMenuView
@@ -55,7 +55,7 @@ fun AllWordsScreen(
 
     Column(modifier = Modifier.padding(bottom = 64.dp)) {
 
-        BasicTopView(
+        BaseTopView(
             title = ALL_WORDS,
             leftIcon = Icons.Default.ArrowBackIosNew,
             onLeftClick = onBackPressed

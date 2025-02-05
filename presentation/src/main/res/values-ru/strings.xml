@@ -18,5 +18,11 @@
     <string name="register_marquee">Рады вас видеть!</string>
     <string name="register_subtitle">Зарегестрироваться с почтой</string>
     <string name="signup_button">Войти</string>
+    <string name="home_title">Давайте переведём слова!</string>
+    <string name="save_word_btn">Сохранить слово</string>
+    <string name="card_sets_title">Наборы</string>
+    <string name="empty_sets_description">У Вас нет сохранённых слов</string>
+    <string name="to_translator_btn">К переводчику</string>
+    <string name="random_lesson_btn">Случайный урок</string>
 
 </resources>
