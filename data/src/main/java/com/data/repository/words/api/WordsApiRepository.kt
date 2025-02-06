@@ -7,6 +7,7 @@ import com.data.model.words.WordResponse
 import com.data.model.words.get.bytranslate.WordByOriginalRequest
 import com.data.model.words.get.bytranslate.WordByTranslatedRequest
 import com.data.safeCall
+import java.util.UUID
 
 class WordsApiRepository(
     private val apiService: ApiService
@@ -22,6 +23,10 @@ class WordsApiRepository(
 
     override suspend fun getWordByOriginal(request: WordByOriginalRequest): Result<WordResponse> {
         return safeCall(request = { apiService.getWordByOriginal(request) })
+    }
+
+    override suspend fun getWordsBySet(setId: UUID): Result<List<WordResponse>> {
+        return safeCall(request = { apiService.getWordsBySet(setId) })
     }
 
 }

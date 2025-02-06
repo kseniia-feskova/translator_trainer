@@ -19,6 +19,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import java.util.UUID
 
 interface ApiService {
 
@@ -76,6 +77,9 @@ interface ApiService {
 
     @POST("words/check_by_origin")
     suspend fun getWordByOriginal(@Body request: WordByOriginalRequest): Response<WordResponse>
+
+    @GET("words/get_by_set/{setId}")
+    suspend fun getWordsBySet(@Path("setId") setId: UUID): Response<List<WordResponse>>
 
     //end of region
 }

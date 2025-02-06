@@ -2,15 +2,20 @@ package com.presentation.ui.screens.newset
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.presentation.data.IDataStoreManager
 import com.presentation.model.WordUI
-import com.presentation.usecases.words.IGetWordsOfSetUseCase
+import com.presentation.usecases.sets.IAddSetUseCase
+import com.presentation.usecases.words.IGetWordsBySetUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 class NewSetViewModel(
-    private val getAllWords: IGetWordsOfSetUseCase,
+    private val getAllWords: IGetWordsBySetUseCase,
+    private val saveSet: IAddSetUseCase,
+    private val prefs: IDataStoreManager
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(NewSetUIState(loading = true))
@@ -20,16 +25,20 @@ class NewSetViewModel(
 
     init {
         viewModelScope.launch {
+            _uiState.update { it.copy(loading = true) }
             if (allWords.isEmpty()) {
-//                val id = getAllWordsSet.invoke(ALL_WORDS)?.id
-//                if (id != null) {
-//                    getAllWords.invoke(id).collectLatest { list ->
-//                        allWords = list.toSelectingMap()
-//                        _uiState.update {
-//                            it.copy(words = allWords, loading = false)
-//                        }
-//                    }
-//                }
+                val id = prefs.getCourse()?.allWordsId
+                if (id != null) {
+                    val response = getAllWords.invoke(UUID.fromString(id))
+                    if (response.isSuccess) {
+                        allWords = response.getOrNull()?.toSelectingMap() ?: emptyMap()
+                        _uiState.update { it.copy(words = allWords, loading = false) }
+                    } else {
+                        handleError(response)
+                    }
+                } else {
+                    _uiState.update { it.copy(error = NewSetError.DEFAULT, loading = false) }
+                }
             }
         }
     }
@@ -48,28 +57,37 @@ class NewSetViewModel(
 
     private fun saveSet(onSetSaved: () -> Unit) {
         _uiState.update { it.copy(loading = true) }
-        viewModelScope.launch {
-            //val data = _uiState.value
-//            val set = SetOfCards(data.name, emptySet(), 0)
-//            val setId = addSetOfCards.invoke(set).toInt()
-//
-//            data.words.filter { it.value }.keys.forEach {
-//                addWordToSet.invoke(setId = setId, wordId = it.id)
-//            }
-//            if (data.isSaveChecked) {
-//                prefs.saveSelectedSetId(setId)
-//            }
-            _uiState.update { it.copy(loading = false) }
-            onSetSaved()
-        }
+        if (isActionBtnEnabled()) {
+            viewModelScope.launch {
+                val data = _uiState.value
+                val wordsId = data.words.filter { it.value }.keys.map { it.id }
+                val course = prefs.getCourse()
 
+                if (course != null) {
+                    val response = saveSet.invoke(
+                        name = data.name,
+                        isDefault = data.isSaveChecked,
+                        listOfWords = wordsId,
+                        courseId = UUID.fromString(course.id)
+                    )
+                    if (response.isSuccess) {
+                        if (data.isSaveChecked) {
+                            prefs.saveCourse(course.copy(selectedSetId = response.getOrNull()?.id.toString()))
+                        }
+                        _uiState.update { it.copy(loading = false) }
+                        onSetSaved()
+                    } else {
+                        handleError(response)
+                    }
+                } else {
+                    _uiState.update { it.copy(loading = false, error = NewSetError.DEFAULT) }
+                }
+            }
+        }
     }
 
     private fun changeName(name: String) {
-        _uiState.update {
-            it.copy(name = name)
-        }
-        checkActionButton()
+        _uiState.update { it.copy(name = name, error = null) }
     }
 
     private fun updateCheckBox(isEnabled: Boolean) {
@@ -84,18 +102,19 @@ class NewSetViewModel(
             updatedWords[word] = !oldValue
             updatedAll[word] = !oldValue
             allWords = updatedAll
+            val selected = updatedWords.filter { it.value }.size
             _uiState.update {
-                it.copy(words = updatedWords)
+                it.copy(words = updatedWords, error = null, countOfSelected = selected)
             }
         }
-        checkActionButton()
     }
 
     private fun searchQuery(query: String) {
         _uiState.update {
             it.copy(
                 loading = true,
-                query = query
+                query = query,
+                error = null
             )
         }
         if (query.isNotEmpty()) {
@@ -120,12 +139,25 @@ class NewSetViewModel(
         }
     }
 
-    private fun checkActionButton() {
-        val isEnabled =
-            _uiState.value.name.isNotEmpty() && allWords.filter { it.value }.isNotEmpty()
+    private fun isActionBtnEnabled(): Boolean {
+        val error = if (_uiState.value.name.isEmpty()) {
+            NewSetError.EMPTY_FIELDS
+        } else if (allWords.filter { it.value }.isEmpty()) {
+            NewSetError.EMPTY_SELECTION
+        } else null
         _uiState.update {
-            it.copy(isActionEnable = isEnabled)
+            it.copy(error = error, loading = false)
         }
+        return error == null
+    }
+
+    private fun <T> handleError(response: Result<T>) {
+        val error = response.exceptionOrNull()
+        val errorMsg = when (error?.message) {
+            "Failed to connect" -> NewSetError.INTERNET_CONNECTION_ERROR
+            else -> NewSetError.DEFAULT
+        }
+        _uiState.update { it.copy(error = errorMsg, loading = false) }
     }
 }
 

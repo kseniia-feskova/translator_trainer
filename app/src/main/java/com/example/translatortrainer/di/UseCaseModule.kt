@@ -6,7 +6,6 @@ import com.domain.usecase.AddSetWordCrossRef
 import com.domain.usecase.AddWordToSetUseCase
 import com.domain.usecase.DeleteSetByIdUseCase
 import com.domain.usecase.GetAccountUseCase
-import com.domain.usecase.GetAllSetsUseCase
 import com.domain.usecase.TranslateWordUseCase
 import com.domain.usecase.auth.DeleteUseCase
 import com.domain.usecase.auth.LoginUseCase
@@ -15,18 +14,20 @@ import com.domain.usecase.auth.RegisterUseCase
 import com.domain.usecase.course.AddCourseUseCase
 import com.domain.usecase.course.GetAllCoursesUseCase
 import com.domain.usecase.course.GetCourseUseCase
+import com.domain.usecase.sets.AddSetUseCase
+import com.domain.usecase.sets.GetAllSetsUseCase
 import com.domain.usecase.words.AddWordUseCase
 import com.domain.usecase.words.DeleteWordUseCase
 import com.domain.usecase.words.GetWordByIdUseCase
 import com.domain.usecase.words.GetWordByOriginal
 import com.domain.usecase.words.GetWordByTranslated
+import com.domain.usecase.words.GetWordsBySetUseCase
 import com.domain.usecase.words.GetWordsOfSetUseCase
 import com.domain.usecase.words.UpdateWordUseCase
 import com.presentation.usecases.IAddSetWordCrossRefUseCase
 import com.presentation.usecases.IAddWordToSetUseCase
 import com.presentation.usecases.IDeleteSetByIdUseCase
 import com.presentation.usecases.IGetAccountUseCase
-import com.presentation.usecases.IGetAllSetsUseCase
 import com.presentation.usecases.ITranslateWordUseCase
 import com.presentation.usecases.auth.IDeleteUseCase
 import com.presentation.usecases.auth.ILoginUseCase
@@ -35,11 +36,14 @@ import com.presentation.usecases.auth.IRegisterUseCase
 import com.presentation.usecases.course.IAddCourseUseCase
 import com.presentation.usecases.course.IGetAllCoursesUseCase
 import com.presentation.usecases.course.IGetCourseUseCase
+import com.presentation.usecases.sets.IAddSetUseCase
+import com.presentation.usecases.sets.IGetAllSetsUseCase
 import com.presentation.usecases.words.IAddWordUseCase
 import com.presentation.usecases.words.IDeleteWordUseCase
 import com.presentation.usecases.words.IGetWordByIdUseCase
 import com.presentation.usecases.words.IGetWordByOriginal
 import com.presentation.usecases.words.IGetWordByTranslated
+import com.presentation.usecases.words.IGetWordsBySetUseCase
 import com.presentation.usecases.words.IGetWordsOfSetUseCase
 import com.presentation.usecases.words.IUpdateWordUseCase
 import org.koin.core.module.dsl.singleOf
@@ -90,4 +94,7 @@ val useCaseModule = module {
 
     singleOf(::GetAllCoursesUseCase) bind IGetAllCoursesUseCase::class
 
+    singleOf(::GetWordsBySetUseCase) bind IGetWordsBySetUseCase::class
+
+    singleOf(::AddSetUseCase) bind IAddSetUseCase::class
 }

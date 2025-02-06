@@ -30,4 +30,14 @@
     <string name="to_translator_btn">To translator</string>
     <string name="random_lesson_btn">Random lesson</string>
 
+    <!-- New set -->
+    <string name="new_set_title">New set</string>
+    <string name="set_name_label">Name</string>
+    <string name="search_label">Search</string>
+    <string name="selected_words_subtitle">Selected %d words</string>
+    <string name="save_words_to_set_checkbox">Save new words to the set</string>
+    <string name="save_set_btn">Save set</string>
+    <string name="empty_words_error">Select at least one word</string>
+    <string name="set_name_taken_error">Set with this name exists</string>
+
 </resources>

@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -51,7 +50,6 @@ fun HomeTopView(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(LocalConfiguration.current.screenHeightDp.dp / 7)
             .background(
                 color = bgColor,
                 shape = RoundedCornerShape(bottomStart = 32.dp, bottomEnd = 32.dp)
@@ -63,7 +61,8 @@ fun HomeTopView(
             color = whiteColor,
             modifier = Modifier
                 .align(Alignment.CenterStart)
-                .padding(horizontal = 24.dp, vertical = 12.dp)
+                .padding(horizontal = 24.dp)
+                .padding(bottom = 24.dp, top = 10.dp)
                 .width(LocalConfiguration.current.screenWidthDp.dp / 2)
         )
 

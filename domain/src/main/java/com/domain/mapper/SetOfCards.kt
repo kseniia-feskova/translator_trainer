@@ -17,3 +17,12 @@ fun SetResponse.toUI(): SetOfCards {
         words = words.map { it.toWord() },
     )
 }
+
+fun SetResponse.toUIWithoutWords(): SetOfCards {
+    return SetOfCards(
+        id = id,
+        title = name,
+        isDefault = isDefault,
+        words = emptyList()
+    )
+}

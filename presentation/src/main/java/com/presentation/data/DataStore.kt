@@ -70,7 +70,7 @@ class DataStoreManager(private val context: Context) : IDataStoreManager {
             }
         } else {
             context.dataStore.edit { preferences ->
-                preferences.remove(userIdKey)
+                preferences.remove(courseKey)
             }
         }
     }

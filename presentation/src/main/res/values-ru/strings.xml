@@ -25,4 +25,14 @@
     <string name="to_translator_btn">К переводчику</string>
     <string name="random_lesson_btn">Случайный урок</string>
 
+    <!-- New set -->
+    <string name="new_set_title">Новый набор</string>
+    <string name="set_name_label">Имя</string>
+    <string name="search_label">Поиск</string>
+    <string name="selected_words_subtitle">Выбранно %d слов</string>
+    <string name="save_words_to_set_checkbox">Сохранять новые слова в набор</string>
+    <string name="save_set_btn">Сохранить</string>
+    <string name="empty_words_error">Выберите хотя бы одно слово</string>
+    <string name="set_name_taken_error">Набор с таким именем уже существует</string>
+
 </resources>

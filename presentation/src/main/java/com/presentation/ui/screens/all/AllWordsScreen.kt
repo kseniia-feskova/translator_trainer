@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
@@ -33,11 +32,12 @@ import com.presentation.model.Level
 import com.presentation.model.WordUI
 import com.presentation.test.smallList
 import com.presentation.ui.AppTheme
+import com.presentation.ui.bgColor
+import com.presentation.ui.lightLilaColor
 import com.presentation.ui.views.BaseTopView
 import com.presentation.ui.views.Loader
 import com.presentation.ui.views.SearchBarView
 import com.presentation.ui.views.WordMenuView
-import com.presentation.ui.views.WordWithStatusView
 import com.presentation.utils.ALL_WORDS
 
 @Composable
@@ -85,13 +85,12 @@ fun AllWordsScreen(
                 .padding(horizontal = 12.dp)
                 .clip(shape = RoundedCornerShape(12.dp))
         ) {
-            items(state.words) {
-                WordWithStatusView(
-                    modifier = Modifier.padding(vertical = 6.dp),
-                    word = it,
-                    onLongClicked = onWordSelected
-                )
-            }
+//            items(state.words) {
+//                WordWithStatusView(
+//                    modifier = Modifier.padding(vertical = 6.dp),
+//                    word = it,
+//                )
+//            }
         }
         if (state.selectedItem != null && state.popupOffset != null) {
             Box(
@@ -125,7 +124,7 @@ private val listOfStates = listOf(
         query = "Mutter"
     ),
     AllWordsUIState(words = smallList.filter { it.level == Level.NEW }),
-    AllWordsUIState(words = smallList, selectedItem = smallList[3], popupOffset = Offset(12f, 59f))
+    AllWordsUIState(words = smallList, selectedItem = smallList[2], popupOffset = Offset(12f, 59f))
 
 )
 
@@ -136,7 +135,7 @@ fun StarsRow(modifier: Modifier = Modifier, stars: List<Boolean>) {
             Icon(
                 if (it) Icons.Default.Star else Icons.Default.StarOutline,
                 "Star",
-                tint = MaterialTheme.colorScheme.onSurface,
+                tint = if (it) bgColor else lightLilaColor,
             )
         }
     }

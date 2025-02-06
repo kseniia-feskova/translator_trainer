@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.presentation.data.IDataStoreManager
-import com.presentation.usecases.IGetAllSetsUseCase
+import com.presentation.usecases.sets.IGetAllSetsUseCase
 import com.presentation.utils.ALL_WORDS
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,11 +20,13 @@ class SetsViewModel(
     private val _uiState = MutableStateFlow(SetsUIState())
     val uiState = _uiState.asStateFlow()
 
-    init {
+    init { reload() }
+
+    fun reload(){
         viewModelScope.launch {
             _uiState.update { it.copy(loading = true) }
             val course = prefs.getCourse()
-            Log.e("SetsViewModel", "init, course = ${course?.id} ")
+            Log.e("SetsViewModel", "reload, course = ${course?.id} ")
             if (course != null) {
                 val response = getAllSets.invoke(UUID.fromString(course.id))
                 if (response.isSuccess) {

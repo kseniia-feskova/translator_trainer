@@ -1,20 +1,27 @@
-package com.domain.usecase
+package com.domain.usecase.sets
 
+import com.data.model.sets.AddSetRequest
 import com.data.repository.sets.ISetRepository
-import com.domain.mapper.toUI
+import com.domain.mapper.toUIWithoutWords
 import com.domain.token.ITokenRefresher
 import com.domain.token.safeApiCallWithRefresh
 import com.presentation.model.SetOfCards
-import com.presentation.usecases.IGetAllSetsUseCase
+import com.presentation.usecases.sets.IAddSetUseCase
 import java.util.UUID
 
-class GetAllSetsUseCase(
-    private val repo: ISetRepository,
-    private val tokenRefresher: ITokenRefresher
-) : IGetAllSetsUseCase {
-    override suspend fun invoke(courseId: UUID): Result<List<SetOfCards>> {
+class AddSetUseCase(
+    val repo: ISetRepository,
+    val tokenRefresher: ITokenRefresher
+) : IAddSetUseCase {
+    override suspend fun invoke(
+        name: String,
+        isDefault: Boolean,
+        courseId: UUID,
+        listOfWords: List<UUID>
+    ): Result<SetOfCards> {
+        val request = AddSetRequest(name, isDefault, courseId, listOfWords)
         val response = safeApiCallWithRefresh(
-            call = { repo.getAllSets(courseId) },
+            call = { repo.addSet(request) },
             onTokenExpired = { tokenRefresher.refreshToken() })
         val data = response.data
         return if (response.errorMsg.isNotEmpty()) {
@@ -23,7 +30,6 @@ class GetAllSetsUseCase(
             } else Result.failure(Exception(response.errorMsg))
         } else if (data == null) {
             Result.failure(Exception("Empty user data"))
-        } else Result.success(data.toUI())
+        } else Result.success(data.toUIWithoutWords())
     }
-
 }

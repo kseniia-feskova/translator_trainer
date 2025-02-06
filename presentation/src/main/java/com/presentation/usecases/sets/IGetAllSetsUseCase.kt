@@ -1,4 +1,4 @@
-package com.presentation.usecases
+package com.presentation.usecases.sets
 
 import com.presentation.model.SetOfCards
 import java.util.UUID

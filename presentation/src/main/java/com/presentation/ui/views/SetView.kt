@@ -1,6 +1,7 @@
 package com.presentation.ui.views
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -26,6 +27,7 @@ import com.presentation.test.mockListOfSets
 import com.presentation.ui.AppTheme
 import com.presentation.ui.AppTypography
 import com.presentation.ui.darkColor
+import com.presentation.ui.fieldBorderColor
 import com.presentation.ui.lightLilaColor
 import java.util.UUID
 
@@ -37,6 +39,7 @@ fun SetOfCardsView(set: SetOfCards, background: Color, onSetSelected: (UUID) -> 
         modifier = Modifier
             .padding(16.dp)
             .background(color = background, shape = RoundedCornerShape(20.dp))
+            .border(width = 1.dp, color = fieldBorderColor, shape = RoundedCornerShape(20.dp))
             .fillMaxWidth()
             .clickable { onSetSelected(set.id) }
     ) {
