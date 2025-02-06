@@ -29,8 +29,11 @@ class GetWordByOriginal(
 
         val data = response.data
 
+
         return if (response.errorMsg.isNotEmpty()) {
-            Result.failure(Exception(response.errorMsg))
+            if (response.errorMsg.contains("Failed to connect")) {
+                Result.failure(Exception("Failed to connect"))
+            } else Result.failure(Exception(response.errorMsg))
         } else if (data == null) {
             Result.failure(Exception("Empty user data"))
         } else Result.success(data.toUI())

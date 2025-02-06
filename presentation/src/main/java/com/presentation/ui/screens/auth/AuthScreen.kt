@@ -73,6 +73,7 @@ import com.presentation.ui.fieldColors
 import com.presentation.ui.lightLilaColor
 import com.presentation.ui.redDarkColor
 import com.presentation.ui.viewLightColor
+import com.presentation.ui.views.Loader
 import com.presentation.ui.whiteColor
 
 enum class AuthScreenState { LOGIN, REGISTER }
@@ -86,63 +87,79 @@ fun AuthScreen(
     onAuthClicked: () -> Unit = {},
     onGuestClicked: () -> Unit = {}
 ) {
-
-    Column(
-        modifier = Modifier.fillMaxSize().background(bgColor)
-    ) {
-        Spacer(Modifier.height(24.dp))
-        MarqueeText(
-            text = if (state.screenState == AuthScreenState.LOGIN) stringResource(R.string.login_marquee) + " "
-            else stringResource(R.string.register_marquee) + " "
-        )
-        Spacer(Modifier.height(24.dp))
-        Circles(
-            modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
-            isRegister = state.screenState == AuthScreenState.REGISTER
-        )
-        Spacer(Modifier.height(32.dp))
-        Box(
+    Box() {
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(
-                    whiteColor,
-                    shape = RoundedCornerShape(topEnd = 36.dp, topStart = 36.dp)
-                )
-                .padding(vertical = 24.dp, horizontal = 16.dp)
+                .background(bgColor)
         ) {
-            AnimatedContent(
-                targetState = state.screenState,
-                label = "AuthForm",
-                transitionSpec = {
-                    slideInHorizontally(
-                        initialOffsetX = { if (targetState == AuthScreenState.LOGIN) 1200 else -1200 },
-                        animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing)
-                    ) togetherWith slideOutHorizontally(
-                        targetOffsetX = { if (targetState == AuthScreenState.LOGIN) -1200 else 1200 },
-                        animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing)
+            Spacer(Modifier.height(24.dp))
+            MarqueeText(
+                text = if (state.screenState == AuthScreenState.LOGIN) stringResource(R.string.login_marquee) + " "
+                else stringResource(R.string.register_marquee) + " "
+            )
+            Spacer(Modifier.height(24.dp))
+            Circles(
+                modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
+                isRegister = state.screenState == AuthScreenState.REGISTER
+            )
+            Spacer(Modifier.height(32.dp))
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        whiteColor,
+                        shape = RoundedCornerShape(topEnd = 36.dp, topStart = 36.dp)
                     )
-                },
-            ) { screen ->
-                if (screen == AuthScreenState.LOGIN) {
-                    LoginForm(
-                        state,
-                        onEmailChanged,
-                        onPasswordChanged,
-                        onAuthClicked,
-                        onGuestClicked,
-                        onAuthStateChanged
-                    )
-                } else {
-                    RegisterForm(
-                        state,
-                        onEmailChanged,
-                        onPasswordChanged,
-                        onAuthClicked,
-                        onGuestClicked,
-                        onAuthStateChanged
-                    )
+                    .padding(vertical = 24.dp, horizontal = 16.dp)
+            ) {
+                AnimatedContent(
+                    targetState = state.screenState,
+                    label = "AuthForm",
+                    transitionSpec = {
+                        slideInHorizontally(
+                            initialOffsetX = { if (targetState == AuthScreenState.LOGIN) 1200 else -1200 },
+                            animationSpec = tween(
+                                durationMillis = 1000,
+                                easing = FastOutSlowInEasing
+                            )
+                        ) togetherWith slideOutHorizontally(
+                            targetOffsetX = { if (targetState == AuthScreenState.LOGIN) -1200 else 1200 },
+                            animationSpec = tween(
+                                durationMillis = 1000,
+                                easing = FastOutSlowInEasing
+                            )
+                        )
+                    },
+                ) { screen ->
+                    if (screen == AuthScreenState.LOGIN) {
+                        LoginForm(
+                            state,
+                            onEmailChanged,
+                            onPasswordChanged,
+                            onAuthClicked,
+                            onGuestClicked,
+                            onAuthStateChanged
+                        )
+                    } else {
+                        RegisterForm(
+                            state,
+                            onEmailChanged,
+                            onPasswordChanged,
+                            onAuthClicked,
+                            onGuestClicked,
+                            onAuthStateChanged
+                        )
+                    }
                 }
             }
+        }
+        if (state.isLoading) {
+            Loader(
+                modifier = Modifier
+                    .width(80.dp)
+                    .align(Alignment.Center)
+            )
         }
     }
 }
@@ -172,7 +189,10 @@ fun Circles(modifier: Modifier, isRegister: Boolean) {
     val offset1 by transition.animateOffset(
         label = "lightLilaColor",
         transitionSpec = { tween(durationMillis = 1000, easing = EaseInOutQuad) }) { state ->
-        if (state) Offset(center + circleOffset, 0f) else Offset(center - circleOffset, 0f)  // 1 → 3
+        if (state) Offset(center + circleOffset, 0f) else Offset(
+            center - circleOffset,
+            0f
+        )  // 1 → 3
     }
     val offset2 by transition.animateOffset(
         label = "whiteColor",
@@ -182,7 +202,10 @@ fun Circles(modifier: Modifier, isRegister: Boolean) {
     val offset3 by transition.animateOffset(
         label = "darkColor",
         transitionSpec = { tween(durationMillis = 1000, easing = EaseInOutQuad) }) { state ->
-        if (state) Offset(center - circleOffset, 0f) else Offset(center, 0f) // 3 → 2 + поднятие вверх
+        if (state) Offset(center - circleOffset, 0f) else Offset(
+            center,
+            0f
+        ) // 3 → 2 + поднятие вверх
     }
     Box(modifier = modifier.wrapContentWidth()) {
         Box(
@@ -449,7 +472,12 @@ fun OrView() {
 }
 
 @Composable
-fun CustomShadowButton(text: String, icon: Painter? = null, onClick: () -> Unit = {}, modifier: Modifier = Modifier) {
+fun CustomShadowButton(
+    text: String,
+    icon: Painter? = null,
+    onClick: () -> Unit = {},
+    modifier: Modifier = Modifier
+) {
     Box(modifier = modifier) {
         Spacer(
             modifier = Modifier

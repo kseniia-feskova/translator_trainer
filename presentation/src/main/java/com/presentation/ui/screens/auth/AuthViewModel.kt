@@ -46,6 +46,7 @@ class AuthViewModel(
     ) {
         val state = _uiState.value
         if (state.fieldsValid()) {
+            _uiState.update { it.copy(isLoading = true) }
             when (state.screenState) {
                 AuthScreenState.LOGIN -> login(state, goToCourses, goToHome)
                 AuthScreenState.REGISTER -> register(state, goToCourses)
@@ -70,9 +71,13 @@ class AuthViewModel(
             if (userId != null) {
                 dataStore.saveUserId(userId)
                 checkCourses(userId, goToCourses, goToHome)
-                Log.e("NewLoginVM", "Login success")
             } else {
-                _uiState.update { it.copy(error = AuthError.USER_DOES_NOT_EXIST) }
+                _uiState.update {
+                    it.copy(
+                        error = AuthError.USER_DOES_NOT_EXIST,
+                        isLoading = false
+                    )
+                }
             }
         }
     }
@@ -87,9 +92,11 @@ class AuthViewModel(
             val courses = response.getOrNull() ?: return@launch
             if (courses.size != 1) {
                 dataStore.saveCourses(courses)
+                _uiState.update { it.copy(isLoading = false) }
                 goToCourses()
             } else {
                 dataStore.saveCourse(courses.first())
+                _uiState.update { it.copy(isLoading = false) }
                 goToHome()
             }
         }
@@ -108,10 +115,16 @@ class AuthViewModel(
             val userId = response.getOrNull()
             if (userId != null) {
                 dataStore.saveUserId(userId)
+                _uiState.update { it.copy(isLoading = false) }
                 goToCourses()
                 Log.e("NewLoginVM", "Register success")
             } else {
-                _uiState.update { it.copy(error = AuthError.USER_DOES_NOT_EXIST) }
+                _uiState.update {
+                    it.copy(
+                        error = AuthError.USER_DOES_NOT_EXIST,
+                        isLoading = false
+                    )
+                }
             }
         }
     }
@@ -128,8 +141,9 @@ class AuthViewModel(
             "Wrong password" -> AuthError.WRONG_PASSWORD
             "User does not exist" -> AuthError.USER_DOES_NOT_EXIST
             "User already exists" -> AuthError.EMAIL_TAKEN
+            "Failed to connect" -> AuthError.INTERNET_CONNECTION_ERROR
             else -> AuthError.DEFAULT
         }
-        _uiState.update { it.copy(error = errorMsg) }
+        _uiState.update { it.copy(error = errorMsg, isLoading = false) }
     }
 }

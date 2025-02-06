@@ -59,6 +59,7 @@ import com.presentation.ui.fieldBorderColor
 import com.presentation.ui.fieldColors
 import com.presentation.ui.fieldValueColor
 import com.presentation.ui.lightLilaColor
+import com.presentation.ui.redDarkColor
 import com.presentation.ui.screens.auth.CustomShadowButton
 import com.presentation.ui.views.BackgroundDecorAnimated
 import com.presentation.ui.views.HomeTopView
@@ -167,7 +168,16 @@ fun HomeScreen(
                 }
             )
             Spacer(Modifier.height(24.dp))
-
+            if (state.error != null) {
+                Text(
+                    text = stringResource(state.error.msg),
+                    style = AppTypography.titleSmall.copy(color = redDarkColor),
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
+            }
+            if (state.error == null) {
+                Spacer(modifier = Modifier.height(8.dp))
+            }
         }
         CustomShadowButton(
             text = stringResource(R.string.save_word_btn),
@@ -215,7 +225,6 @@ fun LanguageSwitch(
     Box(
         modifier = Modifier
             .then(modifier)
-            .background(whiteColor, shape = RoundedCornerShape(8.dp))
             .wrapContentSize()
             .clickable { /* Игнорируем клики по Box, обработка ниже */ },
     ) {

@@ -1,6 +1,5 @@
 package com.presentation.ui.screens.home
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.presentation.data.IDataStoreManager
@@ -74,12 +73,12 @@ class HomeViewModel(
             if (response.isSuccess) {
                 val savedWord = response.getOrNull()
                 if (savedWord != null) {
-                    _uiState.update { it.copy(loading = false, isWordSaved = true) }
+                    _uiState.update { it.copy(loading = false, isWordSaved = true, error = null) }
                 } else {
-                    Log.e(TAG, "savedWord is null")
+                    _uiState.update { it.copy(loading = false, error = HomeError.DEFAULT) }
                 }
             } else {
-                Log.e(TAG, "SaveWord response is failed")
+                handleError(response)
             }
         }
     }
@@ -95,7 +94,8 @@ class HomeViewModel(
                 it.copy(
                     translatedText = translatedText,
                     showGlow = true,
-                    loading = false
+                    loading = false,
+                    error = null
                 )
             }
         }
@@ -107,6 +107,7 @@ class HomeViewModel(
                 it.copy(
                     isWordSaved = false,
                     inputText = inputText,
+                    error = null,
                     translatedText = if (it.translatedText.isNotEmpty()) "" else it.translatedText
                 )
             }
@@ -125,7 +126,8 @@ class HomeViewModel(
                         it.copy(
                             loading = false,
                             translatedText = word.resText,
-                            isWordSaved = true
+                            isWordSaved = true,
+                            error = null
                         )
                     }
                 }
@@ -134,7 +136,7 @@ class HomeViewModel(
                 if (error == NEW_WORD) {
                     translateText(origin)
                 } else {
-                    Log.e("translateFromTranslated", "Error = $error")
+                    handleError(wordResult)
                 }
             }
         }
@@ -152,7 +154,8 @@ class HomeViewModel(
                         it.copy(
                             loading = false,
                             translatedText = word.originalText,
-                            isWordSaved = true
+                            isWordSaved = true,
+                            error = null
                         )
                     }
                 }
@@ -161,7 +164,7 @@ class HomeViewModel(
                 if (error == NEW_WORD) {
                     translateText(translated)
                 } else {
-                    Log.e("translateFromTranslated", "Error = $error")
+                    handleError(wordResult)
                 }
             }
         }
@@ -175,10 +178,20 @@ class HomeViewModel(
                     originalLanguage = it.resLanguage,
                     inputText = "",
                     translatedText = "",
-                    isWordSaved = false
+                    isWordSaved = false,
+                    error = null
                 )
             }
         }
+    }
+
+    private fun <T> handleError(response: Result<T>) {
+        val error = response.exceptionOrNull()
+        val errorMsg = when (error?.message) {
+            "Failed to connect" -> HomeError.INTERNET_CONNECTION_ERROR
+            else -> HomeError.DEFAULT
+        }
+        _uiState.update { it.copy(error = errorMsg, loading = false) }
     }
 
     companion object {

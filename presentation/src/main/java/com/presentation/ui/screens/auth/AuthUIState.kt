@@ -7,7 +7,8 @@ data class AuthUIState(
     val email: String = "",
     val password: String = "",
     val screenState: AuthScreenState = AuthScreenState.LOGIN,
-    val error: AuthError? = null
+    val error: AuthError? = null,
+    val isLoading: Boolean = false
 )
 
 sealed class AuthIntent {
@@ -26,5 +27,6 @@ enum class AuthError(@StringRes val msg: Int) {
     USER_DOES_NOT_EXIST(R.string.user_does_not_exist_error),
     WRONG_PASSWORD(R.string.wrong_password_error),
     EMAIL_TAKEN(R.string.taken_email_error),
+    INTERNET_CONNECTION_ERROR(R.string.internet_connection_error),
     DEFAULT(R.string.default_error)
 }

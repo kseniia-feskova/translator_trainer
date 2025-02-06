@@ -14,6 +14,7 @@
     <string name="wrong_password_error">Wrong password</string>
     <string name="taken_email_error">User with this e-mail is already exist</string>
     <string name="default_error">Something went wrong</string>
+    <string name="internet_connection_error">Check your internet connection</string>
 
     <string name="register_marquee">Nice to meet you!</string>
     <string name="register_subtitle">Signup with e-mail</string>

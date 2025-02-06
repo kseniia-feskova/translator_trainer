@@ -22,13 +22,24 @@ class SetsViewModel(
 
     init {
         viewModelScope.launch {
+            _uiState.update { it.copy(loading = true) }
             val course = prefs.getCourse()
             Log.e("SetsViewModel", "init, course = ${course?.id} ")
             if (course != null) {
                 val response = getAllSets.invoke(UUID.fromString(course.id))
                 if (response.isSuccess) {
-                    _uiState.update { it.copy(sets = response.getOrNull() ?: emptyList()) }
+                    val sets = response.getOrNull() ?: emptyList()
+                    _uiState.update {
+                        it.copy(
+                            sets = if (sets.isNotEmpty() && sets[0].words.isEmpty()) emptyList() else sets,
+                            loading = false
+                        )
+                    }
+                } else {
+                    handleError(response)
                 }
+            } else {
+                _uiState.update { it.copy(loading = false) }
             }
         }
     }
@@ -42,5 +53,14 @@ class SetsViewModel(
         return if (selected != null) {
             selected.title == ALL_WORDS
         } else false
+    }
+
+    private fun <T> handleError(response: Result<T>) {
+        val error = response.exceptionOrNull()
+        val errorMsg = when (error?.message) {
+            "Failed to connect" -> SetsError.INTERNET_CONNECTION_ERROR
+            else -> SetsError.DEFAULT
+        }
+        _uiState.update { it.copy(error = errorMsg, loading = false) }
     }
 }

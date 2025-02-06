@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LibraryAdd
@@ -24,11 +25,14 @@ import com.presentation.R
 import com.presentation.navigation.BottomNavigationBar
 import com.presentation.test.mockListOfSets
 import com.presentation.ui.AppTheme
+import com.presentation.ui.AppTypography
 import com.presentation.ui.darkColor
+import com.presentation.ui.redDarkColor
 import com.presentation.ui.screens.auth.CustomShadowButton
 import com.presentation.ui.views.BackgroundDecorAnimated
 import com.presentation.ui.views.BaseTopView
 import com.presentation.ui.views.ListOfSetsView
+import com.presentation.ui.views.Loader
 import java.util.UUID
 
 @Composable
@@ -55,6 +59,14 @@ fun SetsScreen(
                 rightIcon = Icons.Default.LibraryAdd,
                 onRightClick = { createNewSet() }
             )
+
+            if (state.error != null) {
+                Text(
+                    text = stringResource(state.error.msg),
+                    style = AppTypography.titleSmall.copy(color = redDarkColor),
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
+            }
 
             if (state.sets.isEmpty()) {
                 Box(
@@ -97,6 +109,14 @@ fun SetsScreen(
                 .padding(horizontal = 20.dp, vertical = 16.dp)
                 .align(Alignment.BottomCenter)
         )
+
+        if (state.loading) {
+            Loader(
+                modifier = Modifier
+                    .width(80.dp)
+                    .align(Alignment.Center)
+            )
+        }
     }
 }
 

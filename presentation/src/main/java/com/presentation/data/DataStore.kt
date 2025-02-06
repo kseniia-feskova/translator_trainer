@@ -64,8 +64,14 @@ class DataStoreManager(private val context: Context) : IDataStoreManager {
     override fun getCourses(): List<CourseUI> = coursesList.toList()
 
     override suspend fun saveCourse(course: CourseUI?) {
-        context.dataStore.edit { preferences ->
-            preferences[COURSE_KEY] = Json.encodeToString(course)
+        if (course != null) {
+            context.dataStore.edit { preferences ->
+                preferences[COURSE_KEY] = Json.encodeToString(course)
+            }
+        } else {
+            context.dataStore.edit { preferences ->
+                preferences.remove(USER_ID)
+            }
         }
     }
 
