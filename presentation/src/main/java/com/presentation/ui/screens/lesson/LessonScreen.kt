@@ -253,7 +253,7 @@ private class PreviewProvider : PreviewParameterProvider<LessonUIState> {
         get() = listOfStates.asSequence()
 }
 
-@Preview()
+@Preview
 @Composable
 fun TranslateViewPreview(@PreviewParameter(PreviewProvider::class) state: LessonUIState) {
     AppTheme {

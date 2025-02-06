@@ -10,7 +10,7 @@ data class AccountUIState(
     val showDeleteDialog: Boolean = false
 )
 
-sealed class AccountIntent() {
+sealed class AccountIntent {
     object EditClicked : AccountIntent()
     object AddLanguage : AccountIntent()
     object ChangeTheme : AccountIntent()

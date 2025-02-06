@@ -33,7 +33,7 @@ class LessonViewModel(
         viewModelScope.launch {
             getSetOfWords.invoke(setId).collectLatest {
                 if (allWords.isEmpty()) {
-                    val filtered = it.filter { it.level != Level.KNOW }
+                    val filtered = it.filter { word -> word.level != Level.KNOW }
                     val selected = filtered.take(if (filtered.size < 5) filtered.size else 5)
                     allWords.clear()
                     allWords.addAll(selected.shuffled())

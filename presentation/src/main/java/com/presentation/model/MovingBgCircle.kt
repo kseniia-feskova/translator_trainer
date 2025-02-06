@@ -1,6 +1,8 @@
 package com.presentation.model
 
 import androidx.compose.ui.graphics.Color
+import kotlin.math.cos
+import kotlin.math.sin
 
 data class MovingBgCircle(
     val x: Float,
@@ -21,8 +23,8 @@ data class MovingBgCircle(
         val angleInRadians = Math.toRadians(angle.toDouble())
 
         // Вычисляем смещение по x и y
-        val dx = (speed * deltaTime * Math.cos(angleInRadians)).toFloat()
-        val dy = (speed * deltaTime * Math.sin(angleInRadians)).toFloat()
+        val dx = (speed * deltaTime * cos(angleInRadians)).toFloat()
+        val dy = (speed * deltaTime * sin(angleInRadians)).toFloat()
 
         // Обновляем координаты
         var newX = x + dx

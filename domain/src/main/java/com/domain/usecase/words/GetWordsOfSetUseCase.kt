@@ -12,7 +12,7 @@ import java.util.UUID
 class GetWordsOfSetUseCase(private val repo: IWordsDaoRepository) : IGetWordsOfSetUseCase {
 
     fun invoke(setId: Int): Flow<List<WordUI>> {
-        return repo.getWordsInSet(setId).map { it.words.map { it.toWord() } }
+        return repo.getWordsInSet(setId).map { it.words.map { word -> word.toWord() } }
     }
 
     override fun invoke(setId: UUID): Flow<List<WordUI>> {

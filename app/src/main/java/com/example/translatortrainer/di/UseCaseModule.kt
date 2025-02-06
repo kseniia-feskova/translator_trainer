@@ -2,15 +2,11 @@ package com.example.translatortrainer.di
 
 import com.domain.token.ITokenRefresher
 import com.domain.token.TokenRefresher
-import com.domain.usecase.AddSetOfWordsUseCase
 import com.domain.usecase.AddSetWordCrossRef
 import com.domain.usecase.AddWordToSetUseCase
 import com.domain.usecase.DeleteSetByIdUseCase
 import com.domain.usecase.GetAccountUseCase
 import com.domain.usecase.GetAllSetsUseCase
-import com.domain.usecase.GetSetOfAllCardsUseCase
-import com.domain.usecase.GetSetOfCardsUseCase
-import com.domain.usecase.GetSetOfWordsUseCase
 import com.domain.usecase.TranslateWordUseCase
 import com.domain.usecase.auth.DeleteUseCase
 import com.domain.usecase.auth.LoginUseCase
@@ -26,15 +22,11 @@ import com.domain.usecase.words.GetWordByOriginal
 import com.domain.usecase.words.GetWordByTranslated
 import com.domain.usecase.words.GetWordsOfSetUseCase
 import com.domain.usecase.words.UpdateWordUseCase
-import com.presentation.usecases.IAddSetOfWordsUseCase
 import com.presentation.usecases.IAddSetWordCrossRefUseCase
 import com.presentation.usecases.IAddWordToSetUseCase
 import com.presentation.usecases.IDeleteSetByIdUseCase
 import com.presentation.usecases.IGetAccountUseCase
 import com.presentation.usecases.IGetAllSetsUseCase
-import com.presentation.usecases.IGetSetOfAllCardsUseCase
-import com.presentation.usecases.IGetSetOfCardsUseCase
-import com.presentation.usecases.IGetSetOfWordsUseCase
 import com.presentation.usecases.ITranslateWordUseCase
 import com.presentation.usecases.auth.IDeleteUseCase
 import com.presentation.usecases.auth.ILoginUseCase
@@ -64,15 +56,7 @@ val useCaseModule = module {
 
     singleOf(::AddWordUseCase) bind IAddWordUseCase::class
 
-    singleOf(::GetSetOfCardsUseCase) bind IGetSetOfCardsUseCase::class
-
-    singleOf(::GetSetOfAllCardsUseCase) bind IGetSetOfAllCardsUseCase::class
-
     singleOf(::GetWordsOfSetUseCase) bind IGetWordsOfSetUseCase::class
-
-    singleOf(::AddSetOfWordsUseCase) bind IAddSetOfWordsUseCase::class
-
-    singleOf(::GetSetOfWordsUseCase) bind IGetSetOfWordsUseCase::class
 
     singleOf(::AddSetWordCrossRef) bind IAddSetWordCrossRefUseCase::class
 

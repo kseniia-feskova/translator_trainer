@@ -195,7 +195,6 @@ class HomeViewModel(
     }
 
     companion object {
-        private const val TAG = "HomeViewModel"
         private const val NEW_WORD = "Word does not exist"
     }
 }

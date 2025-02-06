@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login_marquee">Welcome back!</string>
+    <string name="login_subtitle">Login with account</string>
+    <string name="email_label">E-mail</string>
+    <string name="password_label">Password</string>
+    <string name="forgot_password_label">Forgot password?</string>
+    <string name="guest_button">I\'m a guest</string>
+    <string name="create_account_button">Create account</string>
+    <string name="login_button">Log in</string>
+    <string name="or_view">or</string>
+    <string name="empty_fields_error">Enter all fields</string>
+    <string name="user_does_not_exist_error">User does not exist</string>
+    <string name="wrong_password_error">Wrong password</string>
+    <string name="taken_email_error">User with this e-mail is already exist</string>
+    <string name="default_error">Something went wrong</string>
+    <string name="internet_connection_error">Check your internet connection</string>
+
+    <string name="register_marquee">Nice to meet you!</string>
+    <string name="register_subtitle">Signup with e-mail</string>
+    <string name="signup_button">Sign up</string>
+
+    <!-- Home page -->
+    <string name="home_title">Let\'s translate words!</string>
+    <string name="save_word_btn">Save word</string>
+
+    <!-- Card sets -->
+    <string name="card_sets_title">Card sets</string>
+    <string name="empty_sets_description">You do not have any sets</string>
+    <string name="to_translator_btn">To translator</string>
+    <string name="random_lesson_btn">Random lesson</string>
+
+</resources>

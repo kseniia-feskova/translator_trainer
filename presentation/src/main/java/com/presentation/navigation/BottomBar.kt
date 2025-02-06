@@ -102,7 +102,7 @@ fun BottomNavigationBar(navController: NavController) {
 @Preview
 fun BottomBarPreview() {
     AppTheme {
-        Surface() {
+        Surface {
             Column(modifier = Modifier.background(surfaceLight)) {
                 Spacer(modifier = Modifier.size(30.dp))
                 BottomNavigationBar(navController = NavController(LocalContext.current))

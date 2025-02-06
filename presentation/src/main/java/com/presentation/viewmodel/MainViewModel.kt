@@ -34,8 +34,4 @@ class MainViewModel(
         }
     }
 
-    //создание массивов, если их нет
-    fun checkAndAddAllWordsSet() {
-
-    }
 }

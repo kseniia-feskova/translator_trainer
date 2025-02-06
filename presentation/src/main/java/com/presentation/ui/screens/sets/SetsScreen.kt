@@ -39,7 +39,6 @@ import java.util.UUID
 fun SetsScreen(
     state: SetsUIState,
     createNewSet: () -> Unit = {},
-    selectSet: (UUID?) -> Unit = {},
     navigateToHome: () -> Unit = {},
     navigateToSelectedSet: (UUID) -> Unit = {},
     createRandomLesson: () -> Unit = {},
@@ -88,8 +87,6 @@ fun SetsScreen(
                         .weight(1f)
                         .clip(shape = RoundedCornerShape(20.dp)), // Занимает всё свободное пространство между верхней и нижней частью
                     listOfSets = state.sets,
-                    selectedSetId = state.selectedSetId,
-                    onSetClicked = selectSet,
                     onSetSelected = navigateToSelectedSet
                 )
             }

@@ -1,6 +1,7 @@
 package com.presentation.ui.views
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,13 +31,14 @@ import java.util.UUID
 
 
 @Composable
-fun SetOfCardsView(set: SetOfCards, background: Color) {
+fun SetOfCardsView(set: SetOfCards, background: Color, onSetSelected: (UUID) -> Unit = {}) {
 
     Column(
         modifier = Modifier
             .padding(16.dp)
             .background(color = background, shape = RoundedCornerShape(20.dp))
             .fillMaxWidth()
+            .clickable { onSetSelected(set.id) }
     ) {
         Spacer(modifier = Modifier.height(24.dp))
         Text(
@@ -65,15 +67,14 @@ fun SetOfCardsView(set: SetOfCards, background: Color) {
 fun ListOfSetsView(
     modifier: Modifier = Modifier,
     listOfSets: List<SetOfCards>,
-    selectedSetId: UUID? = null,
     onSetSelected: (UUID) -> Unit = {},
-    onSetClicked: (UUID?) -> Unit = {}
 ) {
     LazyColumn(modifier = modifier.clip(RoundedCornerShape(20.dp))) {
         itemsIndexed(listOfSets) { index, item ->
             SetOfCardsView(
                 item,
-                if (index % 2 == 0) Color.White else lightLilaColor.copy(alpha = 0.5f)
+                if (index % 2 == 0) Color.White else lightLilaColor.copy(alpha = 0.5f),
+                onSetSelected
             )
         }
     }

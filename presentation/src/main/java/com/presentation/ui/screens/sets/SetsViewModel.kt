@@ -44,10 +44,6 @@ class SetsViewModel(
         }
     }
 
-    fun selectSet(setId: UUID?) {
-        _uiState.update { it.copy(selectedSetId = setId) }
-    }
-
     fun isAllWordsSelected(setId: UUID): Boolean {
         val selected = _uiState.value.sets.find { it.id == setId }
         return if (selected != null) {

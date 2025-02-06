@@ -86,81 +86,79 @@ fun AuthScreen(
     onAuthStateChanged: () -> Unit = {},
     onAuthClicked: () -> Unit = {},
     onGuestClicked: () -> Unit = {}
-) {
-    Box() {
-        Column(
+) = Box() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(bgColor)
+    ) {
+        Spacer(Modifier.height(24.dp))
+        MarqueeText(
+            text = if (state.screenState == AuthScreenState.LOGIN) stringResource(R.string.login_marquee) + " "
+            else stringResource(R.string.register_marquee) + " "
+        )
+        Spacer(Modifier.height(24.dp))
+        Circles(
+            modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
+            isRegister = state.screenState == AuthScreenState.REGISTER
+        )
+        Spacer(Modifier.height(32.dp))
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(bgColor)
+                .background(
+                    whiteColor,
+                    shape = RoundedCornerShape(topEnd = 36.dp, topStart = 36.dp)
+                )
+                .padding(vertical = 24.dp, horizontal = 16.dp)
         ) {
-            Spacer(Modifier.height(24.dp))
-            MarqueeText(
-                text = if (state.screenState == AuthScreenState.LOGIN) stringResource(R.string.login_marquee) + " "
-                else stringResource(R.string.register_marquee) + " "
-            )
-            Spacer(Modifier.height(24.dp))
-            Circles(
-                modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
-                isRegister = state.screenState == AuthScreenState.REGISTER
-            )
-            Spacer(Modifier.height(32.dp))
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(
-                        whiteColor,
-                        shape = RoundedCornerShape(topEnd = 36.dp, topStart = 36.dp)
+            AnimatedContent(
+                targetState = state.screenState,
+                label = "AuthForm",
+                transitionSpec = {
+                    slideInHorizontally(
+                        initialOffsetX = { if (targetState == AuthScreenState.LOGIN) 1200 else -1200 },
+                        animationSpec = tween(
+                            durationMillis = 1000,
+                            easing = FastOutSlowInEasing
+                        )
+                    ) togetherWith slideOutHorizontally(
+                        targetOffsetX = { if (targetState == AuthScreenState.LOGIN) -1200 else 1200 },
+                        animationSpec = tween(
+                            durationMillis = 1000,
+                            easing = FastOutSlowInEasing
+                        )
                     )
-                    .padding(vertical = 24.dp, horizontal = 16.dp)
-            ) {
-                AnimatedContent(
-                    targetState = state.screenState,
-                    label = "AuthForm",
-                    transitionSpec = {
-                        slideInHorizontally(
-                            initialOffsetX = { if (targetState == AuthScreenState.LOGIN) 1200 else -1200 },
-                            animationSpec = tween(
-                                durationMillis = 1000,
-                                easing = FastOutSlowInEasing
-                            )
-                        ) togetherWith slideOutHorizontally(
-                            targetOffsetX = { if (targetState == AuthScreenState.LOGIN) -1200 else 1200 },
-                            animationSpec = tween(
-                                durationMillis = 1000,
-                                easing = FastOutSlowInEasing
-                            )
-                        )
-                    },
-                ) { screen ->
-                    if (screen == AuthScreenState.LOGIN) {
-                        LoginForm(
-                            state,
-                            onEmailChanged,
-                            onPasswordChanged,
-                            onAuthClicked,
-                            onGuestClicked,
-                            onAuthStateChanged
-                        )
-                    } else {
-                        RegisterForm(
-                            state,
-                            onEmailChanged,
-                            onPasswordChanged,
-                            onAuthClicked,
-                            onGuestClicked,
-                            onAuthStateChanged
-                        )
-                    }
+                },
+            ) { screen ->
+                if (screen == AuthScreenState.LOGIN) {
+                    LoginForm(
+                        state,
+                        onEmailChanged,
+                        onPasswordChanged,
+                        onAuthClicked,
+                        onGuestClicked,
+                        onAuthStateChanged
+                    )
+                } else {
+                    RegisterForm(
+                        state,
+                        onEmailChanged,
+                        onPasswordChanged,
+                        onAuthClicked,
+                        onGuestClicked,
+                        onAuthStateChanged
+                    )
                 }
             }
         }
-        if (state.isLoading) {
-            Loader(
-                modifier = Modifier
-                    .width(80.dp)
-                    .align(Alignment.Center)
-            )
-        }
+    }
+    if (state.isLoading) {
+        Loader(
+            modifier = Modifier
+                .width(80.dp)
+                .align(Alignment.Center)
+        )
     }
 }
 
@@ -550,7 +548,7 @@ private class PreviewProvider : PreviewParameterProvider<AuthUIState> {
         get() = listOfStates.asSequence()
 }
 
-@Preview()
+@Preview
 @Composable
 fun NewLoginViewPreview(@PreviewParameter(PreviewProvider::class) state: AuthUIState) {
     AppTheme {

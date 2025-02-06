@@ -61,7 +61,7 @@ fun CircleProgress(modifier: Modifier = Modifier, value: Int, maxValue: Int) {
             }
         }
     }
-    Box() {
+    Box {
 
         CircularProgressIndicator(
             progress = { currentProgress },
@@ -189,7 +189,7 @@ fun CircleProgressPreview() {
                     .fillMaxSize()
                     .background(whiteColor)
             ) {
-                Row() {
+                Row {
                     CircleProgress(
                         modifier = Modifier
                             .size(180.dp)

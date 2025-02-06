@@ -45,7 +45,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         startKoin()
-        viewModel.checkAndAddAllWordsSet()
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         enableEdgeToEdge(

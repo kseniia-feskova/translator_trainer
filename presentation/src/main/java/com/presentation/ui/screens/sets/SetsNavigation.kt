@@ -45,7 +45,6 @@ fun SetsRoute(
                 navigateToSelectedSet(it)
             }
         },
-        selectSet = viewModel::selectSet,
         navigateToHome = navigateToHome,
         createNewSet = createNewSet,
         createRandomLesson = createRandomLesson

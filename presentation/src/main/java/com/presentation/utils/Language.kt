@@ -51,8 +51,8 @@ fun String?.getLanguageByCode(): Language {
 fun String?.getResourceByCode(): Int {
     return try {
         when (this) {
-            GERMAN.code -> R.drawable.germany
-            RUSSIAN.code -> R.drawable.russia
+            GERMAN.code -> R.drawable.ic_de
+            RUSSIAN.code -> R.drawable.ic_ru
             else -> throw Exception("Can not fund the drawable for language")
         }
     } catch (e: Exception) {

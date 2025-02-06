@@ -148,7 +148,7 @@ private class PreviewProvider : PreviewParameterProvider<AllWordsUIState> {
         get() = listOfStates.asSequence()
 }
 
-@Preview()
+@Preview
 @Composable
 fun TranslateViewPreview(@PreviewParameter(PreviewProvider::class) state: AllWordsUIState) {
     AppTheme {

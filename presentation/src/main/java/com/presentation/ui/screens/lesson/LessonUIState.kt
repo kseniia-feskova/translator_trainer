@@ -48,7 +48,7 @@ sealed class LessonIntent {
     object DontKnow : LessonIntent()
 }
 
-enum class LessonType() {
+enum class LessonType {
     TRANSLATE,
     ORIGIN;
 

@@ -12,7 +12,7 @@ data class AllWordsUIState(
     val popupOffset: Offset? = null
 )
 
-sealed class AllWordsIntent() {
+sealed class AllWordsIntent {
     data class Search(val query: String) : AllWordsIntent()
     object ClearSearch : AllWordsIntent()
     object Filter : AllWordsIntent()

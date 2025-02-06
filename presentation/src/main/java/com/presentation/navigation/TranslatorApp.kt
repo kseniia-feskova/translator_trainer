@@ -31,14 +31,14 @@ fun TranslatorApp(navController: NavHostController, isUserAuthorized: Boolean = 
         navController = navController,
         startDestination = startDestination
     ) {
-        LoginNav(navController)
-        HomeNav()
-        SetsNav(navController)
-        AccountNav()
+        loginNav(navController)
+        homeNav()
+        setsNav(navController)
+        accountNav()
     }
 }
 
-private fun NavGraphBuilder.LoginNav(navController: NavHostController) {
+private fun NavGraphBuilder.loginNav(navController: NavHostController) {
     authScreen(
         goToCourses = {
             navController.navigate(LeafScreen.SelectCourse.route) {
@@ -71,7 +71,7 @@ private fun NavGraphBuilder.LoginNav(navController: NavHostController) {
     )
 }
 
-private fun NavGraphBuilder.HomeNav() {
+private fun NavGraphBuilder.homeNav() {
     navigation(
         startDestination = LeafScreen.Home.route,
         route = RootScreen.Home.route
@@ -80,7 +80,7 @@ private fun NavGraphBuilder.HomeNav() {
     }
 }
 
-private fun NavGraphBuilder.SetsNav(navController: NavHostController) {
+private fun NavGraphBuilder.setsNav(navController: NavHostController) {
     navigation(
         startDestination = LeafScreen.Sets.route, // Это для экрана
         route = RootScreen.Sets.route            // Это для графа
@@ -114,7 +114,7 @@ private fun NavGraphBuilder.SetsNav(navController: NavHostController) {
     }
 }
 
-private fun NavGraphBuilder.AccountNav() {
+private fun NavGraphBuilder.accountNav() {
     navigation(
         startDestination = LeafScreen.Account.route, // Это для экрана
         route = RootScreen.Profile.route            // Это для графа

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -31,7 +32,7 @@ fun SwipeCard(
     swipeEnabled: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    var offset by remember { mutableStateOf(0f) }
+    var offset by remember { mutableFloatStateOf(0f) }
     var dismissRight by remember { mutableStateOf(false) }
     var dismissLeft by remember { mutableStateOf(false) }
     val density = LocalDensity.current.density
@@ -68,11 +69,11 @@ fun SwipeCard(
                         }
 
                         // Возвращаем карточку на место, если не прошли порог
-                        if (!dismissRight && !dismissLeft) {
-                            offset = 0f
+                        offset = if (!dismissRight && !dismissLeft) {
+                            0f
                         } else {
                             // Двигаем карточку за пределы экрана
-                            offset = if (dismissRight) 900f else -900f
+                            if (dismissRight) 900f else -900f
                         }
                     }) { change, dragAmount ->
                         offset += (dragAmount / density) * sensitivityFactor
@@ -102,7 +103,7 @@ fun SwipeCard(
 @Preview
 @Composable
 fun SwipeCardPreview() {
-    SwipeCard() {
+    SwipeCard {
         FlippableCard(frontText = "Deutsches Wort", backText = "Немецкое слово")
     }
 }

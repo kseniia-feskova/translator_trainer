@@ -72,9 +72,9 @@ fun BackgroundDecorAnimated() {
                 }
                 val deltaTime = (frameTimeNanos - lastFrameTimeNanos) / 1_000_000_000f
                 lastFrameTimeNanos = frameTimeNanos
-                points = points.map { point ->
+                points = points.mapNotNull { point ->
                     point.updatePosition(screenWidthPx, screenHeightPx, deltaTime)
-                }.filterNotNull()
+                }
             }
         }
     }
@@ -94,7 +94,7 @@ fun BackgroundDecorAnimated() {
 @Composable
 fun BackgroundDecorAnimatedPreview() {
     AppTheme {
-        Surface() {
+        Surface {
             BackgroundDecorAnimated()
         }
     }

@@ -55,7 +55,7 @@ fun SetScreen(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        Column() {
+        Column {
             BaseTopView(
                 title = state.name,
                 rightIcon = Icons.Default.Edit,
@@ -109,7 +109,7 @@ fun SetScreen(
                         fontSize = TextUnit(16f, TextUnitType.Sp)
                     )
                 }
-                Column(horizontalAlignment = Alignment.CenterHorizontally,) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Icon(
                         Icons.AutoMirrored.Filled.ArrowForwardIos,
                         contentDescription = "Right",

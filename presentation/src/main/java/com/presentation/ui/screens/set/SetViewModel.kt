@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.presentation.model.Level
 import com.presentation.model.WordUI
-import com.presentation.usecases.IGetSetOfCardsUseCase
 import com.presentation.usecases.words.IGetWordsOfSetUseCase
 import com.presentation.usecases.words.IUpdateWordUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +16,6 @@ import java.util.UUID
 class SetViewModel(
     savedStateHandle: SavedStateHandle,
     private val getWords: IGetWordsOfSetUseCase,
-    private val getSet: IGetSetOfCardsUseCase,
     private val updateWord: IUpdateWordUseCase
 ) : ViewModel() {
 
@@ -40,15 +38,15 @@ class SetViewModel(
                     _uiState.update {
                         it.copy(
                             allWords = setWithWords.size,
-                            knowWords = setWithWords.count { it.level == Level.KNOW }
+                            knowWords = setWithWords.count { word -> word.level == Level.KNOW }
                         )
                     }
                     updateUI()
                 }
         }
-        viewModelScope.launch {
-            _uiState.update { it.copy(name = getSet.invoke(setId)?.title.toString()) }
-        }
+//        viewModelScope.launch {
+//            _uiState.update { it.copy(name = getSet.invoke(setId)?.title.toString()) }
+//        }
     }
 
     fun handleIntent(intent: CardSetIntent) {

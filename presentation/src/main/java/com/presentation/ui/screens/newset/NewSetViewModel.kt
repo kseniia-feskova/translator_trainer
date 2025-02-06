@@ -3,17 +3,13 @@ package com.presentation.ui.screens.newset
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.presentation.model.WordUI
-import com.presentation.usecases.IGetSetOfWordsUseCase
 import com.presentation.usecases.words.IGetWordsOfSetUseCase
-import com.presentation.utils.ALL_WORDS
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class NewSetViewModel(
-    private val getAllWordsSet: IGetSetOfWordsUseCase,
     private val getAllWords: IGetWordsOfSetUseCase,
 ) : ViewModel() {
 
@@ -25,15 +21,15 @@ class NewSetViewModel(
     init {
         viewModelScope.launch {
             if (allWords.isEmpty()) {
-                val id = getAllWordsSet.invoke(ALL_WORDS)?.id
-                if (id != null) {
-                    getAllWords.invoke(id).collectLatest { list ->
-                        allWords = list.toSelectingMap()
-                        _uiState.update {
-                            it.copy(words = allWords, loading = false)
-                        }
-                    }
-                }
+//                val id = getAllWordsSet.invoke(ALL_WORDS)?.id
+//                if (id != null) {
+//                    getAllWords.invoke(id).collectLatest { list ->
+//                        allWords = list.toSelectingMap()
+//                        _uiState.update {
+//                            it.copy(words = allWords, loading = false)
+//                        }
+//                    }
+//                }
             }
         }
     }
@@ -53,7 +49,7 @@ class NewSetViewModel(
     private fun saveSet(onSetSaved: () -> Unit) {
         _uiState.update { it.copy(loading = true) }
         viewModelScope.launch {
-            val data = _uiState.value
+            //val data = _uiState.value
 //            val set = SetOfCards(data.name, emptySet(), 0)
 //            val setId = addSetOfCards.invoke(set).toInt()
 //

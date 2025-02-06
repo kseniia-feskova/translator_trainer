@@ -27,7 +27,7 @@ fun ActionButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     onClick: () -> Unit,
-    content: @Composable() (RowScope.() -> Unit)
+    content: @Composable (RowScope.() -> Unit)
 ) {
     OutlinedButton(
         onClick = { onClick() },
@@ -50,7 +50,7 @@ fun ActionButton(
 fun SecondButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
-    content: @Composable() (RowScope.() -> Unit)
+    content: @Composable (RowScope.() -> Unit)
 ) {
     OutlinedButton(
         onClick = { onClick() },

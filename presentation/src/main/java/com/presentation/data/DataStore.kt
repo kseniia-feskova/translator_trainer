@@ -28,15 +28,15 @@ interface IDataStoreManager {
 
 class DataStoreManager(private val context: Context) : IDataStoreManager {
 
-    private val USER_ID = stringPreferencesKey("user_id")
-    private val COURSE_KEY = stringPreferencesKey("course")
+    private val userIdKey = stringPreferencesKey("user_id")
+    private val courseKey = stringPreferencesKey("course")
 
     private val userId: Flow<UUID?> = context.dataStore.data
         .map { preferences ->
-            if (preferences[USER_ID].isNullOrEmpty()) {
+            if (preferences[userIdKey].isNullOrEmpty()) {
                 null
             } else {
-                UUID.fromString(preferences[USER_ID])
+                UUID.fromString(preferences[userIdKey])
             }
         }
 
@@ -47,11 +47,11 @@ class DataStoreManager(private val context: Context) : IDataStoreManager {
     override suspend fun saveUserId(id: UUID?) {
         if (id == null) {
             context.dataStore.edit { preferences ->
-                preferences.remove(USER_ID)
+                preferences.remove(userIdKey)
             }
         } else {
             context.dataStore.edit { preferences ->
-                preferences[USER_ID] = id.toString()
+                preferences[userIdKey] = id.toString()
             }
         }
     }
@@ -66,18 +66,18 @@ class DataStoreManager(private val context: Context) : IDataStoreManager {
     override suspend fun saveCourse(course: CourseUI?) {
         if (course != null) {
             context.dataStore.edit { preferences ->
-                preferences[COURSE_KEY] = Json.encodeToString(course)
+                preferences[courseKey] = Json.encodeToString(course)
             }
         } else {
             context.dataStore.edit { preferences ->
-                preferences.remove(USER_ID)
+                preferences.remove(userIdKey)
             }
         }
     }
 
     override suspend fun getCourse(): CourseUI? {
         return context.dataStore.data.map { preferences ->
-            preferences[COURSE_KEY]?.let { Json.decodeFromString<CourseUI>(it) }
+            preferences[courseKey]?.let { Json.decodeFromString<CourseUI>(it) }
         }.firstOrNull()
     }
 }

@@ -44,8 +44,6 @@ import com.presentation.ui.bgColor
 import com.presentation.ui.whiteColor
 import java.net.URL
 
-private const val MAX_WORDS = 30
-
 @Composable
 fun HomeTopView(
     title: String
