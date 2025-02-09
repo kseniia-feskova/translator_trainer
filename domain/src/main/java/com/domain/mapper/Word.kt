@@ -14,15 +14,6 @@ fun WordUI.toNewWordEntity(): WordEntity {
 //        dateAdded = date
     )
 }
-fun WordUI.toWordEntity(): WordEntity {
-    return WordEntity(
-        id = id,
-        originalText = originalText,
-        translatedText = resText,
-        status = level.toStatus(),
-//        dateAdded = date
-    )
-}
 
 fun WordEntity.toWord(): WordUI {
     return WordUI(
@@ -49,6 +40,6 @@ fun WordResponse.toUI(): WordUI {
         id = id,
         resText = translatedText,
         originalText = originalText,
-        level = Level.NEW
+        level = status.toLevel()
     )
 }

@@ -87,7 +87,12 @@ private fun NavGraphBuilder.setsNav(navController: NavHostController) {
     ) {
 
         setsScreen(
-            navigateToSelectedSet = { navController.navigateToSet(it.toString()) },
+            navigateToSelectedSet = { id, name ->
+                navController.navigateToSet(
+                    id.toString(),
+                    name
+                )
+            },
             navigateToAllWordsSet = { navController.navigateToAllWords(it.toString()) },
             navigateToHome = navController::navigateToHome,
             createNewSet = { navController.navigateToNewSet() },
@@ -95,7 +100,12 @@ private fun NavGraphBuilder.setsNav(navController: NavHostController) {
         )
 
         setScreen(
-            navigateToLesson = { navController.navigateToLesson(it.toString(), LessonType.TRANSLATE) },
+            navigateToLesson = {
+                navController.navigateToLesson(
+                    it.toString(),
+                    LessonType.TRANSLATE
+                )
+            },
             navigateToEdit = {},
             navigateUp = { navController.navigateUp() },
         )

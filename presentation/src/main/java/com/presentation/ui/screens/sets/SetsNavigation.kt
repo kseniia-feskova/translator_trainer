@@ -13,7 +13,7 @@ import org.koin.androidx.compose.koinViewModel
 import java.util.UUID
 
 fun NavGraphBuilder.setsScreen(
-    navigateToSelectedSet: (UUID) -> Unit,
+    navigateToSelectedSet: (UUID, String) -> Unit,
     navigateToAllWordsSet: (UUID) -> Unit,
     navigateToHome: () -> Unit,
     createNewSet: () -> Unit,
@@ -32,7 +32,7 @@ fun NavGraphBuilder.setsScreen(
 
 @Composable
 fun SetsRoute(
-    navigateToSelectedSet: (UUID) -> Unit,
+    navigateToSelectedSet: (UUID, String) -> Unit,
     navigateToAllWordsSet: (UUID) -> Unit,
     navigateToHome: () -> Unit,
     createNewSet: () -> Unit,
@@ -49,11 +49,11 @@ fun SetsRoute(
     val state = viewModel.uiState.collectAsState()
     SetsScreen(
         state = state.value,
-        navigateToSelectedSet = {
-            if (viewModel.isAllWordsSelected(it)) {
-                navigateToAllWordsSet(it)
+        navigateToSelectedSet = { id, name ->
+            if (viewModel.isAllWordsSelected(id)) {
+                navigateToAllWordsSet(id)
             } else {
-                navigateToSelectedSet(it)
+                navigateToSelectedSet(id, name)
             }
         },
         navigateToHome = navigateToHome,

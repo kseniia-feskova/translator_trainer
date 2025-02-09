@@ -39,14 +39,14 @@ enum class RootScreen(val route: String, val iconRes: Int) {
 
 @Serializable
 sealed class LeafScreen(val route: String) {
-    object Login: LeafScreen("login")
-    object SelectCourse: LeafScreen("select_course")
+    object Login : LeafScreen("login")
+    object SelectCourse : LeafScreen("select_course")
     object Home : LeafScreen("home")
     object Sets : LeafScreen("sets")
-    object Account:LeafScreen("account")
+    object Account : LeafScreen("account")
 
     @Serializable
-    data class Set(val setId: String) : LeafScreen("set")
+    data class Set(val setId: String, val setName: String) : LeafScreen("set")
 
     @Serializable
     data class Lesson(val setId: String, val type: LessonType) : LeafScreen("lesson")
@@ -60,7 +60,8 @@ sealed class LeafScreen(val route: String) {
 @Composable
 fun BottomNavigationBar(navController: NavController) {
     NavigationBar(
-        modifier = Modifier.height(60.dp)
+        modifier = Modifier
+            .height(60.dp)
             .clip(
                 shape = RoundedCornerShape(12.dp, 12.dp, 0.dp, 0.dp),
             ),
@@ -73,12 +74,20 @@ fun BottomNavigationBar(navController: NavController) {
             NavigationBarItem(
                 selected = currentDestination?.matchDestination(item.route) ?: false,
                 onClick = {
-                    navController.navigate(item.route) {
-                        popUpTo(navController.graph.startDestinationId) {
-                            saveState = true
+                    val currentRoute = currentDestination?.parent?.route
+                    if (currentRoute == item.route) {
+                        navController.navigate(item.route) {
+                            popUpTo(item.route) { inclusive = true }
+                            launchSingleTop = true
                         }
-                        launchSingleTop = true
-                        restoreState = true
+                    } else {
+                        navController.navigate(item.route) {
+                            popUpTo(navController.graph.startDestinationId) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
                     }
                 },
                 icon = {

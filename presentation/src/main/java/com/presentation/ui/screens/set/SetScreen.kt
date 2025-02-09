@@ -5,8 +5,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBackIos
@@ -14,7 +16,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,18 +23,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
+import com.presentation.R
 import com.presentation.model.WordUI
 import com.presentation.navigation.BottomNavigationBar
 import com.presentation.test.smallList
 import com.presentation.ui.AppTheme
-import com.presentation.ui.accentColorLight
-import com.presentation.ui.views.ActionButton
+import com.presentation.ui.AppTypography
+import com.presentation.ui.bgColor
+import com.presentation.ui.lightLilaColor
+import com.presentation.ui.redDarkColor
+import com.presentation.ui.screens.auth.CustomShadowButton
 import com.presentation.ui.views.BaseTopView
 import com.presentation.ui.views.CardsSet
 import com.presentation.ui.views.ProgressForSet
@@ -52,111 +58,104 @@ fun SetScreen(
     val cardHeight = screenHeight * 0.25f
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
     ) {
-        Column {
-            BaseTopView(
-                title = state.name,
-                rightIcon = Icons.Default.Edit,
-                leftIcon = Icons.Default.ArrowBackIosNew,
-                onRightClick = navigateToEdit,
-                onLeftClick = navigateUp
-            )
+        BaseTopView(
+            title = state.name,
+            rightIcon = Icons.Default.Edit,
+            leftIcon = Icons.Default.ArrowBackIosNew,
+            onRightClick = navigateToEdit,
+            onLeftClick = navigateUp
+        )
+        Column(modifier = Modifier.align(Alignment.Center)) {
+            if (state.words != null) {
+                CardsSet(
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(horizontal = 20.dp),
+                    cardHeight = cardHeight,
+                    state.words.first,
+                    state.words.second,
+                    onRightSwipe = {
+                        addWordToKnow(it)
+
+                    },
+                    onLeftSwipe = {
+                        addWordToLearn(it)
+
+                    }
+                )
+
+                Row(
+                    modifier = Modifier
+                        .padding(horizontal = 20.dp)
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBackIos,
+                            contentDescription = "Left",
+                            tint = lightLilaColor
+                        )
+                    }
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowForwardIos,
+                            contentDescription = "Right",
+                            tint = lightLilaColor
+                        )
+                    }
+                }
+            } else {
+                Column(
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(20.dp)
+                        .fillMaxWidth()
+                        .zIndex(2f),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = stringResource(R.string.sorted_words),
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally),
+                        style = AppTypography.titleSmall.copy(color = bgColor),
+                        fontSize = TextUnit(22f, TextUnitType.Sp)
+                    )
+                    Spacer(modifier = Modifier.height(20.dp))
+                    CustomShadowButton(
+                        onClick = { resetCardSet() },
+                        text = stringResource(R.string.sort_again_btn),
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
 
             ProgressForSet(
-                modifier = Modifier.padding(12.dp),
+                modifier = Modifier.padding(horizontal = 20.dp),
                 current = state.knowWords,
                 all = state.allWords
             )
-        }
 
-        if (state.words != null) {
-            CardsSet(
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .padding(horizontal = 16.dp),
-                cardHeight = cardHeight,
-                state.words.first,
-                state.words.second,
-                onRightSwipe =  {
-                    addWordToKnow(it)
-
-                } ,
-                onLeftSwipe = {
-                    addWordToLearn(it)
-
-                }
-            )
-
-            Row(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth()
-                    .align(Alignment.Center)
-                    .padding(top = cardHeight * 1.4f),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Icon(
-                        Icons.AutoMirrored.Filled.ArrowBackIos,
-                        contentDescription = "Left",
-                        tint = accentColorLight
-                    )
-                    Text(
-                        text = "Не знаю",
-                        style = MaterialTheme.typography.bodyLarge,
-                        fontSize = TextUnit(16f, TextUnitType.Sp)
-                    )
-                }
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Icon(
-                        Icons.AutoMirrored.Filled.ArrowForwardIos,
-                        contentDescription = "Right",
-                        tint = accentColorLight
-                    )
-                    Text(
-                        text = "Знаю",
-                        style = MaterialTheme.typography.bodyLarge,
-                        fontSize = TextUnit(16f, TextUnitType.Sp),
-                    )
-                }
-            }
-        } else {
-            Column(
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .padding(16.dp)
-                    .fillMaxWidth()
-                    .zIndex(2f),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
+            if (state.error != null) {
                 Text(
-                    text = "Вы отсортировали все слова",
-                    style = MaterialTheme.typography.titleMedium,
+                    text = stringResource(state.error.msg),
+                    style = AppTypography.titleSmall.copy(color = redDarkColor),
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
-                ActionButton(onClick = { resetCardSet() }) {
-                    Text(
-                        text = "Отсортировать заново",
-                        modifier = Modifier.padding(vertical = 8.dp),
-                    )
-                }
             }
         }
 
-        ActionButton(
+        CustomShadowButton(
             onClick = { startCourse() },
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .padding(12.dp)
-        ) {
-            Text(
-                text = "Изучить набор",
-                modifier = Modifier.padding(vertical = 8.dp),
-                style = MaterialTheme.typography.titleMedium,
-            )
-        }
+                .padding(horizontal = 20.dp, vertical = 16.dp),
+            text = stringResource(R.string.study_btn)
+        )
     }
 }
 
@@ -170,6 +169,7 @@ fun CardSetScreenPreview() {
             Box(modifier = Modifier.padding(paddings)) {
                 SetScreen(
                     state = SetUIState(
+                        name = "New set",
                         words = Pair(
                             smallList.last(),
                             smallList.first()
@@ -184,7 +184,7 @@ fun CardSetScreenPreview() {
 }
 
 
-@Preview(showBackground = true, backgroundColor = 0xFF000999)
+@Preview
 @Composable
 fun EmptyCardSetScreenPreview() {
     AppTheme {

@@ -5,7 +5,7 @@ import com.presentation.model.Level
 
 fun Level.toStatus(): WordStatus {
     return when (this) {
-        com.presentation.model.Level.NEW -> WordStatus.Known
+        com.presentation.model.Level.NEW -> WordStatus.New
         com.presentation.model.Level.LEARNING_GOOD -> WordStatus.GoodLearning
         com.presentation.model.Level.LEARNING -> WordStatus.Learning
         com.presentation.model.Level.KNOW -> WordStatus.Known

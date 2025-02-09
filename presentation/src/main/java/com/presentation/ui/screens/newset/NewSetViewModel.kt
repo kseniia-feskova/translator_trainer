@@ -27,9 +27,9 @@ class NewSetViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(loading = true) }
             if (allWords.isEmpty()) {
-                val id = prefs.getCourse()?.allWordsId
-                if (id != null) {
-                    val response = getAllWords.invoke(UUID.fromString(id))
+                val allWordsId = prefs.getCourse()?.allWordsId
+                if (allWordsId != null) {
+                    val response = getAllWords.invoke(UUID.fromString(allWordsId))
                     if (response.isSuccess) {
                         allWords = response.getOrNull()?.toSelectingMap() ?: emptyMap()
                         _uiState.update { it.copy(words = allWords, loading = false) }

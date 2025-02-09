@@ -1,4 +1,4 @@
-package com.data.model.words
+package com.data.model.words.add
 
 import com.data.model.WordStatus
 import java.util.UUID

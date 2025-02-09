@@ -117,8 +117,8 @@ fun LessonStepView(
             )
             CardView(
                 cardHeight = cardHeight,
-                firstWordUIPreview = lesson.currentWord,
-                secondWordUIPreview = ""
+                word = lesson.currentWord,
+                secondWord = null
             )
         }
         Column(

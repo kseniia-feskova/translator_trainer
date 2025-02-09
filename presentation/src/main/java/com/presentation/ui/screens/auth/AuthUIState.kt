@@ -30,3 +30,9 @@ enum class AuthError(@StringRes val msg: Int) {
     INTERNET_CONNECTION_ERROR(R.string.internet_connection_error),
     DEFAULT(R.string.default_error)
 }
+
+
+enum class BaseError(@StringRes open val msg: Int) {
+    INTERNET_CONNECTION_ERROR(R.string.internet_connection_error),
+    DEFAULT(R.string.default_error)
+}

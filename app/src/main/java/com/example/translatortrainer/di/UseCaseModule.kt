@@ -23,7 +23,7 @@ import com.domain.usecase.words.GetWordByOriginal
 import com.domain.usecase.words.GetWordByTranslated
 import com.domain.usecase.words.GetWordsBySetUseCase
 import com.domain.usecase.words.GetWordsOfSetUseCase
-import com.domain.usecase.words.UpdateWordUseCase
+import com.domain.usecase.words.UpdateStatusUseCase
 import com.presentation.usecases.IAddSetWordCrossRefUseCase
 import com.presentation.usecases.IAddWordToSetUseCase
 import com.presentation.usecases.IDeleteSetByIdUseCase
@@ -45,7 +45,7 @@ import com.presentation.usecases.words.IGetWordByOriginal
 import com.presentation.usecases.words.IGetWordByTranslated
 import com.presentation.usecases.words.IGetWordsBySetUseCase
 import com.presentation.usecases.words.IGetWordsOfSetUseCase
-import com.presentation.usecases.words.IUpdateWordUseCase
+import com.presentation.usecases.words.IUpdateStatusUseCase
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
@@ -63,8 +63,6 @@ val useCaseModule = module {
     singleOf(::GetWordsOfSetUseCase) bind IGetWordsOfSetUseCase::class
 
     singleOf(::AddSetWordCrossRef) bind IAddSetWordCrossRefUseCase::class
-
-    singleOf(::UpdateWordUseCase) bind IUpdateWordUseCase::class
 
     singleOf(::GetWordByIdUseCase) bind IGetWordByIdUseCase::class
 
@@ -97,4 +95,6 @@ val useCaseModule = module {
     singleOf(::GetWordsBySetUseCase) bind IGetWordsBySetUseCase::class
 
     singleOf(::AddSetUseCase) bind IAddSetUseCase::class
+
+    singleOf(::UpdateStatusUseCase) bind IUpdateStatusUseCase::class
 }

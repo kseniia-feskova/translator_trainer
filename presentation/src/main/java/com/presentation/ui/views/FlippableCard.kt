@@ -18,19 +18,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import com.presentation.model.WordUI
+import com.presentation.test.smallList
 import com.presentation.ui.AppTheme
 import com.presentation.ui.primaryColor
 
 @Composable
 fun FlippableCard(
-    frontText: String,
-    backText: String,
+    word: WordUI,
     modifier: Modifier = Modifier,
     flipEnabled: Boolean = true
 ) {
@@ -66,13 +68,13 @@ fun FlippableCard(
             }
             .height(300.dp)
             .background(
-                color = MaterialTheme.colorScheme.primary,
+                color = Color.White,
                 shape = RoundedCornerShape(24.dp)
             )
     ) {
         if (!rotated) {
             Text(
-                text = frontText,
+                text = word.originalText,
                 modifier = Modifier
                     .align(Alignment.Center)
                     .graphicsLayer {
@@ -85,7 +87,7 @@ fun FlippableCard(
             )
         } else {
             Text(
-                text = backText,
+                text = word.resText,
                 modifier = Modifier
                     .align(Alignment.Center)
                     .graphicsLayer {
@@ -107,7 +109,7 @@ fun FlippableCard(
 fun FlippableCardPreview() {
     AppTheme {
         Surface {
-            FlippableCard("Deutsche", "Немецкий")
+            FlippableCard(smallList.first())
         }
     }
 }

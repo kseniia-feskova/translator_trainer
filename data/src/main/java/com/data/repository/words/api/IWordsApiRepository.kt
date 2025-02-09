@@ -1,10 +1,11 @@
 package com.data.repository.words.api
 
 import com.data.api.Result
-import com.data.model.words.AddWordRequest
 import com.data.model.words.WordResponse
+import com.data.model.words.add.AddWordRequest
 import com.data.model.words.get.bytranslate.WordByOriginalRequest
 import com.data.model.words.get.bytranslate.WordByTranslatedRequest
+import com.data.model.words.update.UpdateWordStatusRequest
 import java.util.UUID
 
 interface IWordsApiRepository {
@@ -16,5 +17,10 @@ interface IWordsApiRepository {
     suspend fun getWordByOriginal(request: WordByOriginalRequest): Result<WordResponse>
 
     suspend fun getWordsBySet(setId: UUID): Result<List<WordResponse>>
+
+    suspend fun updateStatus(
+        wordId: UUID,
+        updateStatus: UpdateWordStatusRequest
+    ): Result<WordResponse>
 
 }

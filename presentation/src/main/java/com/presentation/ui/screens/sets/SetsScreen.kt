@@ -40,7 +40,7 @@ fun SetsScreen(
     state: SetsUIState,
     createNewSet: () -> Unit = {},
     navigateToHome: () -> Unit = {},
-    navigateToSelectedSet: (UUID) -> Unit = {},
+    navigateToSelectedSet: (UUID, String) -> Unit = { id, name -> },
     createRandomLesson: () -> Unit = {},
 ) {
     Box(

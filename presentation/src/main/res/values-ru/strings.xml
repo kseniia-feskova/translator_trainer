@@ -35,4 +35,9 @@
     <string name="empty_words_error">Выберите хотя бы одно слово</string>
     <string name="set_name_taken_error">Набор с таким именем уже существует</string>
 
+    <!-- Selected set -->
+    <string name="known_words_subtitle">Вы знаете %d из %d слов</string>
+    <string name="study_btn">Изучить набор</string>
+    <string name="sorted_words">Вы отсортировали все слова</string>
+    <string name="sort_again_btn">Сортировать снова</string>
 </resources>

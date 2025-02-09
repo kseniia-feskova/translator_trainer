@@ -2,10 +2,11 @@ package com.data.repository.words.api
 
 import com.data.api.ApiService
 import com.data.api.Result
-import com.data.model.words.AddWordRequest
 import com.data.model.words.WordResponse
+import com.data.model.words.add.AddWordRequest
 import com.data.model.words.get.bytranslate.WordByOriginalRequest
 import com.data.model.words.get.bytranslate.WordByTranslatedRequest
+import com.data.model.words.update.UpdateWordStatusRequest
 import com.data.safeCall
 import java.util.UUID
 
@@ -27,6 +28,13 @@ class WordsApiRepository(
 
     override suspend fun getWordsBySet(setId: UUID): Result<List<WordResponse>> {
         return safeCall(request = { apiService.getWordsBySet(setId) })
+    }
+
+    override suspend fun updateStatus(
+        wordId: UUID,
+        updateStatus: UpdateWordStatusRequest
+    ): Result<WordResponse> {
+        return safeCall(request = { apiService.updateStatus(wordId, updateStatus) })
     }
 
 }

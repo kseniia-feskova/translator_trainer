@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import com.presentation.model.WordUI
 import com.presentation.ui.accentColor50
 import com.presentation.ui.accentColor80
 import com.presentation.ui.primaryColor
@@ -27,8 +28,8 @@ import com.presentation.ui.views.FlippableCard
 fun CardView(
     modifier: Modifier = Modifier,
     cardHeight: Dp = 250.dp,
-    firstWordUIPreview: String,
-    secondWordUIPreview: String?,
+    word: WordUI,
+    secondWord: WordUI? = null
 ) {
     Box(
         modifier = Modifier
@@ -36,7 +37,7 @@ fun CardView(
             .fillMaxWidth()
     ) {
 
-        if (secondWordUIPreview != null) {
+        if (secondWord != null) {
             Box(
                 modifier = Modifier
                     .height(cardHeight)
@@ -46,7 +47,7 @@ fun CardView(
                     .zIndex(2f),
             ) {
                 Text(
-                    text = secondWordUIPreview,
+                    text = secondWord.originalText,
                     modifier = Modifier
                         .graphicsLayer {
                             renderEffect = BlurEffect(radiusX = 15f, radiusY = 15f)
@@ -75,8 +76,7 @@ fun CardView(
                 .fillMaxWidth()
                 .zIndex(3f)
                 .align(Alignment.BottomCenter),
-            frontText = firstWordUIPreview,
-            backText = firstWordUIPreview,
+            word = word,
             flipEnabled = false
         )
 

@@ -1,7 +1,7 @@
 package com.domain.usecase.words
 
 import com.data.model.SetWordCrossRef
-import com.data.model.words.AddWordRequest
+import com.data.model.words.add.AddWordRequest
 import com.data.repository.words.api.IWordsApiRepository
 import com.data.repository.words.room.IWordsDaoRepository
 import com.domain.mapper.toDao

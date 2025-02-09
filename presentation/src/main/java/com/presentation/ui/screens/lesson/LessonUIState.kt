@@ -16,7 +16,7 @@ sealed class Lesson(
     val options: List<String>,
     val selectedOption: String?,
     val correctOption: String,
-    val currentWord: String
+    val currentWord: WordUI
 ) {
     data class TranslateLesson(
         val words: Set<WordUI>,
@@ -26,7 +26,7 @@ sealed class Lesson(
         options = words.map { it.resText },
         selectedOption = selectedWord?.resText,
         correctOption = correctWord.resText,
-        currentWord = correctWord.originalText
+        currentWord = correctWord
     )
 
     data class OriginLesson(
@@ -37,7 +37,7 @@ sealed class Lesson(
         options = words.map { it.originalText },
         selectedOption = selectedWord?.originalText,
         correctOption = correctWord.originalText,
-        currentWord = correctWord.resText
+        currentWord = correctWord
     )
 
 }

@@ -33,7 +33,11 @@ import java.util.UUID
 
 
 @Composable
-fun SetOfCardsView(set: SetOfCards, background: Color, onSetSelected: (UUID) -> Unit = {}) {
+fun SetOfCardsView(
+    set: SetOfCards,
+    background: Color,
+    onSetSelected: (UUID, String) -> Unit = { id, name -> }
+) {
 
     Column(
         modifier = Modifier
@@ -41,7 +45,7 @@ fun SetOfCardsView(set: SetOfCards, background: Color, onSetSelected: (UUID) -> 
             .background(color = background, shape = RoundedCornerShape(20.dp))
             .border(width = 1.dp, color = fieldBorderColor, shape = RoundedCornerShape(20.dp))
             .fillMaxWidth()
-            .clickable { onSetSelected(set.id) }
+            .clickable { onSetSelected(set.id, set.title) }
     ) {
         Spacer(modifier = Modifier.height(24.dp))
         Text(
@@ -70,7 +74,7 @@ fun SetOfCardsView(set: SetOfCards, background: Color, onSetSelected: (UUID) -> 
 fun ListOfSetsView(
     modifier: Modifier = Modifier,
     listOfSets: List<SetOfCards>,
-    onSetSelected: (UUID) -> Unit = {},
+    onSetSelected: (UUID, String) -> Unit = { id, name -> },
 ) {
     LazyColumn(modifier = modifier.clip(RoundedCornerShape(20.dp))) {
         itemsIndexed(listOfSets) { index, item ->

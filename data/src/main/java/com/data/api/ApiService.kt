@@ -10,13 +10,15 @@ import com.data.model.course.get.GetAllCoursesRequest
 import com.data.model.sets.AddSetRequest
 import com.data.model.sets.SetResponse
 import com.data.model.sets.get.all.GetAllRequest
-import com.data.model.words.AddWordRequest
 import com.data.model.words.WordResponse
+import com.data.model.words.add.AddWordRequest
 import com.data.model.words.get.bytranslate.WordByOriginalRequest
 import com.data.model.words.get.bytranslate.WordByTranslatedRequest
+import com.data.model.words.update.UpdateWordStatusRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
 import java.util.UUID
@@ -80,6 +82,13 @@ interface ApiService {
 
     @GET("words/get_by_set/{setId}")
     suspend fun getWordsBySet(@Path("setId") setId: UUID): Response<List<WordResponse>>
+
+    @PATCH("words/update_status/{id}")
+    suspend fun updateStatus(
+        @Path("id") wordId: UUID,
+        @Body updateStatusRequest: UpdateWordStatusRequest
+    ): Response<WordResponse>
+
 
     //end of region
 }

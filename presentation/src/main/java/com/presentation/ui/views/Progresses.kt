@@ -29,11 +29,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import com.presentation.R
 import com.presentation.ui.AppTheme
+import com.presentation.ui.AppTypography
 import com.presentation.ui.accentColor
 import com.presentation.ui.bgColor
+import com.presentation.ui.lightLilaColor
 import com.presentation.ui.secondaryColor
 import com.presentation.ui.whiteColor
 import kotlinx.coroutines.delay
@@ -99,14 +105,20 @@ fun ProgressForSet(
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Text(text = "Вы знаете $current из $all слов", style = MaterialTheme.typography.titleMedium)
+        Text(
+            text = stringResource(R.string.known_words_subtitle, current, all),
+            style = AppTypography.titleLarge.copy(
+                color = bgColor,
+                fontSize = TextUnit(18f, TextUnitType.Sp)
+            )
+        )
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(
-                    color = MaterialTheme.colorScheme.tertiary,
+                    color = lightLilaColor,
                     shape = RoundedCornerShape(8.dp)
                 )
                 .height(14.dp)
@@ -116,7 +128,7 @@ fun ProgressForSet(
                 modifier = Modifier
                     .fillMaxHeight()
                     .background(
-                        color = MaterialTheme.colorScheme.onPrimary,
+                        color = bgColor,
                         shape = RoundedCornerShape(8.dp)
                     )
                     .fillMaxWidth(width)

@@ -8,7 +8,7 @@ import com.presentation.model.Level
 import com.presentation.model.WordUI
 import com.presentation.ui.screens.set.setId
 import com.presentation.usecases.words.IGetWordsOfSetUseCase
-import com.presentation.usecases.words.IUpdateWordUseCase
+import com.presentation.usecases.words.IUpdateStatusUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 class LessonViewModel(
     savedStateHandle: SavedStateHandle,
     private val getSetOfWords: IGetWordsOfSetUseCase,
-    private val updateWord: IUpdateWordUseCase
+    private val updateWord: IUpdateStatusUseCase
 ) : ViewModel() {
 
     private val setId = savedStateHandle.setId
@@ -171,6 +171,6 @@ class LessonViewModel(
     }
 
     private suspend fun updateWord(word: WordUI) {
-        updateWord.invoke(word.copy(level = word.level.inc()))
+        updateWord.invoke(word.id, level = word.level.inc())
     }
 }

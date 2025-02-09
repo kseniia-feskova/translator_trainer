@@ -16,17 +16,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlurEffect
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import com.presentation.R
 import com.presentation.model.WordUI
 import com.presentation.test.smallList
 import com.presentation.ui.AppTheme
+import com.presentation.ui.AppTypography
+import com.presentation.ui.bgColor
+import com.presentation.ui.lightLilaColor
 import com.presentation.ui.primaryColor
-import com.presentation.ui.secondaryColor
+import com.presentation.ui.screens.auth.CustomShadowButton
 
 
 // Используется только на предпросмотре набора слов,
@@ -55,7 +60,10 @@ fun CardsSet(
                     .height(cardHeight)
                     .align(Alignment.TopCenter)
                     .fillMaxWidth()
-                    .background(color = MaterialTheme.colorScheme.tertiary, shape = RoundedCornerShape(24.dp))
+                    .background(
+                        color = lightLilaColor.copy(alpha = 0.7f),
+                        shape = RoundedCornerShape(24.dp)
+                    )
                     .zIndex(2f),
             ) {
                 Text(
@@ -84,19 +92,15 @@ fun CardsSet(
                 verticalArrangement = Arrangement.SpaceEvenly
             ) {
                 Text(
-                    text = "Вы отсортировали все слова",
+                    text = stringResource(R.string.sorted_words),
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally),
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = secondaryColor,
+                    style = AppTypography.titleSmall.copy(color = bgColor),
                     fontSize = TextUnit(22f, TextUnitType.Sp)
                 )
-                SecondButton(onClick = {}) {
-                    Text(
-                        text = "Отсортировать заново",
-                        modifier = Modifier.padding(vertical = 8.dp),
-                    )
-                }
+                CustomShadowButton(
+                    onClick = {}, text = stringResource(R.string.sort_again_btn),
+                )
             }
         }
 
@@ -116,8 +120,7 @@ fun CardsSet(
             swipeEnabled = swipeEnabled
         ) {
             FlippableCard(
-                frontText = firstWordUI.originalText,
-                backText = firstWordUI.resText,
+                word = firstWordUI,
                 flipEnabled = flipEnabled
             )
         }

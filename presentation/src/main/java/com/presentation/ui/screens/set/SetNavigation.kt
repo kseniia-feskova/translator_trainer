@@ -14,9 +14,10 @@ import java.util.UUID
 
 fun NavController.navigateToSet(
     setId: String,
+    setName: String,
     navOptions: NavOptions? = null
 ) {
-    this.navigate(LeafScreen.Set(setId), navOptions)
+    this.navigate(LeafScreen.Set(setId, setName), navOptions)
 }
 
 fun NavGraphBuilder.setScreen(
@@ -35,6 +36,10 @@ fun NavGraphBuilder.setScreen(
 
 internal val SavedStateHandle.setId: UUID
     get() = UUID.fromString(toRoute<LeafScreen.Set>().setId)
+
+
+internal val SavedStateHandle.setName: String
+    get() = toRoute<LeafScreen.Set>().setName
 
 @Composable
 fun CardSetRoute(

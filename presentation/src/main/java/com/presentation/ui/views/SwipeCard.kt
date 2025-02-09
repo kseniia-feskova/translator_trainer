@@ -19,6 +19,7 @@ import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
+import com.presentation.test.smallList
 import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
 
@@ -104,6 +105,6 @@ fun SwipeCard(
 @Composable
 fun SwipeCardPreview() {
     SwipeCard {
-        FlippableCard(frontText = "Deutsches Wort", backText = "Немецкое слово")
+        FlippableCard(word = smallList.first())
     }
 }

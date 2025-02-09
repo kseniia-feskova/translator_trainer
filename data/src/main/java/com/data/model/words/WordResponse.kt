@@ -1,7 +1,7 @@
 package com.data.model.words
 
-import com.data.model.course.CourseEntity
 import com.data.model.WordStatus
+import com.data.model.course.CourseEntity
 import java.util.UUID
 
 data class WordResponse(
