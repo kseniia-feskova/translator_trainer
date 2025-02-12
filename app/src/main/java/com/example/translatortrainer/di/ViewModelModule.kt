@@ -8,6 +8,7 @@ import com.presentation.ui.screens.newset.NewSetViewModel
 import com.presentation.ui.screens.set.SetViewModel
 import com.presentation.ui.screens.sets.SetsViewModel
 import com.presentation.ui.screens.auth.AuthViewModel
+import com.presentation.ui.screens.lesson.bubble.BubbleLessonViewModel
 import com.presentation.ui.screens.select_course.SelectCourseViewModel
 import com.presentation.viewmodel.MainViewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
@@ -25,4 +26,5 @@ val viewModelModule = module {
     viewModelOf(::NewSetViewModel)
     viewModelOf(::AuthViewModel)
     viewModelOf(::SelectCourseViewModel)
+    viewModelOf(::BubbleLessonViewModel)
 }

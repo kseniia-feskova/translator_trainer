@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.presentation.model.Level
 import com.presentation.model.WordUI
-import com.presentation.ui.screens.set.setId
 import com.presentation.usecases.words.IGetWordsOfSetUseCase
 import com.presentation.usecases.words.IUpdateStatusUseCase
 import kotlinx.coroutines.flow.MutableStateFlow

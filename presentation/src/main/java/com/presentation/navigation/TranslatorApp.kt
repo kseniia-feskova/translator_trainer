@@ -13,9 +13,9 @@ import com.presentation.ui.screens.auth.authScreen
 import com.presentation.ui.screens.auth.navigateToAuth
 import com.presentation.ui.screens.home.homeScreen
 import com.presentation.ui.screens.home.navigateToHome
-import com.presentation.ui.screens.lesson.LessonType
+import com.presentation.ui.screens.lesson.bubble.bubbleLessonScreen
+import com.presentation.ui.screens.lesson.bubble.navigateToBubbleLesson
 import com.presentation.ui.screens.lesson.lessonScreen
-import com.presentation.ui.screens.lesson.navigateToLesson
 import com.presentation.ui.screens.newset.navigateToNewSet
 import com.presentation.ui.screens.newset.newSetScreen
 import com.presentation.ui.screens.select_course.selectCourseScreen
@@ -101,9 +101,8 @@ private fun NavGraphBuilder.setsNav(navController: NavHostController) {
 
         setScreen(
             navigateToLesson = {
-                navController.navigateToLesson(
-                    it.toString(),
-                    LessonType.TRANSLATE
+                navController.navigateToBubbleLesson(
+                    it.toString()
                 )
             },
             navigateToEdit = {},
@@ -111,6 +110,10 @@ private fun NavGraphBuilder.setsNav(navController: NavHostController) {
         )
 
         lessonScreen {
+            navController.navigateUp()
+        }
+
+        bubbleLessonScreen {
             navController.navigateUp()
         }
 

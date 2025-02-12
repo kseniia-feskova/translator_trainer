@@ -18,7 +18,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.HeartBroken
 import androidx.compose.material.icons.filled.LibraryAdd
+import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -218,6 +220,7 @@ fun BaseTopView(
     }
 }
 
+
 @Preview(backgroundColor = 0xFF000000, showBackground = true)
 @Composable
 fun TopViewPreview() {
@@ -241,8 +244,57 @@ fun TopViewPreview() {
                     "Статистика",
                     leftIcon = Icons.Default.ArrowBackIosNew,
                 )
-                AccountTopView(name = "test@gmail.com")
+              //  AccountTopView(name = "test@gmail.com")
+
+                LessonTopView(3)
+                LessonTopView(2)
+                LessonTopView(1)
             }
         }
+    }
+}
+
+
+@Composable
+fun LessonTopView(
+    lives: Int,
+    onPauseClicked: () -> Unit = {}
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                color = bgColor,
+                shape = RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp)
+            ),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Row(modifier = Modifier.padding(16.dp)) {
+            repeat(lives) {
+                Icon(
+                    imageVector = Icons.Default.HeartBroken,
+                    contentDescription = "LeftIcon",
+                    tint = Color.Red,
+                    modifier = Modifier.padding(horizontal = 4.dp)
+                )
+            }
+        }
+
+        Text(
+            text = "",
+            style = AppTypography.displayLarge,
+            color = whiteColor,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 20.dp)
+        )
+
+        Icon(
+            imageVector = Icons.Default.Pause,
+            contentDescription = "RightIcon",
+            modifier = Modifier
+                .padding(16.dp)
+                .clickable { onPauseClicked() },
+            tint = whiteColor
+        )
     }
 }
