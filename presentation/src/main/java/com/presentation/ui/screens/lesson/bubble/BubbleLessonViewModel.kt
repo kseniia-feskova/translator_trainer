@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.presentation.model.LessonType
 import com.presentation.model.Level
 import com.presentation.model.WordUI
 import com.presentation.usecases.words.IGetWordsBySetUseCase
@@ -75,6 +76,11 @@ class BubbleLessonViewModel(
                 //handleError(words)
             }
         }
+    }
+
+    fun navigateToSuccess(navigate: (LessonType, Int) -> Unit) {
+        _lessonComplete.update { false }
+        navigate(LessonType.BUBBLE, _bubbles.value.size / 2)
     }
 
     fun reload() {

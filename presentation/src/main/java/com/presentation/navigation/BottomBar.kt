@@ -55,6 +55,12 @@ sealed class LeafScreen(val route: String) {
     data class BubbleLesson(val setId: String) : LeafScreen("bubble")
 
     @Serializable
+    data class SuccessLesson(
+        val type: com.presentation.model.LessonType,
+        val wordsCount: Int
+    ) : LeafScreen("success")
+
+    @Serializable
     data class AllWords(val setId: String) : LeafScreen("allWords")
 
     object NewSet : LeafScreen("newset")

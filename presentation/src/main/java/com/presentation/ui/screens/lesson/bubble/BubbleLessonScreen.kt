@@ -132,6 +132,8 @@ fun BubbleLessonScreen(
     onPauseClick: () -> Unit = {},
     reload: () -> Unit = {},
     navigateUp: () -> Unit = {},
+    navigateToSuccess: () -> Unit = { }
+
 ) {
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp.toPx()
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp.toPx()
@@ -215,17 +217,15 @@ fun BubbleLessonScreen(
             .pointerInput(Unit) {
                 detectTapGestures { tapOffset ->
                     animatedBubbles.find { it.contains(tapOffset) }?.let {
-                        onBubbleClick(it.id)
+                        if (it.isVisible) {
+                            onBubbleClick(it.id)
+                        }
                     }
                 }
             }
     ) {
         if (isLessonCompleted) {
-            Text(
-                text = "Level completed!",
-                style = AppTypography.bodyLarge.copy(color = bgColor),
-                modifier = Modifier.align(Alignment.Center)
-            )
+            navigateToSuccess()
         }
         BubbleCanvas(animatedBubbles, emptyBubbles)
         LessonTopView(lives) {

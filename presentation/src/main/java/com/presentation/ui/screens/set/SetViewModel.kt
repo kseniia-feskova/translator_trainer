@@ -61,6 +61,7 @@ class SetViewModel(
             is CardSetIntent.AddWordToKnow -> addWordToKnow(intent.word)
             is CardSetIntent.AddWordToLearn -> addWordToLearn(intent.word)
             is CardSetIntent.ResetCardSet -> resetCardSet()
+            is CardSetIntent.CourseSelection -> _uiState.update { it.copy(selectLessonVisible = intent.isVisible) }
         }
     }
 

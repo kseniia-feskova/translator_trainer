@@ -8,6 +8,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import com.presentation.model.LessonType
 import com.presentation.navigation.LeafScreen
 import org.koin.androidx.compose.koinViewModel
 import java.util.UUID
@@ -21,7 +22,7 @@ fun NavController.navigateToSet(
 }
 
 fun NavGraphBuilder.setScreen(
-    navigateToLesson: (UUID) -> Unit = {},
+    navigateToLesson: (UUID, LessonType) -> Unit = { _, _ -> },
     navigateToEdit: () -> Unit = {},
     navigateUp: () -> Unit = {},
 ) {
@@ -43,7 +44,7 @@ internal val SavedStateHandle.setName: String
 
 @Composable
 fun CardSetRoute(
-    navigateToLesson: (UUID) -> Unit = {},
+    navigateToLesson: (UUID, LessonType) -> Unit = { _, _ -> },
     navigateToEdit: () -> Unit = {},
     navigateUp: () -> Unit = {},
     viewModel: SetViewModel = koinViewModel()
@@ -54,7 +55,8 @@ fun CardSetRoute(
         addWordToKnow = { viewModel.handleIntent(CardSetIntent.AddWordToKnow(it)) },
         addWordToLearn = { viewModel.handleIntent(CardSetIntent.AddWordToLearn(it)) },
         resetCardSet = { viewModel.handleIntent(CardSetIntent.ResetCardSet) },
-        startCourse = { navigateToLesson(viewModel.getSetId()) },
+        startCourse = { navigateToLesson(viewModel.getSetId(), it) },
+        showCourseSelection = { viewModel.handleIntent(CardSetIntent.CourseSelection(it)) },
         navigateUp = navigateUp,
         navigateToEdit = navigateToEdit
     )

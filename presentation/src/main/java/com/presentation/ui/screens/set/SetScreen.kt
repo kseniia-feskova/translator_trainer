@@ -1,6 +1,12 @@
 package com.presentation.ui.screens.set
 
 import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,6 +16,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBackIos
 import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
@@ -24,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
@@ -31,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import com.presentation.R
+import com.presentation.model.LessonType
 import com.presentation.model.WordUI
 import com.presentation.navigation.BottomNavigationBar
 import com.presentation.test.smallList
@@ -50,7 +62,8 @@ fun SetScreen(
     addWordToKnow: (WordUI) -> Unit = {},
     addWordToLearn: (WordUI) -> Unit = {},
     resetCardSet: () -> Unit = {},
-    startCourse: () -> Unit = {},
+    showCourseSelection: (Boolean) -> Unit = {},
+    startCourse: (LessonType) -> Unit = {},
     navigateToEdit: () -> Unit = {},
     navigateUp: () -> Unit = {}
 ) {
@@ -150,12 +163,76 @@ fun SetScreen(
         }
 
         CustomShadowButton(
-            onClick = { startCourse() },
+            onClick = { showCourseSelection(true) },
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(horizontal = 20.dp, vertical = 16.dp),
             text = stringResource(R.string.study_btn)
         )
+
+        AnimatedVisibility(
+            modifier = Modifier
+                .wrapContentHeight()
+                .align(Alignment.BottomCenter),
+            visible = state.selectLessonVisible,
+            enter = slideInVertically(
+                initialOffsetY = { it },
+                animationSpec = tween(1000)
+            ),
+            exit = slideOutVertically(targetOffsetY = { it }, animationSpec = tween(1000))
+        ) {
+            Column(
+                modifier = Modifier
+                    .height(screenHeight * 0.4f)
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+                    .background(
+                        lightLilaColor,
+                        shape = RoundedCornerShape(topEnd = 36.dp, topStart = 36.dp)
+                    )
+                    .padding(vertical = 24.dp, horizontal = 16.dp)
+            ) {
+                Text(
+                    "Select lesson",
+                    style = AppTypography.displayLarge.copy(
+                        fontSize = TextUnit(
+                            22f,
+                            TextUnitType.Sp
+                        )
+                    ),
+                    color = bgColor,
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
+
+
+                Spacer(modifier = Modifier.height(32.dp))
+                Box(modifier = Modifier.fillMaxSize()) {
+                    LazyColumn {
+                        items(LessonType.values()) { lesson ->
+                            CustomShadowButton(
+                                text = lesson.name,
+                                onClick = { startCourse(lesson) }
+                            )
+                            Spacer(modifier = Modifier.height(12.dp))
+                        }
+                    }
+
+                    Column(modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(top = 32.dp)) {
+                        Text(
+                            "Close",
+                            modifier = Modifier
+                                .align(Alignment.CenterHorizontally)
+                                .clickable { showCourseSelection(false) },
+                            color = bgColor,
+                            style = AppTypography.titleSmall.copy(fontWeight = FontWeight.Bold)
+                        )
+
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -194,6 +271,30 @@ fun EmptyCardSetScreenPreview() {
                 SetScreen(
                     state = SetUIState(
                         words = null
+                    )
+                )
+            }
+        }, bottomBar = {
+            BottomNavigationBar(navController = NavController(LocalContext.current))
+        })
+    }
+}
+
+@Preview
+@Composable
+fun CardSetScreenWithLessonsPreview() {
+    AppTheme {
+        Scaffold(content = { paddings ->
+            Log.e("CardSetScreenPreview", "paddings = $paddings")
+            Box(modifier = Modifier.padding(paddings)) {
+                SetScreen(
+                    state = SetUIState(
+                        name = "New set",
+                        words = Pair(
+                            smallList.last(),
+                            smallList.first()
+                        ),
+                        selectLessonVisible = true
                     )
                 )
             }
