@@ -29,6 +29,7 @@
     <string name="empty_sets_description">You do not have any sets</string>
     <string name="to_translator_btn">To translator</string>
     <string name="random_lesson_btn">Random lesson</string>
+    <string name="learned_count_label">Learned: %s</string>
 
     <!-- New set -->
     <string name="new_set_title">New set</string>
@@ -45,4 +46,23 @@
     <string name="study_btn">Study set</string>
     <string name="sorted_words">You have sorted all the words</string>
     <string name="sort_again_btn">Sort again</string>
+    <string name="select_lesson_title">Select lesson</string>
+    <string name="close_btn">Close</string>
+
+    <!-- Account set -->
+    <string name="account_title">Account</string>
+    <string name="name_label">Name: </string>
+    <string name="add_course_btn">Add course</string>
+    <string name="change_theme_btn">Change theme</string>
+    <string name="delete_account_btn">Delete account</string>
+    <string name="agree_btn">Agree</string>
+    <string name="cancel_btn">Cancel</string>
+    <string name="delete_account_title">Delete account</string>
+    <string name="delete_account_subtitle">Are you sure you want to delete your account and all data? This action cannot be undone</string>
+    <string name="logout_title">Logout</string>
+    <string name="logout_subtitle">Are you sure you want to log out of your profile?</string>
+
+    <string name="russian">Russian</string>
+    <string name="german">German</string>
+
 </resources>

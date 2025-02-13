@@ -34,8 +34,11 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.presentation.R
@@ -120,17 +123,17 @@ fun AccountTopView(
         Modifier
             .fillMaxWidth()
             .background(
-                color = MaterialTheme.colorScheme.primary,
+                color = bgColor,
                 shape = RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp)
             )
-            .padding(bottom = 12.dp),
+            .padding(bottom = 18.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Text(
-            text = "Профиль",
-            style = MaterialTheme.typography.headlineSmall,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 20.dp)
+            text = stringResource(R.string.account_title),
+            style = MaterialTheme.typography.displayLarge,
+            modifier = Modifier.padding(horizontal = 16.dp)
         )
 
         AsyncImage(
@@ -138,21 +141,32 @@ fun AccountTopView(
                 .size(imageSize)
                 .border(
                     width = 4.dp,
-                    color = MaterialTheme.colorScheme.tertiary,
+                    color = whiteColor,
                     shape = CircleShape
                 )
                 .clip(CircleShape), // Делаем изображение круглым
             placeholder = painterResource(id = R.drawable.ic_account),
+            error = painterResource(id = R.drawable.ic_account),
             model = photo,
             contentDescription = "Sample Image",
             contentScale = ContentScale.Crop
         )
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                text = "Имя: ",
-                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Medium)
+                text = stringResource(R.string.name_label),
+                style = MaterialTheme.typography.titleLarge.copy(
+                    fontWeight = FontWeight.Medium,
+                    fontSize = TextUnit(20f, TextUnitType.Sp),
+                    color = whiteColor
+                )
             )
-            Text(text = name, style = MaterialTheme.typography.titleLarge)
+            Text(
+                text = name,
+                style = MaterialTheme.typography.titleLarge.copy(
+                    color = whiteColor,
+                    fontSize = TextUnit(20f, TextUnitType.Sp)
+                )
+            )
             Icon(
                 imageVector = Icons.Default.Edit,
                 contentDescription = "Edit",
@@ -244,11 +258,11 @@ fun TopViewPreview() {
                     "Статистика",
                     leftIcon = Icons.Default.ArrowBackIosNew,
                 )
-              //  AccountTopView(name = "test@gmail.com")
-
-                LessonTopView(3)
-                LessonTopView(2)
-                LessonTopView(1)
+                AccountTopView(name = "test@gmail.com")
+//
+//                LessonTopView(3)
+//                LessonTopView(2)
+//                LessonTopView(1)
             }
         }
     }

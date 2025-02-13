@@ -24,6 +24,7 @@
     <string name="empty_sets_description">У Вас нет сохранённых слов</string>
     <string name="to_translator_btn">К переводчику</string>
     <string name="random_lesson_btn">Случайный урок</string>
+    <string name="learned_count_label">Изученно: %s</string>
 
     <!-- New set -->
     <string name="new_set_title">Новый набор</string>
@@ -40,4 +41,22 @@
     <string name="study_btn">Изучить набор</string>
     <string name="sorted_words">Вы отсортировали все слова</string>
     <string name="sort_again_btn">Сортировать снова</string>
+    <string name="select_lesson_title">Выбрать урок</string>
+    <string name="close_btn">Закрыть</string>
+
+    <!-- Account set -->
+    <string name="account_title">Профиль</string>
+    <string name="name_label">Имя: </string>
+    <string name="add_course_btn">Добавить курс</string>
+    <string name="change_theme_btn">Изменить тему</string>
+    <string name="delete_account_btn">Удалить аккаунт</string>
+    <string name="agree_btn">Согласен</string>
+    <string name="cancel_btn">Отмена</string>
+    <string name="delete_account_title">Удалить аккаунт</string>
+    <string name="delete_account_subtitle">Вы уверены, что хотите удалить свой аккаунт и все данные? Это действие нельзя отменить</string>
+    <string name="logout_title">Выйти из аккаунта</string>
+    <string name="logout_subtitle">Вы уверены, что хотите выйти из своего профиля?</string>
+
+    <string name="russian">Русский</string>
+    <string name="german">Немецкий</string>
 </resources>

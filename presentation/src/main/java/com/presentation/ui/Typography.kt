@@ -35,20 +35,6 @@ val AppTypography = Typography(
         fontSize = 14.sp,
         fontWeight = FontWeight.Normal
     ),
-    headlineLarge = TextStyle(
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 32.sp,
-        lineHeight = 32.sp,
-        letterSpacing = 0.sp,
-        color = onPrimaryColorLight
-    ),
-    headlineSmall = TextStyle(
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 24.sp,
-        lineHeight = 32.sp,
-        letterSpacing = 0.sp,
-        color = onPrimaryColorLight
-    ),
     titleLarge = TextStyle(
         fontFamily = NunitoFont,
         fontWeight = FontWeight.Normal,

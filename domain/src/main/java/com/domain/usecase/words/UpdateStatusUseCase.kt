@@ -6,6 +6,7 @@ import com.domain.mapper.toStatus
 import com.domain.mapper.toUI
 import com.domain.token.ITokenRefresher
 import com.domain.token.safeApiCallWithRefresh
+import com.presentation.cache.ISetsCacheProvider
 import com.presentation.model.Level
 import com.presentation.model.WordUI
 import com.presentation.usecases.words.IUpdateStatusUseCase
@@ -13,6 +14,7 @@ import java.util.UUID
 
 class UpdateStatusUseCase(
     private val repo: IWordsApiRepository,
+    private val cache: ISetsCacheProvider,
     private val tokenRefresher: ITokenRefresher
 ) : IUpdateStatusUseCase {
 
@@ -29,7 +31,10 @@ class UpdateStatusUseCase(
             } else Result.failure(Exception(response.errorMsg))
         } else if (data == null) {
             Result.failure(Exception("Empty user data"))
-        } else Result.success(data.toUI())
+        } else {
+            cache.addSets(null)
+            Result.success(data.toUI())
+        }
     }
 
 }

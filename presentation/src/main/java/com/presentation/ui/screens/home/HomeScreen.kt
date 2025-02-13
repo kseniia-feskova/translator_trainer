@@ -115,7 +115,12 @@ fun HomeScreen(
                 value = state.inputText,
                 onValueChange = { onWordInput(it) },
                 singleLine = true,
-                label = { Text(state.originalLanguage.name, style = AppTypography.titleSmall) },
+                label = {
+                    Text(
+                        stringResource(state.originalLanguage.getRes()),
+                        style = AppTypography.titleSmall
+                    )
+                },
                 shape = RoundedCornerShape(8.dp),
                 colors = fieldColors(),
                 textStyle = AppTypography.titleSmall,
@@ -150,7 +155,7 @@ fun HomeScreen(
                 singleLine = true,
                 label = {
                     Text(
-                        state.resLanguage.name,
+                        stringResource(state.resLanguage.getRes()),
                         style = AppTypography.titleSmall,
                     )
                 },
@@ -209,8 +214,8 @@ fun LanguageSwitch(
     onClick: (Language) -> Unit
 ) {
     // Фиксируем первоначальные названия языков при первом рендере
-    val firstText = remember { originLang.name }
-    val secondText = remember { translateLang.name }
+    val firstText = stringResource(remember { originLang }.getRes())
+    val secondText = stringResource(remember { translateLang }.getRes())
     var selectedLanguage by remember { mutableStateOf(firstText) }
     val transition = updateTransition(targetState = selectedLanguage, label = "Language Transition")
 
@@ -240,26 +245,28 @@ fun LanguageSwitch(
         Row(
             modifier = Modifier.align(Alignment.CenterStart),
         ) {
+            val first = stringResource(originLang.getRes())
             Text(
                 text = firstText,
                 modifier = Modifier
                     .padding(horizontal = 12.dp)
                     .clickable {
                         selectedLanguage = firstText
-                        onClick(if (originLang.name == firstText) originLang else translateLang)
+                        onClick(if (first == firstText) originLang else translateLang)
                     },
                 color = darkColor,
                 style = AppTypography.displayLarge.copy(fontSize = TextUnit(24f, TextUnitType.Sp))
             )
 
             Spacer(Modifier.width(8.dp))
+            val second = stringResource(translateLang.getRes())
             Text(
                 text = secondText,
                 modifier = Modifier
                     .padding(horizontal = 12.dp)
                     .clickable {
                         selectedLanguage = secondText
-                        onClick(if (translateLang.name == secondText) translateLang else originLang)
+                        onClick(if (second == secondText) translateLang else originLang)
                     },
                 color = darkColor,
                 style = AppTypography.displayLarge.copy(fontSize = TextUnit(24f, TextUnitType.Sp))

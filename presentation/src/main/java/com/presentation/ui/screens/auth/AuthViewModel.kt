@@ -62,6 +62,7 @@ class AuthViewModel(
         goToHome: () -> Unit
     ) {
         viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
             val response = login.invoke(state.email, state.email, state.password)
             if (!response.isSuccess) {
                 handleError(response)
@@ -92,12 +93,12 @@ class AuthViewModel(
             val courses = response.getOrNull() ?: return@launch
             if (courses.size != 1) {
                 dataStore.saveCourses(courses)
-                _uiState.update { it.copy(isLoading = false) }
                 goToCourses()
+                _uiState.update { it.copy(isLoading = false) }
             } else {
                 dataStore.saveCourse(courses.first())
-                _uiState.update { it.copy(isLoading = false) }
                 goToHome()
+                _uiState.update { it.copy(isLoading = false) }
             }
         }
     }

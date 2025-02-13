@@ -5,12 +5,14 @@ import com.data.repository.sets.ISetRepository
 import com.domain.mapper.toUIWithoutWords
 import com.domain.token.ITokenRefresher
 import com.domain.token.safeApiCallWithRefresh
+import com.presentation.cache.ISetsCacheProvider
 import com.presentation.model.SetOfCards
 import com.presentation.usecases.sets.IAddSetUseCase
 import java.util.UUID
 
 class AddSetUseCase(
     val repo: ISetRepository,
+    private val cache: ISetsCacheProvider,
     val tokenRefresher: ITokenRefresher
 ) : IAddSetUseCase {
     override suspend fun invoke(
@@ -30,6 +32,9 @@ class AddSetUseCase(
             } else Result.failure(Exception(response.errorMsg))
         } else if (data == null) {
             Result.failure(Exception("Empty user data"))
-        } else Result.success(data.toUIWithoutWords())
+        } else {
+            cache.addSets(null)
+            Result.success(data.toUIWithoutWords())
+        }
     }
 }

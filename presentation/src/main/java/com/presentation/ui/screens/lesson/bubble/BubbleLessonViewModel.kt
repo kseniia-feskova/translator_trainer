@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.presentation.model.LessonType
 import com.presentation.model.Level
 import com.presentation.model.WordUI
+import com.presentation.usecases.sets.IUpdateSetsUseCase
 import com.presentation.usecases.words.IGetWordsBySetUseCase
 import com.presentation.usecases.words.IUpdateStatusUseCase
 import kotlinx.coroutines.delay
@@ -21,6 +22,7 @@ class BubbleLessonViewModel(
     savedStateHandle: SavedStateHandle,
     private val getWordsBySetUseCase: IGetWordsBySetUseCase,
     private val updateStatusUseCase: IUpdateStatusUseCase,
+    private val updateSetsUseCase: IUpdateSetsUseCase
 ) : ViewModel() {
     private val _bubbles = MutableStateFlow<List<BubbleWitText>>(emptyList())
     val bubbles: StateFlow<List<BubbleWitText>> = _bubbles.asStateFlow()
@@ -182,6 +184,7 @@ class BubbleLessonViewModel(
         words.forEach {
             updateStatusUseCase.invoke(it.id, level = it.level.inc())
         }
+        updateSetsUseCase.invoke()
     }
 
     private fun checkFail() {

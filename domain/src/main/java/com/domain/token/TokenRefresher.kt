@@ -6,11 +6,13 @@ import com.data.prefs.ITokenStorage
 import com.data.prefs.TokenStorage.Companion.ACCESS_TOKEN
 import com.data.prefs.TokenStorage.Companion.REFRESH_TOKEN
 import com.data.repository.auth.IAuthRepository
+import com.presentation.cache.ISetsCacheProvider
 import com.presentation.data.IDataStoreManager
 
 class TokenRefresher(
     private val authRepo: IAuthRepository,
     private val tokenStorage: ITokenStorage,
+    private val cache: ISetsCacheProvider,
     private val prefs: IDataStoreManager,
 ) : ITokenRefresher {
 
@@ -30,6 +32,7 @@ class TokenRefresher(
                 if (response.errorMsg == ERROR_TOKEN_EXPIRED) {
                     Log.e("refreshToken", "Code = 401")
                     authRepo.logout()
+                    cache.addSets(null)
                     prefs.saveUserId(null)
                 } else {
                     Log.e("TokenRefresher", "Can not refresh token. Error msg = ${response.errorMsg}")
@@ -39,6 +42,7 @@ class TokenRefresher(
         } else {
             Log.e("refreshToken", "Token is null(")
             authRepo.logout()
+            cache.addSets(null)
             prefs.saveUserId(null)
             return false
         }

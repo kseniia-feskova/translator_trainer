@@ -25,6 +25,14 @@ enum class Language(val code: String) {
     }
 
     override fun toString() = name.lowercase().replaceFirstChar { it.uppercase() }
+
+    fun getRes(): Int {
+       return when (this) {
+            GERMAN -> R.string.german
+            RUSSIAN -> R.string.russian
+            else -> R.string.german
+        }
+    }
 }
 
 private val languageToEnum = mutableMapOf<String, Language>()

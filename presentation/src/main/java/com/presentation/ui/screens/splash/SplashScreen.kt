@@ -13,17 +13,15 @@ import com.presentation.ui.bgColor
 import com.presentation.ui.screens.auth.navigateToAuth
 import com.presentation.ui.screens.home.navigateToHome
 import com.presentation.ui.views.BackgroundDecorAnimated
-import kotlinx.coroutines.delay
 
 @Composable
 fun SplashScreen(
     viewModel: SplashViewModel,
     navController: NavController
 ) {
-    LaunchedEffect(Unit) { // Используем `true`, чтобы не пересоздавался при изменении переменных
+    LaunchedEffect(Unit) {
         viewModel.isUserLoggedIn.collect {
             if (it) {
-                delay(1500) // Имитация загрузки
                 navController.navigateToHome(
                     navOptions = NavOptions.Builder().setPopUpTo(
                         navController.graph.startDestinationId,
@@ -31,7 +29,6 @@ fun SplashScreen(
                     ).build()
                 )
             } else {
-                delay(1500) // Имитация загрузки
                 navController.navigateToAuth(
                     navOptions = NavOptions.Builder().setPopUpTo(
                         navController.graph.startDestinationId,
@@ -49,6 +46,10 @@ fun SplashScreen(
         contentAlignment = Alignment.Center,
     ) {
         BackgroundDecorAnimated()
+    }
+
+    LaunchedEffect(true) {
+        viewModel.observeUserId()
     }
 }
 

@@ -16,10 +16,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import com.presentation.R
 import com.presentation.model.Level
 import com.presentation.model.SetOfCards
 import com.presentation.test.mockListOfSets
@@ -56,7 +58,10 @@ fun SetOfCardsView(
         Spacer(modifier = Modifier.height(18.dp))
         Text(
             modifier = Modifier.padding(horizontal = 24.dp),
-            text = "Learned: ${set.words.filter { it.level == Level.KNOW }.size}/${set.words.size}",
+            text = stringResource(
+                R.string.learned_count_label,
+                "${set.words.filter { it.level == Level.KNOW }.size}/${set.words.size}"
+            ),
             style = AppTypography.titleLarge.copy(
                 color = darkColor,
                 fontSize = TextUnit(18f, TextUnitType.Sp)

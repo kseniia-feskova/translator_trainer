@@ -193,7 +193,7 @@ fun SetScreen(
                     .padding(vertical = 24.dp, horizontal = 16.dp)
             ) {
                 Text(
-                    "Select lesson",
+                    stringResource(R.string.select_lesson_title),
                     style = AppTypography.displayLarge.copy(
                         fontSize = TextUnit(
                             22f,
@@ -211,7 +211,10 @@ fun SetScreen(
                         items(LessonType.values()) { lesson ->
                             CustomShadowButton(
                                 text = lesson.name,
-                                onClick = { startCourse(lesson) }
+                                onClick = {
+                                    showCourseSelection(false)
+                                    startCourse(lesson)
+                                }
                             )
                             Spacer(modifier = Modifier.height(12.dp))
                         }
@@ -221,7 +224,7 @@ fun SetScreen(
                         .align(Alignment.BottomCenter)
                         .padding(top = 32.dp)) {
                         Text(
-                            "Close",
+                            stringResource(R.string.close_btn),
                             modifier = Modifier
                                 .align(Alignment.CenterHorizontally)
                                 .clickable { showCourseSelection(false) },

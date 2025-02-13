@@ -1,5 +1,6 @@
 package com.example.translatortrainer.di
 
+import com.domain.cache.SetsCacheProvider
 import com.domain.token.ITokenRefresher
 import com.domain.token.TokenRefresher
 import com.domain.usecase.AddSetWordCrossRef
@@ -16,6 +17,7 @@ import com.domain.usecase.course.GetAllCoursesUseCase
 import com.domain.usecase.course.GetCourseUseCase
 import com.domain.usecase.sets.AddSetUseCase
 import com.domain.usecase.sets.GetAllSetsUseCase
+import com.domain.usecase.sets.UpdateSetsUseCase
 import com.domain.usecase.words.AddWordUseCase
 import com.domain.usecase.words.DeleteWordUseCase
 import com.domain.usecase.words.GetWordByIdUseCase
@@ -24,6 +26,7 @@ import com.domain.usecase.words.GetWordByTranslated
 import com.domain.usecase.words.GetWordsBySetUseCase
 import com.domain.usecase.words.GetWordsOfSetUseCase
 import com.domain.usecase.words.UpdateStatusUseCase
+import com.presentation.cache.ISetsCacheProvider
 import com.presentation.usecases.IAddSetWordCrossRefUseCase
 import com.presentation.usecases.IAddWordToSetUseCase
 import com.presentation.usecases.IDeleteSetByIdUseCase
@@ -38,6 +41,7 @@ import com.presentation.usecases.course.IGetAllCoursesUseCase
 import com.presentation.usecases.course.IGetCourseUseCase
 import com.presentation.usecases.sets.IAddSetUseCase
 import com.presentation.usecases.sets.IGetAllSetsUseCase
+import com.presentation.usecases.sets.IUpdateSetsUseCase
 import com.presentation.usecases.words.IAddWordUseCase
 import com.presentation.usecases.words.IDeleteWordUseCase
 import com.presentation.usecases.words.IGetWordByIdUseCase
@@ -51,6 +55,8 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val useCaseModule = module {
+
+    singleOf(::SetsCacheProvider) bind ISetsCacheProvider::class
 
     singleOf(::RegisterUseCase) bind IRegisterUseCase::class
 
@@ -97,4 +103,6 @@ val useCaseModule = module {
     singleOf(::AddSetUseCase) bind IAddSetUseCase::class
 
     singleOf(::UpdateStatusUseCase) bind IUpdateStatusUseCase::class
+
+    singleOf(::UpdateSetsUseCase) bind IUpdateSetsUseCase::class
 }
