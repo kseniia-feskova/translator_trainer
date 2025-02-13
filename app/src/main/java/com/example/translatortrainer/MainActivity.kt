@@ -13,10 +13,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
+import androidx.navigation.NavOptions
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.data.di.databaseModule
@@ -30,6 +30,7 @@ import com.presentation.navigation.BottomNavigationBar
 import com.presentation.navigation.LeafScreen
 import com.presentation.navigation.TranslatorApp
 import com.presentation.ui.AppTheme
+import com.presentation.ui.screens.auth.navigateToAuth
 import com.presentation.ui.screens.lesson.LessonType
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
@@ -67,27 +68,29 @@ class MainActivity : AppCompatActivity() {
                     ).route
                 }"
             )
-            val isUserAuthorized by viewModel.isUserAuthorized.collectAsState()
-
-            LaunchedEffect(isUserAuthorized) {
-                if (!isUserAuthorized) {
-//                    //TODO: we need to call logout flow
-//                    navController.navigateToAuth(
-//                        NavOptions.Builder()
-//                            .setPopUpTo(
-//                                navController.graph.startDestinationId,
-//                                inclusive = true
-//                            )
-//                            .setLaunchSingleTop(true)
-//                            .build()
-//                    )
+            LaunchedEffect(Unit) {
+                viewModel.isUserAuthorized.collect {
+                    if (!it) {
+                        navController.navigateToAuth(
+                            NavOptions.Builder()
+                                .setPopUpTo(
+                                    navController.graph.startDestinationId,
+                                    inclusive = true
+                                )
+                                .setLaunchSingleTop(true)
+                                .build()
+                        )
+                    }
                 }
             }
             val shouldShowBottomBar = when {
-                currentRoute?.contains(LeafScreen.Lesson("0", LessonType.TRANSLATE).route) ?: true -> false
+                currentRoute?.contains(LeafScreen.Lesson("0", LessonType.TRANSLATE).route)
+                    ?: true -> false
+
                 currentRoute?.contains(LeafScreen.NewSet.route) ?: true -> false
                 currentRoute?.contains(LeafScreen.Login.route) ?: true -> false
                 currentRoute?.contains(LeafScreen.SelectCourse.route) ?: true -> false
+                currentRoute?.contains(LeafScreen.Splash.route) ?: true -> false
                 else -> true
             }
             AppTheme {
@@ -98,7 +101,7 @@ class MainActivity : AppCompatActivity() {
                     content = { padding ->
                         Log.e("Preview", "Padding  = $padding")
                         Box(modifier = Modifier.padding(padding)) {
-                            TranslatorApp(navController, isUserAuthorized)
+                            TranslatorApp(navController)
                         }
                     },
                     bottomBar = {

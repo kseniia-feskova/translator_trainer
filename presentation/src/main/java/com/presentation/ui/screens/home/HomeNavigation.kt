@@ -1,5 +1,8 @@
 package com.presentation.ui.screens.home
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.navigation.NavController
@@ -18,7 +21,10 @@ fun NavController.navigateToHome(
 
 fun NavGraphBuilder.homeScreen(
 ) {
-    composable(route = LeafScreen.Home.route) { HomeRoute() }
+    composable(route = LeafScreen.Home.route,
+        enterTransition = { fadeIn(animationSpec = tween(1000)) },
+        exitTransition = { fadeOut(animationSpec = tween(500)) }
+    ) { HomeRoute() }
 }
 
 @Composable

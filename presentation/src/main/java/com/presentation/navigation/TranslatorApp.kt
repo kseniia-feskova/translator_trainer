@@ -25,15 +25,15 @@ import com.presentation.ui.screens.select_course.selectCourseScreen
 import com.presentation.ui.screens.set.navigateToSet
 import com.presentation.ui.screens.set.setScreen
 import com.presentation.ui.screens.sets.setsScreen
+import com.presentation.ui.screens.splash.splashScreen
 
 @Composable
-fun TranslatorApp(navController: NavHostController, isUserAuthorized: Boolean = false) {
-    val startDestination = if (isUserAuthorized) RootScreen.Home.route else LeafScreen.Login.route
-
+fun TranslatorApp(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = startDestination
+        startDestination = LeafScreen.Splash.route
     ) {
+        splashScreen(navController)
         loginNav(navController)
         homeNav()
         setsNav(navController)

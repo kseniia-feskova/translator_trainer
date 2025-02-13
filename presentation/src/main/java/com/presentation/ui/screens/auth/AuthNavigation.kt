@@ -1,5 +1,8 @@
 package com.presentation.ui.screens.auth
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.navigation.NavController
@@ -19,7 +22,14 @@ fun NavGraphBuilder.authScreen(
     goToCourses: () -> Unit,
     goToHome: () -> Unit
 ) {
-    composable(route = LeafScreen.Login.route) { AuthRoute(goToCourses, goToHome) }
+    composable(route = LeafScreen.Login.route,
+        enterTransition = { fadeIn(animationSpec = tween(1000)) },
+        exitTransition = { fadeOut(animationSpec = tween(500)) }) {
+        AuthRoute(
+            goToCourses,
+            goToHome
+        )
+    }
 }
 
 @Composable
