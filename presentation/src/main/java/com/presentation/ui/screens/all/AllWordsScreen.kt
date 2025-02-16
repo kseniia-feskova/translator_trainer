@@ -46,7 +46,6 @@ fun AllWordsScreen(
     searchQuery: (String) -> Unit = {},
     onClearClick: () -> Unit = {},
     onFilterClick: () -> Unit = {},
-    onWordSelected: (WordUI, Offset) -> Unit = { _, _ -> },
     onDismissRequest: () -> Unit = {},
     onEdit: (WordUI) -> Unit = {},
     onDelete: (WordUI) -> Unit = {},

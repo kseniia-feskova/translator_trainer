@@ -36,7 +36,7 @@ import java.util.UUID
 fun SetOfCardsView(
     set: SetOfCards,
     background: Color,
-    onSetSelected: (UUID, String) -> Unit = { id, name -> }
+    onSetSelected: (UUID, String) -> Unit = { _, _ -> }
 ) {
 
     Column(
@@ -76,7 +76,7 @@ fun SetOfCardsView(
 fun ListOfSetsView(
     modifier: Modifier = Modifier,
     listOfSets: List<SetOfCards>,
-    onSetSelected: (UUID, String) -> Unit = { id, name -> },
+    onSetSelected: (UUID, String) -> Unit = { _, _ -> },
 ) {
     LazyColumn(modifier = modifier.clip(RoundedCornerShape(20.dp))) {
         itemsIndexed(listOfSets) { index, item ->

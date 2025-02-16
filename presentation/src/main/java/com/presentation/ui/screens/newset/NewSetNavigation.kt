@@ -41,7 +41,6 @@ fun NewSetRoute(
         saveSet = { viewModel.handleIntent(NewSetIntent.SaveSet(navigateUp)) },
         searchQuery = { viewModel.handleIntent(NewSetIntent.SearchWord(it)) },
         onClearClick = { viewModel.handleIntent(NewSetIntent.ClearSearch) },
-        onFilterClick = { viewModel.handleIntent(NewSetIntent.FilterClicked) },
         navigateUp = navigateUp,
     )
 }

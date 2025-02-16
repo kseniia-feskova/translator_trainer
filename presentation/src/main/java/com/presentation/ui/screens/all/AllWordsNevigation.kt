@@ -45,14 +45,6 @@ fun AllWordsRoute(
         searchQuery = { viewModel.handleIntent(AllWordsIntent.Search(it)) },
         onClearClick = { viewModel.handleIntent(AllWordsIntent.ClearSearch) },
         onFilterClick = { viewModel.handleIntent(AllWordsIntent.Filter) },
-        onWordSelected = { word, offset ->
-            viewModel.handleIntent(
-                AllWordsIntent.WordSelected(
-                    word,
-                    offset
-                )
-            )
-        },
         onDismissRequest = { viewModel.handleIntent(AllWordsIntent.CloseDialog) },
         onEdit = { viewModel.handleIntent(AllWordsIntent.Edit(it)) },
         onDelete = { viewModel.handleIntent(AllWordsIntent.Delete(it)) },

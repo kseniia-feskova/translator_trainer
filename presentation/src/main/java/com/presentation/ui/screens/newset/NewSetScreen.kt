@@ -70,7 +70,6 @@ fun NewSetScreen(
     saveSet: () -> Unit = {},
     searchQuery: (String) -> Unit = {},
     onClearClick: () -> Unit = {},
-    onFilterClick: () -> Unit = {},
     navigateUp: () -> Unit = {}
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current

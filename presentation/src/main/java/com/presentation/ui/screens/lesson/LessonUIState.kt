@@ -48,25 +48,25 @@ sealed class LessonIntent {
     object DontKnow : LessonIntent()
 }
 
-enum class LessonType {
-    TRANSLATE,
-    ORIGIN;
-
-    fun mapToUI(): LessonUIState {
-        return when (this) {
-            TRANSLATE -> {
-                LessonUIState(
-                    title = "Задание №1",
-                    description = "Выберите перевод",
-                )
-            }
-
-            ORIGIN -> {
-                LessonUIState(
-                    title = "Задание №2",
-                    description = "Выберите перевод",
-                )
-            }
-        }
-    }
-}
+//enum class LessonType {
+//    TRANSLATE,
+//    ORIGIN;
+//
+//    fun mapToUI(): LessonUIState {
+//        return when (this) {
+//            TRANSLATE -> {
+//                LessonUIState(
+//                    title = "Задание №1",
+//                    description = "Выберите перевод",
+//                )
+//            }
+//
+//            ORIGIN -> {
+//                LessonUIState(
+//                    title = "Задание №2",
+//                    description = "Выберите перевод",
+//                )
+//            }
+//        }
+//    }
+//}

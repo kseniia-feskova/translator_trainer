@@ -31,7 +31,6 @@ import com.presentation.navigation.LeafScreen
 import com.presentation.navigation.TranslatorApp
 import com.presentation.ui.AppTheme
 import com.presentation.ui.screens.auth.navigateToAuth
-import com.presentation.ui.screens.lesson.LessonType
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -59,15 +58,7 @@ class MainActivity : AppCompatActivity() {
             val navController = rememberNavController()
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val currentRoute = navBackStackEntry?.destination?.route?.lowercase()
-            Log.e(
-                "MainActivity",
-                "Current route = $currentRoute, lesson = ${
-                    LeafScreen.Lesson(
-                        setId = "0",
-                        LessonType.TRANSLATE
-                    ).route
-                }"
-            )
+
             LaunchedEffect(Unit) {
                 viewModel.isUserAuthorized.collect {
                     if (!it) {
@@ -84,8 +75,8 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             val shouldShowBottomBar = when {
-                currentRoute?.contains(LeafScreen.Lesson("0", LessonType.TRANSLATE).route)
-                    ?: true -> false
+//                currentRoute?.contains(LeafScreen.Lesson("0", LessonType.TRANSLATE).route)
+//                    ?: true -> false
 
                 currentRoute?.contains(LeafScreen.NewSet.route) ?: true -> false
                 currentRoute?.contains(LeafScreen.Login.route) ?: true -> false

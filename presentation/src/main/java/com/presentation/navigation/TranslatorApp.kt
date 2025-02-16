@@ -16,7 +16,6 @@ import com.presentation.ui.screens.home.homeScreen
 import com.presentation.ui.screens.home.navigateToHome
 import com.presentation.ui.screens.lesson.bubble.bubbleLessonScreen
 import com.presentation.ui.screens.lesson.bubble.navigateToBubbleLesson
-import com.presentation.ui.screens.lesson.lessonScreen
 import com.presentation.ui.screens.lesson.success.navigateToSuccessLesson
 import com.presentation.ui.screens.lesson.success.successLessonScreen
 import com.presentation.ui.screens.newset.navigateToNewSet
@@ -113,9 +112,6 @@ private fun NavGraphBuilder.setsNav(navController: NavHostController) {
             navigateUp = { navController.navigateUp() },
         )
 
-        lessonScreen {
-            navController.navigateUp()
-        }
 
         successLessonScreen {
             navController.navigate(LeafScreen.Sets.route) {

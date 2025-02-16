@@ -27,7 +27,6 @@ import com.presentation.R
 import com.presentation.ui.AppTheme
 import com.presentation.ui.accentColorLight
 import com.presentation.ui.onSurfaceLight
-import com.presentation.ui.screens.lesson.LessonType
 import com.presentation.ui.surfaceLight
 import kotlinx.serialization.Serializable
 
@@ -49,8 +48,8 @@ sealed class LeafScreen(val route: String) {
     @Serializable
     data class Set(val setId: String, val setName: String) : LeafScreen("set")
 
-    @Serializable
-    data class Lesson(val setId: String, val type: LessonType) : LeafScreen("lesson")
+    //  @Serializable
+    // data class Lesson(val setId: String, val type: LessonType) : LeafScreen("lesson")
 
     @Serializable
     data class BubbleLesson(val setId: String) : LeafScreen("bubble")
