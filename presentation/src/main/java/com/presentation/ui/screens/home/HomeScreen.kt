@@ -242,36 +242,65 @@ fun LanguageSwitch(
                 .background(lightLilaColor, shape = RoundedCornerShape(8.dp))
         )
 
-        Row(
+        SelectLanguages(
             modifier = Modifier.align(Alignment.CenterStart),
-        ) {
-            val first = stringResource(originLang.getRes())
-            Text(
-                text = firstText,
-                modifier = Modifier
-                    .padding(horizontal = 12.dp)
-                    .clickable {
-                        selectedLanguage = firstText
-                        onClick(if (first == firstText) originLang else translateLang)
-                    },
-                color = darkColor,
-                style = AppTypography.displayLarge.copy(fontSize = TextUnit(24f, TextUnitType.Sp))
-            )
+            originLang = originLang,
+            translateLang = translateLang,
+            firstText = firstText,
+            secondText = secondText,
+            onFirstClick = { language, firstText ->
+                selectedLanguage = firstText
+                onClick(language)
+            },
+            onSecondClick = { language, secondText ->
+                selectedLanguage = secondText
+                onClick(language)
+            }
+        )
+    }
+}
 
-            Spacer(Modifier.width(8.dp))
-            val second = stringResource(translateLang.getRes())
-            Text(
-                text = secondText,
-                modifier = Modifier
-                    .padding(horizontal = 12.dp)
-                    .clickable {
-                        selectedLanguage = secondText
-                        onClick(if (second == secondText) translateLang else originLang)
-                    },
-                color = darkColor,
-                style = AppTypography.displayLarge.copy(fontSize = TextUnit(24f, TextUnitType.Sp))
-            )
-        }
+@Composable
+fun SelectLanguages(
+    originLang: Language,
+    translateLang: Language,
+    modifier: Modifier,
+    firstText: String,
+    secondText: String,
+    onFirstClick: (Language, String) -> Unit,
+    onSecondClick: (Language, String) -> Unit,
+) {
+    Row(modifier = modifier) {
+        val first = stringResource(originLang.getRes())
+        Text(
+            text = firstText,
+            modifier = Modifier
+                .padding(horizontal = 12.dp)
+                .clickable {
+                    onFirstClick(
+                        if (first == firstText) originLang else translateLang,
+                        firstText
+                    )
+                },
+            color = darkColor,
+            style = AppTypography.displayLarge.copy(fontSize = TextUnit(24f, TextUnitType.Sp))
+        )
+
+        Spacer(Modifier.width(8.dp))
+        val second = stringResource(translateLang.getRes())
+        Text(
+            text = secondText,
+            modifier = Modifier
+                .padding(horizontal = 12.dp)
+                .clickable {
+                    onSecondClick(
+                        if (second == secondText) translateLang else originLang,
+                        secondText
+                    )
+                },
+            color = darkColor,
+            style = AppTypography.displayLarge.copy(fontSize = TextUnit(24f, TextUnitType.Sp))
+        )
     }
 }
 

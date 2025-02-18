@@ -33,6 +33,7 @@ import kotlinx.serialization.Serializable
 enum class RootScreen(val route: String, val iconRes: Int) {
     Home("home_root", R.drawable.ic_translate),
     Sets("sets_root", R.drawable.ic_sets),
+    Photo("photo_root", R.drawable.ic_camera),
     Profile("profile_root", R.drawable.ic_account)
 }
 
@@ -44,6 +45,7 @@ sealed class LeafScreen(val route: String) {
     object Home : LeafScreen("home")
     object Sets : LeafScreen("sets")
     object Account : LeafScreen("account")
+    object PhotoToText : LeafScreen("photo_to_text")
 
     @Serializable
     data class Set(val setId: String, val setName: String) : LeafScreen("set")

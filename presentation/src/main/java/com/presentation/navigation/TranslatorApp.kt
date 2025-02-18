@@ -20,6 +20,7 @@ import com.presentation.ui.screens.lesson.success.navigateToSuccessLesson
 import com.presentation.ui.screens.lesson.success.successLessonScreen
 import com.presentation.ui.screens.newset.navigateToNewSet
 import com.presentation.ui.screens.newset.newSetScreen
+import com.presentation.ui.screens.texts.photoToText
 import com.presentation.ui.screens.select_course.selectCourseScreen
 import com.presentation.ui.screens.set.navigateToSet
 import com.presentation.ui.screens.set.setScreen
@@ -36,6 +37,7 @@ fun TranslatorApp(navController: NavHostController) {
         loginNav(navController)
         homeNav()
         setsNav(navController)
+        photoNav()
         accountNav()
     }
 }
@@ -79,6 +81,15 @@ private fun NavGraphBuilder.homeNav() {
         route = RootScreen.Home.route
     ) {
         homeScreen()
+    }
+}
+
+private fun NavGraphBuilder.photoNav() {
+    navigation(
+        startDestination = LeafScreen.PhotoToText.route,
+        route = RootScreen.Photo.route
+    ) {
+        photoToText()
     }
 }
 
