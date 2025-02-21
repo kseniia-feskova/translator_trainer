@@ -12,19 +12,36 @@ import com.domain.token.safeApiCallWithRefresh
 import com.presentation.data.IDataStoreManager
 import com.presentation.model.WordUI
 import com.presentation.usecases.words.IAddWordUseCase
+import com.presentation.usecases.words.IGetWordByOriginal
+import com.presentation.usecases.words.IGetWordByTranslated
 import java.util.UUID
 
 class AddWordUseCase(
     private val repo: IWordsDaoRepository,
     private val apiRepo: IWordsApiRepository,
     private val prefs: IDataStoreManager,
-    private val tokenRefresher: ITokenRefresher
+    private val tokenRefresher: ITokenRefresher,
+    private val findWordByOrigin: IGetWordByOriginal,
+    private val findWordByTranslate: IGetWordByTranslated,
 ) : IAddWordUseCase {
 
     override suspend fun invoke(
         originalText: String,
         translatedText: String
     ): Result<WordUI> {
+        val wordInDB = findWordByOrigin.invoke(originalText)
+        if (wordInDB.isSuccess) {
+            wordInDB.getOrNull()?.apply {
+               return Result.success(this)
+            }
+        }
+
+        val wordInDBByTranslated = findWordByTranslate.invoke(translatedText)
+        if (wordInDBByTranslated.isSuccess) {
+            wordInDB.getOrNull()?.apply {
+                return Result.success(this)
+            }
+        }
         val course = prefs.getCourse()
             ?: return Result.failure(Exception("Prefs are empty. Check them, please"))
         val request = AddWordRequest(

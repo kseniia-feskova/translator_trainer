@@ -1,6 +1,6 @@
 package com.data.repository.sets
 
-import com.data.api.Result
+import com.data.model.base.Result
 import com.data.model.sets.AddSetRequest
 import com.data.model.sets.SetResponse
 import java.util.UUID

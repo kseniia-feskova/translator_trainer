@@ -1,7 +1,7 @@
 package com.domain.token
 
 import com.data.ERROR_TOKEN_EXPIRED
-import com.data.api.Result
+import com.data.model.base.Result
 
 suspend fun <T> safeApiCallWithRefresh(
     call: suspend () -> Result<T>,

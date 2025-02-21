@@ -1,7 +1,7 @@
 package com.data.repository.words.api
 
 import com.data.api.ApiService
-import com.data.api.Result
+import com.data.model.base.Result
 import com.data.model.words.WordResponse
 import com.data.model.words.add.AddWordRequest
 import com.data.model.words.get.bytranslate.WordByOriginalRequest

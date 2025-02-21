@@ -13,7 +13,13 @@ class TranslateRepository(
         originalLanguage: Language,
         resLanguage: Language
     ): String {
+//        val request = TranslateRequest(
+//            contents = listOf(text),
+//            sourceLanguageCode = originalLanguage.code,
+//            targetLanguageCode = resLanguage.code
+//        )
         val response = service.translate(text, "${originalLanguage.code}|${resLanguage.code}")
+  //      val response = service.translateText(request)
         if (response.isSuccessful && response.body() != null) {
             println(response.body())
             return getTranslation(response.body()!!)

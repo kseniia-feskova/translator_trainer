@@ -1,6 +1,6 @@
 package com.data.repository.auth
 
-import com.data.api.Result
+import com.data.model.base.Result
 import com.data.model.auth.AuthResponse
 
 interface IAuthRepository {

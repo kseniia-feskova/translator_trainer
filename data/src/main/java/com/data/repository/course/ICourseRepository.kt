@@ -1,6 +1,6 @@
 package com.data.repository.course
 
-import com.data.api.Result
+import com.data.model.base.Result
 import com.data.model.course.CourseEntity
 import com.data.model.course.add.AddCourseRequest
 import com.data.model.course.get.GetAllCoursesRequest

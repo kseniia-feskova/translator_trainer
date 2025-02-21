@@ -1,7 +1,7 @@
 package com.data.repository.auth
 
 import com.data.api.ApiService
-import com.data.api.Result
+import com.data.model.base.Result
 import com.data.model.auth.AuthResponse
 import com.data.model.auth.AuthRequest
 import com.data.model.auth.RefreshTokenRequest

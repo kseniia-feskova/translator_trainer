@@ -1,7 +1,7 @@
 package com.data.repository.user
 
 import com.data.api.ApiService
-import com.data.api.Result
+import com.data.model.base.Result
 import com.data.model.UserEntity
 import com.data.safeCall
 import java.util.UUID

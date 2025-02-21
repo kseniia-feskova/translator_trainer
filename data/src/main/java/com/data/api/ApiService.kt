@@ -92,18 +92,3 @@ interface ApiService {
 
     //end of region
 }
-
-data class ErrorDetails(
-    val message: String
-)
-
-data class ErrorResponse(
-    val status: String,
-    val details: ErrorDetails
-)
-
-data class Result<T>(
-    val data: T? = null,
-    val errorMsg: String = ""
-)
-

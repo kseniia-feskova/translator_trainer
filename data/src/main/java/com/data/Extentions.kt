@@ -1,8 +1,8 @@
 package com.data
 
 import android.util.Log
-import com.data.api.ErrorResponse
-import com.data.api.Result
+import com.data.model.base.ErrorResponse
+import com.data.model.base.Result
 import com.google.gson.Gson
 import retrofit2.Response
 import java.io.IOException
