@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.presentation.data.IDataStoreManager
 import com.presentation.usecases.sets.IGetAllSetsUseCase
-import com.presentation.utils.ALL_WORDS
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -20,19 +19,24 @@ class SetsViewModel(
     private val _uiState = MutableStateFlow(SetsUIState())
     val uiState = _uiState.asStateFlow()
 
-    init { reload() }
+    init {
+        reload()
+    }
 
-    fun reload(){
+    fun reload() {
         viewModelScope.launch {
             _uiState.update { it.copy(loading = true) }
             val course = prefs.getCourse()
-            Log.e("SetsViewModel", "reload, course = ${course?.id} ")
             if (course != null) {
+                Log.e("SetsViewModel", "reload, course = ${course.id} ")
                 val response = getAllSets.invoke(UUID.fromString(course.id))
+                val allWords =
+                    if (course.allWordsId != null) UUID.fromString(course.allWordsId) else null
                 if (response.isSuccess) {
                     val sets = response.getOrNull() ?: emptyList()
                     _uiState.update {
                         it.copy(
+                            allWordsSet = allWords,
                             sets = if (sets.isNotEmpty() && sets[0].words.isEmpty()) emptyList() else sets,
                             loading = false
                         )
@@ -47,10 +51,8 @@ class SetsViewModel(
     }
 
     fun isAllWordsSelected(setId: UUID): Boolean {
-        val selected = _uiState.value.sets.find { it.id == setId }
-        return if (selected != null) {
-            selected.title == ALL_WORDS
-        } else false
+        Log.e("SetsViewModel", "SetId = $setId, all words = ${_uiState.value.allWordsSet}")
+        return _uiState.value.allWordsSet == setId
     }
 
     private fun <T> handleError(response: Result<T>) {

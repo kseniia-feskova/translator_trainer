@@ -33,7 +33,7 @@ class AddSetUseCase(
         } else if (data == null) {
             Result.failure(Exception("Empty user data"))
         } else {
-            cache.addSets(null)
+            cache.clear()
             Result.success(data.toUIWithoutWords())
         }
     }

@@ -17,6 +17,7 @@ import com.data.model.words.get.bytranslate.WordByTranslatedRequest
 import com.data.model.words.update.UpdateWordStatusRequest
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
@@ -89,6 +90,8 @@ interface ApiService {
         @Body updateStatusRequest: UpdateWordStatusRequest
     ): Response<WordResponse>
 
+    @DELETE("words/delete/{id}")
+    suspend fun deleteWord(@Path("id") wordId: UUID): Response<Void>
 
     //end of region
 }

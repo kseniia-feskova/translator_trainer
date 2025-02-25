@@ -5,18 +5,16 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.presentation.model.WordUI
-import com.presentation.ui.screens.set.setId
 import com.presentation.usecases.words.IDeleteWordUseCase
-import com.presentation.usecases.words.IGetWordsOfSetUseCase
+import com.presentation.usecases.words.IGetWordsBySetUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class AllWordsViewModel(
     savedStateHandle: SavedStateHandle,
-    private val getAllWords: IGetWordsOfSetUseCase,
+    private val getWords: IGetWordsBySetUseCase,
     private val deleteWord: IDeleteWordUseCase
 ) : ViewModel() {
 
@@ -28,12 +26,16 @@ class AllWordsViewModel(
 
     init {
         viewModelScope.launch {
-            getAllWords.invoke(setId).collectLatest { list ->
+            val response = getWords.invoke(setId)
+            if (response.isSuccess) {
+                val words = response.getOrNull() ?: emptyList()
                 allWords.clear()
-                allWords.addAll(list.sortedBy { it.level })
+                allWords.addAll(words.sortedBy { it.level })
                 _uiState.update {
                     it.copy(words = allWords, loading = false)
                 }
+            } else {
+                //TODO: handle error case
             }
         }
     }
@@ -82,8 +84,20 @@ class AllWordsViewModel(
     }
 
     private fun deleteWord(word: WordUI) {
-        _uiState.update { it.copy(loading = true) }
-        viewModelScope.launch { deleteWord.invoke(word.id)  }
+        viewModelScope.launch {
+            val deletion = deleteWord.invoke(word.id)
+            if (deletion.isSuccess) {
+                val response = getWords.invoke(setId)
+                if (response.isSuccess) {
+                    val words = response.getOrNull() ?: emptyList()
+                    allWords.clear()
+                    allWords.addAll(words.sortedBy { it.level })
+                    _uiState.update {
+                        it.copy(words = allWords, loading = false)
+                    }
+                }
+            }
+        }
     }
 
     private fun selectWord(word: WordUI?, offset: Offset?) {
@@ -97,7 +111,10 @@ class AllWordsViewModel(
 
     private fun searchByQuery(query: String): List<WordUI> {
         return allWords.filter { word ->
-            word.originalText.contains(query, ignoreCase = true) || word.resText.contains(query, ignoreCase = true)
+            word.originalText.contains(query, ignoreCase = true) || word.resText.contains(
+                query,
+                ignoreCase = true
+            )
         }
     }
 }

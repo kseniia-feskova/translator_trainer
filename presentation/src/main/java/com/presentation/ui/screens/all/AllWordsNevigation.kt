@@ -47,6 +47,14 @@ fun AllWordsRoute(
         onFilterClick = { viewModel.handleIntent(AllWordsIntent.Filter) },
         onDismissRequest = { viewModel.handleIntent(AllWordsIntent.CloseDialog) },
         onEdit = { viewModel.handleIntent(AllWordsIntent.Edit(it)) },
+        onWordSelected = { word, offset ->
+            viewModel.handleIntent(
+                AllWordsIntent.WordSelected(
+                    word,
+                    offset
+                )
+            )
+        },
         onDelete = { viewModel.handleIntent(AllWordsIntent.Delete(it)) },
         onBackPressed = navigateUp
     )

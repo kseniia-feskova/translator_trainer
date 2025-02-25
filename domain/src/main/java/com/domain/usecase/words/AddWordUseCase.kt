@@ -9,6 +9,7 @@ import com.domain.mapper.toNewWordEntity
 import com.domain.mapper.toUI
 import com.domain.token.ITokenRefresher
 import com.domain.token.safeApiCallWithRefresh
+import com.presentation.cache.ISetsCacheProvider
 import com.presentation.data.IDataStoreManager
 import com.presentation.model.WordUI
 import com.presentation.usecases.words.IAddWordUseCase
@@ -20,6 +21,7 @@ class AddWordUseCase(
     private val repo: IWordsDaoRepository,
     private val apiRepo: IWordsApiRepository,
     private val prefs: IDataStoreManager,
+    private val cache: ISetsCacheProvider,
     private val tokenRefresher: ITokenRefresher,
     private val findWordByOrigin: IGetWordByOriginal,
     private val findWordByTranslate: IGetWordByTranslated,
@@ -32,7 +34,7 @@ class AddWordUseCase(
         val wordInDB = findWordByOrigin.invoke(originalText)
         if (wordInDB.isSuccess) {
             wordInDB.getOrNull()?.apply {
-               return Result.success(this)
+                return Result.success(this)
             }
         }
 
@@ -64,6 +66,7 @@ class AddWordUseCase(
             Result.failure(Exception("Empty user data"))
         } else {
             course.selectedSetId?.let { addWordToDao(setId = it, newWord = data.toDao()) }
+            cache.clear()
             Result.success(data.toUI())
         })
     }

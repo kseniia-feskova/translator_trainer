@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
@@ -38,6 +39,7 @@ import com.presentation.ui.views.BaseTopView
 import com.presentation.ui.views.Loader
 import com.presentation.ui.views.SearchBarView
 import com.presentation.ui.views.WordMenuView
+import com.presentation.ui.views.WordWithStatusView
 import com.presentation.utils.ALL_WORDS
 
 @Composable
@@ -46,6 +48,7 @@ fun AllWordsScreen(
     searchQuery: (String) -> Unit = {},
     onClearClick: () -> Unit = {},
     onFilterClick: () -> Unit = {},
+    onWordSelected: (WordUI, Offset) -> Unit = { _, _ -> },
     onDismissRequest: () -> Unit = {},
     onEdit: (WordUI) -> Unit = {},
     onDelete: (WordUI) -> Unit = {},
@@ -81,15 +84,16 @@ fun AllWordsScreen(
 
         LazyColumn(
             modifier = Modifier
-                .padding(horizontal = 12.dp)
+                .padding(horizontal = 20.dp)
                 .clip(shape = RoundedCornerShape(12.dp))
         ) {
-//            items(state.words) {
-//                WordWithStatusView(
-//                    modifier = Modifier.padding(vertical = 6.dp),
-//                    word = it,
-//                )
-//            }
+            items(state.words.toList()) {
+                WordWithStatusView(
+                    modifier = Modifier.padding(vertical = 6.dp),
+                    word = it,
+                    onClick = { w, o -> onWordSelected(w, o) }
+                )
+            }
         }
         if (state.selectedItem != null && state.popupOffset != null) {
             Box(

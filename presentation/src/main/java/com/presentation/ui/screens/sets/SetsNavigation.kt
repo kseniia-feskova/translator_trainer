@@ -1,5 +1,6 @@
 package com.presentation.ui.screens.sets
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -51,6 +52,7 @@ fun SetsRoute(
         state = state.value,
         navigateToSelectedSet = { id, name ->
             if (viewModel.isAllWordsSelected(id)) {
+                Log.e("SetsNavigation", "navigateToAllWordsSet")
                 navigateToAllWordsSet(id)
             } else {
                 navigateToSelectedSet(id, name)

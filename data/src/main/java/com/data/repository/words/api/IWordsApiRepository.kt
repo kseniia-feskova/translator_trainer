@@ -23,4 +23,5 @@ interface IWordsApiRepository {
         updateStatus: UpdateWordStatusRequest
     ): Result<WordResponse>
 
+    suspend fun delete(wordId: UUID): Result<Void>
 }

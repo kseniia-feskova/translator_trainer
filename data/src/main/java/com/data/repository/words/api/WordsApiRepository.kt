@@ -37,4 +37,8 @@ class WordsApiRepository(
         return safeCall(request = { apiService.updateStatus(wordId, updateStatus) })
     }
 
+    override suspend fun delete(wordId: UUID): Result<Void> {
+        return safeCall(request = {apiService.deleteWord(wordId)})
+    }
+
 }

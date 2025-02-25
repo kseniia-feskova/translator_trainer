@@ -6,4 +6,6 @@ interface ISetsCacheProvider {
     fun addSets(newList: List<SetOfCards>?)
 
     fun getSets(): List<SetOfCards>?
+
+    fun clear()
 }

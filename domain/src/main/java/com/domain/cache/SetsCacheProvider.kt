@@ -17,4 +17,8 @@ class SetsCacheProvider : ISetsCacheProvider {
         return _sets.value
     }
 
+    override fun clear() {
+        _sets.update { null }
+    }
+
 }

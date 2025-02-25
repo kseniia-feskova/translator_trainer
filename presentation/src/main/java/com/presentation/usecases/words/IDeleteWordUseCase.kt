@@ -4,6 +4,6 @@ import java.util.UUID
 
 interface IDeleteWordUseCase {
 
-    suspend fun invoke(wordId: UUID)
+    suspend fun invoke(wordId: UUID): Result<Unit>
 
 }

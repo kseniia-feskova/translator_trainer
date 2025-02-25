@@ -21,7 +21,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.presentation.ui.AppTheme
+import com.presentation.ui.lightLilaColor
 
 
 @Composable
@@ -37,7 +40,7 @@ fun SearchBarView(
             .then(modifier)
             .fillMaxWidth()
             .background(
-                color = MaterialTheme.colorScheme.primary,
+                color = lightLilaColor,
                 shape = RoundedCornerShape(24.dp)
             )
             .padding(horizontal = 12.dp),
@@ -79,5 +82,16 @@ fun SearchBarView(
                 tint = MaterialTheme.colorScheme.onPrimary
             )
         }
+    }
+}
+
+@Preview
+@Composable
+fun SearchBarViewPreview() {
+    AppTheme {
+        SearchBarView(
+            Modifier,
+            query = "Wort",
+        )
     }
 }

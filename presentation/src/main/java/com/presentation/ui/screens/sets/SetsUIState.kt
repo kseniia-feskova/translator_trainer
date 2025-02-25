@@ -7,6 +7,7 @@ import java.util.UUID
 
 data class SetsUIState(
     val sets: List<SetOfCards> = emptyList(),
+    val allWordsSet: UUID? = null,
     val selectedSetId: UUID? = null,
     val loading: Boolean = false,
     val error: SetsError? = null

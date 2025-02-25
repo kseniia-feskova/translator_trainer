@@ -1,5 +1,6 @@
 package com.presentation.navigation
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -20,12 +21,12 @@ import com.presentation.ui.screens.lesson.success.navigateToSuccessLesson
 import com.presentation.ui.screens.lesson.success.successLessonScreen
 import com.presentation.ui.screens.newset.navigateToNewSet
 import com.presentation.ui.screens.newset.newSetScreen
-import com.presentation.ui.screens.texts.photoToText
 import com.presentation.ui.screens.select_course.selectCourseScreen
 import com.presentation.ui.screens.set.navigateToSet
 import com.presentation.ui.screens.set.setScreen
 import com.presentation.ui.screens.sets.setsScreen
 import com.presentation.ui.screens.splash.splashScreen
+import com.presentation.ui.screens.texts.photoToText
 
 @Composable
 fun TranslatorApp(navController: NavHostController) {
@@ -106,7 +107,10 @@ private fun NavGraphBuilder.setsNav(navController: NavHostController) {
                     name
                 )
             },
-            navigateToAllWordsSet = { navController.navigateToAllWords(it.toString()) },
+            navigateToAllWordsSet = {
+                Log.e("TranslatorApp", " Navigate to all words")
+                navController.navigateToAllWords(it.toString())
+            },
             navigateToHome = navController::navigateToHome,
             createNewSet = { navController.navigateToNewSet() },
             createRandomLesson = {}
