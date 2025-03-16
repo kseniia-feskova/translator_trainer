@@ -1,10 +1,11 @@
-package com.presentation.data
+package com.data.prefs
 
 import android.content.Context
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import com.presentation.model.CourseUI
+import com.data.model.course.CourseEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
@@ -14,22 +15,12 @@ import java.util.UUID
 
 val Context.dataStore by preferencesDataStore(name = "app_preferences")
 
-interface IDataStoreManager {
-    fun listenUserId(): Flow<UUID?>
-
-    suspend fun saveUserId(id: UUID?)
-
-    suspend fun saveCourse(course: CourseUI?)
-    suspend fun getCourse(): CourseUI?
-
-    fun saveCourses(courses: List<CourseUI>)
-    fun getCourses(): List<CourseUI>
-}
-
 class DataStoreManager(private val context: Context) : IDataStoreManager {
 
     private val userIdKey = stringPreferencesKey("user_id")
     private val courseKey = stringPreferencesKey("course")
+    private val isGuestKey = booleanPreferencesKey("is_guest")
+    private var isGuest: Boolean? = null
 
     private val userId: Flow<UUID?> = context.dataStore.data
         .map { preferences ->
@@ -40,7 +31,7 @@ class DataStoreManager(private val context: Context) : IDataStoreManager {
             }
         }
 
-    private val coursesList = mutableListOf<CourseUI>()
+    private val coursesList = mutableListOf<CourseEntity>()
 
     override fun listenUserId(): Flow<UUID?> = userId
 
@@ -56,14 +47,46 @@ class DataStoreManager(private val context: Context) : IDataStoreManager {
         }
     }
 
-    override fun saveCourses(courses: List<CourseUI>) {
+    override suspend fun getUserId(): UUID? {
+        return context.dataStore.data.map {
+            if (it[userIdKey] == null) null
+            else {
+                UUID.fromString(it[userIdKey])
+            }
+        }.firstOrNull()
+    }
+
+    override fun saveCourses(courses: List<CourseEntity>) {
         coursesList.clear()
         coursesList.addAll(courses)
     }
 
-    override fun getCourses(): List<CourseUI> = coursesList.toList()
+    override fun getCourses(): List<CourseEntity> = coursesList.toList()
 
-    override suspend fun saveCourse(course: CourseUI?) {
+    override suspend fun setGuestMode() {
+        isGuest = true
+        context.dataStore.edit { preferences ->
+            preferences[isGuestKey] = true
+        }
+    }
+
+    override suspend fun isGuest(): Boolean {
+        isGuest = context.dataStore.data.map { prefs -> prefs[isGuestKey] }.firstOrNull() ?: false
+        return isGuest == true
+    }
+
+    override fun isGuestOnRuntime(): Boolean? {
+        return isGuest
+    }
+
+    override suspend fun resetGuestMode() {
+        this.isGuest = false
+        context.dataStore.edit { preferences ->
+            preferences[isGuestKey] = false
+        }
+    }
+
+    override suspend fun saveCourse(course: CourseEntity?) {
         if (course != null) {
             context.dataStore.edit { preferences ->
                 preferences[courseKey] = Json.encodeToString(course)
@@ -75,9 +98,9 @@ class DataStoreManager(private val context: Context) : IDataStoreManager {
         }
     }
 
-    override suspend fun getCourse(): CourseUI? {
+    override suspend fun getCourse(): CourseEntity? {
         return context.dataStore.data.map { preferences ->
-            preferences[courseKey]?.let { Json.decodeFromString<CourseUI>(it) }
+            preferences[courseKey]?.let { Json.decodeFromString<CourseEntity>(it) }
         }.firstOrNull()
     }
 }
