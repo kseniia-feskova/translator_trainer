@@ -26,6 +26,7 @@ import com.data.di.translateModule
 import com.example.translatortrainer.di.preferencesModule
 import com.example.translatortrainer.di.useCaseModule
 import com.example.translatortrainer.di.viewModelModule
+import com.presentation.model.LessonType
 import com.presentation.navigation.BottomNavigationBar
 import com.presentation.navigation.LeafScreen
 import com.presentation.navigation.TranslatorApp
@@ -75,13 +76,13 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             val shouldShowBottomBar = when {
-//                currentRoute?.contains(LeafScreen.Lesson("0", LessonType.TRANSLATE).route)
-//                    ?: true -> false
-
                 currentRoute?.contains(LeafScreen.NewSet.route) ?: true -> false
                 currentRoute?.contains(LeafScreen.Login.route) ?: true -> false
                 currentRoute?.contains(LeafScreen.SelectCourse.route) ?: true -> false
                 currentRoute?.contains(LeafScreen.Splash.route) ?: true -> false
+                currentRoute?.contains(LeafScreen.Splash.route) ?: true -> false
+                currentRoute?.contains(LeafScreen.BubbleLesson("").route) ?: true -> false
+                currentRoute?.contains(LeafScreen.SuccessLesson(LessonType.BUBBLE, 0).route) ?: true -> false
                 else -> true
             }
             AppTheme {

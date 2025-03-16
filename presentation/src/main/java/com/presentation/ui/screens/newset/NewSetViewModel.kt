@@ -1,9 +1,10 @@
 package com.presentation.ui.screens.newset
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.presentation.data.IDataStoreManager
 import com.presentation.model.WordUI
+import com.presentation.usecases.course.ICoursesOnPrefsUseCases
 import com.presentation.usecases.sets.IAddSetUseCase
 import com.presentation.usecases.words.IGetWordsBySetUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +16,7 @@ import java.util.UUID
 class NewSetViewModel(
     private val getAllWords: IGetWordsBySetUseCase,
     private val saveSet: IAddSetUseCase,
-    private val prefs: IDataStoreManager
+    private val coursePrefs: ICoursesOnPrefsUseCases
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(NewSetUIState(loading = true))
@@ -27,7 +28,8 @@ class NewSetViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(loading = true) }
             if (allWords.isEmpty()) {
-                val allWordsId = prefs.getCourse()?.allWordsId
+                val allWordsId = coursePrefs.getCourse()?.allWordsId
+                Log.e("NewSet", "All words = $allWordsId")
                 if (allWordsId != null) {
                     val response = getAllWords.invoke(UUID.fromString(allWordsId))
                     if (response.isSuccess) {
@@ -61,7 +63,7 @@ class NewSetViewModel(
             viewModelScope.launch {
                 val data = _uiState.value
                 val wordsId = data.words.filter { it.value }.keys.map { it.id }
-                val course = prefs.getCourse()
+                val course = coursePrefs.getCourse()
 
                 if (course != null) {
                     val response = saveSet.invoke(
@@ -72,7 +74,7 @@ class NewSetViewModel(
                     )
                     if (response.isSuccess) {
                         if (data.isSaveChecked) {
-                            prefs.saveCourse(course.copy(selectedSetId = response.getOrNull()?.id.toString()))
+                            coursePrefs.saveOne(course.copy(selectedSetId = response.getOrNull()?.id.toString()))
                         }
                         _uiState.update { it.copy(loading = false) }
                         onSetSaved()

@@ -3,22 +3,29 @@ package com.presentation.ui.screens.account
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.presentation.data.IDataStoreManager
+import com.presentation.usecases.IAccountUseCase
 import com.presentation.usecases.IGetAccountUseCase
 import com.presentation.usecases.auth.IDeleteUseCase
 import com.presentation.usecases.auth.ILogoutUseCase
+import com.presentation.usecases.auth.ISetGuestUseCase
+import com.presentation.usecases.course.ICoursesOnPrefsUseCases
+import com.presentation.usecases.sets.IGetAllSetsUseCase
+import com.presentation.utils.ALL_WORDS
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.net.URL
+import java.util.UUID
 
 class AccountViewModel(
     private val getDetails: IGetAccountUseCase,
     private val logout: ILogoutUseCase,
     private val deleteAccount: IDeleteUseCase,
-    private val dataStoreManager: IDataStoreManager
+    private val guestUseCase: ISetGuestUseCase,
+    private val accountPrefs: IAccountUseCase,
+    private val coursePrefs: ICoursesOnPrefsUseCases,
+    private val getSets: IGetAllSetsUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AccountUIState(loading = true))
@@ -26,8 +33,24 @@ class AccountViewModel(
 
     init {
         viewModelScope.launch {
-            dataStoreManager.listenUserId().collectLatest { userId ->
-                if (userId != null && _uiState.value.name == null) {
+            if (guestUseCase.isGuestMode()) {
+                val course = coursePrefs.getCourse()
+                if (course != null) {
+                    val sets = getSets.invoke(UUID.fromString(course.id)).getOrNull()
+                    val allSet = sets?.find { it.title == ALL_WORDS }
+                    val guestData = GuestData(
+                        course = course,
+                        allSetsCount = sets?.size ?: 0,
+                        allWordsCount = allSet?.words?.size ?: 0
+                    )
+                    Log.e("AccountViewModel", "Guest = $guestData")
+                    _uiState.update {
+                        it.copy(guestData = guestData)
+                    }
+                }
+            } else {
+                val userId = accountPrefs.getUserId()
+                if (userId != null) {
                     val response = getDetails.invoke(userId)
                     if (response.isSuccess) {
                         val user = response.getOrNull()
@@ -43,7 +66,10 @@ class AccountViewModel(
                             Log.e("AccountViewModel", "User is null")
                         }
                     } else {
-                        Log.e("AccountViewModel", "response is failed, ${response.exceptionOrNull()}")
+                        Log.e(
+                            "AccountViewModel",
+                            "response is failed, ${response.exceptionOrNull()}"
+                        )
                     }
                 }
             }
@@ -66,7 +92,7 @@ class AccountViewModel(
                 if (isDialogVisible) {
                     viewModelScope.launch {
                         deleteAccount.invoke()
-                        dataStoreManager.saveUserId(null)
+                        //  dataStoreManager.saveUserId(null)
                         _uiState.update {
                             it.copy(showDeleteDialog = false)
                         }
@@ -88,8 +114,6 @@ class AccountViewModel(
                 if (isDialogVisible) {
                     viewModelScope.launch {
                         logout.invoke()
-                        dataStoreManager.saveUserId(null)
-                        dataStoreManager.saveCourse(null)
                         _uiState.update {
                             it.copy(showLogoutDialog = false)
                         }

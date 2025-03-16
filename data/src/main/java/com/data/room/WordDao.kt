@@ -6,23 +6,30 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
-import com.data.model.SetOfWords
-import com.data.model.SetWithWords
-import com.data.model.SetWordCrossRef
 import com.data.model.WordEntity
+import com.data.model.WordStatus
+import com.data.model.sets.SetOfWords
+import com.data.model.sets.SetWithWords
+import com.data.model.sets.SetWordCrossRef
 import kotlinx.coroutines.flow.Flow
 import java.util.UUID
 
-const val ALL_WORDS = "Все слова"
+/*
+* Гость -> Курс (только один) -> Набор (Все слова) -> Слово1, Слово2, Слово3
+*                                Набор (Новые слова) -> Слово3
+*
+* Набор:
+* 1. Имя
+* 2. Айди на слова
+* 3. isDefault - для сохранения слов в набор
+* */
+
 
 @Dao
 interface WordDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertWord(word: WordEntity): Long
-
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertSet(setOfWords: SetOfWords): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSetWordCrossRef(crossRef: SetWordCrossRef)
@@ -62,9 +69,17 @@ interface WordDao {
         insertSetWordCrossRef(SetWordCrossRef(setId = allWordsSet.id, wordId = wordId))
     }
 
+    suspend fun addWordToSet(wordId: UUID, setId: UUID) {
+        insertSetWordCrossRef(SetWordCrossRef(setId = setId, wordId = wordId))
+    }
+
     // Метод для обновления слова
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateWord(word: WordEntity)
+
+    @Query("UPDATE words SET status = :newStatus WHERE id = :wordId")
+    suspend fun updateWordStatus(wordId: UUID, newStatus: WordStatus)
+
 
     @Query("SELECT * FROM words WHERE id = :id")
     suspend fun getWordById(id: UUID): WordEntity?
@@ -87,12 +102,12 @@ interface WordDao {
     suspend fun deleteSetById(setId: Int)
 
 
-
     @Transaction
     suspend fun deleteWordWithRelations(wordId: UUID) {
         deleteWordFromSets(wordId)
         deleteWordById(wordId)
     }
+
     @Query("DELETE FROM words WHERE id = :wordId")
     suspend fun deleteWordById(wordId: UUID)
 

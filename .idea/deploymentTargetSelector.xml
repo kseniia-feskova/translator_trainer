@@ -5,18 +5,7 @@
       <SelectionState runConfigName="MainActivity (1)">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="Translator Trainer.Translator_Trainer.app">
-        <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2025-02-06T15:15:11.197315677Z">
-          <Target type="DEFAULT_BOOT">
-            <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=/home/cmdb-130827/.android/avd/Pixel_6_API_33.avd" />
-            </handle>
-          </Target>
-        </DropdownSelection>
-        <DialogSelection />
-      </SelectionState>
-      <SelectionState runConfigName="SelectCourseScreenPreview">
+      <SelectionState runConfigName="text_recognition">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

@@ -8,6 +8,7 @@ data class AuthUIState(
     val password: String = "",
     val screenState: AuthScreenState = AuthScreenState.LOGIN,
     val error: AuthError? = null,
+    val guestDialogVisible: Boolean = false,
     val isLoading: Boolean = false
 )
 
@@ -20,6 +21,9 @@ sealed class AuthIntent {
     object ChangeScreen : AuthIntent()
     data class OnEmailChanged(val login: String) : AuthIntent()
     data class OnPasswordChanged(val password: String) : AuthIntent()
+    data class SaveAsGuest(
+        val goToCourses: () -> Unit,
+    ) : AuthIntent()
 }
 
 enum class AuthError(@StringRes val msg: Int) {

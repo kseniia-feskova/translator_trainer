@@ -44,6 +44,7 @@ val AppTypography = Typography(
         color = onPrimaryColorLight
     ),
     titleMedium = TextStyle(
+        fontFamily = NunitoFont,
         fontWeight = FontWeight.SemiBold,
         fontSize = 16.sp,
         lineHeight = 28.sp,

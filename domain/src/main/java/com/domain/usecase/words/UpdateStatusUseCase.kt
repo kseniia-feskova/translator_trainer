@@ -1,7 +1,7 @@
 package com.domain.usecase.words
 
 import com.data.model.words.update.UpdateWordStatusRequest
-import com.data.repository.words.api.IWordsApiRepository
+import com.data.repository.words.IWordRepository
 import com.domain.mapper.toStatus
 import com.domain.mapper.toUI
 import com.domain.token.ITokenRefresher
@@ -13,7 +13,7 @@ import com.presentation.usecases.words.IUpdateStatusUseCase
 import java.util.UUID
 
 class UpdateStatusUseCase(
-    private val repo: IWordsApiRepository,
+    private val repo: IWordRepository,
     private val cache: ISetsCacheProvider,
     private val tokenRefresher: ITokenRefresher
 ) : IUpdateStatusUseCase {

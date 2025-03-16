@@ -2,14 +2,18 @@ package com.presentation.ui.screens.splash
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.presentation.data.IDataStoreManager
+import com.presentation.usecases.auth.ILoginUseCase
+import com.presentation.usecases.auth.ISetGuestUseCase
+import com.presentation.usecases.course.ICoursesOnPrefsUseCases
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
 class SplashViewModel(
-    private val dataStorage: IDataStoreManager
+    private val login: ILoginUseCase,
+    private val coursesPrefs: ICoursesOnPrefsUseCases,
+    private val authPrefs: ISetGuestUseCase
 ) : ViewModel() {
 
     private val _isUserLoggedIn = MutableSharedFlow<Boolean>()
@@ -22,8 +26,8 @@ class SplashViewModel(
     fun observeUserId() {
         viewModelScope.launch {
             delay(1500) // Задержка перед проверкой авторизации
-            dataStorage.listenUserId().collect {
-                _isUserLoggedIn.emit(it != null && dataStorage.getCourse() != null)
+            login.listenUserId().collect {
+                _isUserLoggedIn.emit((it != null && coursesPrefs.getCourse() != null) || authPrefs.isGuestMode())
             }
         }
     }

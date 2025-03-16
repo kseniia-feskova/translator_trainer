@@ -1,25 +1,19 @@
 package com.domain.usecase.words
 
-import com.data.model.SetWordCrossRef
 import com.data.model.words.add.AddWordRequest
-import com.data.repository.words.api.IWordsApiRepository
-import com.data.repository.words.room.IWordsDaoRepository
-import com.domain.mapper.toDao
-import com.domain.mapper.toNewWordEntity
+import com.data.prefs.IDataStoreManager
+import com.data.repository.words.IWordRepository
 import com.domain.mapper.toUI
 import com.domain.token.ITokenRefresher
 import com.domain.token.safeApiCallWithRefresh
 import com.presentation.cache.ISetsCacheProvider
-import com.presentation.data.IDataStoreManager
 import com.presentation.model.WordUI
 import com.presentation.usecases.words.IAddWordUseCase
 import com.presentation.usecases.words.IGetWordByOriginal
 import com.presentation.usecases.words.IGetWordByTranslated
-import java.util.UUID
 
 class AddWordUseCase(
-    private val repo: IWordsDaoRepository,
-    private val apiRepo: IWordsApiRepository,
+    private val apiRepo: IWordRepository,
     private val prefs: IDataStoreManager,
     private val cache: ISetsCacheProvider,
     private val tokenRefresher: ITokenRefresher,
@@ -44,14 +38,15 @@ class AddWordUseCase(
                 return Result.success(this)
             }
         }
+
         val course = prefs.getCourse()
             ?: return Result.failure(Exception("Prefs are empty. Check them, please"))
         val request = AddWordRequest(
             originalText = originalText,
             translatedText = translatedText,
-            sourceLanguage = course.originalLanguage.code,
-            targetLanguage = course.translateLanguage.code,
-            courseId = UUID.fromString(course.id)
+            sourceLanguage = course.sourceLanguage,
+            targetLanguage = course.targetLanguage,
+            courseId = course.id
         )
         val response = safeApiCallWithRefresh(
             call = { apiRepo.addWord(request) },
@@ -65,23 +60,8 @@ class AddWordUseCase(
         } else if (data == null) {
             Result.failure(Exception("Empty user data"))
         } else {
-            course.selectedSetId?.let { addWordToDao(setId = it, newWord = data.toDao()) }
             cache.clear()
             Result.success(data.toUI())
         })
-    }
-
-    private suspend fun addWordToDao(setId: String, newWord: WordUI) {
-        //TODO refactor dao
-        val wordId = repo.addNewWord(newWord.toNewWordEntity())
-        if (wordId != -1L) {
-            repo.addWordToAllWordsSet(newWord.id)
-            repo.insertSetWordCrossRef(
-                SetWordCrossRef(
-                    setId = UUID.fromString(setId),
-                    wordId = newWord.id
-                )
-            )
-        }
     }
 }

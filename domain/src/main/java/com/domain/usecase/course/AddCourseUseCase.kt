@@ -1,20 +1,61 @@
 package com.domain.usecase.course
 
+import android.util.Log
 import com.data.model.course.add.AddCourseRequest
+import com.data.model.sets.AddSetRequest
+import com.data.prefs.IDataStoreManager
 import com.data.repository.course.ICourseRepository
+import com.data.repository.sets.ISetRepository
+import com.data.room.ALL_WORDS
+import com.domain.mapper.toData
 import com.domain.mapper.toUI
 import com.domain.token.ITokenRefresher
 import com.domain.token.safeApiCallWithRefresh
 import com.presentation.model.CourseUI
 import com.presentation.usecases.course.IAddCourseUseCase
+import kotlinx.coroutines.flow.firstOrNull
 import java.util.UUID
 
 class AddCourseUseCase(
     private val repo: ICourseRepository,
-    private val tokenRefresher: ITokenRefresher
+    private val tokenRefresher: ITokenRefresher,
+    private val dataStore: IDataStoreManager,
+    private val daoSets: ISetRepository
 ) : IAddCourseUseCase {
 
-    override suspend fun invoke(userId: UUID, courseUI: CourseUI): Result<CourseUI> {
+    override suspend fun invoke(course: CourseUI, needToCreateCourse: Boolean): Result<CourseUI> {
+        val isGuest = dataStore.isGuest()
+        return if (isGuest) {
+            val allWordsSet = daoSets.addSet(
+                AddSetRequest(
+                    name = ALL_WORDS,
+                    courseId = UUID.fromString(course.id),
+                    listOfWords = emptyList(),
+                    isDefault = false
+                )
+            )
+            dataStore.saveCourse(
+                course.toData().copy(
+                    allWordsId = allWordsSet.data?.id
+                )
+            )
+            Result.success(course)
+        } else {
+            val userId = dataStore.listenUserId().firstOrNull()
+            if (userId == null) {
+                Log.e("handleContinue", "UserId is null")
+                return Result.failure(Exception("UserId is null"))
+            }
+            if (needToCreateCourse) {
+                createNewCourse(userId, course)
+            } else {
+                dataStore.saveCourse(course.toData())
+                Result.success(course)
+            }
+        }
+    }
+
+    private suspend fun createNewCourse(userId: UUID, courseUI: CourseUI): Result<CourseUI> {
         val request = AddCourseRequest(
             name = "${courseUI.originalLanguage.name} - ${courseUI.translateLanguage.name}",
             userId = userId,

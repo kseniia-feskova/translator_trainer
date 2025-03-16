@@ -1,4 +1,4 @@
-package com.data.repository.words.api
+package com.data.repository.words
 
 import com.data.model.base.Result
 import com.data.model.words.WordResponse
@@ -8,7 +8,7 @@ import com.data.model.words.get.bytranslate.WordByTranslatedRequest
 import com.data.model.words.update.UpdateWordStatusRequest
 import java.util.UUID
 
-interface IWordsApiRepository {
+interface IWordRepository {
 
     suspend fun addWord(request: AddWordRequest): Result<WordResponse>
 
@@ -24,4 +24,5 @@ interface IWordsApiRepository {
     ): Result<WordResponse>
 
     suspend fun delete(wordId: UUID): Result<Void>
+
 }

@@ -1,17 +1,16 @@
 package com.domain.usecase.words
 
 import com.data.model.words.get.bytranslate.WordByOriginalRequest
-import com.data.repository.words.api.IWordsApiRepository
+import com.data.prefs.IDataStoreManager
+import com.data.repository.words.IWordRepository
 import com.domain.mapper.toUI
 import com.domain.token.ITokenRefresher
 import com.domain.token.safeApiCallWithRefresh
-import com.presentation.data.IDataStoreManager
 import com.presentation.model.WordUI
 import com.presentation.usecases.words.IGetWordByOriginal
-import java.util.UUID
 
 class GetWordByOriginal(
-    private val repo: IWordsApiRepository,
+    private val repo: IWordRepository,
     private val prefs: IDataStoreManager,
     private val tokenRefresher: ITokenRefresher
 ) : IGetWordByOriginal {
@@ -19,7 +18,7 @@ class GetWordByOriginal(
         val course = prefs.getCourse() ?: return Result.failure(Exception("No course selected"))
 
         val request = WordByOriginalRequest(
-            courseId = UUID.fromString(course.id),
+            courseId = course.id,
             original = original
         )
 

@@ -3,7 +3,7 @@ package com.presentation.ui.screens.sets
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.presentation.data.IDataStoreManager
+import com.presentation.usecases.course.ICoursesOnPrefsUseCases
 import com.presentation.usecases.sets.IGetAllSetsUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,7 +13,7 @@ import java.util.UUID
 
 class SetsViewModel(
     private val getAllSets: IGetAllSetsUseCase,
-    private val prefs: IDataStoreManager
+    private val coursePrefs: ICoursesOnPrefsUseCases
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SetsUIState())
@@ -26,7 +26,7 @@ class SetsViewModel(
     fun reload() {
         viewModelScope.launch {
             _uiState.update { it.copy(loading = true) }
-            val course = prefs.getCourse()
+            val course = coursePrefs.getCourse()
             if (course != null) {
                 Log.e("SetsViewModel", "reload, course = ${course.id} ")
                 val response = getAllSets.invoke(UUID.fromString(course.id))

@@ -3,9 +3,10 @@ package com.presentation.ui.screens.auth
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.presentation.data.IDataStoreManager
 import com.presentation.usecases.auth.ILoginUseCase
 import com.presentation.usecases.auth.IRegisterUseCase
+import com.presentation.usecases.auth.ISetGuestUseCase
+import com.presentation.usecases.course.ICoursesOnPrefsUseCases
 import com.presentation.usecases.course.IGetAllCoursesUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,7 +18,8 @@ class AuthViewModel(
     private val login: ILoginUseCase,
     private val register: IRegisterUseCase,
     private val getCourses: IGetAllCoursesUseCase,
-    private val dataStore: IDataStoreManager
+    private val coursesPrefs: ICoursesOnPrefsUseCases,
+    private val guestPrefs: ISetGuestUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AuthUIState())
@@ -28,6 +30,7 @@ class AuthViewModel(
             is AuthIntent.OnEmailChanged -> handleNewLogin(intent.login)
             is AuthIntent.OnPasswordChanged -> handleNewPassword(intent.password)
             is AuthIntent.Auth -> handleAuth(intent.goToCourses, intent.goToHome)
+            is AuthIntent.SaveAsGuest -> handleGuest(intent.goToCourses)
             AuthIntent.ChangeScreen -> handleScreenChange()
         }
     }
@@ -70,7 +73,6 @@ class AuthViewModel(
             }
             val userId = response.getOrNull()
             if (userId != null) {
-                dataStore.saveUserId(userId)
                 checkCourses(userId, goToCourses, goToHome)
             } else {
                 _uiState.update {
@@ -92,11 +94,11 @@ class AuthViewModel(
             }
             val courses = response.getOrNull() ?: return@launch
             if (courses.size != 1) {
-                dataStore.saveCourses(courses)
+                coursesPrefs.saveAll(courses)
                 goToCourses()
                 _uiState.update { it.copy(isLoading = false) }
             } else {
-                dataStore.saveCourse(courses.first())
+                coursesPrefs.saveOne(courses.first())
                 goToHome()
                 _uiState.update { it.copy(isLoading = false) }
             }
@@ -115,7 +117,6 @@ class AuthViewModel(
             }
             val userId = response.getOrNull()
             if (userId != null) {
-                dataStore.saveUserId(userId)
                 _uiState.update { it.copy(isLoading = false) }
                 goToCourses()
                 Log.e("NewLoginVM", "Register success")
@@ -127,6 +128,13 @@ class AuthViewModel(
                     )
                 }
             }
+        }
+    }
+
+    private fun handleGuest(goToCourses: () -> Unit) {
+        viewModelScope.launch {
+            guestPrefs.setGuest()
+            goToCourses()
         }
     }
 

@@ -1,14 +1,15 @@
-package com.data.repository.sets
+package com.data.repository.sets.api
 
 import com.data.api.ApiService
 import com.data.model.base.Result
 import com.data.model.sets.AddSetRequest
 import com.data.model.sets.SetResponse
 import com.data.model.sets.get.all.GetAllRequest
+import com.data.repository.sets.ISetRepository
 import com.data.safeCall
 import java.util.UUID
 
-class SetRepository(private val apiService: ApiService) : ISetRepository {
+class SetApiRepository(private val apiService: ApiService ) : ISetRepository {
 
     override suspend fun addSet(request: AddSetRequest): Result<SetResponse> {
         return safeCall(request = { apiService.saveSet(request) })
@@ -17,5 +18,4 @@ class SetRepository(private val apiService: ApiService) : ISetRepository {
     override suspend fun getAllSets(courseId: UUID): Result<List<SetResponse>> {
         return safeCall(request = { apiService.getAllSets(GetAllRequest(courseId)) })
     }
-
 }

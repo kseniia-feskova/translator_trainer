@@ -7,5 +7,5 @@ interface IRegisterUseCase {
         email: String,
         username: String,
         password: String
-    ): Result<UUID?>
+    ): Result<UUID>
 }

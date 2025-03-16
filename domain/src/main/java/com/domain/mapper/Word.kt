@@ -6,15 +6,6 @@ import com.presentation.model.Level
 import com.presentation.model.WordUI
 import java.util.UUID
 
-fun WordUI.toNewWordEntity(): WordEntity {
-    return WordEntity(
-        originalText = originalText,
-        translatedText = resText,
-        status = level.toStatus(),
-//        dateAdded = date
-    )
-}
-
 fun WordEntity.toWord(): WordUI {
     return WordUI(
         id = id,

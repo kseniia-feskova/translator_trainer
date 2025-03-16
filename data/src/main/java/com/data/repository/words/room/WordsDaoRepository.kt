@@ -1,75 +1,70 @@
 package com.data.repository.words.room
 
-import com.data.model.SetOfWords
-import com.data.model.SetWithWords
-import com.data.model.SetWordCrossRef
+import android.util.Log
 import com.data.model.WordEntity
+import com.data.model.base.Result
+import com.data.model.words.WordResponse
+import com.data.model.words.add.AddWordRequest
+import com.data.model.words.get.bytranslate.WordByOriginalRequest
+import com.data.model.words.get.bytranslate.WordByTranslatedRequest
+import com.data.model.words.update.UpdateWordStatusRequest
+import com.data.repository.words.IWordRepository
+import com.data.room.SetsDao
 import com.data.room.WordDao
-import kotlinx.coroutines.flow.Flow
+import com.data.toWordResponse
 import java.util.UUID
 
 class WordsDaoRepository(
-    private val dao: WordDao
-) : IWordsDaoRepository {
+    private val dao: WordDao,
+    private val setsDao: SetsDao
+) : IWordRepository {
 
-    override suspend fun addNewWord(newWord: WordEntity): Long {
-        return dao.insertWord(newWord)
+    override suspend fun addWord(request: AddWordRequest): Result<WordResponse> {
+        val wordEntity = WordEntity(
+            id = UUID.randomUUID(),
+            originalText = request.originalText,
+            translatedText = request.translatedText,
+            sourceLanguage = request.sourceLanguage,
+            targetLanguage = request.targetLanguage,
+            status = request.status,
+            courseId = request.courseId
+        )
+        Log.e("WordsDaoRepo", "Add word : $wordEntity")
+        dao.addWordToAllWordsSet(wordEntity)
+        return Result(data = wordEntity.toWordResponse())
     }
 
-    override suspend fun insertSet(setOfWords: SetOfWords): Long {
-        return dao.insertSet(setOfWords)
+    override suspend fun getWordByTranslated(request: WordByTranslatedRequest): Result<WordResponse> {
+        val inDao = dao.getWordByOriginal(request.translate)
+        return if (inDao == null) {
+            Result(errorMsg = "Word does not exist")
+        } else Result(data = inDao.toWordResponse())
     }
 
-    override suspend fun getSetByName(name: String): SetOfWords? {
-        return dao.getSetByName(name)
+    override suspend fun getWordByOriginal(request: WordByOriginalRequest): Result<WordResponse> {
+        val inDao = dao.getWordByOriginal(request.original)
+        return if (inDao == null) {
+            Result(errorMsg = "Word does not exist")
+        } else Result(data = inDao.toWordResponse())
     }
 
-    override suspend fun getSetById(id: Int): SetOfWords? {
-        return dao.getSetById(id)
+    override suspend fun getWordsBySet(setId: UUID): Result<List<WordResponse>> {
+        val set = setsDao.getSetById(setId) ?: return Result(errorMsg = "Set does not exist")
+        return Result(data = set.words.map { it.toWordResponse() })
     }
 
-    override suspend fun addWordToAllWordsSet(word: WordEntity) {
-        dao.addWordToAllWordsSet(word)
+    override suspend fun updateStatus(
+        wordId: UUID,
+        updateStatus: UpdateWordStatusRequest
+    ): Result<WordResponse> {
+        dao.updateWordStatus(wordId, updateStatus.status)
+        val newValue = dao.getWordById(wordId) ?: return Result(errorMsg = "Word does not exist")
+        return Result(data = newValue.toWordResponse())
     }
 
-    override suspend fun addWordToAllWordsSet(wordId: UUID) {
-        dao.addWordToAllWordsSet(wordId)
-    }
-
-    override fun getWordsInSet(setId: Int): Flow<SetWithWords> {
-        return dao.getSetWithWords(setId)
-    }
-
-    override suspend fun insertSetWordCrossRef(crossRef: SetWordCrossRef) {
-        dao.insertSetWordCrossRef(crossRef)
-    }
-
-    override suspend fun updateWord(newWord: WordEntity) {
-        dao.updateWord(newWord)
-    }
-
-    override suspend fun getWordById(wordId: UUID): WordEntity? {
-        return dao.getWordById(wordId)
-    }
-
-    override suspend fun deleteSetById(setId: Int) {
-        dao.deleteSetWithWords(setId)
-    }
-
-    override suspend fun findWordByOrigin(origin: String): WordEntity? {
-        return dao.getWordByOriginal(origin)
-    }
-
-    override suspend fun findWordByTranslated(translated: String): WordEntity? {
-        return dao.getWordByTranslated(translated)
-    }
-
-    override suspend fun getAllSets(): List<SetWithWords> {
-        return dao.getAllSets()
-    }
-
-    override suspend fun deleteWord(wordId: UUID) {
-        dao.deleteWordWithRelations(wordId)
+    override suspend fun delete(wordId: UUID): Result<Void> {
+        dao.deleteWordById(wordId)
+        return Result()
     }
 
 }

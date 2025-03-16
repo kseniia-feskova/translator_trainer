@@ -112,7 +112,7 @@ fun HomeTopView(
 fun AccountTopView(
     name: String,
     photo: URL? = null,
-    onEditClicked: () -> Unit = {},
+    onEditClicked: (() -> Unit)? = {},
 ) {
 
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
@@ -151,15 +151,20 @@ fun AccountTopView(
             contentDescription = "Sample Image",
             contentScale = ContentScale.Crop
         )
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(
-                text = stringResource(R.string.name_label),
-                style = MaterialTheme.typography.titleLarge.copy(
-                    fontWeight = FontWeight.Medium,
-                    fontSize = TextUnit(20f, TextUnitType.Sp),
-                    color = whiteColor
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            if (onEditClicked != null) {
+                Text(
+                    text = stringResource(R.string.name_label),
+                    style = MaterialTheme.typography.titleLarge.copy(
+                        fontWeight = FontWeight.Medium,
+                        fontSize = TextUnit(20f, TextUnitType.Sp),
+                        color = whiteColor
+                    )
                 )
-            )
+            }
             Text(
                 text = name,
                 style = MaterialTheme.typography.titleLarge.copy(
@@ -167,13 +172,15 @@ fun AccountTopView(
                     fontSize = TextUnit(20f, TextUnitType.Sp)
                 )
             )
-            Icon(
-                imageVector = Icons.Default.Edit,
-                contentDescription = "Edit",
-                modifier = Modifier
-                    .padding(horizontal = 8.dp)
-                    .clickable { onEditClicked() }
-            )
+            if (onEditClicked != null) {
+                Icon(
+                    imageVector = Icons.Default.Edit,
+                    contentDescription = "Edit",
+                    modifier = Modifier
+                        .padding(horizontal = 8.dp)
+                        .clickable { onEditClicked() }
+                )
+            }
         }
     }
 

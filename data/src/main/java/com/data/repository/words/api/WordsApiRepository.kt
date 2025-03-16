@@ -7,12 +7,13 @@ import com.data.model.words.add.AddWordRequest
 import com.data.model.words.get.bytranslate.WordByOriginalRequest
 import com.data.model.words.get.bytranslate.WordByTranslatedRequest
 import com.data.model.words.update.UpdateWordStatusRequest
+import com.data.repository.words.IWordRepository
 import com.data.safeCall
 import java.util.UUID
 
 class WordsApiRepository(
     private val apiService: ApiService
-) : IWordsApiRepository {
+) : IWordRepository {
 
     override suspend fun addWord(request: AddWordRequest): Result<WordResponse> {
         return safeCall(request = { apiService.saveWorld(request) })
@@ -38,7 +39,7 @@ class WordsApiRepository(
     }
 
     override suspend fun delete(wordId: UUID): Result<Void> {
-        return safeCall(request = {apiService.deleteWord(wordId)})
+        return safeCall(request = { apiService.deleteWord(wordId) })
     }
 
 }

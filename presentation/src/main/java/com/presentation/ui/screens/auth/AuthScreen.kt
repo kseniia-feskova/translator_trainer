@@ -73,6 +73,7 @@ import com.presentation.ui.fieldColors
 import com.presentation.ui.lightLilaColor
 import com.presentation.ui.redDarkColor
 import com.presentation.ui.viewLightColor
+import com.presentation.ui.views.GuestModeDialog
 import com.presentation.ui.views.Loader
 import com.presentation.ui.whiteColor
 
@@ -85,8 +86,23 @@ fun AuthScreen(
     onPasswordChanged: (String) -> Unit = {},
     onAuthStateChanged: () -> Unit = {},
     onAuthClicked: () -> Unit = {},
-    onGuestClicked: () -> Unit = {}
-) = Box() {
+    onGuestSelected: () -> Unit = {}
+) = Box {
+
+    var showDialog by remember { mutableStateOf(false) }
+
+    if (showDialog) {
+        GuestModeDialog(
+            onConfirm = {
+                showDialog = false
+                onGuestSelected()
+            },
+            onDismiss = {
+                showDialog = false
+            }
+        )
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -137,7 +153,7 @@ fun AuthScreen(
                         onEmailChanged,
                         onPasswordChanged,
                         onAuthClicked,
-                        onGuestClicked,
+                        onGuestClicked = { showDialog = true },
                         onAuthStateChanged
                     )
                 } else {
@@ -146,7 +162,7 @@ fun AuthScreen(
                         onEmailChanged,
                         onPasswordChanged,
                         onAuthClicked,
-                        onGuestClicked,
+                        onGuestClicked = { showDialog = true },
                         onAuthStateChanged
                     )
                 }

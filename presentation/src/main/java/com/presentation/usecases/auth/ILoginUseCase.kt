@@ -1,9 +1,12 @@
 package com.presentation.usecases.auth
 
+import kotlinx.coroutines.flow.Flow
 import java.util.UUID
 
 interface ILoginUseCase {
-    suspend fun invoke(email: String, username: String, password: String): Result<UUID?>
+    suspend fun invoke(email: String, username: String, password: String): Result<UUID>
+
+    fun listenUserId(): Flow<UUID?>
 }
 
 /*

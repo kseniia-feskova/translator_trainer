@@ -12,5 +12,4 @@ data class CourseUI(
     val translatedFlag: Int,
     val allWordsId: String?,
     val selectedSetId: String?,
-    val userId: String
 )

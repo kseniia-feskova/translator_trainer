@@ -3,20 +3,18 @@ package com.presentation.ui.screens.select_course
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.presentation.data.IDataStoreManager
 import com.presentation.model.CourseUI
 import com.presentation.test.dummyCourses
 import com.presentation.usecases.auth.ILogoutUseCase
 import com.presentation.usecases.course.IAddCourseUseCase
+import com.presentation.usecases.course.ICoursesOnPrefsUseCases
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.util.UUID
 
 class SelectCourseViewModel(
-    private val dataStore: IDataStoreManager,
+    private val getCourses: ICoursesOnPrefsUseCases,
     private val logout: ILogoutUseCase,
     private val addCourse: IAddCourseUseCase
 ) : ViewModel() {
@@ -24,14 +22,15 @@ class SelectCourseViewModel(
     private val _uiState = MutableStateFlow(SelectCourseUIState())
     val uiState = _uiState.asStateFlow()
 
-
     init {
-        val savedCourses = dataStore.getCourses().ifEmpty { dummyCourses }
-        _uiState.update {
-            it.copy(
-                courses = savedCourses,
-                selectedCourse = savedCourses.firstOrNull()
-            )
+        viewModelScope.launch {
+            val savedCourses = getCourses.getAll()
+            _uiState.update {
+                it.copy(
+                    courses = savedCourses,
+                    selectedCourse = savedCourses.firstOrNull()
+                )
+            }
         }
     }
 
@@ -46,7 +45,6 @@ class SelectCourseViewModel(
     private fun handleBackClicked(navigateUp: () -> Unit) {
         viewModelScope.launch {
             logout.invoke()
-            dataStore.saveUserId(null)
             navigateUp()
         }
     }
@@ -58,31 +56,12 @@ class SelectCourseViewModel(
                 Log.e("handleContinue", "Selected course is null")
                 return@launch
             }
-            val userId = dataStore.listenUserId().firstOrNull()
-            if (userId == null) {
-                Log.e("handleContinue", "UserId is null")
-                return@launch
-            }
-            if (state.courses == dummyCourses) {
-                createNewCourse(userId, state.selectedCourse)
+            val response = addCourse.invoke(state.selectedCourse, state.courses == dummyCourses)
+            if (response.isSuccess) {
+                goToHome()
             } else {
-                dataStore.saveCourse(state.selectedCourse)
+                //handleError()
             }
-            goToHome()
-        }
-    }
-
-    private suspend fun createNewCourse(userId: UUID, course: CourseUI) {
-        val addCourseResponse = addCourse.invoke(userId, course)
-        if (addCourseResponse.isSuccess) {
-            val savedCourse = addCourseResponse.getOrNull()
-            if (savedCourse != null) {
-                dataStore.saveCourse(savedCourse)
-            } else {
-                Log.e("createNewCourse", "savedCourse is null")
-            }
-        } else {
-            Log.e("createNewCourse", "${addCourseResponse.exceptionOrNull()?.message}")
         }
     }
 

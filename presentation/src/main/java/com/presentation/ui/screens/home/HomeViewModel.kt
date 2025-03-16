@@ -2,9 +2,9 @@ package com.presentation.ui.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.presentation.data.IDataStoreManager
 import com.presentation.model.CourseUI
 import com.presentation.usecases.ITranslateWordUseCase
+import com.presentation.usecases.course.ICoursesOnPrefsUseCases
 import com.presentation.usecases.words.IAddWordUseCase
 import com.presentation.usecases.words.IGetWordByOriginal
 import com.presentation.usecases.words.IGetWordByTranslated
@@ -20,7 +20,7 @@ class HomeViewModel(
     private val findWordByTranslate: IGetWordByTranslated,
     private val translateWord: ITranslateWordUseCase,
     private val addWordUseCase: IAddWordUseCase,
-    private val prefs: IDataStoreManager
+    private val coursesPrefs: ICoursesOnPrefsUseCases,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUIState())
@@ -29,7 +29,7 @@ class HomeViewModel(
 
     init {
         viewModelScope.launch {
-            course = prefs.getCourse()
+            course = coursesPrefs.getCourse()
             course?.let { course ->
                 _uiState.update {
                     it.copy(

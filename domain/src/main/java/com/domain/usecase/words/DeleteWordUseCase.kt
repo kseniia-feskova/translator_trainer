@@ -1,6 +1,6 @@
 package com.domain.usecase.words
 
-import com.data.repository.words.api.IWordsApiRepository
+import com.data.repository.words.IWordRepository
 import com.domain.token.ITokenRefresher
 import com.domain.token.safeApiCallWithRefresh
 import com.presentation.cache.ISetsCacheProvider
@@ -8,7 +8,7 @@ import com.presentation.usecases.words.IDeleteWordUseCase
 import java.util.UUID
 
 class DeleteWordUseCase(
-    private val repo: IWordsApiRepository,
+    private val repo: IWordRepository,
     private val tokenRefresher: ITokenRefresher,
     private val cacheProvider: ISetsCacheProvider
 ) : IDeleteWordUseCase {

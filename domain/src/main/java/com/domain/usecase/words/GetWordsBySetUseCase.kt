@@ -1,6 +1,6 @@
 package com.domain.usecase.words
 
-import com.data.repository.words.api.IWordsApiRepository
+import com.data.repository.words.IWordRepository
 import com.domain.mapper.toUI
 import com.domain.token.ITokenRefresher
 import com.domain.token.safeApiCallWithRefresh
@@ -9,7 +9,7 @@ import com.presentation.usecases.words.IGetWordsBySetUseCase
 import java.util.UUID
 
 class GetWordsBySetUseCase(
-    private val repo: IWordsApiRepository,
+    private val repo: IWordRepository,
     private val tokenRefresher: ITokenRefresher
 ) : IGetWordsBySetUseCase {
     override suspend fun invoke(setId: UUID): Result<List<WordUI>> {

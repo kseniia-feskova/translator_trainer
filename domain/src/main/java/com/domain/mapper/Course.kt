@@ -4,6 +4,12 @@ import com.data.model.course.CourseEntity
 import com.presentation.model.CourseUI
 import com.presentation.utils.getLanguageByCode
 import com.presentation.utils.getResourceByCode
+import java.util.UUID
+
+fun String?.toUUID(): UUID? {
+    if (this == null) return null
+    return UUID.fromString(this)
+}
 
 fun CourseEntity.toUI(): CourseUI {
     return CourseUI(
@@ -14,6 +20,15 @@ fun CourseEntity.toUI(): CourseUI {
         originalLanguage = sourceLanguage.getLanguageByCode(),
         originalFlag = sourceLanguage.getResourceByCode(),
         translatedFlag = targetLanguage.getResourceByCode(),
-        userId = userId.toString()
+    )
+}
+
+fun CourseUI.toData(): CourseEntity {
+    return CourseEntity(
+        id = UUID.fromString(id),
+        sourceLanguage = originalLanguage.code,
+        targetLanguage = translateLanguage.code,
+        allWordsId = allWordsId.toUUID(),
+        selectedSetId = selectedSetId.toUUID()
     )
 }

@@ -45,6 +45,7 @@ fun AuthRoute(
         onPasswordChanged = { viewModel.handleIntent(AuthIntent.OnPasswordChanged(it)) },
         onAuthStateChanged = { viewModel.handleIntent(AuthIntent.ChangeScreen) },
         onAuthClicked = { viewModel.handleIntent(AuthIntent.Auth(goToCourses, goToHome)) },
+        onGuestSelected = { viewModel.handleIntent(AuthIntent.SaveAsGuest(goToCourses)) }
     )
 
 }

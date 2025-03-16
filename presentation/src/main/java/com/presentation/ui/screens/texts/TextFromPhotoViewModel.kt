@@ -3,9 +3,9 @@ package com.presentation.ui.screens.texts
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.presentation.data.IDataStoreManager
 import com.presentation.model.CourseUI
 import com.presentation.usecases.ITranslateWordUseCase
+import com.presentation.usecases.course.ICoursesOnPrefsUseCases
 import com.presentation.usecases.words.IAddWordUseCase
 import com.presentation.utils.Language
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,7 +25,7 @@ data class TextFromPhotoUI(
 
 class TextFromPhotoViewModel(
     private val translateWord: ITranslateWordUseCase,
-    private val prefs: IDataStoreManager,
+    private val coursesPrefs: ICoursesOnPrefsUseCases,
     private val addWordUseCase: IAddWordUseCase
 ) : ViewModel() {
 
@@ -35,7 +35,7 @@ class TextFromPhotoViewModel(
 
     init {
         viewModelScope.launch {
-            course = prefs.getCourse()
+            course = coursesPrefs.getCourse()
             course?.let { course ->
                 _uiState.update {
                     it.copy(
