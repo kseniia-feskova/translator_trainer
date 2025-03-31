@@ -1,8 +1,10 @@
 package com.presentation.model
 
+import androidx.compose.runtime.Stable
 import com.presentation.utils.Language
 import kotlinx.serialization.Serializable
 
+@Stable
 @Serializable
 data class CourseUI(
     val id: String,

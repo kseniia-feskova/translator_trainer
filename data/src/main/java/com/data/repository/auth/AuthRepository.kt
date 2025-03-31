@@ -1,18 +1,20 @@
 package com.data.repository.auth
 
 import com.data.api.ApiService
-import com.data.model.base.Result
-import com.data.model.auth.AuthResponse
 import com.data.model.auth.AuthRequest
+import com.data.model.auth.AuthResponse
 import com.data.model.auth.RefreshTokenRequest
+import com.data.model.base.Result
 import com.data.prefs.ITokenStorage
 import com.data.prefs.TokenStorage.Companion.ACCESS_TOKEN
 import com.data.prefs.TokenStorage.Companion.REFRESH_TOKEN
+import com.data.room.AppDao
 import com.data.safeCall
 
 class AuthRepository(
     private val service: ApiService,
-    private val tokenStorage: ITokenStorage
+    private val tokenStorage: ITokenStorage,
+    private val appDao: AppDao
 ) : IAuthRepository {
 
     override suspend fun register(
@@ -64,5 +66,13 @@ class AuthRepository(
     override suspend fun logout() {
         tokenStorage.clearToken(ACCESS_TOKEN)
         tokenStorage.clearToken(REFRESH_TOKEN)
+        clearDatabase()
     }
+
+    private suspend fun clearDatabase() {
+        appDao.clearUsers()
+        appDao.clearSets()
+        appDao.clearWords()
+    }
+
 }

@@ -12,12 +12,13 @@ import com.data.model.WordEntity
 
 @Database(
     entities = [WordEntity::class, SetOfWords::class, SetWordCrossRef::class],
-    version = 3
+    version = 4
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun wordDao(): WordDao
     abstract fun setsDao(): SetsDao
+    abstract fun appDao(): AppDao
 
     companion object {
         @Volatile

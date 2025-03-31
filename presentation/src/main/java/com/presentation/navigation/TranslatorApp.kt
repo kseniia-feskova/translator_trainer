@@ -39,7 +39,7 @@ fun TranslatorApp(navController: NavHostController) {
         homeNav()
         setsNav(navController)
         photoNav()
-        accountNav()
+        accountNav(navController)
     }
 }
 
@@ -153,11 +153,13 @@ private fun NavGraphBuilder.setsNav(navController: NavHostController) {
     }
 }
 
-private fun NavGraphBuilder.accountNav() {
+private fun NavGraphBuilder.accountNav(navController: NavHostController) {
     navigation(
         startDestination = LeafScreen.Account.route, // Это для экрана
         route = RootScreen.Profile.route            // Это для графа
     ) {
-        accountScreen()
+        accountScreen(
+            navController::navigateToAuth
+        )
     }
 }

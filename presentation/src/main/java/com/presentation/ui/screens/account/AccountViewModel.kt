@@ -3,6 +3,8 @@ package com.presentation.ui.screens.account
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.presentation.ui.screens.auth.AuthScreenState
+import com.presentation.ui.screens.auth.AuthUIState
 import com.presentation.usecases.IAccountUseCase
 import com.presentation.usecases.IGetAccountUseCase
 import com.presentation.usecases.auth.IDeleteUseCase
@@ -31,6 +33,9 @@ class AccountViewModel(
     private val _uiState = MutableStateFlow(AccountUIState(loading = true))
     val uiState = _uiState.asStateFlow()
 
+    private val _authState = MutableStateFlow<AuthUIState?>(null)
+    val authState = _authState.asStateFlow()
+
     init {
         viewModelScope.launch {
             if (guestUseCase.isGuestMode()) {
@@ -45,7 +50,7 @@ class AccountViewModel(
                     )
                     Log.e("AccountViewModel", "Guest = $guestData")
                     _uiState.update {
-                        it.copy(guestData = guestData)
+                        it.copy(loading = false, guestData = guestData)
                     }
                 }
             } else {
@@ -88,18 +93,22 @@ class AccountViewModel(
 
             //show warning dialog before deletion
             AccountIntent.DeleteAccount -> {
-                val isDialogVisible = _uiState.value.showDeleteDialog
+                val isDialogVisible = _uiState.value.btnsState.showDeleteDialog
                 if (isDialogVisible) {
                     viewModelScope.launch {
                         deleteAccount.invoke()
                         //  dataStoreManager.saveUserId(null)
                         _uiState.update {
-                            it.copy(showDeleteDialog = false)
+                            it.copy(
+                                btnsState = AccountBtnsState(showDeleteDialog = false)
+                            )
                         }
                     }
                 } else {
                     _uiState.update {
-                        it.copy(showDeleteDialog = true)
+                        it.copy(
+                            btnsState = AccountBtnsState(showDeleteDialog = true)
+                        )
                     }
                 }
             }
@@ -109,27 +118,66 @@ class AccountViewModel(
             }
 
             //show warning dialog before logout
-            AccountIntent.Logout -> {
-                val isDialogVisible = _uiState.value.showLogoutDialog
+            is AccountIntent.Logout -> {
+                val isDialogVisible = _uiState.value.btnsState.showLogoutDialog
                 if (isDialogVisible) {
                     viewModelScope.launch {
                         logout.invoke()
                         _uiState.update {
-                            it.copy(showLogoutDialog = false)
+                            it.copy(btnsState = AccountBtnsState(showLogoutDialog = false))
                         }
+                        intent.goToAuth()
                     }
                 } else {
                     _uiState.update {
-                        it.copy(showLogoutDialog = true)
+                        it.copy(btnsState = AccountBtnsState(showLogoutDialog = true))
                     }
                 }
             }
 
             AccountIntent.DismissDialog -> {
                 _uiState.update {
-                    it.copy(showLogoutDialog = false, showDeleteDialog = false)
+                    it.copy(
+                        btnsState = it.btnsState.copy(
+                            showLogoutDialog = false,
+                            showDeleteDialog = false
+                        )
+                    )
                 }
+            }
+
+            is AccountIntent.Auth -> {
+                Log.e("AccountViewModel", "Save account:\n${_uiState.value.guestData}")
+            }
+
+            is AccountIntent.OnEmailChanged -> handleNewLogin(intent.login)
+            is AccountIntent.OnPasswordChanged -> handleNewPassword(intent.password)
+            AccountIntent.createAccount -> {
+                _uiState.update {
+                    it.copy(
+                        btnsState = AccountBtnsState(
+                            showAuthScreen = true
+                        )
+                    )
+                }
+                _authState.value = AuthUIState(screenState = AuthScreenState.REGISTER)
+            }
+
+            AccountIntent.onAuthClose -> {
+                _uiState.update { it.copy(btnsState = AccountBtnsState()) }
+                _authState.value = null
             }
         }
     }
+
+    private fun handleNewLogin(login: String) {
+        _authState.update { it?.copy(email = login, error = null) }
+    }
+
+    private fun handleNewPassword(password: String) {
+        _authState.update {
+            it?.copy(password = password, error = null)
+        }
+    }
+
 }

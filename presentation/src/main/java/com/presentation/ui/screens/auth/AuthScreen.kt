@@ -158,7 +158,9 @@ fun AuthScreen(
                     )
                 } else {
                     RegisterForm(
-                        state,
+                        state.email,
+                        state.password,
+                        state.error,
                         onEmailChanged,
                         onPasswordChanged,
                         onAuthClicked,
@@ -353,12 +355,15 @@ fun LoginForm(
 
 @Composable
 fun RegisterForm(
-    state: AuthUIState,
+    email: String,
+    password: String,
+    error: AuthError? = null,
     onEmailChanged: (String) -> Unit = {},
     onPasswordChanged: (String) -> Unit = {},
     onLoginClicked: () -> Unit = {},
     onGuestClicked: () -> Unit = {},
-    onCreateAccountClicked: () -> Unit = {}
+    onCreateAccountClicked: () -> Unit = {},
+    guestMode: Boolean = false
 ) {
     var passwordVisible by remember { mutableStateOf(false) }
     Box(modifier = Modifier.fillMaxSize()) {
@@ -372,7 +377,7 @@ fun RegisterForm(
             Spacer(modifier = Modifier.height(16.dp))
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = state.email,
+                value = email,
                 onValueChange = onEmailChanged,
                 singleLine = true,
                 label = {
@@ -384,12 +389,12 @@ fun RegisterForm(
                 shape = RoundedCornerShape(8.dp),
                 colors = fieldColors(),
                 textStyle = AppTypography.titleSmall,
-                isError = state.error == AuthError.EMPTY_FIELDS && state.email.isEmpty() || state.error == AuthError.EMAIL_TAKEN
+                isError = error == AuthError.EMPTY_FIELDS && email.isEmpty() || error == AuthError.EMAIL_TAKEN
             )
             Spacer(modifier = Modifier.height(16.dp))
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = state.password,
+                value = password,
                 onValueChange = onPasswordChanged,
                 singleLine = true,
                 trailingIcon = {
@@ -409,7 +414,7 @@ fun RegisterForm(
                 shape = RoundedCornerShape(8.dp),
                 colors = fieldColors(),
                 textStyle = AppTypography.titleSmall,
-                isError = (state.error == AuthError.EMPTY_FIELDS && state.password.isEmpty()),
+                isError = (error == AuthError.EMPTY_FIELDS && password.isEmpty()),
                 visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password),
             )
@@ -420,19 +425,21 @@ fun RegisterForm(
                 color = fieldBorderColor,
                 modifier = Modifier.align(Alignment.End)
             )
-            if (state.error != null) {
+            if (error != null) {
                 Text(
-                    text = stringResource(state.error.msg),
+                    text = stringResource(error.msg),
                     style = AppTypography.titleSmall.copy(color = redDarkColor),
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
             }
-            if (state.error == null) {
+            if (error == null) {
                 Spacer(modifier = Modifier.height(8.dp))
             }
-            OrView()
-            Spacer(modifier = Modifier.height(16.dp))
-            CustomShadowButton(stringResource(R.string.guest_button), onClick = onGuestClicked)
+            if (!guestMode) {
+                OrView()
+                Spacer(modifier = Modifier.height(16.dp))
+                CustomShadowButton(stringResource(R.string.guest_button), onClick = onGuestClicked)
+            }
             //TODO: Google Sign-In
 //            CustomShadowButton(
 //                text = "Continue with Google",
@@ -445,7 +452,7 @@ fun RegisterForm(
         ) {
             Text(
                 modifier = Modifier.clickable { onCreateAccountClicked() },
-                text = stringResource(R.string.login_subtitle),
+                text = if (guestMode) stringResource(R.string.close_btn) else stringResource(R.string.login_subtitle),
                 color = bgColor,
                 style = AppTypography.titleSmall.copy(
                     fontWeight = FontWeight.Bold,

@@ -13,7 +13,7 @@ class LogoutUseCase(
     override suspend fun invoke() {
         dataStore.saveUserId(null)
         dataStore.resetGuestMode()
-        cache.addSets(null)
+        cache.clear()
         repo.logout()
     }
 }
