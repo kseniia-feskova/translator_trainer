@@ -5,6 +5,7 @@ import com.domain.token.ITokenRefresher
 import com.domain.token.TokenRefresher
 import com.domain.usecase.GetAccountUseCase
 import com.domain.usecase.TranslateWordUseCase
+import com.domain.usecase.auth.CreateFromGuestUseCase
 import com.domain.usecase.auth.DeleteUseCase
 import com.domain.usecase.auth.LoginUseCase
 import com.domain.usecase.auth.LogoutUseCase
@@ -18,6 +19,7 @@ import com.domain.usecase.sets.AddSetUseCase
 import com.domain.usecase.sets.GetAllSetsUseCase
 import com.domain.usecase.sets.UpdateSetsUseCase
 import com.domain.usecase.user.AccountUseCase
+import com.domain.usecase.words.AddWordByApiUseCase
 import com.domain.usecase.words.AddWordUseCase
 import com.domain.usecase.words.DeleteWordUseCase
 import com.domain.usecase.words.GetWordByOriginal
@@ -28,6 +30,7 @@ import com.presentation.cache.ISetsCacheProvider
 import com.presentation.usecases.IAccountUseCase
 import com.presentation.usecases.IGetAccountUseCase
 import com.presentation.usecases.ITranslateWordUseCase
+import com.presentation.usecases.auth.ICreateFromGuestUseCase
 import com.presentation.usecases.auth.IDeleteUseCase
 import com.presentation.usecases.auth.ILoginUseCase
 import com.presentation.usecases.auth.ILogoutUseCase
@@ -40,6 +43,7 @@ import com.presentation.usecases.course.IGetCourseUseCase
 import com.presentation.usecases.sets.IAddSetUseCase
 import com.presentation.usecases.sets.IGetAllSetsUseCase
 import com.presentation.usecases.sets.IUpdateSetsUseCase
+import com.presentation.usecases.words.IAddWordByApiUseCase
 import com.presentation.usecases.words.IAddWordUseCase
 import com.presentation.usecases.words.IDeleteWordUseCase
 import com.presentation.usecases.words.IGetWordByOriginal
@@ -61,6 +65,8 @@ val useCaseModule = module {
     singleOf(::AddCourseUseCase) bind IAddCourseUseCase::class
 
     singleOf(::AddWordUseCase) bind IAddWordUseCase::class
+
+    singleOf(::AddWordByApiUseCase) bind IAddWordByApiUseCase::class
 
     singleOf(::TranslateWordUseCase) bind ITranslateWordUseCase::class
 
@@ -97,4 +103,6 @@ val useCaseModule = module {
     singleOf(::UpdateSetsUseCase) bind IUpdateSetsUseCase::class
 
     singleOf(::SetGuestUseCase) bind ISetGuestUseCase::class
+
+    singleOf(::CreateFromGuestUseCase) bind ICreateFromGuestUseCase::class
 }

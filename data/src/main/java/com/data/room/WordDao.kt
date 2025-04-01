@@ -34,6 +34,9 @@ interface WordDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSetWordCrossRef(crossRef: SetWordCrossRef)
 
+    @Query("SELECT * FROM words")
+    suspend fun getAllWords(): List<WordEntity>?
+
     @Query("SELECT * FROM words WHERE LOWER(originalText) = LOWER(:original) LIMIT 1")
     suspend fun getWordByOriginal(original: String): WordEntity?
 

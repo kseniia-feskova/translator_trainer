@@ -71,7 +71,10 @@ class AddCourseUseCase(
             Result.failure(Exception(response.errorMsg))
         } else if (data == null) {
             Result.failure(Exception("Empty user data"))
-        } else Result.success(data.toUI())
+        } else {
+            dataStore.saveCourse(data)
+            Result.success(data.toUI())
+        }
     }
 
 }

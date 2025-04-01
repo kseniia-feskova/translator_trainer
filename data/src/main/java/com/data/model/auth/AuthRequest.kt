@@ -1,7 +1,8 @@
 package com.data.model.auth
 
 data class AuthRequest(
-    val email: String,
     val username: String,
-    val password: String,
+    val phone: String? = null,
+    val email: String? = null,
+    val password: String
 )

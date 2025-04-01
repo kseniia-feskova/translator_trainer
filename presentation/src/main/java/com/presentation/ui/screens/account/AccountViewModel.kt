@@ -7,6 +7,7 @@ import com.presentation.ui.screens.auth.AuthScreenState
 import com.presentation.ui.screens.auth.AuthUIState
 import com.presentation.usecases.IAccountUseCase
 import com.presentation.usecases.IGetAccountUseCase
+import com.presentation.usecases.auth.ICreateFromGuestUseCase
 import com.presentation.usecases.auth.IDeleteUseCase
 import com.presentation.usecases.auth.ILogoutUseCase
 import com.presentation.usecases.auth.ISetGuestUseCase
@@ -27,7 +28,8 @@ class AccountViewModel(
     private val guestUseCase: ISetGuestUseCase,
     private val accountPrefs: IAccountUseCase,
     private val coursePrefs: ICoursesOnPrefsUseCases,
-    private val getSets: IGetAllSetsUseCase
+    private val getSets: IGetAllSetsUseCase,
+    private val createUser: ICreateFromGuestUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AccountUIState(loading = true))
@@ -148,6 +150,10 @@ class AccountViewModel(
 
             is AccountIntent.Auth -> {
                 Log.e("AccountViewModel", "Save account:\n${_uiState.value.guestData}")
+                val email = _authState.value?.email ?: return
+                val password = _authState.value?.password ?: return
+                val course = _uiState.value.guestData?.course ?: return
+                viewModelScope.launch { createUser.invoke(email, password, course) }
             }
 
             is AccountIntent.OnEmailChanged -> handleNewLogin(intent.login)

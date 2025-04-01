@@ -48,6 +48,10 @@ class WordsDaoRepository(
         } else Result(data = inDao.toWordResponse())
     }
 
+    override suspend fun getAllWords(): Result<List<WordResponse>> {
+        return Result(dao.getAllWords()?.map { it.toWordResponse() })
+    }
+
     override suspend fun getWordsBySet(setId: UUID): Result<List<WordResponse>> {
         val set = setsDao.getSetById(setId) ?: return Result(errorMsg = "Set does not exist")
         return Result(data = set.words.map { it.toWordResponse() })

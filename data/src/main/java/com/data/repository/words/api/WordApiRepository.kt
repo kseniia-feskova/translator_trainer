@@ -11,9 +11,9 @@ import com.data.repository.words.IWordRepository
 import com.data.safeCall
 import java.util.UUID
 
-class WordsApiRepository(
+class WordApiRepository(
     private val apiService: ApiService
-) : IWordRepository {
+) : IWordRepository, IWordApiRepository {
 
     override suspend fun addWord(request: AddWordRequest): Result<WordResponse> {
         return safeCall(request = { apiService.saveWorld(request) })
@@ -25,6 +25,10 @@ class WordsApiRepository(
 
     override suspend fun getWordByOriginal(request: WordByOriginalRequest): Result<WordResponse> {
         return safeCall(request = { apiService.getWordByOriginal(request) })
+    }
+
+    override suspend fun getAllWords(): Result<List<WordResponse>> {
+        return Result(data = emptyList())
     }
 
     override suspend fun getWordsBySet(setId: UUID): Result<List<WordResponse>> {
