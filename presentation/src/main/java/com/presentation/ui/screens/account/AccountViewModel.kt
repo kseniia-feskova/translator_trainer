@@ -3,6 +3,7 @@ package com.presentation.ui.screens.account
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.presentation.ui.screens.auth.AuthError
 import com.presentation.ui.screens.auth.AuthScreenState
 import com.presentation.ui.screens.auth.AuthUIState
 import com.presentation.usecases.IAccountUseCase
@@ -153,7 +154,14 @@ class AccountViewModel(
                 val email = _authState.value?.email ?: return
                 val password = _authState.value?.password ?: return
                 val course = _uiState.value.guestData?.course ?: return
-                viewModelScope.launch { createUser.invoke(email, password, course) }
+                viewModelScope.launch {
+                    val result = createUser.invoke(email, password, course)
+                    if (result.isFailure) {
+                        handleError(result)
+                    } else {
+                        intent.goToHome()
+                    }
+                }
             }
 
             is AccountIntent.OnEmailChanged -> handleNewLogin(intent.login)
@@ -174,6 +182,19 @@ class AccountViewModel(
                 _authState.value = null
             }
         }
+    }
+
+    private fun <T> handleError(response: Result<T>) {
+        val error = response.exceptionOrNull()
+        val errorMsg = when (error?.message) {
+            "Wrong password" -> AuthError.WRONG_PASSWORD
+            "User does not exist" -> AuthError.USER_DOES_NOT_EXIST
+            "User already exists" -> AuthError.EMAIL_TAKEN
+            "Failed to connect" -> AuthError.INTERNET_CONNECTION_ERROR
+            "Check your internet connection" -> AuthError.INTERNET_CONNECTION_ERROR
+            else -> AuthError.DEFAULT
+        }
+        _authState.update { it?.copy(error = errorMsg, isLoading = false) }
     }
 
     private fun handleNewLogin(login: String) {

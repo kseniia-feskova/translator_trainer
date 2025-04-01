@@ -10,15 +10,22 @@ import com.presentation.navigation.LeafScreen
 import org.koin.androidx.compose.koinViewModel
 
 fun NavGraphBuilder.accountScreen(
-    toLogin: () -> Unit
+    toLogin: () -> Unit,
+    toHome: () -> Unit
 ) {
-    composable(route = LeafScreen.Account.route) { AccountRoute(toLogin = toLogin) }
+    composable(route = LeafScreen.Account.route) {
+        AccountRoute(
+            toLogin = toLogin,
+            toHome = toHome
+        )
+    }
 }
 
 @Composable
 fun AccountRoute(
     viewModel: AccountViewModel = koinViewModel(),
-    toLogin: () -> Unit
+    toLogin: () -> Unit,
+    toHome: () -> Unit
 ) {
     val authState by viewModel.authState.collectAsState()
     val state by viewModel.uiState.collectAsState()
@@ -39,7 +46,7 @@ fun AccountRoute(
             )
         }
     }
-    val onAuthClicked = remember { { viewModel.handleIntent(AccountIntent.Auth({})) } }
+    val onAuthClicked = remember { { viewModel.handleIntent(AccountIntent.Auth({ toHome() })) } }
     val onAuthClose = remember { { viewModel.handleIntent(AccountIntent.onAuthClose) } }
     AccountScreen(
         name = state.name.toString(),

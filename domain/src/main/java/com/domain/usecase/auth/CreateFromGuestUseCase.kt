@@ -1,7 +1,12 @@
 package com.domain.usecase.auth
 
 import com.data.repository.words.IWordRepository
+import com.domain.CanNotCreateCourseException
+import com.domain.CanNotCreateSetException
+import com.domain.CanNotCreateUserException
+import com.domain.WordDoesNotExist
 import com.presentation.model.CourseUI
+import com.presentation.model.SetOfCards
 import com.presentation.usecases.auth.ICreateFromGuestUseCase
 import com.presentation.usecases.auth.IRegisterUseCase
 import com.presentation.usecases.course.IAddCourseUseCase
@@ -19,11 +24,21 @@ class CreateFromGuestUseCase(
     private val addSet: IAddSetUseCase
 ) : ICreateFromGuestUseCase {
 
-    override suspend fun invoke(email: String, password: String, course: CourseUI) {
+    override suspend fun invoke(email: String, password: String, course: CourseUI): Result<UUID> {
         val allWords = wordsRepo.getAllWords().data
-        //TODO: handle errors
-        register(email, password) ?: return
-        val courseFromBack = saveCourse(course) ?: return
+        val userFromBack = register(email, password)
+        if (userFromBack.isFailure) {
+            return userFromBack
+        }
+        val courseFromBack = saveCourse(course)
+        if (courseFromBack.isFailure) {
+            return courseFromBack
+        }
+
+        val userId = userFromBack.getOrNull() ?: return Result.failure(CanNotCreateUserException())
+        val courseId =
+            courseFromBack.getOrNull() ?: return Result.failure(CanNotCreateCourseException())
+
         val allWordsIds = mutableListOf<UUID?>()
         allWords?.forEach {
             val savedWord = saveWord.invoke(
@@ -33,46 +48,43 @@ class CreateFromGuestUseCase(
             allWordsIds.add(savedWord.getOrNull()?.id)
         }
 
+        if (allWordsIds.size != allWords?.size) return Result.failure(WordDoesNotExist())
+
         val allSets = sets.invoke(UUID.fromString(course.id))
         val sets = allSets.getOrNull()
+        val setsResults = mutableListOf<Result<SetOfCards?>>()
         if (allSets.isSuccess && !sets.isNullOrEmpty()) {
             sets.forEach {
-                addSet.invoke(
-                    name = it.title,
-                    isDefault = it.isDefault,
-                    courseId = UUID.fromString(courseFromBack.id),
-                    //TODO: bottleneck!!!
-                    listOfWords = it.words.map { word ->
-                        val index = allWords?.indexOfFirst { it.id == word.id }
-                        if (index != null) {
+                setsResults.add(
+                    addSet.invoke(
+                        name = it.title,
+                        isDefault = it.isDefault,
+                        courseId = courseId,
+                        //TODO: bottleneck!!!
+                        listOfWords = it.words.map { word ->
+                            val index = allWords.indexOfFirst { it.id == word.id }
                             allWordsIds[index]
-                        } else word.id
-                    }.filterNotNull()
+                        }.filterNotNull()
+                    )
                 )
             }
+            if (setsResults.contains(Result.failure(Throwable()))) {
+                return Result.failure(CanNotCreateSetException())
+            }
         }
+        return Result.success(userId)
     }
 
-    private suspend fun register(email: String, password: String): UUID? {
-        val result = registerUseCase.invoke(
+    private suspend fun register(email: String, password: String): Result<UUID> {
+        return registerUseCase.invoke(
             email = email,
             username = email,
             password = password
         )
-        return if (result.isSuccess) {
-            result.getOrNull()
-        } else {
-            null
-        }
     }
 
-    private suspend fun saveCourse(course: CourseUI): CourseUI? {
-        val result = courseUseCase.invoke(course, true)
-        return if (result.isSuccess) {
-            result.getOrNull()
-        } else {
-            null
-        }
+    private suspend fun saveCourse(course: CourseUI): Result<UUID> {
+        return courseUseCase.invoke(course, true).map { UUID.fromString(it.id) }
     }
 
 }

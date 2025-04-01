@@ -1,11 +1,3 @@
 1. Logout in guest mode ✅
 2. Register user from guest mode
-
-1. register -> uuid userId  ✅
-2. addCourse -> uuid courseId, uuid allWordsSet  ✅
-3. add all words to AllWordsSet on back  ✅
-4. add all other sets  ✅
-5. update account screen
-6. handle errors
-
 3. Set limits for functional (words and sets count)

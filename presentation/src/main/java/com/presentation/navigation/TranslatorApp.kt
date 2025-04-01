@@ -159,7 +159,8 @@ private fun NavGraphBuilder.accountNav(navController: NavHostController) {
         route = RootScreen.Profile.route            // Это для графа
     ) {
         accountScreen(
-            navController::navigateToAuth
+            navController::navigateToAuth,
+            navController::navigateToHome
         )
     }
 }
