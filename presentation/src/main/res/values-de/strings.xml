@@ -64,5 +64,8 @@
 
     <string name="russian">Russian</string>
     <string name="german">German</string>
+    <string name="guest_limits_title">Dear Guest!</string>
+    <string name="guest_limits_description">Seems like you have used all your limits. Please, go to account settings for more information</string>
+    <string name="move_to_account">To settings</string>
 
 </resources>

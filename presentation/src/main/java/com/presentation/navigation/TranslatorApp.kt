@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.navigation
 import com.presentation.model.LessonType
 import com.presentation.ui.screens.account.accountScreen
+import com.presentation.ui.screens.account.navigateToAccount
 import com.presentation.ui.screens.all.allWordsScreen
 import com.presentation.ui.screens.all.navigateToAllWords
 import com.presentation.ui.screens.auth.authScreen
@@ -36,7 +37,7 @@ fun TranslatorApp(navController: NavHostController) {
     ) {
         splashScreen(navController)
         loginNav(navController)
-        homeNav()
+        homeNav(navController)
         setsNav(navController)
         photoNav()
         accountNav(navController)
@@ -76,12 +77,12 @@ private fun NavGraphBuilder.loginNav(navController: NavHostController) {
     )
 }
 
-private fun NavGraphBuilder.homeNav() {
+private fun NavGraphBuilder.homeNav(navController: NavHostController) {
     navigation(
         startDestination = LeafScreen.Home.route,
         route = RootScreen.Home.route
     ) {
-        homeScreen()
+        homeScreen(navController::navigateToAccount)
     }
 }
 
@@ -147,9 +148,10 @@ private fun NavGraphBuilder.setsNav(navController: NavHostController) {
             navController.navigateUp()
         }
 
-        newSetScreen {
-            navController.navigateUp()
-        }
+        newSetScreen(
+            navController::navigateUp,
+            navController::navigateToAccount
+        )
     }
 }
 

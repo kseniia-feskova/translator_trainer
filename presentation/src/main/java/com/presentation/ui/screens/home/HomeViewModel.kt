@@ -47,6 +47,7 @@ class HomeViewModel(
             is HomeIntent.EnterText -> translateInput()
             is HomeIntent.SaveWord -> saveWord()
             is HomeIntent.ChangeLanguages -> changeLanguages(intent.selectedLang)
+            HomeIntent.HideLimitsError -> _uiState.update { it.copy(limitsError = false) }
         }
     }
 
@@ -189,9 +190,17 @@ class HomeViewModel(
         val error = response.exceptionOrNull()
         val errorMsg = when (error?.message) {
             "Failed to connect" -> HomeError.INTERNET_CONNECTION_ERROR
+
+            "Guest limit" -> {
+                _uiState.update { it.copy(limitsError = true, loading = false) }
+                null
+            }
+
             else -> HomeError.DEFAULT
         }
-        _uiState.update { it.copy(error = errorMsg, loading = false) }
+        if (errorMsg != null) {
+            _uiState.update { it.copy(error = errorMsg, loading = false) }
+        }
     }
 
     companion object {

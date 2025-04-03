@@ -59,4 +59,7 @@
 
     <string name="russian">Русский</string>
     <string name="german">Немецкий</string>
+    <string name="guest_limits_title">Дорогой гость!</string>
+    <string name="guest_limits_description">Видимо Вы потратили свои лимиты. Пожалуйста, пройдите в настройки аккаунта, чтобы узнать больше</string>
+    <string name="move_to_account">К настройкам</string>
 </resources>

@@ -17,17 +17,19 @@ fun NavController.navigateToNewSet(
 }
 
 fun NavGraphBuilder.newSetScreen(
-    navigateUp: () -> Unit = {}
+    navigateUp: () -> Unit = {},
+    goToAccount: () -> Unit
 ) {
 
     composable(LeafScreen.NewSet.route) {
-        NewSetRoute(navigateUp)
+        NewSetRoute(navigateUp, goToAccount)
     }
 }
 
 @Composable
 fun NewSetRoute(
     navigateUp: () -> Unit = {},
+    goToAccount: () -> Unit = {},
     viewModel: NewSetViewModel = koinViewModel()
 ) {
 
@@ -42,5 +44,8 @@ fun NewSetRoute(
         searchQuery = { viewModel.handleIntent(NewSetIntent.SearchWord(it)) },
         onClearClick = { viewModel.handleIntent(NewSetIntent.ClearSearch) },
         navigateUp = navigateUp,
-    )
+        goToAccount = goToAccount,
+        hideLimitsError = {viewModel.handleIntent(NewSetIntent.HideLimitsError)},
+
+        )
 }

@@ -52,6 +52,7 @@ import com.presentation.test.smallList
 import com.presentation.ui.AppTheme
 import com.presentation.ui.AppTypography
 import com.presentation.ui.bgColor
+import com.presentation.ui.dialog.GuestLimitsDialog
 import com.presentation.ui.fieldColors
 import com.presentation.ui.lightLilaColor
 import com.presentation.ui.redDarkColor
@@ -70,7 +71,9 @@ fun NewSetScreen(
     saveSet: () -> Unit = {},
     searchQuery: (String) -> Unit = {},
     onClearClick: () -> Unit = {},
-    navigateUp: () -> Unit = {}
+    navigateUp: () -> Unit = {},
+    goToAccount: () -> Unit = {},
+    hideLimitsError: () -> Unit = {},
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     Box(
@@ -78,6 +81,16 @@ fun NewSetScreen(
             .fillMaxSize()
             .padding(bottom = 12.dp)
     ) {
+        if (state.limitsError) {
+            GuestLimitsDialog(
+                modifier = Modifier.align(Alignment.Center),
+                toAccountSetting = {
+                    hideLimitsError()
+                    goToAccount()
+                },
+                dismissDialog = hideLimitsError
+            )
+        }
         Column(
             modifier = Modifier.padding(bottom = 120.dp)
         ) {
@@ -87,7 +100,6 @@ fun NewSetScreen(
                 onLeftClick = navigateUp
             )
             Spacer(Modifier.height(24.dp))
-
             OutlinedTextField(
                 modifier = Modifier
                     .fillMaxWidth()

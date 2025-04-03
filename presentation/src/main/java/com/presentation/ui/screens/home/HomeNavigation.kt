@@ -20,20 +20,26 @@ fun NavController.navigateToHome(
 }
 
 fun NavGraphBuilder.homeScreen(
+    goToAccount: () -> Unit
 ) {
     composable(route = LeafScreen.Home.route,
         enterTransition = { fadeIn(animationSpec = tween(1000)) },
         exitTransition = { fadeOut(animationSpec = tween(500)) }
-    ) { HomeRoute() }
+    ) {
+        HomeRoute(goToAccount = goToAccount)
+    }
 }
 
 @Composable
 fun HomeRoute(
-    viewModel: HomeViewModel = koinViewModel()
+    viewModel: HomeViewModel = koinViewModel(),
+    goToAccount: () -> Unit
 ) {
     val state = viewModel.uiState.collectAsState()
     HomeScreen(
         state = state.value,
+        goToAccount = goToAccount,
+        hideLimitsError = {viewModel.handleIntent(HomeIntent.HideLimitsError)},
         onWordInput = { viewModel.handleIntent(HomeIntent.InputText(it)) },
         onEnterText = { viewModel.handleIntent(HomeIntent.EnterText) },
         onSaveClick = { viewModel.handleIntent(HomeIntent.SaveWord) },

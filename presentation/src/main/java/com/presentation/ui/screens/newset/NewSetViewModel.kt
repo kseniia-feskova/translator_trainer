@@ -54,6 +54,7 @@ class NewSetViewModel(
             is NewSetIntent.NameChange -> changeName(intent.name)
             is NewSetIntent.SaveCheckBoxChange -> updateCheckBox(intent.isSaveEnabled)
             is NewSetIntent.SearchWord -> searchQuery(intent.query)
+            NewSetIntent.HideLimitsError -> _uiState.update { it.copy(limitsError = false) }
         }
     }
 
@@ -157,9 +158,16 @@ class NewSetViewModel(
         val error = response.exceptionOrNull()
         val errorMsg = when (error?.message) {
             "Failed to connect" -> NewSetError.INTERNET_CONNECTION_ERROR
+            "Guest limit" -> {
+                _uiState.update { it.copy(limitsError = true, loading = false) }
+                null
+            }
+
             else -> NewSetError.DEFAULT
         }
-        _uiState.update { it.copy(error = errorMsg, loading = false) }
+        if (errorMsg != null) {
+            _uiState.update { it.copy(error = errorMsg, loading = false) }
+        }
     }
 }
 
@@ -171,4 +179,5 @@ sealed class NewSetIntent {
     object ClearSearch : NewSetIntent()
     object FilterClicked : NewSetIntent()
     data class SaveSet(val onSetSaved: () -> Unit) : NewSetIntent()
+    object HideLimitsError : NewSetIntent()
 }

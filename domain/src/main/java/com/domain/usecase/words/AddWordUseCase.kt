@@ -3,6 +3,7 @@ package com.domain.usecase.words
 import com.data.model.words.add.AddWordRequest
 import com.data.prefs.IDataStoreManager
 import com.data.repository.words.IWordRepository
+import com.domain.GuestLimitException
 import com.domain.mapper.toUI
 import com.domain.token.ITokenRefresher
 import com.domain.token.safeApiCallWithRefresh
@@ -11,6 +12,7 @@ import com.presentation.model.WordUI
 import com.presentation.usecases.words.IAddWordUseCase
 import com.presentation.usecases.words.IGetWordByOriginal
 import com.presentation.usecases.words.IGetWordByTranslated
+import com.presentation.utils.GUEST_MAX_WORDS
 
 class AddWordUseCase(
     private val apiRepo: IWordRepository,
@@ -25,6 +27,11 @@ class AddWordUseCase(
         originalText: String,
         translatedText: String
     ): Result<WordUI> {
+        if (prefs.isGuest()) {
+            if (!checkLimit()) {
+                return Result.failure(GuestLimitException())
+            }
+        }
         val wordInDB = findWordByOrigin.invoke(originalText)
         if (wordInDB.isSuccess) {
             wordInDB.getOrNull()?.apply {
@@ -63,5 +70,10 @@ class AddWordUseCase(
             cache.clear()
             Result.success(data.toUI())
         })
+    }
+
+    private suspend fun checkLimit(): Boolean {
+        val allWords = apiRepo.getAllWords().data?.size ?: 0
+        return allWords < GUEST_MAX_WORDS
     }
 }

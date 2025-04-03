@@ -55,6 +55,7 @@ import com.presentation.ui.AppTheme
 import com.presentation.ui.AppTypography
 import com.presentation.ui.bgColor
 import com.presentation.ui.darkColor
+import com.presentation.ui.dialog.GuestLimitsDialog
 import com.presentation.ui.fieldBorderColor
 import com.presentation.ui.fieldColors
 import com.presentation.ui.fieldValueColor
@@ -70,6 +71,8 @@ import com.presentation.utils.Language
 @Composable
 fun HomeScreen(
     state: HomeUIState,
+    goToAccount: () -> Unit = {},
+    hideLimitsError: () -> Unit = {},
     onWordInput: (String) -> Unit = {},
     onEnterText: () -> Unit = { },
     onSaveClick: () -> Unit = {},
@@ -96,6 +99,17 @@ fun HomeScreen(
             exit = fadeOut(animationSpec = tween(500))
         ) {
             HomeTopView(stringResource(R.string.home_title))
+        }
+
+        if (state.limitsError) {
+            GuestLimitsDialog(
+                modifier = Modifier.align(Alignment.Center),
+                toAccountSetting = {
+                    hideLimitsError()
+                    goToAccount()
+                },
+                dismissDialog = hideLimitsError
+            )
         }
 
         Column(

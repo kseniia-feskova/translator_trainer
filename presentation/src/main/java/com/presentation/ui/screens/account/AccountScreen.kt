@@ -1,6 +1,10 @@
 package com.presentation.ui.screens.account
 
 import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -13,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
@@ -52,6 +57,7 @@ import com.presentation.ui.screens.auth.AuthError
 import com.presentation.ui.screens.auth.CustomShadowButton
 import com.presentation.ui.screens.auth.RegisterForm
 import com.presentation.ui.views.AccountTopView
+import com.presentation.utils.GUEST_MAX_WORDS
 import java.net.URL
 
 @Composable
@@ -173,8 +179,20 @@ fun AccountScreen(
                 logout = logout,
             )
         }
-
-        if (btnsState.showAuthScreen && authState) {
+        AnimatedVisibility(
+            modifier = Modifier
+                .wrapContentHeight()
+                .align(Alignment.BottomCenter),
+            visible = btnsState.showAuthScreen && authState,
+            enter = slideInVertically(
+                initialOffsetY = { it },
+                animationSpec = tween(1000)
+            ),
+            exit = slideOutVertically(
+                targetOffsetY = { it },
+                animationSpec = tween(800)
+            )
+        ) {
             RegisterSection(
                 email,
                 password,
@@ -321,15 +339,18 @@ fun RegisterSection(
     val screenHeight = (LocalConfiguration.current.screenHeightDp * 0.6).dp
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Black.copy(alpha = 0.5f))
+        modifier = Modifier.fillMaxSize()
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
                 .height(screenHeight)
+                .border(
+                    width = 1.dp,
+                    color = bgColor.copy(alpha = 0.5f),
+                    shape = RoundedCornerShape(topEnd = 36.dp, topStart = 36.dp)
+                )
                 .background(
                     Color.White,
                     shape = RoundedCornerShape(topEnd = 36.dp, topStart = 36.dp)
@@ -410,7 +431,7 @@ fun GuestDataView(modifier: Modifier = Modifier, guestData: GuestData?) {
                 style = MaterialTheme.typography.titleSmall.copy(color = bgColor)
             )
             Text(
-                "${guestData.allWordsCount}/100",
+                "${guestData.allWordsCount}/$GUEST_MAX_WORDS",
                 style = MaterialTheme.typography.titleSmall.copy(color = bgColor)
             )
         }

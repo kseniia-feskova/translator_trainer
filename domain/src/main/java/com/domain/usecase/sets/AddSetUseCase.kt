@@ -1,19 +1,23 @@
 package com.domain.usecase.sets
 
 import com.data.model.sets.AddSetRequest
+import com.data.prefs.IDataStoreManager
 import com.data.repository.sets.ISetRepository
+import com.domain.GuestLimitException
 import com.domain.mapper.toUIWithoutWords
 import com.domain.token.ITokenRefresher
 import com.domain.token.safeApiCallWithRefresh
 import com.presentation.cache.ISetsCacheProvider
 import com.presentation.model.SetOfCards
 import com.presentation.usecases.sets.IAddSetUseCase
+import com.presentation.utils.GUEST_MAX_SETS
 import java.util.UUID
 
 class AddSetUseCase(
-    val repo: ISetRepository,
+    private val repo: ISetRepository,
     private val cache: ISetsCacheProvider,
-    val tokenRefresher: ITokenRefresher
+    private val tokenRefresher: ITokenRefresher,
+    private val prefs: IDataStoreManager,
 ) : IAddSetUseCase {
     override suspend fun invoke(
         name: String,
@@ -21,6 +25,11 @@ class AddSetUseCase(
         courseId: UUID,
         listOfWords: List<UUID>
     ): Result<SetOfCards> {
+        if (prefs.isGuest()) {
+            if (!checkLimit()) {
+                return Result.failure(GuestLimitException())
+            }
+        }
         val request = AddSetRequest(name, isDefault, courseId, listOfWords)
         val response = safeApiCallWithRefresh(
             call = { repo.addSet(request) },
@@ -36,5 +45,11 @@ class AddSetUseCase(
             cache.clear()
             Result.success(data.toUIWithoutWords())
         }
+    }
+
+    private suspend fun checkLimit(): Boolean {
+        val course = prefs.getCourse() ?: return false
+        val allWords = repo.getAllSets(course.id).data?.size ?: 0
+        return allWords < GUEST_MAX_SETS
     }
 }

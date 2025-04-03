@@ -12,7 +12,8 @@ data class HomeUIState(
     val originalLanguage: Language = Language.RUSSIAN,
     val resLanguage: Language = Language.GERMAN,
     val isWordSaved: Boolean = false,
-    val error: HomeError? = null
+    val error: HomeError? = null,
+    val limitsError: Boolean = false
 )
 
 sealed class HomeIntent {
@@ -20,6 +21,7 @@ sealed class HomeIntent {
     object EnterText : HomeIntent()
     object SaveWord : HomeIntent()
     data class ChangeLanguages(val selectedLang: Language) : HomeIntent()
+    object HideLimitsError : HomeIntent()
 }
 
 enum class HomeError(@StringRes val msg: Int) {

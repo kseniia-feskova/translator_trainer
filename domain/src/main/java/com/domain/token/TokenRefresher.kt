@@ -28,7 +28,6 @@ class TokenRefresher(
                 tokenStorage.saveToken(REFRESH_TOKEN, body.refreshToken)
                 return true
             } else {
-                //TODO: test expired refresh token
                 if (response.errorMsg == ERROR_TOKEN_EXPIRED) {
                     Log.e("refreshToken", "Code = 401")
                     authRepo.logout()

@@ -4,10 +4,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.presentation.navigation.LeafScreen
+import com.presentation.navigation.RootScreen
 import org.koin.androidx.compose.koinViewModel
+
+fun NavController.navigateToAccount(
+    navOptions: NavOptions? = null,
+) {
+    this.navigate(RootScreen.Profile.route, navOptions)
+}
 
 fun NavGraphBuilder.accountScreen(
     toLogin: () -> Unit,

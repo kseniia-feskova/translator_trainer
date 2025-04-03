@@ -11,7 +11,8 @@ data class NewSetUIState(
     val query: String = "",
     val words: Map<WordUI, Boolean> = mapOf(),
     val countOfSelected: Int = 0,
-    val error: NewSetError? = null
+    val error: NewSetError? = null,
+    val limitsError: Boolean = false
 )
 
 enum class NewSetError(@StringRes val msg: Int) {
