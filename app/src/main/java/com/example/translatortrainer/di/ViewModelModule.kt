@@ -7,6 +7,7 @@ import com.presentation.ui.screens.newset.NewSetViewModel
 import com.presentation.ui.screens.set.SetViewModel
 import com.presentation.ui.screens.sets.SetsViewModel
 import com.presentation.ui.screens.auth.AuthViewModel
+import com.presentation.ui.screens.auth.verify.VerifyEmailViewModel
 import com.presentation.ui.screens.lesson.bubble.BubbleLessonViewModel
 import com.presentation.ui.screens.lesson.success.SuccessLessonViewModel
 import com.presentation.ui.screens.select_course.SelectCourseViewModel
@@ -27,6 +28,7 @@ val viewModelModule = module {
     viewModelOf(::AllWordsViewModel)
     viewModelOf(::NewSetViewModel)
     viewModelOf(::AuthViewModel)
+    viewModelOf(::VerifyEmailViewModel)
     viewModelOf(::SelectCourseViewModel)
     viewModelOf(::BubbleLessonViewModel)
     viewModelOf(::SuccessLessonViewModel)

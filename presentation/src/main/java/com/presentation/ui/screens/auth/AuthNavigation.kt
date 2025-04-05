@@ -20,14 +20,16 @@ fun NavController.navigateToAuth(
 
 fun NavGraphBuilder.authScreen(
     goToCourses: () -> Unit,
-    goToHome: () -> Unit
-) {
+    goToHome: () -> Unit,
+    goToVerification:() -> Unit
+    ) {
     composable(route = LeafScreen.Login.route,
         enterTransition = { fadeIn(animationSpec = tween(1000)) },
         exitTransition = { fadeOut(animationSpec = tween(500)) }) {
         AuthRoute(
             goToCourses,
-            goToHome
+            goToHome,
+            goToVerification
         )
     }
 }
@@ -36,6 +38,7 @@ fun NavGraphBuilder.authScreen(
 fun AuthRoute(
     goToCourses: () -> Unit,
     goToHome: () -> Unit,
+    goToVerification:() -> Unit,
     viewModel: AuthViewModel = koinViewModel()
 ) {
     val state = viewModel.uiState.collectAsState()
@@ -44,7 +47,7 @@ fun AuthRoute(
         onEmailChanged = { viewModel.handleIntent(AuthIntent.OnEmailChanged(it)) },
         onPasswordChanged = { viewModel.handleIntent(AuthIntent.OnPasswordChanged(it)) },
         onAuthStateChanged = { viewModel.handleIntent(AuthIntent.ChangeScreen) },
-        onAuthClicked = { viewModel.handleIntent(AuthIntent.Auth(goToCourses, goToHome)) },
+        onAuthClicked = { viewModel.handleIntent(AuthIntent.Auth(goToCourses, goToHome, goToVerification)) },
         onGuestSelected = { viewModel.handleIntent(AuthIntent.SaveAsGuest(goToCourses)) }
     )
 

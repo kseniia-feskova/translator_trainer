@@ -41,6 +41,7 @@ enum class RootScreen(val route: String, val iconRes: Int) {
 sealed class LeafScreen(val route: String) {
     object Splash : LeafScreen("splash")
     object Login : LeafScreen("login")
+    object VerifyEmail : LeafScreen("verify_email")
     object SelectCourse : LeafScreen("select_course")
     object Home : LeafScreen("home")
     object Sets : LeafScreen("sets")

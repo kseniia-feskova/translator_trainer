@@ -15,7 +15,8 @@ data class AuthUIState(
 sealed class AuthIntent {
     data class Auth(
         val goToCourses: () -> Unit,
-        val goToHome: () -> Unit
+        val goToHome: () -> Unit,
+        val goToVerification: () -> Unit,
     ) : AuthIntent()
 
     object ChangeScreen : AuthIntent()

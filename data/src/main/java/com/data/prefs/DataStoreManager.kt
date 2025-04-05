@@ -19,6 +19,7 @@ class DataStoreManager(private val context: Context) : IDataStoreManager {
 
     private val userIdKey = stringPreferencesKey("user_id")
     private val courseKey = stringPreferencesKey("course")
+    private val emailKey = stringPreferencesKey("email")
     private val isGuestKey = booleanPreferencesKey("is_guest")
     private var isGuest: Boolean? = null
 
@@ -36,6 +37,9 @@ class DataStoreManager(private val context: Context) : IDataStoreManager {
     override fun listenUserId(): Flow<UUID?> = userId
 
     override suspend fun saveUserId(id: UUID?) {
+        context.dataStore.edit { preferences ->
+            preferences.remove(emailKey)
+        }
         if (id == null) {
             context.dataStore.edit { preferences ->
                 preferences.remove(userIdKey)
@@ -85,6 +89,19 @@ class DataStoreManager(private val context: Context) : IDataStoreManager {
             preferences[isGuestKey] = false
         }
     }
+
+    override suspend fun saveEmail(email: String) {
+        context.dataStore.edit { preferences ->
+            preferences[emailKey] = email
+        }
+    }
+
+    override suspend fun getEmail(): String? {
+        return context.dataStore.data.map { preferences ->
+            preferences[emailKey]
+        }.firstOrNull()
+    }
+
 
     override suspend fun saveCourse(course: CourseEntity?) {
         if (course != null) {

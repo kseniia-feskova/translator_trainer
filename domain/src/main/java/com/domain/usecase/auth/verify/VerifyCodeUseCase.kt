@@ -1,21 +1,17 @@
-package com.domain.usecase.auth
+package com.domain.usecase.auth.verify
 
 import com.data.prefs.IDataStoreManager
 import com.data.repository.auth.IAuthRepository
-import com.presentation.usecases.auth.IRegisterUseCase
+import com.presentation.usecases.auth.verify.IVerifyCodeUseCase
 import java.util.UUID
 
-class RegisterUseCase(
-    private val repo: IAuthRepository,
-    private val dataStore: IDataStoreManager
-) : IRegisterUseCase {
-    override suspend fun invoke(
-        email: String,
-        username: String,
-        password: String
-    ): Result<UUID> {
-        dataStore.saveEmail(email)
-        val response = repo.register(email, username, password)
+class VerifyCodeUseCase(
+    private val authRepository: IAuthRepository,
+    private val dataStore: IDataStoreManager,
+) : IVerifyCodeUseCase {
+    override suspend fun invoke(code: String): Result<UUID> {
+        val email = dataStore.getEmail() ?: return Result.failure(Exception("User does not exist"))
+        val response = authRepository.verify(email, code)
         return if (response.errorMsg.isNotEmpty()) {
             Result.failure(Exception(response.errorMsg))
         } else {

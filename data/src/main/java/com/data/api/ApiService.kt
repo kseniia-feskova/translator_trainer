@@ -18,6 +18,8 @@ import com.data.model.words.update.UpdateWordStatusRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
@@ -36,6 +38,25 @@ interface ApiService {
 
     @POST("auth/refresh")
     suspend fun refreshToken(@Body tokenRequest: RefreshTokenRequest): Response<AuthResponse>
+
+    @FormUrlEncoded
+    @POST("auth/verify")
+    suspend fun verifyCode(
+        @Field("email") email: String,
+        @Field("code") code: String
+    ): Response<AuthResponse>
+
+    @FormUrlEncoded
+    @POST("auth/verify/resend_code")
+    suspend fun resendCode(
+        @Field("email") email: String,
+    ): Response<AuthResponse>
+
+    @FormUrlEncoded
+    @POST("auth/verify/clear_code")
+    suspend fun clearCode(
+        @Field("email") email: String,
+    ): Response<Unit>
 
     //end of region
 

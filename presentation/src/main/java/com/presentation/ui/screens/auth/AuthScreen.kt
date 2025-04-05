@@ -497,33 +497,38 @@ fun CustomShadowButton(
     text: String,
     icon: Painter? = null,
     onClick: () -> Unit = {},
+    isEnabled: Boolean = true,
     modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier) {
-        Spacer(
-            modifier = Modifier
-                .padding(top = 5.dp)
-                .height(42.dp)
-                .fillMaxWidth()
-                .background(
-                    shape = RoundedCornerShape(30.dp),
-                    color = fieldBorderColor
-                )
-        )
+        if (isEnabled) {
+            Spacer(
+                modifier = Modifier
+                    .padding(top = 5.dp)
+                    .height(42.dp)
+                    .fillMaxWidth()
+                    .background(
+                        shape = RoundedCornerShape(30.dp),
+                        color = fieldBorderColor
+                    )
+            )
+        }
         Button(
             onClick = { onClick() },
+            enabled = isEnabled,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(42.dp)
                 .clip(shape = RoundedCornerShape(30.dp))
-                .background(Color.White)
+                .background(if (isEnabled) Color.White else whiteColor)
                 .border(
                     1.dp,
                     color = fieldBorderColor,
                     shape = RoundedCornerShape(30.dp)
                 ),
             colors = ButtonDefaults.buttonColors().copy(
-                containerColor = Color.White
+                containerColor = Color.White,
+                disabledContainerColor = whiteColor
             )
         ) {
             if (icon != null) {
@@ -538,7 +543,7 @@ fun CustomShadowButton(
             Text(
                 modifier = Modifier.padding(bottom = 2.dp),
                 text = text,
-                color = bgColor,
+                color = if (isEnabled) bgColor else lightLilaColor,
                 style = AppTypography.titleSmall.copy(fontWeight = FontWeight.Bold)
             )
 

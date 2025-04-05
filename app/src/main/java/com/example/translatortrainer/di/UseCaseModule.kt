@@ -11,6 +11,9 @@ import com.domain.usecase.auth.LoginUseCase
 import com.domain.usecase.auth.LogoutUseCase
 import com.domain.usecase.auth.RegisterUseCase
 import com.domain.usecase.auth.SetGuestUseCase
+import com.domain.usecase.auth.verify.DeleteCodeUseCase
+import com.domain.usecase.auth.verify.ResendCodeUseCase
+import com.domain.usecase.auth.verify.VerifyCodeUseCase
 import com.domain.usecase.course.AddCourseUseCase
 import com.domain.usecase.course.CoursesOnPrefsUseCases
 import com.domain.usecase.course.GetAllCoursesUseCase
@@ -36,6 +39,9 @@ import com.presentation.usecases.auth.ILoginUseCase
 import com.presentation.usecases.auth.ILogoutUseCase
 import com.presentation.usecases.auth.IRegisterUseCase
 import com.presentation.usecases.auth.ISetGuestUseCase
+import com.presentation.usecases.auth.verify.IDeleteCodeUseCase
+import com.presentation.usecases.auth.verify.IResendCodeUseCase
+import com.presentation.usecases.auth.verify.IVerifyCodeUseCase
 import com.presentation.usecases.course.IAddCourseUseCase
 import com.presentation.usecases.course.ICoursesOnPrefsUseCases
 import com.presentation.usecases.course.IGetAllCoursesUseCase
@@ -61,6 +67,12 @@ val useCaseModule = module {
     singleOf(::RegisterUseCase) bind IRegisterUseCase::class
 
     singleOf(::LoginUseCase) bind ILoginUseCase::class
+
+    singleOf(::VerifyCodeUseCase) bind IVerifyCodeUseCase::class
+
+    singleOf(::ResendCodeUseCase) bind IResendCodeUseCase::class
+
+    singleOf(::DeleteCodeUseCase) bind IDeleteCodeUseCase::class
 
     singleOf(::AddCourseUseCase) bind IAddCourseUseCase::class
 

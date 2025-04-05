@@ -20,4 +20,7 @@ interface IDataStoreManager {
     suspend fun isGuest(): Boolean
     fun isGuestOnRuntime(): Boolean?
     suspend fun resetGuestMode()
+
+    suspend fun saveEmail(email: String)
+    suspend fun getEmail(): String?
 }

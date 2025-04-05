@@ -70,4 +70,7 @@
     <string name="guest_limits_description">Seems like you have used all your limits. Please, go to account settings for more information</string>
     <string name="move_to_account">To settings</string>
 
+    <!-- Verify email code -->
+    <string name="wrong_code_error">Verification code is not correct</string>
+
 </resources>

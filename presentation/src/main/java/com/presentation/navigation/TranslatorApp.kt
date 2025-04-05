@@ -14,6 +14,8 @@ import com.presentation.ui.screens.all.allWordsScreen
 import com.presentation.ui.screens.all.navigateToAllWords
 import com.presentation.ui.screens.auth.authScreen
 import com.presentation.ui.screens.auth.navigateToAuth
+import com.presentation.ui.screens.auth.verify.navigateToVerify
+import com.presentation.ui.screens.auth.verify.verifyEmailScreen
 import com.presentation.ui.screens.home.homeScreen
 import com.presentation.ui.screens.home.navigateToHome
 import com.presentation.ui.screens.lesson.bubble.bubbleLessonScreen
@@ -55,7 +57,8 @@ private fun NavGraphBuilder.loginNav(navController: NavHostController) {
             navController.navigate(RootScreen.Home.route) {
                 popUpTo(LeafScreen.Login.route) { inclusive = true }
             }
-        }
+        },
+        goToVerification = navController::navigateToVerify
     )
     selectCourseScreen(
         navigateUp = {
@@ -71,6 +74,15 @@ private fun NavGraphBuilder.loginNav(navController: NavHostController) {
         },
         goToHome = {
             navController.navigate(RootScreen.Home.route) {
+                popUpTo(LeafScreen.Login.route) { inclusive = true }
+            }
+        }
+    )
+
+    verifyEmailScreen(
+        navigateUp = navController::navigateUp,
+        navigateToCourses = {
+            navController.navigate(LeafScreen.SelectCourse.route) {
                 popUpTo(LeafScreen.Login.route) { inclusive = true }
             }
         }

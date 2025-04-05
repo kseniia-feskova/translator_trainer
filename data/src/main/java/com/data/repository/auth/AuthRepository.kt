@@ -63,6 +63,37 @@ class AuthRepository(
         return safeCall({ service.refreshToken(RefreshTokenRequest(token)) })
     }
 
+
+    override suspend fun verify(email: String, code: String): Result<AuthResponse> {
+        return safeCall({
+            service.verifyCode(email, code)
+        }, onSuccess = { body ->
+            tokenStorage.saveToken(ACCESS_TOKEN, body.accessToken)
+            tokenStorage.saveToken(REFRESH_TOKEN, body.refreshToken)
+            if (body.uuid == null) {
+                Result(errorMsg = "Empty user id")
+            } else {
+                Result(data = body)
+            }
+        })
+    }
+
+    override suspend fun resendCode(email: String): Result<AuthResponse> {
+        return safeCall({
+            service.resendCode(email)
+        }, onSuccess = { body ->
+            if (body.uuid == null) {
+                Result(errorMsg = "Empty user id")
+            } else {
+                Result(data = body)
+            }
+        })
+    }
+
+    override suspend fun clearCode(email: String) {
+        safeCall({ service.clearCode(email) }, onSuccess = {})
+    }
+
     override suspend fun logout() {
         tokenStorage.clearToken(ACCESS_TOKEN)
         tokenStorage.clearToken(REFRESH_TOKEN)
@@ -74,5 +105,4 @@ class AuthRepository(
         appDao.clearSets()
         appDao.clearWords()
     }
-
 }

@@ -78,6 +78,7 @@ class MainActivity : AppCompatActivity() {
             val shouldShowBottomBar = when {
                 currentRoute?.contains(LeafScreen.NewSet.route) ?: true -> false
                 currentRoute?.contains(LeafScreen.Login.route) ?: true -> false
+                currentRoute?.contains(LeafScreen.VerifyEmail.route) ?: true -> false
                 currentRoute?.contains(LeafScreen.SelectCourse.route) ?: true -> false
                 currentRoute?.contains(LeafScreen.Splash.route) ?: true -> false
                 currentRoute?.contains(LeafScreen.Splash.route) ?: true -> false

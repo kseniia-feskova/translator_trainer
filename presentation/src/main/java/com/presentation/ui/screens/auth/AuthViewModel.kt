@@ -29,7 +29,12 @@ class AuthViewModel(
         when (intent) {
             is AuthIntent.OnEmailChanged -> handleNewLogin(intent.login)
             is AuthIntent.OnPasswordChanged -> handleNewPassword(intent.password)
-            is AuthIntent.Auth -> handleAuth(intent.goToCourses, intent.goToHome)
+            is AuthIntent.Auth -> handleAuth(
+                intent.goToCourses,
+                intent.goToHome,
+                intent.goToVerification
+            )
+
             is AuthIntent.SaveAsGuest -> handleGuest(intent.goToCourses)
             AuthIntent.ChangeScreen -> handleScreenChange()
         }
@@ -45,18 +50,20 @@ class AuthViewModel(
 
     private fun handleAuth(
         goToCourses: () -> Unit,
-        goToHome: () -> Unit
+        goToHome: () -> Unit,
+        goToVerification: () -> Unit
     ) {
         val state = _uiState.value
         if (state.fieldsValid()) {
             _uiState.update { it.copy(isLoading = true) }
             when (state.screenState) {
                 AuthScreenState.LOGIN -> login(state, goToCourses, goToHome)
-                AuthScreenState.REGISTER -> register(state, goToCourses)
+                AuthScreenState.REGISTER -> register(state, goToCourses, goToVerification)
             }
         } else {
             _uiState.update { it.copy(error = AuthError.EMPTY_FIELDS) }
         }
+        _uiState.update { it.copy(isLoading = false) }
     }
 
     private fun login(
@@ -108,10 +115,15 @@ class AuthViewModel(
     private fun register(
         state: AuthUIState,
         goToCourses: () -> Unit,
+        goToVerification: () -> Unit
     ) {
         viewModelScope.launch {
             val response = register.invoke(state.email, state.email, state.password)
             if (!response.isSuccess) {
+                if (response.exceptionOrNull()?.message == "Verification is needed") {
+                    goToVerification()
+                    return@launch
+                }
                 handleError(response)
                 return@launch
             }
