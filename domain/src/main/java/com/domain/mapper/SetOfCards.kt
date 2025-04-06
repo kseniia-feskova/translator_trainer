@@ -1,6 +1,6 @@
 package com.domain.mapper
 
-import com.data.model.sets.SetResponse
+import translator.data.model.sets.SetResponse
 import com.presentation.model.SetOfCards
 
 fun List<SetResponse>.toUI(): List<SetOfCards> {

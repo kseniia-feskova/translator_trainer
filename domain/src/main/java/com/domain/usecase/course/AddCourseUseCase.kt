@@ -1,12 +1,12 @@
 package com.domain.usecase.course
 
 import android.util.Log
-import com.data.model.course.add.AddCourseRequest
-import com.data.model.sets.AddSetRequest
-import com.data.prefs.IDataStoreManager
-import com.data.repository.course.ICourseRepository
-import com.data.repository.sets.ISetRepository
-import com.data.room.ALL_WORDS
+import translator.data.model.course.add.AddCourseRequest
+import translator.data.model.sets.AddSetRequest
+import translator.data.prefs.IDataStoreManager
+import translator.data.repository.course.ICourseRepository
+import translator.data.repository.sets.ISetRepository
+import translator.data.room.ALL_WORDS
 import com.domain.mapper.toData
 import com.domain.mapper.toUI
 import com.domain.token.ITokenRefresher

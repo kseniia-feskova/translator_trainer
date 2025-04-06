@@ -1,6 +1,6 @@
 package com.domain.usecase
 
-import com.data.repository.user.IUserRepository
+import translator.data.repository.user.IUserRepository
 import com.domain.mapper.toUI
 import com.domain.token.ITokenRefresher
 import com.domain.token.safeApiCallWithRefresh

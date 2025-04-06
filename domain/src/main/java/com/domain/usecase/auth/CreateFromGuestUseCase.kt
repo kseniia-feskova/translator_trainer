@@ -1,6 +1,6 @@
 package com.domain.usecase.auth
 
-import com.data.repository.words.IWordRepository
+import translator.data.repository.words.IWordRepository
 import com.domain.CanNotCreateCourseException
 import com.domain.CanNotCreateSetException
 import com.domain.CanNotCreateUserException

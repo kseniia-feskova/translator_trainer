@@ -1,8 +1,8 @@
 package com.domain.usecase.words
 
-import com.data.model.words.add.AddWordRequest
-import com.data.prefs.IDataStoreManager
-import com.data.repository.words.IWordRepository
+import translator.data.model.words.add.AddWordRequest
+import translator.data.prefs.IDataStoreManager
+import translator.data.repository.words.IWordRepository
 import com.domain.GuestLimitException
 import com.domain.mapper.toUI
 import com.domain.token.ITokenRefresher

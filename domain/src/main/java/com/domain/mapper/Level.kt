@@ -1,6 +1,6 @@
 package com.domain.mapper
 
-import com.data.model.WordStatus
+import translator.data.model.WordStatus
 import com.presentation.model.Level
 
 fun Level.toStatus(): WordStatus {

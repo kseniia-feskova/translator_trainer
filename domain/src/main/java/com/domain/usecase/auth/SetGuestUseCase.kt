@@ -1,6 +1,6 @@
 package com.domain.usecase.auth
 
-import com.data.prefs.IDataStoreManager
+import translator.data.prefs.IDataStoreManager
 import com.presentation.usecases.auth.ISetGuestUseCase
 
 class SetGuestUseCase(private val dataStore: IDataStoreManager) : ISetGuestUseCase {

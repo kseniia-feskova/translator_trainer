@@ -1,6 +1,6 @@
 package com.domain.usecase.course
 
-import com.data.repository.course.ICourseRepository
+import translator.data.repository.course.ICourseRepository
 import com.domain.mapper.toUI
 import com.domain.token.ITokenRefresher
 import com.domain.token.safeApiCallWithRefresh

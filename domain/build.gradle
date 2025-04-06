@@ -50,7 +50,8 @@ dependencies {
     // Koin
     implementation 'io.insert-koin:koin-android:3.5.3'
 
-    implementation project(':data')
+    implementation project(':core:data')
+    implementation project(':core')
     implementation project(':presentation')
 
 }

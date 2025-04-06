@@ -1,0 +1,120 @@
+package translator.data.room
+
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Transaction
+import androidx.room.Update
+import translator.data.model.WordEntity
+import translator.data.model.WordStatus
+import translator.data.model.sets.SetOfWords
+import translator.data.model.sets.SetWithWords
+import translator.data.model.sets.SetWordCrossRef
+import kotlinx.coroutines.flow.Flow
+import translator.data.room.ALL_WORDS
+import java.util.UUID
+
+/*
+* Гость -> Курс (только один) -> Набор (Все слова) -> Слово1, Слово2, Слово3
+*                                Набор (Новые слова) -> Слово3
+*
+* Набор:
+* 1. Имя
+* 2. Айди на слова
+* 3. isDefault - для сохранения слов в набор
+* */
+
+
+@Dao
+interface WordDao {
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertWord(word: WordEntity): Long
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertSetWordCrossRef(crossRef: SetWordCrossRef)
+
+    @Query("SELECT * FROM words")
+    suspend fun getAllWords(): List<WordEntity>?
+
+    @Query("SELECT * FROM words WHERE LOWER(originalText) = LOWER(:original) LIMIT 1")
+    suspend fun getWordByOriginal(original: String): WordEntity?
+
+    @Query("SELECT * FROM words WHERE LOWER(translatedText) = LOWER(:translated) LIMIT 1")
+    suspend fun getWordByTranslated(translated: String): WordEntity?
+
+    @Transaction
+    @Query("SELECT * FROM sets_of_words WHERE name = :name")
+    suspend fun getSetByName(name: String): SetOfWords?
+
+    @Query("SELECT * FROM sets_of_words WHERE id = :id")
+    suspend fun getSetById(id: Int): SetOfWords?
+
+    @Transaction
+    @Query("SELECT * FROM sets_of_words")
+    suspend fun getAllSets(): List<SetWithWords>
+
+    @Transaction
+    @Query("SELECT * FROM sets_of_words WHERE id = :setId")
+    fun getSetWithWords(setId: Int): Flow<SetWithWords>
+
+    // Добавить слово в набор "Все слова"
+    suspend fun addWordToAllWordsSet(word: WordEntity) {
+        val allWordsSet = getSetByName(ALL_WORDS) ?: return
+        val wordId = insertWord(word)
+        if (wordId != -1L) {
+            insertSetWordCrossRef(SetWordCrossRef(setId = allWordsSet.id, wordId = word.id))
+        }
+    }
+
+    suspend fun addWordToAllWordsSet(wordId: UUID) {
+        val allWordsSet = getSetByName(ALL_WORDS) ?: return
+        insertSetWordCrossRef(SetWordCrossRef(setId = allWordsSet.id, wordId = wordId))
+    }
+
+    suspend fun addWordToSet(wordId: UUID, setId: UUID) {
+        insertSetWordCrossRef(SetWordCrossRef(setId = setId, wordId = wordId))
+    }
+
+    // Метод для обновления слова
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun updateWord(word: WordEntity)
+
+    @Query("UPDATE words SET status = :newStatus WHERE id = :wordId")
+    suspend fun updateWordStatus(wordId: UUID, newStatus: WordStatus)
+
+
+    @Query("SELECT * FROM words WHERE id = :id")
+    suspend fun getWordById(id: UUID): WordEntity?
+
+    // Метод для удаления набора слов и связанных записей
+    @Transaction
+    suspend fun deleteSetWithWords(setId: Int) {
+        // Удаляем связи между набором и словами
+        deleteSetWordCrossRefs(setId)
+        // Удаляем сам набор
+        deleteSetById(setId)
+    }
+
+    // Удалить записи в set_word_cross_ref по setId
+    @Query("DELETE FROM set_word_cross_ref WHERE setId = :setId")
+    suspend fun deleteSetWordCrossRefs(setId: Int)
+
+    // Удалить набор по id
+    @Query("DELETE FROM sets_of_words WHERE id = :setId")
+    suspend fun deleteSetById(setId: Int)
+
+
+    @Transaction
+    suspend fun deleteWordWithRelations(wordId: UUID) {
+        deleteWordFromSets(wordId)
+        deleteWordById(wordId)
+    }
+
+    @Query("DELETE FROM words WHERE id = :wordId")
+    suspend fun deleteWordById(wordId: UUID)
+
+    @Query("DELETE FROM set_word_cross_ref WHERE wordId = :wordId")
+    suspend fun deleteWordFromSets(wordId: UUID)
+}

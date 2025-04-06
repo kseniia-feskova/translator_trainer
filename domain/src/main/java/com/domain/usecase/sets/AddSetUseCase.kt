@@ -1,8 +1,8 @@
 package com.domain.usecase.sets
 
-import com.data.model.sets.AddSetRequest
-import com.data.prefs.IDataStoreManager
-import com.data.repository.sets.ISetRepository
+import translator.data.model.sets.AddSetRequest
+import translator.data.prefs.IDataStoreManager
+import translator.data.repository.sets.ISetRepository
 import com.domain.GuestLimitException
 import com.domain.mapper.toUIWithoutWords
 import com.domain.token.ITokenRefresher

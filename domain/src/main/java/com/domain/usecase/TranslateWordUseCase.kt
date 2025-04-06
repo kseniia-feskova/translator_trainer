@@ -1,6 +1,6 @@
 package com.domain.usecase
 
-import com.data.repository.translate.ITranslateRepository
+import translator.data.repository.translate.ITranslateRepository
 import com.domain.mapper.toData
 import com.presentation.usecases.ITranslateWordUseCase
 import com.presentation.utils.Language

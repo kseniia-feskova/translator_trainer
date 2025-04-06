@@ -1,6 +1,6 @@
 package com.domain.mapper
 
-import com.data.model.UserEntity
+import translator.data.model.UserEntity
 import com.presentation.model.UserUI
 
 fun UserEntity.toUI(): UserUI {

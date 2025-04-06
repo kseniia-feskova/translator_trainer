@@ -1,6 +1,6 @@
 package com.domain.usecase.user
 
-import com.data.prefs.IDataStoreManager
+import translator.data.prefs.IDataStoreManager
 import com.presentation.usecases.IAccountUseCase
 import java.util.UUID
 

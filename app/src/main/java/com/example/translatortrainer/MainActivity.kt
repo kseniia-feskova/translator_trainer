@@ -19,10 +19,10 @@ import androidx.core.view.WindowCompat
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.data.di.databaseModule
-import com.data.di.networkModule
-import com.data.di.repositoryModule
-import com.data.di.translateModule
+import translator.data.di.databaseModule
+import translator.data.di.networkModule
+import translator.data.di.repositoryModule
+import translator.data.di.translateModule
 import com.example.translatortrainer.di.preferencesModule
 import com.example.translatortrainer.di.useCaseModule
 import com.example.translatortrainer.di.viewModelModule

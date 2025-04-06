@@ -1,6 +1,6 @@
 package com.domain.usecase.words
 
-import com.data.repository.words.IWordRepository
+import translator.data.repository.words.IWordRepository
 import com.domain.mapper.toUI
 import com.domain.token.ITokenRefresher
 import com.domain.token.safeApiCallWithRefresh

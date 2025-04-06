@@ -1,12 +1,12 @@
 package com.domain.token
 
 import android.util.Log
-import com.data.ERROR_TOKEN_EXPIRED
-import com.data.prefs.IDataStoreManager
-import com.data.prefs.ITokenStorage
-import com.data.prefs.TokenStorage.Companion.ACCESS_TOKEN
-import com.data.prefs.TokenStorage.Companion.REFRESH_TOKEN
-import com.data.repository.auth.IAuthRepository
+import translator.data.ERROR_TOKEN_EXPIRED
+import translator.data.prefs.IDataStoreManager
+import translator.data.prefs.ITokenStorage
+import translator.data.prefs.TokenStorage.Companion.ACCESS_TOKEN
+import translator.data.prefs.TokenStorage.Companion.REFRESH_TOKEN
+import translator.data.repository.auth.IAuthRepository
 import com.presentation.cache.ISetsCacheProvider
 
 class TokenRefresher(

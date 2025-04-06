@@ -1,7 +1,7 @@
 package com.domain.mapper
 
-import com.data.model.WordEntity
-import com.data.model.words.WordResponse
+import translator.data.model.WordEntity
+import translator.data.model.words.WordResponse
 import com.presentation.model.Level
 import com.presentation.model.WordUI
 import java.util.UUID

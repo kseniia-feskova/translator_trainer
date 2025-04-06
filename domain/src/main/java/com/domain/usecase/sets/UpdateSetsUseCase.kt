@@ -1,7 +1,7 @@
 package com.domain.usecase.sets
 
-import com.data.prefs.IDataStoreManager
-import com.data.repository.sets.ISetRepository
+import translator.data.prefs.IDataStoreManager
+import translator.data.repository.sets.ISetRepository
 import com.domain.mapper.toUI
 import com.domain.token.ITokenRefresher
 import com.domain.token.safeApiCallWithRefresh

@@ -1,6 +1,6 @@
 package com.domain.usecase.course
 
-import com.data.prefs.IDataStoreManager
+import translator.data.prefs.IDataStoreManager
 import com.domain.mapper.toData
 import com.domain.mapper.toUI
 import com.presentation.model.CourseUI

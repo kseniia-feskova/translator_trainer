@@ -1,6 +1,6 @@
 package com.domain.mapper
 
-import com.data.model.course.CourseEntity
+import translator.data.model.course.CourseEntity
 import com.presentation.model.CourseUI
 import com.presentation.utils.getLanguageByCode
 import com.presentation.utils.getResourceByCode

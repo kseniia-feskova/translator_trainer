@@ -1,7 +1,7 @@
 package com.domain.usecase.course
 
-import com.data.model.course.get.GetAllCoursesRequest
-import com.data.repository.course.ICourseRepository
+import translator.data.model.course.get.GetAllCoursesRequest
+import translator.data.repository.course.ICourseRepository
 import com.domain.mapper.toUI
 import com.domain.token.TokenRefresher
 import com.domain.token.safeApiCallWithRefresh

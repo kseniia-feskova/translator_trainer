@@ -1,7 +1,7 @@
 package com.domain.usecase.words
 
-import com.data.model.words.update.UpdateWordStatusRequest
-import com.data.repository.words.IWordRepository
+import translator.data.model.words.update.UpdateWordStatusRequest
+import translator.data.repository.words.IWordRepository
 import com.domain.mapper.toStatus
 import com.domain.mapper.toUI
 import com.domain.token.ITokenRefresher

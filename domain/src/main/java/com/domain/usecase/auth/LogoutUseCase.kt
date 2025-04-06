@@ -1,7 +1,7 @@
 package com.domain.usecase.auth
 
-import com.data.prefs.IDataStoreManager
-import com.data.repository.auth.IAuthRepository
+import translator.data.prefs.IDataStoreManager
+import translator.data.repository.auth.IAuthRepository
 import com.presentation.cache.ISetsCacheProvider
 import com.presentation.usecases.auth.ILogoutUseCase
 
