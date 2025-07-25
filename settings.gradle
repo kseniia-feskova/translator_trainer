@@ -6,8 +6,9 @@ dependencyResolutionManagement {
         maven { url "https://jitpack.io" }
     }
 }
+
 rootProject.name = "Translator Trainer"
+//include ':data'
+//include ':presentation'
+include ':shared'
 include ':app'
-include ':data'
-include ':domain'
-include ':presentation'
