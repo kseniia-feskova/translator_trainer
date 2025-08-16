@@ -7,8 +7,4 @@ interface ITokenStorage {
     fun getToken(key: String): String?
 
     fun clearToken(key: String)
-
-    companion object {
-        const val ACCESS_TOKEN = "access-token"
-    }
 }
