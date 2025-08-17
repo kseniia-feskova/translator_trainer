@@ -6,6 +6,7 @@ import data.repository.ISetRepository
 import data.model.sets.AddSetRequest
 import data.model.sets.SetResponse
 import data.model.base.Result
+import java.util.UUID
 
 class SetApiRepository(private val apiService: ApiService) : ISetRepository {
 
@@ -15,9 +16,7 @@ class SetApiRepository(private val apiService: ApiService) : ISetRepository {
 
     override suspend fun getAllSets(courseId: String): Result<List<SetResponse>> {
         return safeCall(request = {
-            apiService.getAllSets(
-                data.model.sets.get.all.GetAllRequest(courseId)
-            )
+            apiService.getAllSets(UUID.fromString(courseId))
         })
     }
 }

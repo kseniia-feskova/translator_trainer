@@ -6,14 +6,10 @@ import data.model.auth.AuthResponse
 import data.model.auth.RefreshTokenRequest
 import data.model.course.CourseEntity
 import data.model.course.add.AddCourseRequest
-import data.model.course.get.GetAllCoursesRequest
 import data.model.sets.AddSetRequest
 import data.model.sets.SetResponse
-import data.model.sets.get.all.GetAllRequest
 import data.model.words.WordResponse
 import data.model.words.add.AddWordRequest
-import data.model.words.get.bytranslate.WordByOriginalRequest
-import data.model.words.get.bytranslate.WordByTranslatedRequest
 import data.model.words.update.UpdateWordStatusRequest
 import retrofit2.Response
 import retrofit2.http.Body
@@ -24,6 +20,8 @@ import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
+import java.util.UUID
 
 interface ApiService {
 
@@ -71,8 +69,10 @@ interface ApiService {
     @GET("course/{uuid}")
     suspend fun getCourseById(@Path("uuid") uuid: String): Response<CourseEntity>
 
-    @POST("course/get_for_user")
-    suspend fun getAllCourses(@Body request: GetAllCoursesRequest): Response<List<CourseEntity>>
+    @GET("course/")
+    suspend fun getAllCourses(
+        @Query("userId") userId: UUID
+    ): Response<List<CourseEntity>>
 
     @POST("course/add")
     suspend fun addCourse(@Body request: AddCourseRequest): Response<CourseEntity>
@@ -82,8 +82,8 @@ interface ApiService {
 
     //set region
 
-    @POST("sets/get_all")
-    suspend fun getAllSets(@Body request: GetAllRequest): Response<List<SetResponse>>
+    @GET("sets/")
+    suspend fun getAllSets(@Query("courseId") courseId: UUID): Response<List<SetResponse>>
 
     @POST("sets/add")
     suspend fun saveSet(@Body addWordRequest: AddSetRequest): Response<SetResponse>
@@ -95,11 +95,17 @@ interface ApiService {
     @POST("words/add")
     suspend fun saveWorld(@Body addWordRequest: AddWordRequest): Response<WordResponse>
 
-    @POST("words/check_by_translated")
-    suspend fun getWordByTranslated(@Body request: WordByTranslatedRequest): Response<WordResponse>
+    @GET("words/check_by_translated")
+    suspend fun getWordByTranslated(
+        @Query("courseId") courseId: UUID,
+        @Query("translate") translate: String
+    ): Response<WordResponse>
 
     @POST("words/check_by_origin")
-    suspend fun getWordByOriginal(@Body request: WordByOriginalRequest): Response<WordResponse>
+    suspend fun getWordByOriginal(
+        @Query("courseId") courseId: UUID,
+        @Query("translate") original: String
+    ): Response<WordResponse>
 
     @GET("words/get_by_set/{setId}")
     suspend fun getWordsBySet(@Path("setId") setId: String): Response<List<WordResponse>>

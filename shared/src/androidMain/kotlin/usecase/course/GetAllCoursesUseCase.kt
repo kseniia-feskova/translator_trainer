@@ -1,6 +1,5 @@
 package usecase.course
 
-import data.model.course.get.GetAllCoursesRequest
 import data.repository.ICourseRepository
 import domain.token.ICheckToken
 import domain.token.TokenRefresher
@@ -15,9 +14,8 @@ class GetAllCoursesUseCase(
 ): IGetAllCoursesUseCase {
 
     override suspend fun invoke(userId: String): Result<List<CourseUI>> {
-        val request = GetAllCoursesRequest(userId)
         val response = checkToken.safeApiCallWithRefresh(
-            call = { repo.getAllCoursesForUser(request) },
+            call = { repo.getAllCoursesForUser(userId) },
             onTokenExpired = { tokenRefresher.refreshToken() }
         )
         val data = response.data
