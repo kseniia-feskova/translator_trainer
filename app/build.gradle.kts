@@ -2,7 +2,7 @@ plugins {
     id("com.android.application")
     kotlin("plugin.serialization") version "2.1.21"
     id("org.jetbrains.kotlin.plugin.compose") version "2.1.21" // или нужная версия
-    id ("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp") version "2.1.21-2.0.1"
 
 }
@@ -58,7 +58,6 @@ dependencies {
 
     implementation("androidx.core:core-ktx:1.16.0")
     implementation("androidx.appcompat:appcompat:1.7.0")
-    implementation("com.google.android.material:material:1.12.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
@@ -85,11 +84,14 @@ dependencies {
     implementation("io.insert-koin:koin-androidx-compose:3.5.6")
 
     // Compose
-    implementation("androidx.compose.runtime:runtime-android:1.8.3")
-    implementation("androidx.navigation:navigation-runtime-android:2.9.0")
-    implementation("androidx.compose.material3:material3-android:1.3.2")
+    implementation(platform("androidx.compose:compose-bom:2025.08.00"))
+    implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.material:material-icons-extended")
+    implementation("androidx.compose.runtime:runtime-android:1.9.0")
+    implementation("androidx.navigation:navigation-runtime-android:2.9.3")
     implementation("androidx.wear.compose:compose-navigation:1.4.1")
-    implementation("androidx.compose.ui:ui-tooling-preview-android:1.8.3")
-    implementation("androidx.navigation:navigation-compose:2.9.0")
+    implementation("androidx.compose.ui:ui-tooling-preview-android:1.9.0")
+    implementation("androidx.navigation:navigation-compose:2.9.3")
+    debugImplementation("androidx.compose.ui:ui-tooling:1.9.0")
 
 }

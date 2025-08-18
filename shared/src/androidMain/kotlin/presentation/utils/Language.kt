@@ -30,6 +30,7 @@ enum class Language(val code: String) {
        return when (this) {
             GERMAN -> R.string.german
             RUSSIAN -> R.string.russian
+            FRENCH -> R.string.french
             else -> R.string.german
         }
     }
@@ -61,6 +62,7 @@ fun String?.getResourceByCode(): Int {
         when (this) {
             GERMAN.code -> R.drawable.ic_de
             RUSSIAN.code -> R.drawable.ic_ru
+            FRENCH.code -> R.drawable.ic_fr
             else -> throw Exception("Can not fund the drawable for language")
         }
     } catch (e: Exception) {

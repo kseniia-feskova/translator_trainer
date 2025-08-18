@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import presentation.model.CourseUI
-import presentation.test.dummyCourses
 import com.presentation.usecases.auth.ILogoutUseCase
 import com.presentation.usecases.course.IAddCourseUseCase
 import presentation.usecases.course.ICoursesOnPrefsUseCases
@@ -56,10 +55,11 @@ class SelectCourseViewModel(
                 Log.e("handleContinue", "Selected course is null")
                 return@launch
             }
-            val response = addCourse.invoke(state.selectedCourse, state.courses == dummyCourses)
+            val response = addCourse.invoke(state.selectedCourse, true)
             if (response.isSuccess) {
                 goToHome()
             } else {
+                Log.e("SelectCourseVM", "save course error = ${response.exceptionOrNull()?.message}")
                 //handleError()
             }
         }

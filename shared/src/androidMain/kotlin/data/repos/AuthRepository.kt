@@ -21,6 +21,7 @@ class AuthRepository(
     ): data.model.base.Result<data.model.auth.AuthResponse> {
         val request = data.model.auth.AuthRequest(
             email = email,
+            phone = email,
             username = username,
             password = password
         )

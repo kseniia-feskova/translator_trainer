@@ -63,6 +63,7 @@
     <string name="logout_subtitle">Are you sure you want to log out of your profile?</string>
 
     <string name="russian">Russian</string>
+    <string name="french">French</string>
     <string name="german">German</string>
 
     <!-- Guest mode -->

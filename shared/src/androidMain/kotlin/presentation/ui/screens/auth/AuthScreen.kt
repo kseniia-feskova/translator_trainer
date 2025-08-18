@@ -30,9 +30,6 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -51,6 +48,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -66,7 +64,6 @@ import androidx.compose.ui.unit.round
 import androidx.compose.ui.zIndex
 import com.example.translatortrainer.shared.R
 import com.presentation.ui.AppTheme
-import presentation.ui.AppTypography
 import com.presentation.ui.bgColor
 import com.presentation.ui.darkColor
 import com.presentation.ui.fieldBorderColor
@@ -77,6 +74,7 @@ import com.presentation.ui.viewLightColor
 import com.presentation.ui.views.GuestModeDialog
 import com.presentation.ui.views.Loader
 import com.presentation.ui.whiteColor
+import presentation.ui.AppTypography
 
 enum class AuthScreenState { LOGIN, REGISTER }
 
@@ -292,7 +290,7 @@ fun LoginForm(
                 trailingIcon = {
                     Icon(
                         modifier = Modifier.clickable { passwordVisible = !passwordVisible },
-                        imageVector = if (passwordVisible) Icons.Default.Star else Icons.Filled.Star,
+                        painter = painterResource(if (passwordVisible) R.drawable.ic_visible_pass else (R.drawable.ic_hide_pass)),
                         contentDescription = stringResource(R.string.password_label),
                         tint = fieldBorderColor
                     )
@@ -329,7 +327,10 @@ fun LoginForm(
             }
             OrView()
             Spacer(modifier = Modifier.height(16.dp))
-            CustomShadowButton(stringResource(R.string.guest_button), onClick = onGuestClicked)
+            CustomShadowButton(
+                text = stringResource(R.string.guest_button),
+                onClick = onGuestClicked
+            )
             //TODO: Google Sign-In
 //            CustomShadowButton(
 //                text = "Continue with Google",
@@ -350,7 +351,10 @@ fun LoginForm(
                 )
             )
             Spacer(modifier = Modifier.height(8.dp))
-            CustomShadowButton(stringResource(R.string.login_button), onClick = onLoginClicked)
+            CustomShadowButton(
+                text = stringResource(R.string.login_button),
+                onClick = onLoginClicked
+            )
         }
     }
 }
@@ -402,7 +406,7 @@ fun RegisterForm(
                 trailingIcon = {
                     Icon(
                         modifier = Modifier.clickable { passwordVisible = !passwordVisible },
-                        imageVector = if (passwordVisible) Icons.Outlined.Star else Icons.Filled.Star,
+                        painter = painterResource(if (passwordVisible) R.drawable.ic_visible_pass else (R.drawable.ic_hide_pass)),
                         contentDescription = stringResource(R.string.password_label),
                         tint = fieldBorderColor
                     )
@@ -440,7 +444,10 @@ fun RegisterForm(
             if (!guestMode) {
                 OrView()
                 Spacer(modifier = Modifier.height(16.dp))
-                CustomShadowButton(stringResource(R.string.guest_button), onClick = onGuestClicked)
+                CustomShadowButton(
+                    text = stringResource(R.string.guest_button),
+                    onClick = onGuestClicked
+                )
             }
             //TODO: Google Sign-In
 //            CustomShadowButton(
@@ -462,7 +469,10 @@ fun RegisterForm(
                 )
             )
             Spacer(modifier = Modifier.height(8.dp))
-            CustomShadowButton(stringResource(R.string.signup_button), onClick = onLoginClicked)
+            CustomShadowButton(
+                text = stringResource(R.string.signup_button),
+                onClick = onLoginClicked
+            )
         }
     }
 }
@@ -496,11 +506,11 @@ fun OrView() {
 
 @Composable
 fun CustomShadowButton(
+    modifier: Modifier = Modifier,
     text: String,
     icon: Painter? = null,
     onClick: () -> Unit = {},
     isEnabled: Boolean = true,
-    modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier) {
         if (isEnabled) {

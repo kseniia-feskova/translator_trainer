@@ -69,7 +69,7 @@ interface ApiService {
     @GET("course/{uuid}")
     suspend fun getCourseById(@Path("uuid") uuid: String): Response<CourseEntity>
 
-    @GET("course/")
+    @GET("course/get")
     suspend fun getAllCourses(
         @Query("userId") userId: UUID
     ): Response<List<CourseEntity>>
@@ -82,7 +82,7 @@ interface ApiService {
 
     //set region
 
-    @GET("sets/")
+    @GET("sets/get")
     suspend fun getAllSets(@Query("courseId") courseId: UUID): Response<List<SetResponse>>
 
     @POST("sets/add")
@@ -101,10 +101,10 @@ interface ApiService {
         @Query("translate") translate: String
     ): Response<WordResponse>
 
-    @POST("words/check_by_origin")
+    @GET("words/check_by_origin")
     suspend fun getWordByOriginal(
         @Query("courseId") courseId: UUID,
-        @Query("translate") original: String
+        @Query("original") original: String
     ): Response<WordResponse>
 
     @GET("words/get_by_set/{setId}")

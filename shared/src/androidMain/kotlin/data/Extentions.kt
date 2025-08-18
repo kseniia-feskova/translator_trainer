@@ -1,9 +1,8 @@
 package data
 
-import android.util.Log
-import data.model.base.Result
 import com.google.gson.Gson
 import data.model.base.ErrorResponse
+import data.model.base.Result
 import domain.token.TokenRefresher.Companion.ERROR_TOKEN_EXPIRED
 import retrofit2.Response
 import java.io.IOException
@@ -18,21 +17,17 @@ suspend fun <T> safeCall(
         if (response.isSuccessful) {
             val body = response.body()
             if (body != null) {
-                Log.e("saveCall", "Success, body !=null")
                 onSuccess(body)
                 Result(data = body)
             } else {
-                Log.e("saveCall", "Success, but empty body")
                 Result(errorMsg = "Empty data")
             }
         } else {
-            Log.e("saveCall", "Error, response = ${response.message()}")
             if (response.code() == 401) {
                 onRefresh()
                 return Result(errorMsg = ERROR_TOKEN_EXPIRED)
             }
             val errorResponse = extractErrorMessage(response)
-            Log.e("saveCall", "Error, response = $errorResponse")
             Result(errorMsg = errorResponse.toString())
         }
     } catch (e: Exception) {

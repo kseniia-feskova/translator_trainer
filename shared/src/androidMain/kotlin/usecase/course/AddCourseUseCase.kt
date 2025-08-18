@@ -14,14 +14,17 @@ import kotlinx.coroutines.flow.firstOrNull
 import mapper.toData
 import mapper.toUI
 import presentation.model.CourseUI
+import presentation.usecases.course.ICoursesOnPrefsUseCases
+import java.util.UUID
 
 class AddCourseUseCase(
     private val repo: ICourseRepository,
     private val tokenRefresher: ITokenRefresher,
     private val dataStore: IDataStoreManager,
     private val daoSets: ISetRepository,
-    private val checkToken: ICheckToken
-): IAddCourseUseCase {
+    private val checkToken: ICheckToken,
+    private val coursesOnPrefs: ICoursesOnPrefsUseCases
+) : IAddCourseUseCase {
 
     override suspend fun invoke(course: CourseUI, needToCreateCourse: Boolean): Result<CourseUI> {
         val isGuest = dataStore.isGuest()
@@ -35,7 +38,11 @@ class AddCourseUseCase(
                 )
             )
             dataStore.saveCourse(
-                course.copy(allWordsId = allWordsSet.data?.id).toData()
+                course.copy(
+                    allWordsId = allWordsSet.data?.id,
+                    id = UUID.fromString(course.id).toString()
+                )
+                    .toData()
             )
             Result.success(course)
         } else {
@@ -74,6 +81,7 @@ class AddCourseUseCase(
             Result.failure(Exception("Empty user data"))
         } else {
             dataStore.saveCourse(data)
+            coursesOnPrefs.saveOne(data.toUI())
             Result.success(data.toUI())
         }
     }

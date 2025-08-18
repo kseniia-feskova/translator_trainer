@@ -1,6 +1,6 @@
 package usecase.course
 
-import domain.mock.dummyCourses
+import data.mock.dummyCourses
 import data.prefs.IDataStoreManager
 import mapper.toData
 import mapper.toUI

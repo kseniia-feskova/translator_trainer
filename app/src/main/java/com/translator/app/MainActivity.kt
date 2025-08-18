@@ -2,7 +2,6 @@ package com.translator.app
 
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -19,23 +18,23 @@ import androidx.core.view.WindowCompat
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.translator.app.di.preferencesModule
-import com.translator.app.di.viewModelModule
-import presentation.model.LessonType
-import presentation.navigation.BottomNavigationBar
-import presentation.navigation.LeafScreen
-import presentation.navigation.TranslatorApp
 import com.presentation.ui.AppTheme
 import com.presentation.viewmodel.MainViewModel
 import com.translator.app.di.databaseModule
 import com.translator.app.di.networkModule
+import com.translator.app.di.preferencesModule
 import com.translator.app.di.repositoryModule
 import com.translator.app.di.translateModule
-import presentation.ui.screens.auth.navigateToAuth
+import com.translator.app.di.viewModelModule
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.logger.Level
+import presentation.model.LessonType
+import presentation.navigation.BottomNavigationBar
+import presentation.navigation.LeafScreen
+import presentation.navigation.TranslatorApp
+import presentation.ui.screens.auth.navigateToAuth
 import useCaseModule
 
 class MainActivity : AppCompatActivity() {
@@ -82,7 +81,9 @@ class MainActivity : AppCompatActivity() {
                 currentRoute?.contains(LeafScreen.Splash.route) ?: true -> false
                 currentRoute?.contains(LeafScreen.Splash.route) ?: true -> false
                 currentRoute?.contains(LeafScreen.BubbleLesson("").route) ?: true -> false
-                currentRoute?.contains(LeafScreen.SuccessLesson(LessonType.BUBBLE, 0).route) ?: true -> false
+                currentRoute?.contains(LeafScreen.SuccessLesson(LessonType.BUBBLE, 0).route)
+                    ?: true -> false
+
                 else -> true
             }
             AppTheme {
@@ -91,7 +92,6 @@ class MainActivity : AppCompatActivity() {
                         .fillMaxSize()
                         .systemBarsPadding(),
                     content = { padding ->
-                        Log.e("Preview", "Padding  = $padding")
                         Box(modifier = Modifier.padding(padding)) {
                             TranslatorApp(navController)
                         }
@@ -111,7 +111,7 @@ class MainActivity : AppCompatActivity() {
 
 fun MainActivity.startKoin() {
     org.koin.core.context.startKoin {
-        androidLogger(Level.DEBUG)
+        androidLogger(Level.ERROR)
         androidContext(applicationContext)
         modules(
             listOf(
