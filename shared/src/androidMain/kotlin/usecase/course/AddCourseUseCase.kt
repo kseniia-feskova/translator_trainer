@@ -15,7 +15,6 @@ import mapper.toData
 import mapper.toUI
 import presentation.model.CourseUI
 import presentation.usecases.course.ICoursesOnPrefsUseCases
-import java.util.UUID
 
 class AddCourseUseCase(
     private val repo: ICourseRepository,
@@ -38,11 +37,7 @@ class AddCourseUseCase(
                 )
             )
             dataStore.saveCourse(
-                course.copy(
-                    allWordsId = allWordsSet.data?.id,
-                    id = UUID.fromString(course.id).toString()
-                )
-                    .toData()
+                course.copy(allWordsId = allWordsSet.data?.id).toData()
             )
             Result.success(course)
         } else {

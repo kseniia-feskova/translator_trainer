@@ -38,7 +38,7 @@ fun GuestModeDialog(
             )
         },
         confirmButton = {
-            CustomShadowButton("Войти", onClick = onConfirm, modifier = Modifier.fillMaxWidth())
+            CustomShadowButton(text = "Войти", onClick = onConfirm, modifier = Modifier.fillMaxWidth())
         }
     )
 }

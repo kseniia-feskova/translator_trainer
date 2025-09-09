@@ -37,7 +37,7 @@ fun GuestLimitsDialog(
         },
         confirmButton = {
             CustomShadowButton(
-                stringResource(R.string.move_to_account), onClick = toAccountSetting
+                text = stringResource(R.string.move_to_account), onClick = toAccountSetting
             )
         },
         dismissButton = {

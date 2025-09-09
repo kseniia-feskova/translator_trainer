@@ -203,7 +203,7 @@ fun TextRecognitionScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             if (state.selectedWords.isNotEmpty()) {
-                CustomShadowButton("Save words", onClick = onSaveClick)
+                CustomShadowButton(text = "Save words", onClick = onSaveClick)
             }
         }
         if (state.loading) {

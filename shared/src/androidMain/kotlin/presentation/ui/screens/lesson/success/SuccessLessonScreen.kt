@@ -53,7 +53,7 @@ fun SuccessLessonScreen(
             )
             Spacer(modifier = Modifier.height(32.dp))
             CustomShadowButton(
-                "Continue",
+                text = "Continue",
                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp),
                 onClick = { onContinue() }
             )

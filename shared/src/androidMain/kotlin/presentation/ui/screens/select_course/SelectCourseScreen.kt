@@ -116,7 +116,7 @@ fun SelectCourseScreen(
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
-                    CustomShadowButton("Continue", onClick = onContinueClicked)
+                    CustomShadowButton(text = "Continue", onClick = onContinueClicked)
                 }
             }
         }

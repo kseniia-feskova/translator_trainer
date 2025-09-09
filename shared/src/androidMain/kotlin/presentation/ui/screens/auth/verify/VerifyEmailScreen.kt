@@ -167,7 +167,7 @@ fun VerifyEmailScreen(
 
                     Spacer(modifier = Modifier.height(16.dp))
                     CustomShadowButton(
-                        "Continue",
+                        text = "Continue",
                         onClick = verifyCode,
                         isEnabled = enteredCode.isNotEmpty()
                     )

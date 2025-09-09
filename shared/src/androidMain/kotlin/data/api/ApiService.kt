@@ -43,6 +43,7 @@ interface ApiService {
         @Field("code") code: String
     ): Response<AuthResponse>
 
+    //TODO: investigate this and add to the documentation
     @FormUrlEncoded
     @POST("auth/verify/resend_code")
     suspend fun resendCode(
