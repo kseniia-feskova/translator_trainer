@@ -86,3 +86,6 @@ android {
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
 }
+dependencies {
+    debugImplementation("androidx.compose.ui:ui-tooling:1.9.1")
+}

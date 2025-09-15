@@ -23,8 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.presentation.ui.AppTheme
-import com.presentation.ui.lightLilaColor
-
+import com.presentation.ui.bgColor
 
 @Composable
 fun SearchBarView(
@@ -39,7 +38,7 @@ fun SearchBarView(
             .then(modifier)
             .fillMaxWidth()
             .background(
-                color = lightLilaColor,
+                color = bgColor,
                 shape = RoundedCornerShape(24.dp)
             )
             .padding(horizontal = 12.dp),

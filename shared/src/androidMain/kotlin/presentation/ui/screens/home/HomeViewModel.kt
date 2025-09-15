@@ -86,18 +86,22 @@ class HomeViewModel(
 
     private fun translateText(text: String) {
         viewModelScope.launch {
-            val translatedText = translateWord.invoke(
-                text,
-                _uiState.value.originalLanguage,
-                _uiState.value.resLanguage
-            )
-            _uiState.update {
-                it.copy(
-                    translatedText = translatedText,
-                    showGlow = true,
-                    loading = false,
-                    error = null
+            val origin = _uiState.value.originalLanguage
+            val res = _uiState.value.resLanguage
+            if (origin != null && res != null) {
+                val translatedText = translateWord.invoke(
+                    text = text,
+                    originalLanguage = origin,
+                    resLanguage = res
                 )
+                _uiState.update {
+                    it.copy(
+                        translatedText = translatedText,
+                        showGlow = true,
+                        loading = false,
+                        error = null
+                    )
+                }
             }
         }
     }

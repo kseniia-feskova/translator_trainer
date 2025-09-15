@@ -9,8 +9,8 @@ data class HomeUIState(
     val inputText: String = "",
     val translatedText: String = "",
     val showGlow: Boolean = false,
-    val originalLanguage: Language = Language.RUSSIAN,
-    val resLanguage: Language = Language.GERMAN,
+    val originalLanguage: Language? = null,
+    val resLanguage: Language? = null,
     val isWordSaved: Boolean = false,
     val error: HomeError? = null,
     val limitsError: Boolean = false

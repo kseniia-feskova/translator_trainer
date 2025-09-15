@@ -103,7 +103,8 @@ fun TextRecognitionScreen(
                     }
                     val bitmap = uriToBitmap(context, uri)
                     bitmap?.let {
-                        textRecognizer.recognizeText(it,
+                        textRecognizer.recognizeText(
+                            it,
                             onSuccess = { text -> onTranslate(text) },
                             onError = { Log.e("Translate", "Ошибка распознавания") }
                         )
@@ -119,7 +120,8 @@ fun TextRecognitionScreen(
                 val bitmap = uriToBitmap(context, it)
                 bitmap?.let {
                     imageBitmap = it
-                    textRecognizer.recognizeText(it,
+                    textRecognizer.recognizeText(
+                        it,
                         onSuccess = { text -> onTranslate(text) },
                         onError = { Log.e("Translate", "Ошибка распознавания") }
                     )
@@ -137,12 +139,14 @@ fun TextRecognitionScreen(
         ) {
             Spacer(modifier = Modifier.height(16.dp))
 
-            LanguageSwitch(
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-                state.originalLanguage,
-                state.resLanguage
-            ) {
-                onLanguageChange(it)
+            if (state.resLanguage != null && state.originalLanguage != null) {
+                LanguageSwitch(
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    state.originalLanguage,
+                    state.resLanguage
+                ) {
+                    onLanguageChange(it)
+                }
             }
 
             Spacer(modifier = Modifier.height(16.dp))

@@ -14,8 +14,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 data class TextFromPhotoUI(
-    val originalLanguage: Language = Language.RUSSIAN,
-    val resLanguage: Language = Language.GERMAN,
+    val originalLanguage: Language? = null,
+    val resLanguage: Language? = null,
     val original: String = "",
     val translate: String = "",
     val selectedWords: List<String> = emptyList(),
@@ -52,18 +52,23 @@ class TextFromPhotoViewModel(
         viewModelScope.launch {
             Log.e("TextFromPhotoVM", "Text = $text")
             val formated = text.replace('\n', ' ')
-            val translatedText = translateWord.invoke(
-                formated,
-                _uiState.value.originalLanguage,
-                _uiState.value.resLanguage
-            )
-            _uiState.update {
-                it.copy(
-                    loading = false,
-                    translate = translatedText,
-                    original = text,
-                    allWords = text.split(Regex("\\s+|[,.!?;:()]")).filter { it.isNotBlank() }
+            val origin = _uiState.value.originalLanguage
+            val res = _uiState.value.resLanguage
+            if (origin != null && res != null) {
+                val translatedText = translateWord.invoke(
+                    text = formated,
+                    originalLanguage = origin,
+                    resLanguage = res
                 )
+
+                _uiState.update {
+                    it.copy(
+                        loading = false,
+                        translate = translatedText,
+                        original = text,
+                        allWords = text.split(Regex("\\s+|[,.!?;:()]")).filter { it.isNotBlank() }
+                    )
+                }
             }
         }
     }
@@ -93,17 +98,20 @@ class TextFromPhotoViewModel(
         }
 
     }
-
+//TODO: save several words from text photo
     fun saveWords() {
         val list = _uiState.value.selectedWords
         list.map {
             viewModelScope.launch {
-                val translatedText = translateWord.invoke(
-                    it,
-                    _uiState.value.originalLanguage,
-                    _uiState.value.resLanguage
-                )
-                val response = addWordUseCase.invoke(it, translatedText)
+                val origin = _uiState.value.originalLanguage
+                val res = _uiState.value.resLanguage
+                if (origin != null && res != null) {
+                    val translatedText = translateWord.invoke(
+                        text = it,
+                        originalLanguage = origin,
+                        resLanguage = res
+                    )
+                    val response = addWordUseCase.invoke(it, translatedText)
 //                if (response.isSuccess) {
 //                    val savedWord = response.getOrNull()
 //                    if (savedWord != null) {
@@ -114,6 +122,7 @@ class TextFromPhotoViewModel(
 //                } else {
 //                   // handleError(response)
 //                }
+                }
             }
         }
     }

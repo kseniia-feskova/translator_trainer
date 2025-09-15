@@ -52,6 +52,7 @@ import com.presentation.ui.bgColor
 import com.presentation.ui.fieldBorderColor
 import com.presentation.ui.lightLilaColor
 import com.presentation.ui.redDarkColor
+import com.presentation.ui.whiteColor
 import presentation.ui.screens.auth.AuthError
 import presentation.ui.screens.auth.CustomShadowButton
 import presentation.ui.screens.auth.RegisterForm
@@ -272,7 +273,7 @@ fun DeleteDialog(
 @Composable
 fun LogoutDialog(modifier: Modifier, dismissDialog: () -> Unit, logout: () -> Unit) {
     AlertDialog(modifier = modifier,
-        containerColor = lightLilaColor.copy(alpha = 0.9f),
+        containerColor = whiteColor.copy(alpha = 0.9f),
         onDismissRequest = {
             dismissDialog()
         },

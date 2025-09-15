@@ -34,6 +34,7 @@ import presentation.test.smallList
 import com.presentation.ui.AppTheme
 import presentation.ui.AppTypography
 import com.presentation.ui.bgColor
+import com.presentation.ui.darkColor
 import com.presentation.ui.lightLilaColor
 import presentation.ui.screens.all.StarsRow
 
@@ -70,9 +71,9 @@ fun WordWithStatusView(
         ) {
             Text(
                 text = word.originalText,
-                style = AppTypography.titleLarge.copy(color = bgColor)
+                style = AppTypography.titleLarge.copy(color = darkColor)
             )
-            Text(text = word.resText, style = AppTypography.titleSmall.copy(color = bgColor))
+            Text(text = word.resText, style = AppTypography.titleSmall.copy(color = darkColor))
         }
 
         StarsRow(
@@ -123,9 +124,9 @@ fun SelectingWordWithStatusView(
             ) {
                 Text(
                     text = word.originalText,
-                    style = AppTypography.titleLarge.copy(color = bgColor)
+                    style = AppTypography.titleLarge.copy(color = darkColor)
                 )
-                Text(text = word.resText, style = AppTypography.titleSmall.copy(color = bgColor))
+                Text(text = word.resText, style = AppTypography.titleSmall.copy(color = darkColor))
             }
 
             StarsRow(

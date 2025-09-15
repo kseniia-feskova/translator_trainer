@@ -122,70 +122,75 @@ fun HomeScreen(
         ) {
             Spacer(Modifier.height(24.dp))
 
-            OutlinedTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp),
-                value = state.inputText,
-                onValueChange = { onWordInput(it) },
-                singleLine = true,
-                label = {
-                    Text(
-                        stringResource(state.originalLanguage.getRes()),
-                        style = AppTypography.titleSmall
+            if (state.originalLanguage != null) {
+                OutlinedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp),
+                    value = state.inputText,
+                    onValueChange = { onWordInput(it) },
+                    singleLine = true,
+                    label = {
+                        Text(
+                            stringResource(state.originalLanguage.getRes()),
+                            style = AppTypography.titleSmall
+                        )
+                    },
+                    shape = RoundedCornerShape(8.dp),
+                    colors = fieldColors(),
+                    textStyle = AppTypography.titleSmall,
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        imeAction = ImeAction.Done // Изменяем кнопку на "Готово"
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = {
+                            onEnterText()
+                            keyboardController?.hide() // Скрываем клавиатуру
+                        }
                     )
-                },
-                shape = RoundedCornerShape(8.dp),
-                colors = fieldColors(),
-                textStyle = AppTypography.titleSmall,
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    imeAction = ImeAction.Done // Изменяем кнопку на "Готово"
-                ),
-                keyboardActions = KeyboardActions(
-                    onDone = {
-                        onEnterText()
-                        keyboardController?.hide() // Скрываем клавиатуру
+                )
+            }
+
+            Spacer(Modifier.height(24.dp))
+            if (state.originalLanguage != null && state.resLanguage != null) {
+                LanguageSwitch(
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    state.originalLanguage,
+                    state.resLanguage
+                ) { onLanguageChange(it) }
+            }
+
+            Spacer(Modifier.height(24.dp))
+
+            if (state.resLanguage != null) {
+                OutlinedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp),
+                    value = state.translatedText,
+                    enabled = false,
+                    onValueChange = {},
+                    singleLine = true,
+                    label = {
+                        Text(
+                            stringResource(state.resLanguage.getRes()),
+                            style = AppTypography.titleSmall,
+                        )
+                    },
+                    shape = RoundedCornerShape(8.dp),
+                    colors = fieldColors().copy(
+                        disabledTextColor = fieldValueColor,
+                        disabledContainerColor = Color.White,
+                        disabledIndicatorColor = fieldBorderColor
+                    ),
+                    textStyle = AppTypography.titleSmall,
+                    trailingIcon = {
+                        if (state.isWordSaved) {
+                            Icon(Icons.Default.Add, tint = bgColor, contentDescription = "Saved")
+                        }
                     }
                 )
-            )
-
-            Spacer(Modifier.height(24.dp))
-
-            LanguageSwitch(
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-                state.originalLanguage,
-                state.resLanguage
-            ) { onLanguageChange(it) }
-
-            Spacer(Modifier.height(24.dp))
-
-            OutlinedTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp),
-                value = state.translatedText,
-                enabled = false,
-                onValueChange = {},
-                singleLine = true,
-                label = {
-                    Text(
-                        stringResource(state.resLanguage.getRes()),
-                        style = AppTypography.titleSmall,
-                    )
-                },
-                shape = RoundedCornerShape(8.dp),
-                colors = fieldColors().copy(
-                    disabledTextColor = fieldValueColor,
-                    disabledContainerColor = Color.White,
-                    disabledIndicatorColor = fieldBorderColor
-                ),
-                textStyle = AppTypography.titleSmall,
-                trailingIcon = {
-                    if (state.isWordSaved) {
-                        Icon(Icons.Default.Add, tint = bgColor, contentDescription = "Saved")
-                    }
-                }
-            )
+            }
             Spacer(Modifier.height(24.dp))
             if (state.error != null) {
                 Text(
@@ -284,6 +289,7 @@ fun SelectLanguages(
     onFirstClick: (Language, String) -> Unit,
     onSecondClick: (Language, String) -> Unit,
 ) {
+    Log.e("SelectLanguages", "origin = $originLang, translate = $translateLang")
     Row(modifier = modifier) {
         val first = stringResource(originLang.getRes())
         Text(
@@ -323,7 +329,13 @@ fun SelectLanguages(
 fun MainScreenPreview() {
     AppTheme {
         Surface {
-            HomeScreen(state = HomeUIState(inputText = "Katze"))
+            HomeScreen(
+                state = HomeUIState(
+                    inputText = "Katze",
+                    originalLanguage = Language.GERMAN,
+                    resLanguage = Language.RUSSIAN,
+                )
+            )
         }
     }
 }
@@ -338,7 +350,9 @@ fun MainScreenWithButtonPreview() {
                 HomeScreen(
                     state = HomeUIState().copy(
                         inputText = "Katze",
-                        translatedText = "Котик"
+                        translatedText = "Котик",
+                        originalLanguage = Language.GERMAN,
+                        resLanguage = Language.RUSSIAN,
                     )
                 )
             }
