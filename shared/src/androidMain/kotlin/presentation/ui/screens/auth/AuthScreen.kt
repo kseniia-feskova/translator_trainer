@@ -148,23 +148,23 @@ fun AuthScreen(
             ) { screen ->
                 if (screen == AuthScreenState.LOGIN) {
                     LoginForm(
-                        state,
-                        onEmailChanged,
-                        onPasswordChanged,
-                        onAuthClicked,
+                        state = state,
+                        onEmailChanged = onEmailChanged,
+                        onPasswordChanged = onPasswordChanged,
+                        onLoginClicked = onAuthClicked,
                         onGuestClicked = { showDialog = true },
-                        onAuthStateChanged
+                        onCreateAccountClicked = onAuthStateChanged
                     )
                 } else {
                     RegisterForm(
-                        state.email,
-                        state.password,
-                        state.error,
-                        onEmailChanged,
-                        onPasswordChanged,
-                        onAuthClicked,
+                        email = state.email,
+                        password = state.password,
+                        error = state.error,
+                        onEmailChanged = onEmailChanged,
+                        onPasswordChanged = onPasswordChanged,
+                        onLoginClicked = onAuthClicked,
                         onGuestClicked = { showDialog = true },
-                        onAuthStateChanged
+                        onCreateAccountClicked = onAuthStateChanged
                     )
                 }
             }
@@ -327,10 +327,11 @@ fun LoginForm(
             }
             OrView()
             Spacer(modifier = Modifier.height(16.dp))
-            CustomShadowButton(
-                text = stringResource(R.string.guest_button),
-                onClick = onGuestClicked
-            )
+            //TODO: Guest mode
+//            CustomShadowButton(
+//                text = stringResource(R.string.guest_button),
+//                onClick = onGuestClicked
+//            )
             //TODO: Google Sign-In
 //            CustomShadowButton(
 //                text = "Continue with Google",
@@ -441,14 +442,15 @@ fun RegisterForm(
             if (error == null) {
                 Spacer(modifier = Modifier.height(8.dp))
             }
-            if (!guestMode) {
-                OrView()
-                Spacer(modifier = Modifier.height(16.dp))
-                CustomShadowButton(
-                    text = stringResource(R.string.guest_button),
-                    onClick = onGuestClicked
-                )
-            }
+            //TODO: Guest mode
+//            if (!guestMode) {
+//                OrView()
+//                Spacer(modifier = Modifier.height(16.dp))
+//                CustomShadowButton(
+//                    text = stringResource(R.string.guest_button),
+//                    onClick = onGuestClicked
+//                )
+//            }
             //TODO: Google Sign-In
 //            CustomShadowButton(
 //                text = "Continue with Google",

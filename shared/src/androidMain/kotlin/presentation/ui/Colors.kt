@@ -6,16 +6,16 @@ import androidx.compose.ui.graphics.Color
 
 
 val whiteColor = Color(0xFFFAFAFA)
-val bgColor = Color(0xFF362477)
-val darkColor = Color(0xFF1A0C4C)
-val lightLilaColor = Color(0xFFC6BDF9)
-val fieldNameColor = Color(0xFF6D6D7C)
-val fieldValueColor = Color(0xFF1F1F24)
-val fieldBorderColor = Color(0xFF8987A5)
-val viewLightColor = Color(0xFFC6BDF9)
+val bgColor = Color(0xFF6860B4)
+val darkColor = Color(0xFF4D4386)
+val lightLilaColor = Color(0xFFDAD6F5)
+val fieldNameColor = Color(0xFF575765)
+val fieldValueColor = Color(0xFF37373D)
+val fieldBorderColor = Color(0xFFB5AEEC)
+val viewLightColor = Color(0xFFDBD5F8)
 
 
-val primaryColor = Color(0xFF271460)
+val primaryColor = Color(0xFF756AB2)
 val secondaryColor = Color(0xFFF9F9FB)
 val accentColor = Color(0xFFD9CDFD)
 

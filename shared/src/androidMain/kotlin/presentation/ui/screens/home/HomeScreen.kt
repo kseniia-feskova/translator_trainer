@@ -53,11 +53,11 @@ import com.example.translatortrainer.shared.R
 import com.presentation.ui.AppTheme
 import presentation.ui.AppTypography
 import com.presentation.ui.bgColor
-import com.presentation.ui.darkColor
 import com.presentation.ui.fieldBorderColor
 import com.presentation.ui.fieldColors
 import com.presentation.ui.fieldValueColor
 import com.presentation.ui.lightLilaColor
+import com.presentation.ui.onSurfaceLight
 import com.presentation.ui.redDarkColor
 import presentation.ui.views.BackgroundDecorAnimated
 import presentation.ui.views.HomeTopView
@@ -296,7 +296,7 @@ fun SelectLanguages(
                         firstText
                     )
                 },
-            color = darkColor,
+            color = onSurfaceLight,
             style = AppTypography.displayLarge.copy(fontSize = TextUnit(24f, TextUnitType.Sp))
         )
 
@@ -312,7 +312,7 @@ fun SelectLanguages(
                         secondText
                     )
                 },
-            color = darkColor,
+            color = onSurfaceLight,
             style = AppTypography.displayLarge.copy(fontSize = TextUnit(24f, TextUnitType.Sp))
         )
     }
