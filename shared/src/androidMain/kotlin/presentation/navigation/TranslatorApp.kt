@@ -32,7 +32,7 @@ import presentation.ui.screens.splash.splashScreen
 import com.presentation.ui.screens.texts.photoToText
 
 @Composable
-fun TranslatorApp(navController: NavHostController) {
+fun TranslatorAppContainer(navController: NavHostController) {
     NavHost(
         navController = navController,
         startDestination = LeafScreen.Splash.route

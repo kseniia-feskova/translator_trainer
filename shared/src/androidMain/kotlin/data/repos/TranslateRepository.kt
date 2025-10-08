@@ -1,7 +1,9 @@
 package data.repos
 
 import data.api.TranslateService
+import data.model.translate.TranslationResponse
 import data.repository.ITranslateRepository
+import data.translate.Language
 
 class TranslateRepository(
     private val service: TranslateService,
@@ -9,16 +11,10 @@ class TranslateRepository(
 
     override suspend fun getTranslate(
         text: String,
-        originalLanguage: data.translate.Language,
-        resLanguage: data.translate.Language
+        originalLanguage: Language,
+        resLanguage: Language
     ): String {
-//        val request = TranslateRequest(
-//            contents = listOf(text),
-//            sourceLanguageCode = originalLanguage.code,
-//            targetLanguageCode = resLanguage.code
-//        )
         val response = service.translate(text, "${originalLanguage.code}|${resLanguage.code}")
-  //      val response = service.translateText(request)
         if (response.isSuccessful && response.body() != null) {
             println(response.body())
             return getTranslation(response.body()!!)
@@ -28,7 +24,7 @@ class TranslateRepository(
         }
     }
 
-    private fun getTranslation(response: data.model.TranslationResponse): String {
+    private fun getTranslation(response: TranslationResponse): String {
         val directTranslation = response.responseData.translatedText
         if (directTranslation.isNotEmpty()) {
             return directTranslation

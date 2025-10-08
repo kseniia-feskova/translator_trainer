@@ -2,6 +2,8 @@ package data.repos
 
 import data.room.AppDao
 import data.api.ApiService
+import data.model.base.Result
+import data.model.auth.AuthResponse
 import data.prefs.ITokenStorage
 import data.repository.IAuthRepository
 import data.safeCall
@@ -18,7 +20,7 @@ class AuthRepository(
         email: String,
         username: String,
         password: String
-    ): data.model.base.Result<data.model.auth.AuthResponse> {
+    ): Result<AuthResponse> {
         val request = data.model.auth.AuthRequest(
             email = email,
             phone = email,
@@ -31,9 +33,9 @@ class AuthRepository(
                 tokenStorage.saveToken(ACCESS_TOKEN, body.accessToken)
                 tokenStorage.saveToken(REFRESH_TOKEN, body.refreshToken)
                 if (body.uuid == null) {
-                    data.model.base.Result(errorMsg = "Empty uuid")
+                    Result(errorMsg = "Empty uuid")
                 } else {
-                    data.model.base.Result(data = body)
+                    Result(data = body)
                 }
             })
     }
@@ -42,7 +44,7 @@ class AuthRepository(
         email: String,
         username: String,
         password: String
-    ): data.model.base.Result<data.model.auth.AuthResponse> {
+    ): Result<AuthResponse> {
         val request =
             data.model.auth.AuthRequest(email = email, username = username, password = password)
         return safeCall({
@@ -51,40 +53,40 @@ class AuthRepository(
             tokenStorage.saveToken(ACCESS_TOKEN, body.accessToken)
             tokenStorage.saveToken(REFRESH_TOKEN, body.refreshToken)
             if (body.uuid == null) {
-                data.model.base.Result(errorMsg = "Empty user id")
+                Result(errorMsg = "Empty user id")
             } else {
-                data.model.base.Result(data = body)
+                Result(data = body)
             }
         })
     }
 
-    override suspend fun refreshToken(token: String): data.model.base.Result<data.model.auth.AuthResponse> {
+    override suspend fun refreshToken(token: String): Result<AuthResponse> {
         return safeCall({ service.refreshToken(data.model.auth.RefreshTokenRequest(token)) })
     }
 
 
-    override suspend fun verify(email: String, code: String): data.model.base.Result<data.model.auth.AuthResponse> {
+    override suspend fun verify(email: String, code: String): Result<AuthResponse> {
         return safeCall({
             service.verifyCode(email, code)
         }, onSuccess = { body ->
             tokenStorage.saveToken(ACCESS_TOKEN, body.accessToken)
             tokenStorage.saveToken(REFRESH_TOKEN, body.refreshToken)
             if (body.uuid == null) {
-                data.model.base.Result(errorMsg = "Empty user id")
+                Result(errorMsg = "Empty user id")
             } else {
-                data.model.base.Result(data = body)
+                Result(data = body)
             }
         })
     }
 
-    override suspend fun resendCode(email: String): data.model.base.Result<data.model.auth.AuthResponse> {
+    override suspend fun resendCode(email: String): Result<AuthResponse> {
         return safeCall({
             service.resendCode(email)
         }, onSuccess = { body ->
             if (body.uuid == null) {
-                data.model.base.Result(errorMsg = "Empty user id")
+                Result(errorMsg = "Empty user id")
             } else {
-                data.model.base.Result(data = body)
+                Result(data = body)
             }
         })
     }

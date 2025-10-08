@@ -33,7 +33,7 @@ import org.koin.core.logger.Level
 import presentation.model.LessonType
 import presentation.navigation.BottomNavigationBar
 import presentation.navigation.LeafScreen
-import presentation.navigation.TranslatorApp
+import presentation.navigation.TranslatorAppContainer
 import presentation.ui.screens.auth.navigateToAuth
 import useCaseModule
 
@@ -75,14 +75,13 @@ class MainActivity : AppCompatActivity() {
             }
             val shouldShowBottomBar = when {
                 currentRoute?.contains(LeafScreen.NewSet.route) ?: true -> false
-                currentRoute?.contains(LeafScreen.Login.route) ?: true -> false
-                currentRoute?.contains(LeafScreen.VerifyEmail.route) ?: true -> false
-                currentRoute?.contains(LeafScreen.SelectCourse.route) ?: true -> false
-                currentRoute?.contains(LeafScreen.Splash.route) ?: true -> false
-                currentRoute?.contains(LeafScreen.Splash.route) ?: true -> false
-                currentRoute?.contains(LeafScreen.BubbleLesson("").route) ?: true -> false
-                currentRoute?.contains(LeafScreen.SuccessLesson(LessonType.BUBBLE, 0).route)
-                    ?: true -> false
+                currentRoute.contains(LeafScreen.Login.route) -> false
+                currentRoute.contains(LeafScreen.VerifyEmail.route) -> false
+                currentRoute.contains(LeafScreen.SelectCourse.route) -> false
+                currentRoute.contains(LeafScreen.Splash.route) -> false
+                currentRoute.contains(LeafScreen.Splash.route) -> false
+                currentRoute.contains(LeafScreen.BubbleLesson("").route) -> false
+                currentRoute.contains(LeafScreen.SuccessLesson(LessonType.BUBBLE, 0).route) -> false
 
                 else -> true
             }
@@ -93,7 +92,7 @@ class MainActivity : AppCompatActivity() {
                         .systemBarsPadding(),
                     content = { padding ->
                         Box(modifier = Modifier.padding(padding)) {
-                            TranslatorApp(navController)
+                            TranslatorAppContainer(navController)
                         }
                     },
                     bottomBar = {

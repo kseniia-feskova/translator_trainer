@@ -10,7 +10,7 @@ import data.model.words.update.UpdateWordStatusRequest
 import data.room.SetsDao
 import data.room.WordDao
 import data.room.model.WordEntity
-import data.toWordResponse
+import mapper.toWordResponse
 import java.util.UUID
 
 class WordsDaoRepository(

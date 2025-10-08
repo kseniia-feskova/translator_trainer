@@ -1,4 +1,4 @@
-package data
+package mapper
 
 import data.model.course.CourseEntity
 import data.model.words.WordResponse
