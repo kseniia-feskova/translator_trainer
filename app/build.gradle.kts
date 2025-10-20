@@ -35,7 +35,7 @@ android {
         }
 
         create("qa") {
-            buildConfigField("String", "BASE_URL", "\"http://18.193.113.17:8080/api/\"")
+            buildConfigField("String", "BASE_URL", "\"http://35.159.225.33:8080/api/\"")
         }
     }
 

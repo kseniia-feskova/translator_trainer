@@ -18,7 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
@@ -56,7 +56,7 @@ import presentation.ui.dialog.GuestLimitsDialog
 import com.presentation.ui.fieldColors
 import com.presentation.ui.lightLilaColor
 import com.presentation.ui.redDarkColor
-import presentation.ui.screens.auth.CustomShadowButton
+import presentation.ui.views.buttons.CustomShadowButton
 import presentation.ui.views.BaseTopView
 import com.presentation.ui.views.Loader
 import com.presentation.ui.views.SelectingWordWithStatusView
@@ -96,7 +96,7 @@ fun NewSetScreen(
         ) {
             BaseTopView(
                 title = stringResource(R.string.new_set_title),
-                leftIcon = Icons.Default.ArrowBack,
+                leftIcon = Icons.AutoMirrored.Filled.ArrowBack,
                 onLeftClick = navigateUp
             )
             Spacer(Modifier.height(24.dp))

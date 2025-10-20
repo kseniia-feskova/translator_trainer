@@ -33,7 +33,7 @@ import com.presentation.ui.lightLilaColor
 import com.presentation.ui.primaryColor
 import com.presentation.ui.views.FlippableCard
 import com.presentation.ui.views.SwipeCard
-import presentation.ui.screens.auth.CustomShadowButton
+import presentation.ui.views.buttons.CustomShadowButton
 
 
 // Используется только на предпросмотре набора слов,

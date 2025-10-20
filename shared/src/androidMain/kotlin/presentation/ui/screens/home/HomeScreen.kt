@@ -66,7 +66,7 @@ import com.presentation.ui.whiteColor
 import presentation.utils.Language
 import presentation.navigation.BottomNavigationBar
 import presentation.ui.dialog.GuestLimitsDialog
-import presentation.ui.screens.auth.CustomShadowButton
+import presentation.ui.views.buttons.CustomShadowButton
 
 @Composable
 fun HomeScreen(

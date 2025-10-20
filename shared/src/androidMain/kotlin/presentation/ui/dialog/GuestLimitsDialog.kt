@@ -20,7 +20,7 @@ import com.example.translatortrainer.shared.R
 import com.presentation.ui.AppTheme
 import presentation.ui.AppTypography
 import com.presentation.ui.bgColor
-import presentation.ui.screens.auth.CustomShadowButton
+import presentation.ui.views.buttons.CustomShadowButton
 import com.presentation.ui.secondaryColor
 
 @Composable

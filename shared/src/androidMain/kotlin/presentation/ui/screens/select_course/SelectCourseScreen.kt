@@ -42,7 +42,7 @@ import presentation.ui.AppTypography
 import com.presentation.ui.bgColor
 import com.presentation.ui.fieldBorderColor
 import com.presentation.ui.lightLilaColor
-import presentation.ui.screens.auth.CustomShadowButton
+import presentation.ui.views.buttons.CustomShadowButton
 import presentation.ui.views.BackgroundDecorAnimated
 import com.presentation.ui.views.CustomRadioButton
 import com.presentation.ui.whiteColor

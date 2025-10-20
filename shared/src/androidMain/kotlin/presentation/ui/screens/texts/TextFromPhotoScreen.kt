@@ -46,7 +46,7 @@ import com.example.translatortrainer.shared.R
 import presentation.ui.AppTypography
 import com.presentation.ui.bgColor
 import com.presentation.ui.screens.texts.TextFromPhotoUI
-import presentation.ui.screens.auth.CustomShadowButton
+import presentation.ui.views.buttons.CustomShadowButton
 import presentation.ui.screens.home.LanguageSwitch
 import com.presentation.ui.views.Loader
 import com.presentation.ui.views.SelectableChipSet

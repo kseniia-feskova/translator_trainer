@@ -53,7 +53,7 @@ import presentation.model.LessonType
 import presentation.model.WordUI
 import presentation.navigation.BottomNavigationBar
 import presentation.test.smallList
-import presentation.ui.screens.auth.CustomShadowButton
+import presentation.ui.views.buttons.CustomShadowButton
 
 @SuppressLint("ConfigurationScreenWidthHeight")
 @Composable

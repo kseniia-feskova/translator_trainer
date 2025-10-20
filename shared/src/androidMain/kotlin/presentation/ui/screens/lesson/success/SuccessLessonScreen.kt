@@ -20,7 +20,7 @@ import presentation.model.LessonType
 import com.presentation.ui.AppTheme
 import presentation.ui.AppTypography
 import com.presentation.ui.bgColor
-import presentation.ui.screens.auth.CustomShadowButton
+import presentation.ui.views.buttons.CustomShadowButton
 import presentation.ui.views.BackgroundDecorAnimated
 import presentation.ui.views.BaseTopView
 

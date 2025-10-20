@@ -2,16 +2,18 @@ package com.presentation.ui
 
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
 
-val whiteColor = Color(0xFFFAFAFA)
-val bgColor = Color(0xFFB2B2B2)
-val darkColor = Color(0xFF252526)
+val whiteColor = Color(0xFFF9F9FF)
+val bgColor = Color(0xFFEBEBFF)
+val darkColor = Color(0xFF14063D)
+val yellowColor = Color(0xFFFFE625)
 val lightLilaColor = Color(0xFFD3D3DE)
 val fieldNameColor = Color(0xFF616169)
 val fieldValueColor = Color(0xFF3F3F42)
-val fieldBorderColor = Color(0xFFC2C2CB)
+val fieldBorderColor = Color(0xFFA59BCA)
 val viewLightColor = Color(0xFFEDEDEF)
 
 
@@ -30,12 +32,16 @@ val lightGreenColor = Color(0xFF83FFAD)
 
 val surfaceLight = Color(0xFFFFFFFF)
 val onSurfaceLight = Color(0xFF29292C)
-val primaryColorLight = Color(0xFFF9FAFB)
 val onPrimaryColorLight = Color(0xFF29282A)
-
-val indicatorColorLight = Color(0xFF8F919D)
 val accentColorLight = Color(0xFF838693)
 
+val gradientBrush = Brush.verticalGradient(
+    colors = listOf(
+        Color(0xE6FFFFFF),
+        Color(0xFFF0F2FF),
+        Color(0xFFB9C3FF)
+    )
+)
 
 @Composable
 fun fieldColors() = TextFieldDefaults.colors().copy(

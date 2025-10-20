@@ -28,7 +28,7 @@ import com.presentation.ui.AppTheme
 import presentation.ui.AppTypography
 import com.presentation.ui.darkColor
 import com.presentation.ui.redDarkColor
-import presentation.ui.screens.auth.CustomShadowButton
+import presentation.ui.views.buttons.CustomShadowButton
 import presentation.ui.views.BackgroundDecorAnimated
 import presentation.ui.views.BaseTopView
 import com.presentation.ui.views.ListOfSetsView

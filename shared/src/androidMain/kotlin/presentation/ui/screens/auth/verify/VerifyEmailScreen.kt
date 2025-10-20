@@ -33,7 +33,7 @@ import presentation.ui.AppTypography
 import com.presentation.ui.bgColor
 import com.presentation.ui.fieldColors
 import com.presentation.ui.redDarkColor
-import presentation.ui.screens.auth.CustomShadowButton
+import presentation.ui.views.buttons.CustomShadowButton
 import presentation.ui.views.BackgroundDecorAnimated
 import com.presentation.ui.views.CountdownTimer
 import com.presentation.ui.views.Loader

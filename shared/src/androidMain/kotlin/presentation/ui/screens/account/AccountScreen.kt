@@ -53,13 +53,14 @@ import com.presentation.ui.fieldBorderColor
 import com.presentation.ui.lightLilaColor
 import com.presentation.ui.redDarkColor
 import com.presentation.ui.whiteColor
-import presentation.ui.screens.auth.AuthError
-import presentation.ui.screens.auth.CustomShadowButton
+import presentation.ui.views.buttons.CustomShadowButton
 import presentation.ui.screens.auth.RegisterForm
 import presentation.ui.views.AccountTopView
 import com.presentation.utils.GUEST_MAX_WORDS
 import presentation.navigation.BottomNavigationBar
 import presentation.test.dummyCourses
+import presentation.ui.screens.auth.AuthScreenState
+import presentation.ui.screens.auth.AuthUIState
 import java.net.URL
 
 @Composable
@@ -68,9 +69,7 @@ fun AccountScreen(
     image: URL? = null,
     guestData: GuestData? = null,
     authState: Boolean = false,
-    email: String = "",
-    password: String = "",
-    error: AuthError? = null,
+    authUIState: AuthUIState? = null,
     btnsState: AccountBtnsState = AccountBtnsState(),
     onEditClicked: () -> Unit = {},
     addLanguage: () -> Unit = {},
@@ -196,9 +195,7 @@ fun AccountScreen(
             )
         ) {
             RegisterSection(
-                email,
-                password,
-                error,
+                authUIState?: AuthUIState(screenState = AuthScreenState.REGISTER),
                 onEmailChanged,
                 onPasswordChanged,
                 onAuthClicked,
@@ -214,7 +211,8 @@ fun DeleteDialog(
     dismissDialog: () -> Unit,
     deleteAccount: () -> Unit
 ) {
-    AlertDialog(modifier = modifier,
+    AlertDialog(
+        modifier = modifier,
         containerColor = lightLilaColor.copy(alpha = 0.9f),
         onDismissRequest = {
             dismissDialog()
@@ -272,7 +270,8 @@ fun DeleteDialog(
 
 @Composable
 fun LogoutDialog(modifier: Modifier, dismissDialog: () -> Unit, logout: () -> Unit) {
-    AlertDialog(modifier = modifier,
+    AlertDialog(
+        modifier = modifier,
         containerColor = whiteColor.copy(alpha = 0.9f),
         onDismissRequest = {
             dismissDialog()
@@ -331,9 +330,7 @@ fun LogoutDialog(modifier: Modifier, dismissDialog: () -> Unit, logout: () -> Un
 @SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
 fun RegisterSection(
-    email: String = "",
-    password: String = "",
-    error: AuthError? = null,
+    state: AuthUIState,
     onEmailChanged: (String) -> Unit,
     onPasswordChanged: (String) -> Unit,
     onAuthClicked: () -> Unit,
@@ -361,9 +358,7 @@ fun RegisterSection(
                 .padding(vertical = 24.dp, horizontal = 16.dp)
         ) {
             RegisterForm(
-                email,
-                password,
-                error,
+                state = state,
                 onEmailChanged,
                 onPasswordChanged,
                 onAuthClicked,

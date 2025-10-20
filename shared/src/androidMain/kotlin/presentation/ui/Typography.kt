@@ -7,13 +7,13 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.example.translatortrainer.shared.R
+import com.presentation.ui.darkColor
+import com.presentation.ui.fieldBorderColor
 import com.presentation.ui.onPrimaryColorLight
+val merriweatherLight = Font(R.font.merriweater_light, FontWeight.Light)
 
-val bebasRegular = Font(R.font.bebas_neue_regular, FontWeight.Normal)
-val bebasCyrillic = Font(R.font.bebas_neue_cyrillic, FontWeight.Normal)
-
-val BebasFont = FontFamily(
-    fonts = listOf(bebasCyrillic, bebasRegular)
+val MerriweatherFont = FontFamily(
+    fonts = listOf(merriweatherLight)
 )
 val NunitoFont = FontFamily(
     fonts = listOf(
@@ -28,13 +28,24 @@ val NunitoFont = FontFamily(
 
 val AppTypography = Typography(
     displayLarge = TextStyle(
-        fontFamily = BebasFont,
-        fontSize = 32.sp
+        fontFamily = MerriweatherFont,
+        fontSize = 40.sp,
+        color = darkColor
+    ),
+    displayMedium = TextStyle(
+        fontFamily = MerriweatherFont,
+        fontSize = 24.sp,
+        color = darkColor
+    ),
+    displaySmall = TextStyle(
+        fontFamily = MerriweatherFont,
+        fontSize = 16.sp,
+        color = darkColor
     ),
     titleSmall = TextStyle(
-        fontFamily = NunitoFont,
+        fontFamily = MerriweatherFont,
         fontSize = 14.sp,
-        fontWeight = FontWeight.Normal
+        color = fieldBorderColor
     ),
     titleLarge = TextStyle(
         fontFamily = NunitoFont,

@@ -1,4 +1,4 @@
-package com.presentation.ui.views
+package presentation.ui.dialog
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.AlertDialog
@@ -11,8 +11,8 @@ import androidx.compose.ui.unit.TextUnitType
 import com.presentation.ui.AppTheme
 import presentation.ui.AppTypography
 import com.presentation.ui.bgColor
-import presentation.ui.screens.auth.CustomShadowButton
 import com.presentation.ui.whiteColor
+import presentation.ui.views.buttons.CustomShadowButton
 
 @Composable
 fun GuestModeDialog(
@@ -38,7 +38,11 @@ fun GuestModeDialog(
             )
         },
         confirmButton = {
-            CustomShadowButton(text = "Войти", onClick = onConfirm, modifier = Modifier.fillMaxWidth())
+            CustomShadowButton(
+                text = "Войти",
+                onClick = onConfirm,
+                modifier = Modifier.fillMaxWidth()
+            )
         }
     )
 }

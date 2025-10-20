@@ -150,7 +150,12 @@ class AuthViewModel(
     }
 
     private fun handleScreenChange() {
-        _uiState.update { it.copy(screenState = if (it.screenState == AuthScreenState.LOGIN) AuthScreenState.REGISTER else AuthScreenState.LOGIN) }
+        _uiState.update {
+            it.copy(
+                screenState = if (it.screenState == AuthScreenState.LOGIN) AuthScreenState.REGISTER else AuthScreenState.LOGIN,
+                error = null
+            )
+        }
     }
 
     private fun AuthUIState.fieldsValid() = email.isNotEmpty() && password.isNotEmpty()
