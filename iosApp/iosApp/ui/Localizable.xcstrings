@@ -1,7 +1,64 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "Create Account" : {
 
+    },
+    "Email" : {
+
+    },
+    "Forgot password?" : {
+
+    },
+    "Hello, world!" : {
+
+    },
+    "Login" : {
+
+    },
+    "Login with account" : {
+
+    },
+    "login_subtitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Login with account"
+          }
+        }
+      }
+    },
+    "login_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Welcome Back"
+          }
+        }
+      }
+    },
+    "or" : {
+
+    },
+    "Password" : {
+
+    },
+    "register_title" : {
+      "extractionState" : "manual"
+    },
+    "Sign up" : {
+
+    },
+    "Signup with e-mail" : {
+
+    },
+    "Welcome back" : {
+
+    }
   },
   "version" : "1.0"
 }

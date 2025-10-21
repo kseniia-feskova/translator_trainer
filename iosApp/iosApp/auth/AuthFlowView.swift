@@ -6,63 +6,52 @@
 //
 
 import SwiftUI
-//29b78654
 
-struct AuthFlowView: View {
+struct AuthScreen: View {
         @StateObject private var viewModel = AuthViewModel()
         @State private var state = AuthUIState()
         @State private var showDialog = false
         @Namespace private var animation
         
         var body: some View {
-            ZStack {
-                VStack {
-                    Spacer().frame(height: 24)
+            ZStack{
+                ZStack {
+                    VStack {
+                        Text(state.screenState == .login
+                             ? String(localized: "login_title")
+                             : String(localized: "register_title"))
+                        .foregroundColor(AppColor.dark)
+                        .font(AppTypography.displayLarge)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                                                
+                        CirclesView(isRegister: state.screenState == .register)
+                            .frame(height: 256)
+                        
+                        Spacer()
+                    }.frame(maxWidth: .infinity, maxHeight: .infinity)
                     
-                    // Верхний бегущий текст (аналог MarqueeText)
-                    MarqueeText(
-                        //text: state.screenState == .login ? "Login
-                        text : "Register "
-                    )
-                    .frame(height: 40)
-                    
-                    Spacer().frame(height: 24)
-                    
-                    // Анимированные круги
-//                    Circles(isRegister: if state.screenState == .register {true} else {false})
-//                        .frame(height: 150)
-                    
-                    Spacer().frame(height: 32)
-                    
-                    // Форма
                     ZStack {
-                        if state.screenState == .login {
-                            LoginFormView(
-                                email: $state.email,
-                                password: $state.password,
-                                error: $state.error,
-                                onLogin: {},
-                                onSwitch: { withAnimation { state.screenState = .register } }
-                            )
-                            .transition(.move(edge: .trailing))
-                        } else {
-                            RegisterFlowView(
-                                email: $state.email,
-                                password: $state.password,
-                                error: $state.error,
-                                onRegister: {},
-                                onSwitch: { withAnimation { state.screenState = .login } }
-                            )
-                            .transition(.move(edge: .leading))
+                        RoundedRectangle(cornerRadius: 24, style: .continuous)
+                            .fill(gradient)
+                            .padding(.top, 256)
+                            .edgesIgnoringSafeArea(.all)
+                        Group {
+                            if state.screenState == .login {
+                                LoginFormView()
+                                    .transition(.asymmetric(
+                                        insertion: .move(edge: .trailing),
+                                        removal: .move(edge: .leading)
+                                    ))
+                            } else {
+                                RegisterFlowView()
+                                    .transition(.asymmetric(
+                                        insertion: .move(edge: .leading),
+                                        removal: .move(edge: .trailing)
+                                    ))
+                            }
                         }
+                        .animation(.easeInOut(duration: 1.0), value: state.screenState)
                     }
-                    .padding()
-                    .background(
-                        RoundedRectangle(cornerRadius: 36)
-                            .fill(Color.white)
-                            .shadow(radius: 5)
-                    )
-                    .animation(.easeInOut(duration: 0.8), value: state.screenState)
                 }
                 
                 // Диалог
@@ -82,14 +71,15 @@ struct AuthFlowView: View {
                     ProgressView().scaleEffect(2)
                 }
             }
-            .background(Color("BackgroundColor").ignoresSafeArea())
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(AppColor.background.edgesIgnoringSafeArea(.all))
         }
     }
 
 
 struct AuthFlowView_Previews: PreviewProvider {
     static var previews: some View {
-        AuthFlowView()
+        AuthScreen()
     }
 }
 

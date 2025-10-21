@@ -16,7 +16,7 @@ struct iosAppApp: App {
             if isLoggedIn {
                // MainTabView() // экран с 4 табами
             } else {
-                AuthFlowView() // выбор языка, логин, регистрация
+                AuthScreen() // выбор языка, логин, регистрация
             }
         }
     }

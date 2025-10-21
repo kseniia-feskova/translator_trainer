@@ -10,6 +10,8 @@ struct AuthUIState {
     var email: String = ""
     var password: String = ""
     var error: AuthError?
+    var screenState: AuthScreenState = AuthScreenState.login
+    var isLoading: Bool = false
 }
 
 enum AuthError: Error {
@@ -38,10 +40,11 @@ struct LoginFormView: View {
         VStack {
             Spacer(minLength: 20)
             
-            Text("Welcome back")
-                .font(.system(size: 22, weight: .bold))
-                .foregroundColor(Color.blue)
+            Text(String(localized: "login_subtitle"))
+                .foregroundColor(AppColor.dark)
+                .font(AppTypography.displayMedium)
                 .frame(maxWidth: .infinity, alignment: .center)
+                    
             
             Spacer().frame(height: 16)
             
@@ -150,24 +153,18 @@ struct LoginFormView: View {
             VStack {
                 Button(action: onCreateAccountClicked) {
                     Text("Create Account")
-                        .fontWeight(.bold)
-                        .foregroundColor(.blue)
-                        .font(.system(size: 16))
+                        .font(AppTypography.titleSmall)
+                        .foregroundColor(AppColor.dark)
                 }
                 .padding(.bottom, 8)
                 
-                Button(action: onLoginClicked) {
-                    Text("Login")
-                        .fontWeight(.semibold)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(12)
-                        .shadow(radius: 4)
+                CustomShadowButton(
+                    text: "Login",
+                    isEnabled: true,
+                    onClick: { print("Button pressed") }
+                )
                 }
             }
-        }
         .padding(.horizontal, 20)
     }
 }
