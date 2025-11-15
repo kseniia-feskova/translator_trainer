@@ -29,7 +29,7 @@ val NunitoFont = FontFamily(
 val AppTypography = Typography(
     displayLarge = TextStyle(
         fontFamily = MerriweatherFont,
-        fontSize = 40.sp,
+        fontSize = 36.sp,
         color = darkColor
     ),
     displayMedium = TextStyle(

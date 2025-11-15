@@ -39,7 +39,7 @@ fun RegisterForm(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(vertical = 24.dp, horizontal = 16.dp)
+            .padding(vertical = 16.dp, horizontal = 16.dp)
     ) {
         Column {
             Text(

@@ -89,7 +89,7 @@ fun LoginForm(
             Spacer(modifier = Modifier.height(16.dp))
 
             CustomShadowButton(
-                isEnabled = false,
+                isEnabled = true,
                 text = stringResource(R.string.guest_button),
                 onClick = onGuestClicked
             )

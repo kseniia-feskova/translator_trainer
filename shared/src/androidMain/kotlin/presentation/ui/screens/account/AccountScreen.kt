@@ -49,6 +49,7 @@ import androidx.navigation.NavController
 import com.example.translatortrainer.shared.R
 import com.presentation.ui.AppTheme
 import com.presentation.ui.bgColor
+import com.presentation.ui.darkColor
 import com.presentation.ui.fieldBorderColor
 import com.presentation.ui.lightLilaColor
 import com.presentation.ui.redDarkColor
@@ -132,21 +133,21 @@ fun AccountScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             CustomShadowButton(
                 text = stringResource(R.string.change_theme_btn),
                 onClick = changeTheme,
                 modifier = Modifier.padding(horizontal = 24.dp),
             )
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             Text(
                 modifier = Modifier.clickable(onClick = logout),
                 text = stringResource(R.string.logout_title),
                 style = MaterialTheme.typography.titleSmall.copy(
-                    color = bgColor,
-                    fontSize = TextUnit(18f, TextUnitType.Sp),
+                    color = darkColor,
+                    fontSize = TextUnit(16f, TextUnitType.Sp),
                     fontWeight = FontWeight.SemiBold
                 )
             )
@@ -158,7 +159,7 @@ fun AccountScreen(
                     text = stringResource(R.string.delete_account_btn),
                     style = MaterialTheme.typography.titleSmall.copy(
                         color = redDarkColor,
-                        fontSize = TextUnit(18f, TextUnitType.Sp),
+                        fontSize = TextUnit(16f, TextUnitType.Sp),
                         fontWeight = FontWeight.SemiBold
                     ),
                 )
@@ -292,7 +293,7 @@ fun LogoutDialog(modifier: Modifier, dismissDialog: () -> Unit, logout: () -> Un
                 text = stringResource(R.string.cancel_btn),
                 Modifier.clickable { dismissDialog() },
                 style = MaterialTheme.typography.titleSmall.copy(
-                    color = bgColor,
+                    color = darkColor,
                     fontWeight = FontWeight.Bold,
                     fontSize = TextUnit(16f, TextUnitType.Sp)
                 )
@@ -302,7 +303,7 @@ fun LogoutDialog(modifier: Modifier, dismissDialog: () -> Unit, logout: () -> Un
             Text(
                 stringResource(R.string.logout_title),
                 style = MaterialTheme.typography.displayLarge.copy(
-                    color = bgColor,
+                    color = darkColor,
                     fontSize = TextUnit(22f, TextUnitType.Sp)
                 )
             )
@@ -311,7 +312,7 @@ fun LogoutDialog(modifier: Modifier, dismissDialog: () -> Unit, logout: () -> Un
             Text(
                 stringResource(R.string.logout_subtitle),
                 style = MaterialTheme.typography.titleSmall.copy(
-                    color = bgColor,
+                    color = darkColor,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = TextUnit(16f, TextUnitType.Sp)
                 )
@@ -336,7 +337,7 @@ fun RegisterSection(
     onAuthClicked: () -> Unit,
     onAuthClose: () -> Unit
 ) {
-    val screenHeight = (LocalConfiguration.current.screenHeightDp * 0.6).dp
+    val screenHeight = (LocalConfiguration.current.screenHeightDp * 0.8).dp
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -382,14 +383,14 @@ fun GuestDataView(modifier: Modifier = Modifier, guestData: GuestData?) {
             .fillMaxWidth()
             .then(modifier)
     ) {
-        Text("Limits", style = MaterialTheme.typography.titleMedium.copy(color = bgColor))
+        Text("Limits", style = MaterialTheme.typography.titleMedium.copy(color = darkColor))
         Row(
             modifier = Modifier,
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text(
-                "Current course:", style = MaterialTheme.typography.titleSmall.copy(color = bgColor)
+                "Current course:", style = MaterialTheme.typography.titleSmall.copy(color = darkColor)
             )
             Icon(
                 modifier = Modifier
@@ -426,11 +427,11 @@ fun GuestDataView(modifier: Modifier = Modifier, guestData: GuestData?) {
         ) {
             Text(
                 "Count of saved words:",
-                style = MaterialTheme.typography.titleSmall.copy(color = bgColor)
+                style = MaterialTheme.typography.titleSmall.copy(color = darkColor)
             )
             Text(
                 "${guestData.allWordsCount}/$GUEST_MAX_WORDS",
-                style = MaterialTheme.typography.titleSmall.copy(color = bgColor)
+                style = MaterialTheme.typography.titleSmall.copy(color = darkColor)
             )
         }
         Row(
@@ -440,11 +441,11 @@ fun GuestDataView(modifier: Modifier = Modifier, guestData: GuestData?) {
         ) {
             Text(
                 "Count of words sets:",
-                style = MaterialTheme.typography.titleSmall.copy(color = bgColor)
+                style = MaterialTheme.typography.titleSmall.copy(color = darkColor)
             )
             Text(
                 "${guestData.allSetsCount}/3",
-                style = MaterialTheme.typography.titleSmall.copy(color = bgColor)
+                style = MaterialTheme.typography.titleSmall.copy(color = darkColor)
             )
         }
     }

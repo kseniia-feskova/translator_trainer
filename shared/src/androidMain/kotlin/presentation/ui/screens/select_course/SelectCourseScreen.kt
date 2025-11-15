@@ -40,6 +40,7 @@ import presentation.test.dummyCourses
 import com.presentation.ui.AppTheme
 import presentation.ui.AppTypography
 import com.presentation.ui.bgColor
+import com.presentation.ui.darkColor
 import com.presentation.ui.fieldBorderColor
 import com.presentation.ui.lightLilaColor
 import presentation.ui.views.buttons.CustomShadowButton
@@ -72,7 +73,7 @@ fun SelectCourseScreen(
                 )
                 .padding(horizontal = 18.dp, vertical = 24.dp)
         ) {
-            Text(text = "Before we start", color = whiteColor, style = AppTypography.displayLarge)
+            Text(text = "Before we start", color = darkColor, style = AppTypography.displayLarge)
         }
         Spacer(Modifier.height(24.dp))
 
@@ -90,7 +91,7 @@ fun SelectCourseScreen(
             Text(
                 "Select course",
                 style = AppTypography.displayLarge.copy(fontSize = TextUnit(22f, TextUnitType.Sp)),
-                color = bgColor,
+                color = darkColor,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
 
@@ -111,7 +112,7 @@ fun SelectCourseScreen(
                     Text(
                         "Back",
                         modifier = Modifier.align(Alignment.CenterHorizontally).clickable { onBackClicked() },
-                        color = bgColor,
+                        color = darkColor,
                         style = AppTypography.titleSmall.copy(fontWeight = FontWeight.Bold)
                     )
 
@@ -138,12 +139,12 @@ fun CourseItem(course: CourseUI, isSelected: Boolean, onSelect: (CourseUI) -> Un
             selected = isSelected,
             onClick = { onSelect(course) },
             unselectedColor = lightLilaColor,
-            selectedColor = bgColor
+            selectedColor = darkColor
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = "${course.originalLanguage} - ${course.translateLanguage}",
-            color = bgColor,
+            color = darkColor,
             style = AppTypography.titleSmall.copy(fontWeight = if (isSelected) FontWeight.Bold else FontWeight.SemiBold)
         )
         Spacer(modifier = Modifier.weight(1f))

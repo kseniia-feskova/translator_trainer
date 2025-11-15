@@ -10,7 +10,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import com.presentation.ui.AppTheme
 import presentation.ui.AppTypography
-import com.presentation.ui.bgColor
+import com.presentation.ui.darkColor
 import com.presentation.ui.whiteColor
 import presentation.ui.views.buttons.CustomShadowButton
 
@@ -25,14 +25,14 @@ fun GuestModeDialog(
         title = {
             Text(
                 "Гостевой режим!",
-                style = AppTypography.displayLarge.copy(color = bgColor)
+                style = AppTypography.displayMedium.copy(color = darkColor)
             )
         },
         text = {
             Text(
                 "Вы заходите как гость, а значит функционал будет ограничен.\nПо желанию, Вы сможете создать аккаунт и сберечь все данные.\nПриятного пользования.",
                 style = AppTypography.titleLarge.copy(
-                    color = bgColor,
+                    color = darkColor,
                     fontSize = TextUnit(14f, TextUnitType.Sp)
                 )
             )

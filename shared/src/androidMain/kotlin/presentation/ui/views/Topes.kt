@@ -45,6 +45,7 @@ import com.example.translatortrainer.shared.R
 import com.presentation.ui.AppTheme
 import presentation.ui.AppTypography
 import com.presentation.ui.bgColor
+import com.presentation.ui.darkColor
 import com.presentation.ui.whiteColor
 import java.net.URL
 
@@ -63,7 +64,7 @@ fun HomeTopView(
         Text(
             text = title,
             style = AppTypography.displayLarge,
-            color = whiteColor,
+            color = darkColor,
             modifier = Modifier
                 .align(Alignment.CenterStart)
                 .padding(horizontal = 24.dp)
@@ -132,7 +133,7 @@ fun AccountTopView(
     ) {
         Text(
             text = stringResource(R.string.account_title),
-            style = MaterialTheme.typography.displayLarge,
+            style = MaterialTheme.typography.displayMedium,
             modifier = Modifier.padding(horizontal = 16.dp)
         )
 
@@ -168,7 +169,7 @@ fun AccountTopView(
             Text(
                 text = name,
                 style = MaterialTheme.typography.titleLarge.copy(
-                    color = whiteColor,
+                    color = darkColor,
                     fontSize = TextUnit(20f, TextUnitType.Sp)
                 )
             )
@@ -208,6 +209,7 @@ fun BaseTopView(
         if (leftIcon != null) {
             Icon(
                 imageVector = leftIcon,
+                tint = darkColor,
                 contentDescription = "LeftIcon",
                 modifier = Modifier
                     .padding(16.dp)
@@ -217,8 +219,8 @@ fun BaseTopView(
 
         Text(
             text = title,
-            style = AppTypography.displayLarge,
-            color = whiteColor,
+            style = AppTypography.displayMedium,
+            color = darkColor,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 20.dp)
         )
 
@@ -226,6 +228,7 @@ fun BaseTopView(
             Icon(
                 imageVector = rightIcon,
                 contentDescription = "RightIcon",
+                tint = darkColor,
                 modifier = Modifier
                     .padding(16.dp)
                     .clickable { onRightClick() }
