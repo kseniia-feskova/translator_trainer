@@ -70,7 +70,7 @@ fun AuthScreen(
             .background(bgColor)
     ) {
         Column() {
-            Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(8.dp))
             Text(
                 modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
                 text = if (state.screenState == AuthScreenState.LOGIN)
@@ -79,7 +79,7 @@ fun AuthScreen(
                 style = AppTypography.displayLarge
             )
 
-            Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(8.dp))
             Circles(
                 modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
                 isRegister = state.screenState == AuthScreenState.REGISTER
@@ -88,7 +88,7 @@ fun AuthScreen(
         }
         Box(
             modifier = Modifier
-                .padding(top = 256.dp)
+                .padding(top = 172.dp)
                 .fillMaxSize()
                 .background(
                     brush = gradientBrush,
