@@ -11,7 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.font.FontWeight
 import presentation.ui.AppTypography
-import com.presentation.ui.bgColor
+import com.presentation.ui.darkColor
 import kotlinx.coroutines.delay
 
 @SuppressLint("DefaultLocale")
@@ -42,7 +42,7 @@ fun CountdownTimer(
 
     Text(
         text = timeText,
-        color = bgColor,
+        color = darkColor,
         style = AppTypography.titleSmall.copy(fontWeight = FontWeight.Bold)
     )
 }

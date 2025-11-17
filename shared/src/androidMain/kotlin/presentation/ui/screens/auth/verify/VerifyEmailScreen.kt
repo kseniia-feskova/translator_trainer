@@ -25,19 +25,18 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import com.presentation.ui.AppTheme
-import presentation.ui.AppTypography
 import com.presentation.ui.bgColor
+import com.presentation.ui.darkColor
 import com.presentation.ui.fieldColors
+import com.presentation.ui.gradientBrush
 import com.presentation.ui.redDarkColor
-import presentation.ui.views.buttons.CustomShadowButton
-import presentation.ui.views.BackgroundDecorAnimated
 import com.presentation.ui.views.CountdownTimer
 import com.presentation.ui.views.Loader
-import com.presentation.ui.whiteColor
+import presentation.ui.AppTypography
+import presentation.ui.views.BackgroundDecorAnimated
+import presentation.ui.views.buttons.CustomShadowButton
 
 @SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
@@ -71,7 +70,7 @@ fun VerifyEmailScreen(
                 )
                 .padding(horizontal = 18.dp, vertical = 24.dp)
         ) {
-            Text(text = "Verify your email", color = whiteColor, style = AppTypography.displayLarge)
+            Text(text = "Verify your email", color = darkColor, style = AppTypography.displayLarge)
         }
         Spacer(Modifier.height(24.dp))
 
@@ -95,15 +94,15 @@ fun VerifyEmailScreen(
                 .align(Alignment.BottomCenter)
                 .height(screenHeight * 0.6f)
                 .background(
-                    whiteColor,
-                    shape = RoundedCornerShape(topEnd = 36.dp, topStart = 36.dp)
+                    brush = gradientBrush,
+                    shape = RoundedCornerShape(topEnd = 36.dp, topStart = 24.dp)
                 )
                 .padding(vertical = 24.dp, horizontal = 16.dp)
         ) {
             Text(
                 "We sent the verification code to your email",
-                style = AppTypography.displayLarge.copy(fontSize = TextUnit(22f, TextUnitType.Sp)),
-                color = bgColor,
+                style = AppTypography.displaySmall,
+                color = darkColor,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
             Spacer(modifier = Modifier.height(16.dp))
@@ -139,8 +138,8 @@ fun VerifyEmailScreen(
                 Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
                     Text(
                         "You can resend the code after: ",
-                        color = bgColor,
-                        style = AppTypography.titleSmall.copy(fontWeight = FontWeight.Bold)
+                        color = darkColor,
+                        style = AppTypography.titleSmall
                     )
                     CountdownTimer { onTimeout() }
                 }
@@ -150,7 +149,7 @@ fun VerifyEmailScreen(
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
                         .clickable { resendCode() },
-                    color = bgColor,
+                    color = darkColor,
                     style = AppTypography.titleSmall.copy(fontWeight = FontWeight.Bold)
                 )
             }
@@ -161,8 +160,8 @@ fun VerifyEmailScreen(
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)
                             .clickable { back() },
-                        color = bgColor,
-                        style = AppTypography.titleSmall.copy(fontWeight = FontWeight.Bold)
+                        color = darkColor,
+                        style = AppTypography.displaySmall
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))

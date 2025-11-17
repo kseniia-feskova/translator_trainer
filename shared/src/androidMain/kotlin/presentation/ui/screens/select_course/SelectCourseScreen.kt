@@ -42,11 +42,11 @@ import presentation.ui.AppTypography
 import com.presentation.ui.bgColor
 import com.presentation.ui.darkColor
 import com.presentation.ui.fieldBorderColor
+import com.presentation.ui.gradientBrush
 import com.presentation.ui.lightLilaColor
 import presentation.ui.views.buttons.CustomShadowButton
 import presentation.ui.views.BackgroundDecorAnimated
 import com.presentation.ui.views.CustomRadioButton
-import com.presentation.ui.whiteColor
 
 @SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
@@ -83,8 +83,8 @@ fun SelectCourseScreen(
                 .align(Alignment.BottomCenter)
                 .height(screenHeight * 0.6f)
                 .background(
-                    whiteColor,
-                    shape = RoundedCornerShape(topEnd = 36.dp, topStart = 36.dp)
+                    brush = gradientBrush,
+                    shape = RoundedCornerShape(topEnd = 36.dp, topStart = 24.dp)
                 )
                 .padding(vertical = 24.dp, horizontal = 16.dp)
         ) {

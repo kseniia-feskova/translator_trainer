@@ -25,7 +25,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.presentation.ui.darkColor
 import com.presentation.ui.fieldBorderColor
-import com.presentation.ui.lightLilaColor
 import com.presentation.ui.whiteColor
 import com.presentation.ui.yellowColor
 import presentation.ui.AppTypography
@@ -81,7 +80,7 @@ fun CustomShadowButton(
             Text(
                 modifier = Modifier.padding(bottom = 2.dp),
                 text = text,
-                color = if (isEnabled) darkColor else lightLilaColor,
+                color = darkColor,
                 style = AppTypography.titleSmall
             )
         }

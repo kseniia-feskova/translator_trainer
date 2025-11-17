@@ -43,7 +43,7 @@ val AppTypography = Typography(
         color = darkColor
     ),
     titleSmall = TextStyle(
-        fontFamily = MerriweatherFont,
+        fontFamily = NunitoFont,
         fontSize = 14.sp,
         color = fieldBorderColor
     ),
