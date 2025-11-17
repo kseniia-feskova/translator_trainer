@@ -1,5 +1,6 @@
 package presentation.ui.screens.account
 
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -19,7 +20,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.net.URL
+import presentation.model.FirebaseUser
+import presentation.usecases.auth.IRegisterWithFirebaseUseCase
 
 class AccountViewModel(
     private val getDetails: IGetAccountUseCase,
@@ -29,7 +31,8 @@ class AccountViewModel(
     private val accountPrefs: IAccountUseCase,
     private val coursePrefs: ICoursesOnPrefsUseCases,
     private val getSets: IGetAllSetsUseCase,
-    private val createUser: ICreateFromGuestUseCase
+    private val createUser: ICreateFromGuestUseCase,
+    private val registerByFirebase: IRegisterWithFirebaseUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AccountUIState(loading = true))
@@ -66,7 +69,7 @@ class AccountViewModel(
                                 it.copy(
                                     loading = false,
                                     name = user.username,
-                                    image = if (user.photo == null) null else URL(user.photo)
+                                    image = if (user.photo == null) null else Uri.parse(user.photo)
                                 )
                             }
                         } else {
@@ -180,6 +183,10 @@ class AccountViewModel(
                 _uiState.update { it.copy(btnsState = AccountBtnsState()) }
                 _authState.value = null
             }
+
+            is AccountIntent.GoogleSign -> {
+                handleGoogleSign(intent.firebaseUser, intent.goToHome)
+            }
         }
     }
 
@@ -203,6 +210,29 @@ class AccountViewModel(
     private fun handleNewPassword(password: String) {
         _authState.update {
             it?.copy(password = password, error = null)
+        }
+    }
+
+    private fun handleGoogleSign(
+        firebaseUser: FirebaseUser?,
+        goToHome: () -> Unit
+    ) {
+        if (firebaseUser == null) {
+            Log.e("handleGoogleSign", "user is null, need to handle error")
+            return
+        }
+        viewModelScope.launch {
+            val response = registerByFirebase.invoke(firebaseUser)
+            if (!response.isSuccess) {
+                handleError(response)
+                return@launch
+            }
+            val userId = response.getOrNull()
+            if (userId != null) {
+                goToHome()
+            } else {
+                handleError(response)
+            }
         }
     }
 

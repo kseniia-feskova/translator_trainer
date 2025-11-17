@@ -4,6 +4,7 @@ import data.room.AppDao
 import data.api.ApiService
 import data.model.base.Result
 import data.model.auth.AuthResponse
+import data.model.auth.FirebaseAuthRequest
 import data.prefs.ITokenStorage
 import data.repository.IAuthRepository
 import data.safeCall
@@ -99,6 +100,35 @@ class AuthRepository(
         tokenStorage.clearToken(ACCESS_TOKEN)
         tokenStorage.clearToken(REFRESH_TOKEN)
         clearDatabase()
+    }
+
+    override suspend fun registerWithFirebase(
+        uuid: String?,
+        email: String?,
+        displayName: String?,
+        photo: String?,
+        phone: String?
+    ): Result<AuthResponse> {
+        val request =
+            FirebaseAuthRequest(
+                uuid = uuid,
+                email = email,
+                displayName = displayName,
+                photo = photo,
+                phone = phone
+            )
+        return safeCall(
+            request = { service.loginWithFirebase(request) },
+            onSuccess = { body ->
+                tokenStorage.saveToken(ACCESS_TOKEN, body.accessToken)
+                tokenStorage.saveToken(REFRESH_TOKEN, body.refreshToken)
+                if (body.uuid == null) {
+                    Result(errorMsg = "Empty uuid")
+                } else {
+                    Result(data = body)
+                }
+            }
+        )
     }
 
     private suspend fun clearDatabase() {

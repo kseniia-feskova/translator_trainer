@@ -10,6 +10,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import org.koin.androidx.compose.koinViewModel
+import presentation.model.FirebaseUser
 import presentation.navigation.LeafScreen
 
 fun NavController.navigateToAuth(
@@ -21,15 +22,18 @@ fun NavController.navigateToAuth(
 fun NavGraphBuilder.authScreen(
     goToCourses: () -> Unit,
     goToHome: () -> Unit,
-    goToVerification:() -> Unit
-    ) {
-    composable(route = LeafScreen.Login.route,
+    goToVerification: () -> Unit,
+    onGoogleClick: (onSuccess: (FirebaseUser?) -> Unit) -> Unit
+) {
+    composable(
+        route = LeafScreen.Login.route,
         enterTransition = { fadeIn(animationSpec = tween(1000)) },
         exitTransition = { fadeOut(animationSpec = tween(500)) }) {
         AuthRoute(
             goToCourses,
             goToHome,
-            goToVerification
+            goToVerification,
+            onGoogleClick
         )
     }
 }
@@ -38,7 +42,8 @@ fun NavGraphBuilder.authScreen(
 fun AuthRoute(
     goToCourses: () -> Unit,
     goToHome: () -> Unit,
-    goToVerification:() -> Unit,
+    goToVerification: () -> Unit,
+    onGoogleClick: (onSuccess: (FirebaseUser?) -> Unit) -> Unit,
     viewModel: AuthViewModel = koinViewModel()
 ) {
     val state = viewModel.uiState.collectAsState()
@@ -47,8 +52,21 @@ fun AuthRoute(
         onEmailChanged = { viewModel.handleIntent(AuthIntent.OnEmailChanged(it)) },
         onPasswordChanged = { viewModel.handleIntent(AuthIntent.OnPasswordChanged(it)) },
         onAuthStateChanged = { viewModel.handleIntent(AuthIntent.ChangeScreen) },
-        onAuthClicked = { viewModel.handleIntent(AuthIntent.Auth(goToCourses, goToHome, goToVerification)) },
-        onGuestSelected = { viewModel.handleIntent(AuthIntent.SaveAsGuest(goToCourses)) }
+        onAuthClicked = {
+            viewModel.handleIntent(
+                AuthIntent.Auth(
+                    goToCourses,
+                    goToHome,
+                    goToVerification
+                )
+            )
+        },
+        onGuestSelected = { viewModel.handleIntent(AuthIntent.SaveAsGuest(goToCourses)) },
+        onGoogleSignClick = {
+            onGoogleClick {
+                viewModel.handleIntent(AuthIntent.GoogleSign(it, goToCourses = goToCourses, goToHome = goToHome))
+            }
+        }
     )
 
 }

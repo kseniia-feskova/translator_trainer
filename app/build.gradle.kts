@@ -1,10 +1,18 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     kotlin("plugin.serialization") version "2.1.21"
     id("org.jetbrains.kotlin.plugin.compose") version "2.1.21" // или нужная версия
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp") version "2.1.21-2.0.1"
-
+    id("com.google.gms.google-services")
+}
+val localProps = Properties().apply {
+    val file = File(rootDir, "local.properties")
+    if (file.exists()) {
+        load(file.inputStream())
+    }
 }
 
 android {
@@ -29,13 +37,17 @@ android {
     }
 
     flavorDimensions += "version"
+    val googleClientId: String = localProps.getProperty("CLIENT_ID") ?: throw GradleException("CLIENT_ID is missing in local.properties")
+
     productFlavors {
         create("dev") {
             buildConfigField("String", "BASE_URL", "\"http://10.0.2.2:8080/api/\"")
+            buildConfigField("String", "CLIENT_ID", "\"$googleClientId\"")
         }
 
         create("qa") {
             buildConfigField("String", "BASE_URL", "\"http://35.159.225.33:8080/api/\"")
+            buildConfigField("String", "CLIENT_ID", "\"$googleClientId\"")
         }
     }
 
@@ -58,6 +70,12 @@ dependencies {
 
     implementation("androidx.core:core-ktx:1.16.0")
     implementation("androidx.appcompat:appcompat:1.7.0")
+
+    implementation("com.google.firebase:firebase-auth:24.0.1")
+    implementation("androidx.credentials:credentials:1.5.0")
+    implementation("androidx.credentials:credentials-play-services-auth:1.5.0")
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
+    implementation("com.google.android.gms:play-services-auth:21.4.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")

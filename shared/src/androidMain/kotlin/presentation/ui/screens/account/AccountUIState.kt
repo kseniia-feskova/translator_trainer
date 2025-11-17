@@ -1,12 +1,13 @@
 package presentation.ui.screens.account
 
+import android.net.Uri
 import androidx.compose.runtime.Stable
 import presentation.model.CourseUI
-import java.net.URL
+import presentation.model.FirebaseUser
 
 data class AccountUIState(
     val name: String? = null,
-    val image: URL? = null,
+    val image: Uri? = null,
     val loading: Boolean,
     val guestData: GuestData? = null,
     val btnsState: AccountBtnsState = AccountBtnsState()
@@ -40,4 +41,7 @@ sealed class AccountIntent {
     data class OnPasswordChanged(val password: String) : AccountIntent()
 
     data class Auth(val goToHome: () -> Unit) : AccountIntent()
+
+    data class GoogleSign(val firebaseUser: FirebaseUser?, val goToHome: () -> Unit) :
+        AccountIntent()
 }

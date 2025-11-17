@@ -59,7 +59,7 @@ class SelectCourseViewModel(
             if (response.isSuccess) {
                 goToHome()
             } else {
-                Log.e("SelectCourseVM", "save course error = ${response.exceptionOrNull()?.message}")
+                Log.e("SelectCourseVM", "save course error = ${response}")
                 //handleError()
             }
         }

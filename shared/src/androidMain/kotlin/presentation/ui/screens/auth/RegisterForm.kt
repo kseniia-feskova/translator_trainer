@@ -34,6 +34,7 @@ fun RegisterForm(
     onLoginClicked: () -> Unit = {},
     onGuestClicked: () -> Unit = {},
     onCreateAccountClicked: () -> Unit = {},
+    onGoogleSignClick: () -> Unit = {},
     guestMode: Boolean = false
 ) {
     Box(
@@ -90,7 +91,7 @@ fun RegisterForm(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 CustomShadowButton(
-                    isEnabled = false,
+                    isEnabled = true,
                     text = stringResource(R.string.guest_button),
                     onClick = onGuestClicked,
                 )
@@ -99,9 +100,10 @@ fun RegisterForm(
             Spacer(modifier = Modifier.height(16.dp))
 
             CustomShadowButton(
-                isEnabled = false,
+                isEnabled = true,
                 text = "Continue with Google",
                 icon = painterResource(R.drawable.ic_google),
+                onClick = onGoogleSignClick
             )
         }
         Column(

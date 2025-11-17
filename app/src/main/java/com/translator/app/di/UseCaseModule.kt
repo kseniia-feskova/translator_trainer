@@ -24,6 +24,7 @@ import presentation.usecases.IAccountUseCase
 import presentation.usecases.IGetAccountUseCase
 import presentation.usecases.auth.ILoginUseCase
 import presentation.usecases.auth.IRegisterUseCase
+import presentation.usecases.auth.IRegisterWithFirebaseUseCase
 import presentation.usecases.auth.ISetGuestUseCase
 import presentation.usecases.course.ICoursesOnPrefsUseCases
 import presentation.usecases.course.IGetAllCoursesUseCase
@@ -57,12 +58,15 @@ import usecase.sets.UpdateSetsUseCase
 import usecase.user.AccountUseCase
 import usecase.auth.SetGuestUseCase
 import usecase.auth.CreateFromGuestUseCase
+import usecase.auth.RegisterWithFirebaseUseCase
 
 val useCaseModule = module {
 
     singleOf(::SetsCacheProvider) bind ISetsCacheProvider::class
 
     singleOf(::RegisterUseCase) bind IRegisterUseCase::class
+
+    singleOf(::RegisterWithFirebaseUseCase) bind IRegisterWithFirebaseUseCase::class
 
     singleOf(::LoginUseCase) bind ILoginUseCase::class
 

@@ -5,6 +5,7 @@ plugins {
     kotlin("plugin.serialization") version "2.1.21"
     id("org.jetbrains.kotlin.plugin.compose") version "2.1.21" // или нужная версия
     id("com.google.devtools.ksp") version "2.1.21-2.0.1"
+    id("com.google.gms.google-services")
 
 }
 
@@ -58,6 +59,13 @@ kotlin {
 
             implementation("com.google.mlkit:text-recognition:16.0.1")
             implementation("io.coil-kt:coil-compose:2.5.0")
+
+            //Firebase
+            implementation("com.google.firebase:firebase-auth:24.0.1")
+            implementation("androidx.credentials:credentials:1.5.0")
+            implementation("androidx.credentials:credentials-play-services-auth:1.5.0")
+            implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
+            implementation("com.google.android.gms:play-services-auth:21.4.0")
 
         }
     }

@@ -12,10 +12,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import presentation.model.FirebaseUser
+import presentation.usecases.auth.IRegisterWithFirebaseUseCase
 
 class AuthViewModel(
     private val login: ILoginUseCase,
     private val register: IRegisterUseCase,
+    private val registerByFirebase: IRegisterWithFirebaseUseCase,
     private val getCourses: IGetAllCoursesUseCase,
     private val coursesPrefs: ICoursesOnPrefsUseCases,
     private val guestPrefs: ISetGuestUseCase
@@ -36,6 +39,7 @@ class AuthViewModel(
 
             is AuthIntent.SaveAsGuest -> handleGuest(intent.goToCourses)
             AuthIntent.ChangeScreen -> handleScreenChange()
+            is AuthIntent.GoogleSign -> handleGoogleSign(intent.firebaseUser,intent.goToCourses, intent.goToHome)
         }
     }
 
@@ -73,6 +77,35 @@ class AuthViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             val response = login.invoke(state.email, state.email, state.password)
+            if (!response.isSuccess) {
+                handleError(response)
+                return@launch
+            }
+            val userId = response.getOrNull()
+            if (userId != null) {
+                checkCourses(userId, goToCourses, goToHome)
+            } else {
+                _uiState.update {
+                    it.copy(
+                        error = AuthError.USER_DOES_NOT_EXIST,
+                        isLoading = false
+                    )
+                }
+            }
+        }
+    }
+
+    private fun handleGoogleSign(
+        firebaseUser: FirebaseUser?,
+        goToCourses: () -> Unit,
+        goToHome: () -> Unit
+    ) {
+        if (firebaseUser == null) {
+            Log.e("handleGoogleSign", "user is null, need to handle error")
+            return
+        }
+        viewModelScope.launch {
+            val response = registerByFirebase.invoke(firebaseUser)
             if (!response.isSuccess) {
                 handleError(response)
                 return@launch

@@ -34,6 +34,7 @@ fun LoginForm(
     onPasswordChanged: (String) -> Unit = {},
     onLoginClicked: () -> Unit = {},
     onGuestClicked: () -> Unit = {},
+    onGoogleSignClick: () -> Unit = {},
     onCreateAccountClicked: () -> Unit = {}
 ) {
     Box(
@@ -97,9 +98,10 @@ fun LoginForm(
             Spacer(modifier = Modifier.height(16.dp))
 
             CustomShadowButton(
-                isEnabled = false,
+                isEnabled = true,
                 text = "Continue with Google",
-                icon = painterResource(R.drawable.ic_google)
+                icon = painterResource(R.drawable.ic_google),
+                onClick = onGoogleSignClick
             )
         }
         Column(

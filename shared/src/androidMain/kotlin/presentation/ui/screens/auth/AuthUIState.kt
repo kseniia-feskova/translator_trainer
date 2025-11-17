@@ -2,6 +2,7 @@ package presentation.ui.screens.auth
 
 import androidx.annotation.StringRes
 import com.example.translatortrainer.shared.R
+import presentation.model.FirebaseUser
 
 data class AuthUIState(
     val email: String = "",
@@ -22,8 +23,11 @@ sealed class AuthIntent {
     object ChangeScreen : AuthIntent()
     data class OnEmailChanged(val login: String) : AuthIntent()
     data class OnPasswordChanged(val password: String) : AuthIntent()
-    data class SaveAsGuest(
+    data class SaveAsGuest(val goToCourses: () -> Unit) : AuthIntent()
+    data class GoogleSign(
+        val firebaseUser: FirebaseUser?,
         val goToCourses: () -> Unit,
+        val goToHome: () -> Unit
     ) : AuthIntent()
 }
 

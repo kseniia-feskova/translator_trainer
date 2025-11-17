@@ -1,10 +1,14 @@
 package com.translator.app
 
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,9 +19,22 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
+import androidx.credentials.Credential
+import androidx.credentials.CredentialManager
+import androidx.credentials.CustomCredential
+import androidx.credentials.GetCredentialRequest
+import androidx.credentials.exceptions.NoCredentialException
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import com.presentation.ui.AppTheme
 import com.presentation.viewmodel.MainViewModel
 import com.translator.app.di.databaseModule
@@ -26,10 +43,13 @@ import com.translator.app.di.preferencesModule
 import com.translator.app.di.repositoryModule
 import com.translator.app.di.translateModule
 import com.translator.app.di.viewModelModule
+import kotlinx.coroutines.launch
+import mapper.toDomain
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.logger.Level
+import presentation.model.FirebaseUser
 import presentation.model.LessonType
 import presentation.navigation.BottomNavigationBar
 import presentation.navigation.LeafScreen
@@ -41,9 +61,13 @@ class MainActivity : AppCompatActivity() {
 
     private val viewModel: MainViewModel by inject()
 
+    private lateinit var credentialManager: CredentialManager
+    private lateinit var launcherClassic: ActivityResultLauncher<Intent>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         startKoin()
+        credentialManager = CredentialManager.create(this)
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         enableEdgeToEdge(
@@ -92,7 +116,10 @@ class MainActivity : AppCompatActivity() {
                         .systemBarsPadding(),
                     content = { padding ->
                         Box(modifier = Modifier.padding(padding)) {
-                            TranslatorAppContainer(navController)
+                            TranslatorAppContainer(
+                                navController,
+                                { onSuccess -> onGoogleLoginClick(onSuccess = onSuccess) }
+                            )
                         }
                     },
                     bottomBar = {
@@ -105,6 +132,93 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    fun onGoogleLoginClick(onSuccess: (FirebaseUser?) -> Unit) {
+        lifecycleScope.launch {
+            try {
+                val googleIdOption = GetGoogleIdOption.Builder()
+                    .setServerClientId(BuildConfig.CLIENT_ID)
+                    .setFilterByAuthorizedAccounts(false)
+                    .build()
+
+                val request = GetCredentialRequest.Builder()
+                    .addCredentialOption(googleIdOption)
+                    .build()
+
+                val result =
+                    credentialManager.getCredential(
+                        request = request,
+                        context = this@MainActivity
+                    )
+                handleCredential(result.credential, onSuccess)
+
+            } catch (e: NoCredentialException) {
+                startClassicGoogleSignIn(onSuccess)
+            } catch (e: Exception) {
+                Log.e("GoogleAuth", "Ошибка авторизации", e)
+            }
+        }
+    }
+
+
+    private fun handleCredential(
+        credential: Credential,
+        onSuccess: (FirebaseUser?) -> Unit
+    ) {
+
+        try {
+            if (credential is CustomCredential &&
+                credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
+            ) {
+                val googleCred = GoogleIdTokenCredential.createFrom(credential.data)
+                val idToken = googleCred.idToken
+                firebaseAuthWithGoogle(idToken, onSuccess)
+            } else {
+                Log.e("GoogleAuth", "Not a Google ID Token credential: ${credential.type}")
+            }
+
+        } catch (e: Exception) {
+            Log.e("GoogleAuth", "Error while parsing Google credential", e)
+        }
+    }
+
+    private fun startClassicGoogleSignIn(onSuccess: (FirebaseUser?) -> Unit) {
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(BuildConfig.CLIENT_ID)
+            .requestEmail()
+            .build()
+
+        val googleSignInClient = GoogleSignIn.getClient(this, gso)
+        val signInIntent = googleSignInClient.signInIntent
+        launcherClassic = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+                try {
+                    val account = task.getResult(ApiException::class.java)
+                    account?.idToken?.let { firebaseAuthWithGoogle(it, onSuccess) }
+                } catch (e: ApiException) {
+                    Log.e("GoogleAuth", "Ошибка Google Sign-In", e)
+                }
+            }
+        }
+        launcherClassic.launch(signInIntent)
+    }
+
+    private fun firebaseAuthWithGoogle(idToken: String, onSuccess: (FirebaseUser?) -> Unit) {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        FirebaseAuth.getInstance()
+            .signInWithCredential(credential)
+            .addOnSuccessListener { authResult ->
+                val user = authResult.user
+                onSuccess(authResult.user?.toDomain())
+            }
+            .addOnFailureListener { e ->
+                Log.e("GoogleAuth", "Ошибка Firebase Auth", e)
+            }
+    }
+
 }
 
 

@@ -30,23 +30,30 @@ import presentation.ui.screens.set.setScreen
 import presentation.ui.screens.sets.setsScreen
 import presentation.ui.screens.splash.splashScreen
 import com.presentation.ui.screens.texts.photoToText
+import presentation.model.FirebaseUser
 
 @Composable
-fun TranslatorAppContainer(navController: NavHostController) {
+fun TranslatorAppContainer(
+    navController: NavHostController,
+    onGoogleClick: (onSuccess: (FirebaseUser?) -> Unit) -> Unit
+) {
     NavHost(
         navController = navController,
         startDestination = LeafScreen.Splash.route
     ) {
         splashScreen(navController)
-        loginNav(navController)
+        loginNav(navController, onGoogleClick)
         homeNav(navController)
         setsNav(navController)
         photoNav()
-        accountNav(navController)
+        accountNav(navController, onGoogleClick)
     }
 }
 
-private fun NavGraphBuilder.loginNav(navController: NavHostController) {
+private fun NavGraphBuilder.loginNav(
+    navController: NavHostController,
+    onGoogleClick: (onSuccess: (FirebaseUser?) -> Unit) -> Unit
+) {
     authScreen(
         goToCourses = {
             navController.navigate(LeafScreen.SelectCourse.route) {
@@ -58,7 +65,8 @@ private fun NavGraphBuilder.loginNav(navController: NavHostController) {
                 popUpTo(LeafScreen.Login.route) { inclusive = true }
             }
         },
-        goToVerification = navController::navigateToVerify
+        goToVerification = navController::navigateToVerify,
+        onGoogleClick = onGoogleClick
     )
     selectCourseScreen(
         navigateUp = {
@@ -164,14 +172,17 @@ private fun NavGraphBuilder.setsNav(navController: NavHostController) {
     }
 }
 
-private fun NavGraphBuilder.accountNav(navController: NavHostController) {
+private fun NavGraphBuilder.accountNav(
+    navController: NavHostController, onGoogleClick: (onSuccess: (FirebaseUser?) -> Unit) -> Unit,
+) {
     navigation(
         startDestination = LeafScreen.Account.route, // Это для экрана
         route = RootScreen.Profile.route            // Это для графа
     ) {
         accountScreen(
             navController::navigateToAuth,
-            navController::navigateToHome
+            navController::navigateToHome,
+            onGoogleClick,
         )
     }
 }

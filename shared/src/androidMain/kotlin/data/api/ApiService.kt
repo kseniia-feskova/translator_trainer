@@ -3,6 +3,7 @@ package data.api
 import data.model.UserEntity
 import data.model.auth.AuthRequest
 import data.model.auth.AuthResponse
+import data.model.auth.FirebaseAuthRequest
 import data.model.auth.RefreshTokenRequest
 import data.model.course.CourseEntity
 import data.model.course.add.AddCourseRequest
@@ -29,6 +30,9 @@ interface ApiService {
 
     @POST("auth/register")
     suspend fun register(@Body authRequest: AuthRequest): Response<AuthResponse>
+
+    @POST("auth/firebase")
+    suspend fun loginWithFirebase(@Body firebaseAuthRequest: FirebaseAuthRequest): Response<AuthResponse>
 
     @POST("auth/login")
     suspend fun login(@Body authRequest: AuthRequest): Response<AuthResponse>

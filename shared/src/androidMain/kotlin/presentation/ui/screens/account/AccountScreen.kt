@@ -1,6 +1,7 @@
 package presentation.ui.screens.account
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -21,7 +22,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
@@ -54,20 +54,20 @@ import com.presentation.ui.fieldBorderColor
 import com.presentation.ui.lightLilaColor
 import com.presentation.ui.redDarkColor
 import com.presentation.ui.whiteColor
-import presentation.ui.views.buttons.CustomShadowButton
-import presentation.ui.screens.auth.RegisterForm
-import presentation.ui.views.AccountTopView
 import com.presentation.utils.GUEST_MAX_WORDS
 import presentation.navigation.BottomNavigationBar
 import presentation.test.dummyCourses
+import presentation.ui.AppTypography
 import presentation.ui.screens.auth.AuthScreenState
 import presentation.ui.screens.auth.AuthUIState
-import java.net.URL
+import presentation.ui.screens.auth.RegisterForm
+import presentation.ui.views.AccountTopView
+import presentation.ui.views.buttons.CustomShadowButton
 
 @Composable
 fun AccountScreen(
     name: String = "",
-    image: URL? = null,
+    image: Uri? = null,
     guestData: GuestData? = null,
     authState: Boolean = false,
     authUIState: AuthUIState? = null,
@@ -83,6 +83,7 @@ fun AccountScreen(
     onPasswordChanged: (String) -> Unit = {},
     onAuthClicked: () -> Unit = {},
     onAuthClose: () -> Unit = {},
+    onGoogleSignClick: () -> Unit = {},
 ) {
     val isGuest by rememberSaveable(guestData) {
         mutableStateOf(guestData != null)
@@ -176,7 +177,7 @@ fun AccountScreen(
 
         if (btnsState.showLogoutDialog) {
             LogoutDialog(
-                modifier = Modifier.align(Alignment.Center),
+                modifier = Modifier,
                 dismissDialog = dismissDialog,
                 logout = logout,
             )
@@ -200,7 +201,8 @@ fun AccountScreen(
                 onEmailChanged,
                 onPasswordChanged,
                 onAuthClicked,
-                onAuthClose
+                onAuthClose,
+                onGoogleSignClick = onGoogleSignClick
             )
         }
     }
@@ -273,9 +275,22 @@ fun DeleteDialog(
 fun LogoutDialog(modifier: Modifier, dismissDialog: () -> Unit, logout: () -> Unit) {
     AlertDialog(
         modifier = modifier,
-        containerColor = whiteColor.copy(alpha = 0.9f),
-        onDismissRequest = {
-            dismissDialog()
+        containerColor = whiteColor,
+        onDismissRequest = dismissDialog,
+        title = {
+            Text(
+                stringResource(R.string.logout_title),
+                style = AppTypography.displayMedium.copy(color = darkColor)
+            )
+        },
+        text = {
+            Text(
+                stringResource(R.string.logout_subtitle),
+                style = AppTypography.titleLarge.copy(
+                    color = darkColor,
+                    fontSize = TextUnit(14f, TextUnitType.Sp)
+                )
+            )
         },
         confirmButton = {
             Text(
@@ -298,32 +313,6 @@ fun LogoutDialog(modifier: Modifier, dismissDialog: () -> Unit, logout: () -> Un
                     fontSize = TextUnit(16f, TextUnitType.Sp)
                 )
             )
-        },
-        title = {
-            Text(
-                stringResource(R.string.logout_title),
-                style = MaterialTheme.typography.displayLarge.copy(
-                    color = darkColor,
-                    fontSize = TextUnit(22f, TextUnitType.Sp)
-                )
-            )
-        },
-        text = {
-            Text(
-                stringResource(R.string.logout_subtitle),
-                style = MaterialTheme.typography.titleSmall.copy(
-                    color = darkColor,
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = TextUnit(16f, TextUnitType.Sp)
-                )
-            )
-        },
-        icon = {
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.ExitToApp,
-                tint = bgColor,
-                contentDescription = "Logout"
-            )
         }
     )
 }
@@ -335,7 +324,8 @@ fun RegisterSection(
     onEmailChanged: (String) -> Unit,
     onPasswordChanged: (String) -> Unit,
     onAuthClicked: () -> Unit,
-    onAuthClose: () -> Unit
+    onAuthClose: () -> Unit,
+    onGoogleSignClick: () -> Unit
 ) {
     val screenHeight = (LocalConfiguration.current.screenHeightDp * 0.8).dp
 
@@ -364,7 +354,8 @@ fun RegisterSection(
                 onPasswordChanged,
                 onAuthClicked,
                 guestMode = true,
-                onCreateAccountClicked = { onAuthClose() }
+                onCreateAccountClicked = { onAuthClose() },
+                onGoogleSignClick = onGoogleSignClick ,
             )
         }
     }

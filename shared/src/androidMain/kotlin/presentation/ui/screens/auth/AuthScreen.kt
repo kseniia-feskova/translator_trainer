@@ -46,6 +46,7 @@ fun AuthScreen(
     onEmailChanged: (String) -> Unit = {},
     onPasswordChanged: (String) -> Unit = {},
     onAuthStateChanged: () -> Unit = {},
+    onGoogleSignClick: () -> Unit = {},
     onAuthClicked: () -> Unit = {},
     onGuestSelected: () -> Unit = {}
 ) = Box {
@@ -121,7 +122,8 @@ fun AuthScreen(
                         onPasswordChanged = onPasswordChanged,
                         onLoginClicked = onAuthClicked,
                         onGuestClicked = { showDialog = true },
-                        onCreateAccountClicked = onAuthStateChanged
+                        onCreateAccountClicked = onAuthStateChanged,
+                        onGoogleSignClick = onGoogleSignClick
                     )
                 } else {
                     RegisterForm(
@@ -130,7 +132,8 @@ fun AuthScreen(
                         onPasswordChanged = onPasswordChanged,
                         onLoginClicked = onAuthClicked,
                         onGuestClicked = { showDialog = true },
-                        onCreateAccountClicked = onAuthStateChanged
+                        onCreateAccountClicked = onAuthStateChanged,
+                        onGoogleSignClick = onGoogleSignClick
                     )
                 }
             }

@@ -1,6 +1,7 @@
 package presentation.ui.views
 
 
+import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -47,7 +48,6 @@ import presentation.ui.AppTypography
 import com.presentation.ui.bgColor
 import com.presentation.ui.darkColor
 import com.presentation.ui.whiteColor
-import java.net.URL
 
 @Composable
 fun HomeTopView(
@@ -112,7 +112,7 @@ fun HomeTopView(
 @Composable
 fun AccountTopView(
     name: String,
-    photo: URL? = null,
+    photo: Uri? = null,
     onEditClicked: (() -> Unit)? = {},
 ) {
 
@@ -142,7 +142,7 @@ fun AccountTopView(
                 .size(imageSize)
                 .border(
                     width = 4.dp,
-                    color = whiteColor,
+                    color = darkColor,
                     shape = CircleShape
                 )
                 .clip(CircleShape), // Делаем изображение круглым
@@ -162,7 +162,7 @@ fun AccountTopView(
                     style = MaterialTheme.typography.titleLarge.copy(
                         fontWeight = FontWeight.Medium,
                         fontSize = TextUnit(20f, TextUnitType.Sp),
-                        color = whiteColor
+                        color = darkColor
                     )
                 )
             }
@@ -176,6 +176,7 @@ fun AccountTopView(
             if (onEditClicked != null) {
                 Icon(
                     imageVector = Icons.Default.Edit,
+                    tint = darkColor,
                     contentDescription = "Edit",
                     modifier = Modifier
                         .padding(horizontal = 8.dp)
