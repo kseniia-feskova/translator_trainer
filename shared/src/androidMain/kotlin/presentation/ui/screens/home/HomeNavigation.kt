@@ -39,11 +39,12 @@ fun HomeRoute(
     HomeScreen(
         state = state.value,
         goToAccount = goToAccount,
-        hideLimitsError = {viewModel.handleIntent(HomeIntent.HideLimitsError)},
+        hideLimitsError = { viewModel.handleIntent(HomeIntent.HideLimitsError) },
         onWordInput = { viewModel.handleIntent(HomeIntent.InputText(it)) },
         onEnterText = { viewModel.handleIntent(HomeIntent.EnterText) },
         onSaveClick = { viewModel.handleIntent(HomeIntent.SaveWord) },
-        onLanguageChange = { viewModel.handleIntent(HomeIntent.ChangeLanguages(it)) }
+        onLanguageChange = { viewModel.handleIntent(HomeIntent.ChangeLanguages(it)) },
+        onAlterTextSelected = { viewModel.handleIntent(HomeIntent.AlterTranslateSave(it)) }
     )
 
 }

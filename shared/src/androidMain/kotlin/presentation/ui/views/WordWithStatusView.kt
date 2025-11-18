@@ -120,7 +120,7 @@ fun SelectingWordWithStatusView(
             Column(
                 modifier = Modifier
                     .align(Alignment.CenterStart)
-                    .padding(horizontal = 12.dp, vertical = 20.dp)
+                    .padding(horizontal = 16.dp, vertical = 20.dp)
             ) {
                 Text(
                     text = word.originalText,

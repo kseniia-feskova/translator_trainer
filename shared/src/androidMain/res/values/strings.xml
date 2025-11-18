@@ -21,8 +21,8 @@
     <string name="signup_button">Sign up</string>
 
     <!-- Home page -->
-    <string name="home_title">Let\'s translate words!</string>
-    <string name="save_word_btn">Save word</string>
+    <string name="home_title">Let’s translate some words!</string>
+    <string name="translate_btn">Translate</string>
 
     <!-- Card sets -->
     <string name="card_sets_title">Card sets</string>

@@ -3,11 +3,8 @@ package com.presentation.ui.views
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -40,16 +37,9 @@ fun SearchBarView(
             .background(
                 color = bgColor,
                 shape = RoundedCornerShape(24.dp)
-            )
-            .padding(horizontal = 12.dp),
+            ),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(
-            imageVector = Icons.Default.Search,
-            contentDescription = "Search Icon",
-            modifier = Modifier.size(24.dp),
-            tint = MaterialTheme.colorScheme.onPrimary
-        )
         TextField(
             value = query,
             onValueChange = onQueryChange,
@@ -64,20 +54,19 @@ fun SearchBarView(
                 unfocusedIndicatorColor = Color.Transparent
             )
         )
-        Spacer(modifier = Modifier.width(8.dp))
         if (query.isNotEmpty()) {
             Icon(
                 imageVector = Icons.Default.Close,
                 contentDescription = "Clear Icon",
-                modifier = Modifier.clickable { onClearClick() },
-                tint = MaterialTheme.colorScheme.onPrimary
+                modifier = Modifier.clickable { onClearClick() }.padding(end = 12.dp),
+                tint = MaterialTheme.colorScheme.onBackground
             )
         } else {
             Icon(
                 imageVector = Icons.Default.Search,
                 contentDescription = "Filter Icon",
-                modifier = Modifier.clickable { onFilterClick() },
-                tint = MaterialTheme.colorScheme.onPrimary
+                modifier = Modifier.clickable { onFilterClick() }.padding(end = 12.dp),
+                tint = MaterialTheme.colorScheme.onBackground
             )
         }
     }

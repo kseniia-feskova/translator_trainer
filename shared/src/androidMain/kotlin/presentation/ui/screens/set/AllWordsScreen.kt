@@ -5,8 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.calculateEndPadding
-import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -26,19 +24,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
-import presentation.model.WordUI
-import presentation.test.mockSetOfCard
-import presentation.test.smallList
 import com.presentation.ui.accentColor
 import com.presentation.ui.primaryColor
 import com.presentation.ui.secondaryColor
 import com.presentation.ui.views.ActionButton
-import presentation.ui.views.BaseTopView
 import domain.ALL_WORDS
+import presentation.model.WordUI
+import presentation.test.mockSetOfCard
+import presentation.test.smallList
+import presentation.ui.views.BaseTopView
 
 private val mockAllCardsState = AllCardsState(
     title = mockSetOfCard.title,
@@ -53,25 +50,13 @@ fun AllCardsScreen(
     Scaffold(
         topBar = {
             BaseTopView(title = ALL_WORDS)
-        },
-        bottomBar = {
-            if (state.words.isNotEmpty()) {
-                ActionButton(modifier = Modifier
-                    .padding(24.dp),
-                    onClick = { }) {
-                    Text(modifier = Modifier.padding(6.dp), text = "Изучить набор")
-                }
-            }
         }
     ) { innerPadding ->
         Log.e("Padding", "innerPadding = $innerPadding")
         Box(
             modifier = Modifier
                 .background(primaryColor)
-                .padding(top = innerPadding.calculateTopPadding() + 16.dp)
-                .padding(bottom = innerPadding.calculateBottomPadding() + 16.dp)
-                .padding(start = innerPadding.calculateStartPadding(LayoutDirection.Ltr) + 16.dp)
-                .padding(end = innerPadding.calculateEndPadding(LayoutDirection.Ltr) + 16.dp)
+                .padding(16.dp)
                 .fillMaxSize()
         ) {
             if (state.words.isNotEmpty()) {

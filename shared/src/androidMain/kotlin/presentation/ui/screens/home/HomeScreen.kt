@@ -8,6 +8,7 @@ import androidx.compose.animation.core.updateTransition
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,11 +22,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -45,28 +50,26 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.translatortrainer.shared.R
 import com.presentation.ui.AppTheme
-import presentation.ui.AppTypography
-import com.presentation.ui.bgColor
+import com.presentation.ui.darkColor
 import com.presentation.ui.fieldBorderColor
 import com.presentation.ui.fieldColors
 import com.presentation.ui.fieldValueColor
-import com.presentation.ui.lightLilaColor
+import com.presentation.ui.gradientBrush
 import com.presentation.ui.onSurfaceLight
 import com.presentation.ui.redDarkColor
-import presentation.ui.views.BackgroundDecorAnimated
-import presentation.ui.views.HomeTopView
 import com.presentation.ui.views.Loader
 import com.presentation.ui.whiteColor
-import presentation.utils.Language
+import com.presentation.ui.yellowColor
 import presentation.navigation.BottomNavigationBar
+import presentation.ui.AppTypography
 import presentation.ui.dialog.GuestLimitsDialog
+import presentation.ui.views.HomeTopView
 import presentation.ui.views.buttons.CustomShadowButton
+import presentation.utils.Language
 
 @Composable
 fun HomeScreen(
@@ -76,30 +79,19 @@ fun HomeScreen(
     onWordInput: (String) -> Unit = {},
     onEnterText: () -> Unit = { },
     onSaveClick: () -> Unit = {},
-    onLanguageChange: (Language) -> Unit = {}
+    onLanguageChange: (Language) -> Unit = {},
+    onAlterTextSelected: (String) -> Unit = {}
 ) {
-    var showTopView by remember { mutableStateOf(false) }
+    var showTopView by remember { mutableStateOf(true) }
     val keyboardController = LocalSoftwareKeyboardController.current
 
     LaunchedEffect(Unit) { showTopView = true }
 
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .background(brush = gradientBrush)
     ) {
-        BackgroundDecorAnimated()
-        AnimatedVisibility(
-            modifier = Modifier
-                .wrapContentHeight()
-                .align(Alignment.TopCenter),
-            visible = showTopView,
-            enter = slideInVertically(
-                initialOffsetY = { -it },
-                animationSpec = tween(1000)
-            ),
-            exit = fadeOut(animationSpec = tween(500))
-        ) {
-            HomeTopView(stringResource(R.string.home_title))
-        }
 
         if (state.limitsError) {
             GuestLimitsDialog(
@@ -111,109 +103,167 @@ fun HomeScreen(
                 dismissDialog = hideLimitsError
             )
         }
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.TopCenter)
+        ) {
+            AnimatedVisibility(
+                modifier = Modifier
+                    .wrapContentHeight(),
+                visible = showTopView,
+                enter = slideInVertically(
+                    initialOffsetY = { -it },
+                    animationSpec = tween(1000)
+                ),
+                exit = fadeOut(animationSpec = tween(500))
+            ) {
+                HomeTopView(stringResource(R.string.home_title))
+            }
+
+            Spacer(modifier = Modifier.height(18.dp))
+            Column(
+                modifier = Modifier
+                    .background(
+                        color = whiteColor.copy(alpha = 0.7f),
+                        shape = RoundedCornerShape(24.dp)
+                    )
+            ) {
+                Spacer(Modifier.height(24.dp))
+
+                if (state.originalLanguage != null) {
+                    OutlinedTextField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 20.dp),
+                        value = state.inputText,
+                        onValueChange = { onWordInput(it) },
+                        singleLine = true,
+                        label = {
+                            Text(
+                                stringResource(state.originalLanguage.getRes()),
+                                style = AppTypography.titleSmall
+                            )
+                        },
+                        placeholder = {
+                            Text(
+                                stringResource(state.originalLanguage.getRes()),
+                                style = AppTypography.titleSmall
+                            )
+                        },
+                        shape = RoundedCornerShape(8.dp),
+                        colors = fieldColors(),
+                        textStyle = AppTypography.titleSmall,
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            imeAction = ImeAction.Done // Изменяем кнопку на "Готово"
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onDone = {
+                                onEnterText()
+                                keyboardController?.hide() // Скрываем клавиатуру
+                            }
+                        )
+                    )
+                }
+
+                Spacer(Modifier.height(24.dp))
+                if (state.originalLanguage != null && state.resLanguage != null) {
+                    LanguageSwitch(
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        state.originalLanguage,
+                        state.resLanguage
+                    ) { onLanguageChange(it) }
+                }
+
+                Spacer(Modifier.height(24.dp))
+
+                if (state.resLanguage != null) {
+                    OutlinedTextField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 20.dp),
+                        value = state.translatedText,
+                        enabled = false,
+                        onValueChange = {},
+                        singleLine = true,
+                        label = {
+                            Text(
+                                stringResource(state.resLanguage.getRes()),
+                                style = AppTypography.titleSmall,
+                            )
+                        },
+                        shape = RoundedCornerShape(8.dp),
+                        colors = fieldColors().copy(
+                            disabledTextColor = fieldValueColor,
+                            disabledContainerColor = Color.White,
+                            disabledIndicatorColor = fieldBorderColor
+                        ),
+                        textStyle = AppTypography.titleSmall,
+                        trailingIcon = {
+                            if (state.isWordSaved) {
+                                Icon(
+                                    imageVector = Icons.Default.CheckCircle,
+                                    tint = darkColor,
+                                    contentDescription = "Saved"
+                                )
+                            } else {
+                                if (state.translatedText.isNotEmpty()) {
+                                    Icon(
+                                        Icons.Default.Add,
+                                        modifier = Modifier
+                                            .padding(vertical = 8.dp)
+                                            .clickable { onSaveClick() }
+                                            .background(color = yellowColor, shape = CircleShape)
+                                            .border(1.dp, shape = CircleShape, color = darkColor),
+                                        tint = darkColor,
+                                        contentDescription = "Saved"
+                                    )
+                                }
+                            }
+                        }
+                    )
+                }
+
+                if (state.altTranslates?.isNotEmpty() == true) {
+                    Spacer(Modifier.height(12.dp))
+                    ListOfAlterTranslates(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 36.dp, end = 32.dp),
+                        state.altTranslates,
+                        onAlterTextSelected = onAlterTextSelected
+                    )
+                    Spacer(Modifier.height(12.dp))
+                } else {
+                    Spacer(Modifier.height(24.dp))
+                }
+                if (state.error != null) {
+                    Text(
+                        text = stringResource(state.error.msg),
+                        style = AppTypography.titleSmall.copy(color = redDarkColor),
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+                } else {
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
+            }
+        }
 
         Column(
             modifier = Modifier
-                .background(
-                    color = whiteColor.copy(alpha = 0.7f),
-                    shape = RoundedCornerShape(24.dp)
-                )
-                .align(Alignment.Center)
-        ) {
-            Spacer(Modifier.height(24.dp))
-
-            if (state.originalLanguage != null) {
-                OutlinedTextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 20.dp),
-                    value = state.inputText,
-                    onValueChange = { onWordInput(it) },
-                    singleLine = true,
-                    label = {
-                        Text(
-                            stringResource(state.originalLanguage.getRes()),
-                            style = AppTypography.titleSmall
-                        )
-                    },
-                    shape = RoundedCornerShape(8.dp),
-                    colors = fieldColors(),
-                    textStyle = AppTypography.titleSmall,
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        imeAction = ImeAction.Done // Изменяем кнопку на "Готово"
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onDone = {
-                            onEnterText()
-                            keyboardController?.hide() // Скрываем клавиатуру
-                        }
-                    )
-                )
-            }
-
-            Spacer(Modifier.height(24.dp))
-            if (state.originalLanguage != null && state.resLanguage != null) {
-                LanguageSwitch(
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                    state.originalLanguage,
-                    state.resLanguage
-                ) { onLanguageChange(it) }
-            }
-
-            Spacer(Modifier.height(24.dp))
-
-            if (state.resLanguage != null) {
-                OutlinedTextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 20.dp),
-                    value = state.translatedText,
-                    enabled = false,
-                    onValueChange = {},
-                    singleLine = true,
-                    label = {
-                        Text(
-                            stringResource(state.resLanguage.getRes()),
-                            style = AppTypography.titleSmall,
-                        )
-                    },
-                    shape = RoundedCornerShape(8.dp),
-                    colors = fieldColors().copy(
-                        disabledTextColor = fieldValueColor,
-                        disabledContainerColor = Color.White,
-                        disabledIndicatorColor = fieldBorderColor
-                    ),
-                    textStyle = AppTypography.titleSmall,
-                    trailingIcon = {
-                        if (state.isWordSaved) {
-                            Icon(Icons.Default.Add, tint = bgColor, contentDescription = "Saved")
-                        }
-                    }
-                )
-            }
-            Spacer(Modifier.height(24.dp))
-            if (state.error != null) {
-                Text(
-                    text = stringResource(state.error.msg),
-                    style = AppTypography.titleSmall.copy(color = redDarkColor),
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                )
-            }
-            if (state.error == null) {
-                Spacer(modifier = Modifier.height(8.dp))
-            }
-        }
-        CustomShadowButton(
-            text = stringResource(R.string.save_word_btn),
-            modifier = Modifier
+                .fillMaxWidth()
                 .align(Alignment.BottomCenter)
-                .padding(horizontal = 20.dp, vertical = 16.dp),
-            onClick = {
-                if (state.translatedText.isNotEmpty()) {
-                    onSaveClick()
+        ) {
+
+            CustomShadowButton(
+                text = stringResource(R.string.translate_btn),
+                modifier = Modifier
+                    .padding(horizontal = 20.dp, vertical = 16.dp),
+                onClick = {
+                    onEnterText()
                 }
-            }
-        )
+            )
+        }
 
         if (state.loading) {
             Loader(
@@ -221,6 +271,39 @@ fun HomeScreen(
                     .width(80.dp)
                     .align(Alignment.Center)
             )
+        }
+    }
+}
+
+@Composable
+fun ListOfAlterTranslates(
+    modifier: Modifier = Modifier,
+    alterTranslates: List<String>,
+    onAlterTextSelected: (String) -> Unit = {},
+) {
+    LazyColumn(modifier = modifier) {
+        itemsIndexed(alterTranslates) { index, item ->
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.clickable(true) {
+                    onAlterTextSelected(item)
+                }
+            ) {
+                Text(
+                    item, modifier = Modifier
+                        .weight(1f)
+                        .padding(vertical = 8.dp),
+                    style = AppTypography.titleSmall.copy(color = darkColor)
+                )
+                Icon(
+                    Icons.Default.Add,
+                    modifier = Modifier
+                        .padding(vertical = 8.dp)
+                        .clickable { onAlterTextSelected(item) }
+                        .border(1.dp, shape = CircleShape, color = darkColor), tint = darkColor,
+                    contentDescription = "Saved"
+                )
+            }
         }
     }
 }
@@ -243,7 +326,7 @@ fun LanguageSwitch(
     }
 
     val backgroundWidth by transition.animateDp(label = "Background Width") { language ->
-        if (language == firstText) (firstText.length * 13f).dp else (secondText.length * 13f).dp  // Можно подстроить под разную длину слов
+        if (language == firstText) (firstText.length * 14f).dp else (secondText.length * 14f).dp  // Можно подстроить под разную длину слов
     }
 
     Box(
@@ -258,7 +341,7 @@ fun LanguageSwitch(
                 .offset(x = backgroundOffset)
                 .width(backgroundWidth)
                 .height(40.dp)
-                .background(lightLilaColor, shape = RoundedCornerShape(8.dp))
+                .background(yellowColor, shape = RoundedCornerShape(8.dp))
         )
 
         SelectLanguages(
@@ -303,7 +386,7 @@ fun SelectLanguages(
                     )
                 },
             color = onSurfaceLight,
-            style = AppTypography.displayLarge.copy(fontSize = TextUnit(24f, TextUnitType.Sp))
+            style = AppTypography.displaySmall
         )
 
         Spacer(Modifier.width(8.dp))
@@ -319,7 +402,7 @@ fun SelectLanguages(
                     )
                 },
             color = onSurfaceLight,
-            style = AppTypography.displayLarge.copy(fontSize = TextUnit(24f, TextUnitType.Sp))
+            style = AppTypography.displaySmall
         )
     }
 }
@@ -351,6 +434,7 @@ fun MainScreenWithButtonPreview() {
                     state = HomeUIState().copy(
                         inputText = "Katze",
                         translatedText = "Котик",
+                        altTranslates = listOf("Кот", "Кошак"),
                         originalLanguage = Language.GERMAN,
                         resLanguage = Language.RUSSIAN,
                     )
@@ -359,6 +443,34 @@ fun MainScreenWithButtonPreview() {
         }, bottomBar = {
             val context = LocalContext.current
             BottomNavigationBar(navController = NavController(context))
+        }
+        )
+    }
+}
+
+@Preview
+@Composable
+fun MainScreenWithSavedButtonPreview() {
+    AppTheme {
+        Scaffold(content = { paddings ->
+            Log.e("Preview", "paddings $paddings")
+            Box(modifier = Modifier.padding(paddings)) {
+                HomeScreen(
+                    state = HomeUIState().copy(
+                        inputText = "Katze",
+                        translatedText = "Котик",
+                        altTranslates = listOf("Кот", "Кошак"),
+                        originalLanguage = Language.GERMAN,
+                        resLanguage = Language.RUSSIAN,
+                        isWordSaved = true,
+                    )
+                )
+            }
+        }, bottomBar = {
+            val context = LocalContext.current
+            BottomNavigationBar(
+                bgColor = Color(0xFFB9C3FF), navController = NavController(context)
+            )
         }
         )
     }

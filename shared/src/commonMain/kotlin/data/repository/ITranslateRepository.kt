@@ -1,5 +1,6 @@
 package data.repository
 
+import data.model.translate.TranslationResponse
 import data.translate.Language
 
 interface ITranslateRepository {
@@ -7,6 +8,6 @@ interface ITranslateRepository {
         text: String,
         originalLanguage: Language,
         resLanguage: Language
-    ): String
+    ): TranslationResponse?
 
 }

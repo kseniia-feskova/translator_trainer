@@ -55,7 +55,7 @@ fun AllWordsScreen(
     onBackPressed: () -> Unit = {}
 ) {
 
-    Column(modifier = Modifier.padding(bottom = 64.dp)) {
+    Column(modifier = Modifier) {
 
         BaseTopView(
             title = ALL_WORDS,
@@ -84,7 +84,7 @@ fun AllWordsScreen(
 
         LazyColumn(
             modifier = Modifier
-                .padding(horizontal = 20.dp)
+                .padding(horizontal = 12.dp)
                 .clip(shape = RoundedCornerShape(12.dp))
         ) {
             items(state.words.toList()) {
@@ -95,6 +95,8 @@ fun AllWordsScreen(
                 )
             }
         }
+
+        //TODO: refactor to slider as on ios
         if (state.selectedItem != null && state.popupOffset != null) {
             Box(
                 modifier = Modifier

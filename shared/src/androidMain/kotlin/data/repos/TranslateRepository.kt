@@ -13,24 +13,15 @@ class TranslateRepository(
         text: String,
         originalLanguage: Language,
         resLanguage: Language
-    ): String {
+    ): TranslationResponse? {
         val response = service.translate(text, "${originalLanguage.code}|${resLanguage.code}")
         if (response.isSuccessful && response.body() != null) {
             println(response.body())
-            return getTranslation(response.body()!!)
+            return response.body()
         } else {
             println("Ошибка: ${response.code()}")
-            return ""
+            return null
         }
     }
 
-    private fun getTranslation(response: TranslationResponse): String {
-        val directTranslation = response.responseData.translatedText
-        if (directTranslation.isNotEmpty()) {
-            return directTranslation
-        }
-
-        val match = response.matches.maxByOrNull { it.match }
-        return match?.translation ?: "Перевод не найден"
-    }
 }

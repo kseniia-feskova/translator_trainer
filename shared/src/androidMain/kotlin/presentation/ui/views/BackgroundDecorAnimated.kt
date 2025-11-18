@@ -16,11 +16,11 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import presentation.model.MovingBgCircle
 import com.presentation.ui.AppTheme
+import com.presentation.ui.bgColor
 import com.presentation.ui.darkColor
-import com.presentation.ui.lightLilaColor
-import com.presentation.ui.whiteColor
+import com.presentation.ui.yellowColor
+import presentation.model.MovingBgCircle
 import kotlin.math.roundToInt
 
 @Composable
@@ -50,7 +50,7 @@ fun BackgroundDecorAnimated() {
         angle = (30..360).random().toFloat(),
         speed = (20..400).random().toFloat(),
         size = sizes[1].roundToInt(),
-        color = lightLilaColor
+        color = bgColor
     )
     val whiteCircle = MovingBgCircle(
         x = (0..screenWidthPx.roundToInt()).random().toFloat(),
@@ -58,7 +58,7 @@ fun BackgroundDecorAnimated() {
         angle = (40..270).random().toFloat(),
         speed = (50..200).random().toFloat(),
         size = sizes[2].roundToInt(),
-        color = whiteColor
+        color = yellowColor
     )
     var points by remember { mutableStateOf(listOf(darkCircle, lightCircle, whiteCircle)) }
     var lastFrameTimeNanos = 0L

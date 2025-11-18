@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -63,13 +62,11 @@ fun HomeTopView(
     ) {
         Text(
             text = title,
-            style = AppTypography.displayLarge,
+            style = AppTypography.displayMedium,
             color = darkColor,
             modifier = Modifier
                 .align(Alignment.CenterStart)
-                .padding(horizontal = 24.dp)
-                .padding(bottom = 24.dp, top = 10.dp)
-                .width(LocalConfiguration.current.screenWidthDp.dp / 2)
+                .padding(24.dp)
         )
 
 //

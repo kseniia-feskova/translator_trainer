@@ -64,7 +64,7 @@ class TextFromPhotoViewModel(
                 _uiState.update {
                     it.copy(
                         loading = false,
-                        translate = translatedText,
+                        translate = translatedText?.translating.toString(),
                         original = text,
                         allWords = text.split(Regex("\\s+|[,.!?;:()]")).filter { it.isNotBlank() }
                     )
@@ -111,7 +111,7 @@ class TextFromPhotoViewModel(
                         originalLanguage = origin,
                         resLanguage = res
                     )
-                    val response = addWordUseCase.invoke(it, translatedText)
+                    val response = addWordUseCase.invoke(it, translatedText?.translating.toString())
 //                if (response.isSuccess) {
 //                    val savedWord = response.getOrNull()
 //                    if (savedWord != null) {

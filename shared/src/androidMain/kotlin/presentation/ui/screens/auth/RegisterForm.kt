@@ -126,7 +126,7 @@ fun RegisterForm(
     }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
 private fun RegisterFormPreview() {
     Surface(

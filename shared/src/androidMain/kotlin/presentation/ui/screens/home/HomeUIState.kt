@@ -8,6 +8,7 @@ data class HomeUIState(
     val loading: Boolean = false,
     val inputText: String = "",
     val translatedText: String = "",
+    val altTranslates: List<String>? = null,
     val showGlow: Boolean = false,
     val originalLanguage: Language? = null,
     val resLanguage: Language? = null,
@@ -22,6 +23,7 @@ sealed class HomeIntent {
     object SaveWord : HomeIntent()
     data class ChangeLanguages(val selectedLang: Language) : HomeIntent()
     object HideLimitsError : HomeIntent()
+    data class AlterTranslateSave(val alterText: String) : HomeIntent()
 }
 
 enum class HomeError(@StringRes val msg: Int) {
