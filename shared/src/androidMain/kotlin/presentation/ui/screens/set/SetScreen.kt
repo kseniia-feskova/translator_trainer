@@ -30,6 +30,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -44,6 +45,8 @@ import com.example.translatortrainer.shared.R
 import com.presentation.ui.AppTheme
 import presentation.ui.AppTypography
 import com.presentation.ui.bgColor
+import com.presentation.ui.darkColor
+import com.presentation.ui.gradientBrush
 import com.presentation.ui.lightLilaColor
 import com.presentation.ui.redDarkColor
 import presentation.ui.views.BaseTopView
@@ -71,7 +74,9 @@ fun SetScreen(
     val cardHeight = screenHeight * 0.25f
 
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .background(gradientBrush)
     ) {
         BaseTopView(
             title = state.name,
@@ -89,14 +94,8 @@ fun SetScreen(
                     cardHeight = cardHeight,
                     state.words.first,
                     state.words.second,
-                    onRightSwipe = {
-                        addWordToKnow(it)
-
-                    },
-                    onLeftSwipe = {
-                        addWordToLearn(it)
-
-                    }
+                    onRightSwipe = { addWordToKnow(it) },
+                    onLeftSwipe = { addWordToLearn(it) }
                 )
 
                 Row(
@@ -183,24 +182,19 @@ fun SetScreen(
         ) {
             Column(
                 modifier = Modifier
-                    .height(screenHeight * 0.4f)
+                    .height(screenHeight * 0.5f)
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter)
                     .background(
-                        lightLilaColor,
+                        Color.White,
                         shape = RoundedCornerShape(topEnd = 36.dp, topStart = 36.dp)
                     )
                     .padding(vertical = 24.dp, horizontal = 16.dp)
             ) {
                 Text(
                     stringResource(R.string.select_lesson_title),
-                    style = AppTypography.displayLarge.copy(
-                        fontSize = TextUnit(
-                            22f,
-                            TextUnitType.Sp
-                        )
-                    ),
-                    color = bgColor,
+                    style = AppTypography.displaySmall,
+                    color = darkColor,
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
 
@@ -210,7 +204,7 @@ fun SetScreen(
                     LazyColumn {
                         items(LessonType.entries.toTypedArray()) { lesson ->
                             CustomShadowButton(
-                                text = lesson.name,
+                                text = lesson.btnName,
                                 onClick = {
                                     showCourseSelection(false)
                                     startCourse(lesson)
@@ -220,15 +214,17 @@ fun SetScreen(
                         }
                     }
 
-                    Column(modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .padding(top = 32.dp)) {
+                    Column(
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                            .padding(top = 32.dp)
+                    ) {
                         Text(
                             stringResource(R.string.close_btn),
                             modifier = Modifier
                                 .align(Alignment.CenterHorizontally)
                                 .clickable { showCourseSelection(false) },
-                            color = bgColor,
+                            color = darkColor,
                             style = AppTypography.titleSmall.copy(fontWeight = FontWeight.Bold)
                         )
 

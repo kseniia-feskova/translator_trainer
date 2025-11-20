@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import presentation.model.LessonType
 import com.presentation.ui.AppTheme
 import presentation.ui.AppTypography
-import com.presentation.ui.bgColor
+import com.presentation.ui.gradientBrush
 import presentation.ui.views.buttons.CustomShadowButton
 import presentation.ui.views.BackgroundDecorAnimated
 import presentation.ui.views.BaseTopView
@@ -33,10 +33,10 @@ fun SuccessLessonScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = bgColor)
+            .background(gradientBrush)
     ) {
         BaseTopView(
-            title = lessonType.name,
+            title = lessonType.btnName +" lesson",
         )
 
         BackgroundDecorAnimated()

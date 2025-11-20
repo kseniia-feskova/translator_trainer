@@ -1,5 +1,6 @@
 package presentation.ui.screens.sets
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,6 +28,7 @@ import presentation.test.mockListOfSets
 import com.presentation.ui.AppTheme
 import presentation.ui.AppTypography
 import com.presentation.ui.darkColor
+import com.presentation.ui.gradientBrush
 import com.presentation.ui.redDarkColor
 import presentation.ui.views.buttons.CustomShadowButton
 import presentation.ui.views.BackgroundDecorAnimated
@@ -43,7 +45,10 @@ fun SetsScreen(
     createRandomLesson: () -> Unit = {},
 ) {
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .background(gradientBrush)
+
     ) {
 
         if (state.sets.isEmpty()) {

@@ -46,7 +46,7 @@
     <string name="study_btn">Study set</string>
     <string name="sorted_words">You have sorted all the words</string>
     <string name="sort_again_btn">Sort again</string>
-    <string name="select_lesson_title">Select lesson</string>
+    <string name="select_lesson_title">Select lesson type</string>
     <string name="close_btn">Close</string>
 
     <!-- Account set -->

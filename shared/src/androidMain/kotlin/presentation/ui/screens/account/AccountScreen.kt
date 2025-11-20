@@ -51,6 +51,7 @@ import com.presentation.ui.AppTheme
 import com.presentation.ui.bgColor
 import com.presentation.ui.darkColor
 import com.presentation.ui.fieldBorderColor
+import com.presentation.ui.gradientBrush
 import com.presentation.ui.lightLilaColor
 import com.presentation.ui.redDarkColor
 import com.presentation.ui.whiteColor
@@ -89,7 +90,11 @@ fun AccountScreen(
         mutableStateOf(guestData != null)
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(gradientBrush)
+    ) {
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -197,7 +202,7 @@ fun AccountScreen(
             )
         ) {
             RegisterSection(
-                authUIState?: AuthUIState(screenState = AuthScreenState.REGISTER),
+                authUIState ?: AuthUIState(screenState = AuthScreenState.REGISTER),
                 onEmailChanged,
                 onPasswordChanged,
                 onAuthClicked,
@@ -355,7 +360,7 @@ fun RegisterSection(
                 onAuthClicked,
                 guestMode = true,
                 onCreateAccountClicked = { onAuthClose() },
-                onGoogleSignClick = onGoogleSignClick ,
+                onGoogleSignClick = onGoogleSignClick,
             )
         }
     }
@@ -381,7 +386,8 @@ fun GuestDataView(modifier: Modifier = Modifier, guestData: GuestData?) {
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text(
-                "Current course:", style = MaterialTheme.typography.titleSmall.copy(color = darkColor)
+                "Current course:",
+                style = MaterialTheme.typography.titleSmall.copy(color = darkColor)
             )
             Icon(
                 modifier = Modifier

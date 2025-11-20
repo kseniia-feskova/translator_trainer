@@ -10,10 +10,10 @@ val whiteColor = Color(0xFFF9F9FF)
 val bgColor = Color(0xFFEBEBFF)
 val darkColor = Color(0xFF14063D)
 val yellowColor = Color(0xFFFFE625)
-val lightLilaColor = Color(0xFFD3D3DE)
+val lightLilaColor = Color(0xFFB9C3FF)
 val fieldNameColor = Color(0xFF616169)
-val fieldValueColor = Color(0xFF3F3F42)
-val fieldBorderColor = Color(0xFFA59BCA)
+val fieldValueColor = Color(0xFF271460)
+val fieldBorderColor = Color(0xFF271460)
 val viewLightColor = Color(0xFFEDEDEF)
 
 

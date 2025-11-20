@@ -1,7 +1,7 @@
 package presentation.ui.screens.newset
 
 import android.util.Log
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,9 +19,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -46,21 +43,22 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.translatortrainer.shared.R
+import com.presentation.ui.AppTheme
+import com.presentation.ui.darkColor
+import com.presentation.ui.fieldColors
+import com.presentation.ui.gradientBrush
+import com.presentation.ui.redDarkColor
+import com.presentation.ui.views.Loader
+import com.presentation.ui.views.SearchBarView
+import com.presentation.ui.views.SelectingWordWithStatusView
+import com.presentation.ui.yellowColor
 import presentation.model.WordUI
 import presentation.navigation.BottomNavigationBar
 import presentation.test.smallList
-import com.presentation.ui.AppTheme
 import presentation.ui.AppTypography
-import com.presentation.ui.bgColor
 import presentation.ui.dialog.GuestLimitsDialog
-import com.presentation.ui.fieldColors
-import com.presentation.ui.lightLilaColor
-import com.presentation.ui.redDarkColor
-import presentation.ui.views.buttons.CustomShadowButton
 import presentation.ui.views.BaseTopView
-import com.presentation.ui.views.Loader
-import com.presentation.ui.views.SelectingWordWithStatusView
-import com.presentation.ui.whiteColor
+import presentation.ui.views.buttons.CustomShadowButton
 
 @Composable
 fun NewSetScreen(
@@ -79,6 +77,7 @@ fun NewSetScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .background(gradientBrush)
             .padding(bottom = 12.dp)
     ) {
         if (state.limitsError) {
@@ -99,7 +98,7 @@ fun NewSetScreen(
                 leftIcon = Icons.AutoMirrored.Filled.ArrowBack,
                 onLeftClick = navigateUp
             )
-            Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(8.dp))
             OutlinedTextField(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -141,7 +140,7 @@ fun NewSetScreen(
             Text(
                 text = stringResource(R.string.selected_words_subtitle, state.countOfSelected),
                 style = AppTypography.titleLarge.copy(
-                    color = bgColor,
+                    color = darkColor,
                     fontSize = TextUnit(18f, TextUnitType.Sp),
                     fontWeight = FontWeight.Medium
                 ),
@@ -151,39 +150,15 @@ fun NewSetScreen(
 
             Spacer(Modifier.height(8.dp))
 
-            OutlinedTextField(
+            SearchBarView(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp),
-                value = state.query,
-                onValueChange = { searchQuery(it) },
-                singleLine = true,
-                label = {
-                    Text(
-                        text = stringResource(R.string.search_label),
-                        style = AppTypography.titleSmall
-                    )
-                },
-                shape = RoundedCornerShape(8.dp),
-                colors = fieldColors(),
-                textStyle = AppTypography.titleSmall,
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    imeAction = ImeAction.Done
-                ),
-                keyboardActions = KeyboardActions(
-                    onDone = {
-                        keyboardController?.hide()
-                    }
-                ),
-                trailingIcon = {
-                    if (state.query.isNotEmpty()) {
-                        Icon(Icons.Default.Close, tint = bgColor, contentDescription = "Close",
-                            modifier = Modifier.clickable { onClearClick() })
-                    } else {
-                        Icon(Icons.Default.Search, tint = bgColor, contentDescription = "Search")
-                    }
-                }
+                query = state.query,
+                onQueryChange = searchQuery,
+                onClearClick = onClearClick,
             )
+
             Spacer(Modifier.height(12.dp))
 
             LazyColumn(
@@ -200,6 +175,8 @@ fun NewSetScreen(
                     )
                 }
             }
+            Spacer(Modifier.height(12.dp))
+
         }
         Column(
             modifier = Modifier
@@ -215,17 +192,17 @@ fun NewSetScreen(
                     checked = state.isSaveChecked,
                     onCheckedChange = onSaveCheckBoxChange,
                     colors = SwitchDefaults.colors().copy(
-                        uncheckedTrackColor = lightLilaColor,
+                        uncheckedTrackColor = Color.White,
                         uncheckedBorderColor = Color.Transparent,
-                        uncheckedThumbColor = whiteColor,
-                        checkedTrackColor = bgColor,
-                        checkedThumbColor = Color.White
+                        uncheckedThumbColor = darkColor,
+                        checkedTrackColor = darkColor,
+                        checkedThumbColor = yellowColor
                     )
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = stringResource(R.string.save_words_to_set_checkbox),
-                    style = MaterialTheme.typography.titleSmall.copy(color = bgColor)
+                    style = MaterialTheme.typography.titleSmall.copy(color = darkColor)
                 )
             }
             Spacer(modifier = Modifier.height(8.dp))

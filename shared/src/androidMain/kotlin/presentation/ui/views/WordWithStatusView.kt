@@ -33,7 +33,6 @@ import presentation.model.WordUI
 import presentation.test.smallList
 import com.presentation.ui.AppTheme
 import presentation.ui.AppTypography
-import com.presentation.ui.bgColor
 import com.presentation.ui.darkColor
 import com.presentation.ui.lightLilaColor
 import presentation.ui.screens.all.StarsRow
@@ -108,7 +107,7 @@ fun SelectingWordWithStatusView(
             selected = isSelected,
             onClick = { onClick(word) },
             unselectedColor = lightLilaColor,
-            selectedColor = bgColor
+            selectedColor = darkColor
         )
 
         Box(

@@ -30,13 +30,13 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import com.presentation.ui.AppTheme
-import com.presentation.ui.bgColor
-import com.presentation.ui.lightLilaColor
+import com.presentation.ui.darkColor
 import presentation.ui.views.BaseTopView
 import com.presentation.ui.views.Loader
 import com.presentation.ui.views.SearchBarView
 import com.presentation.ui.views.WordMenuView
 import com.presentation.ui.views.WordWithStatusView
+import com.presentation.ui.yellowColor
 import domain.ALL_WORDS
 import presentation.model.Level
 import presentation.model.WordUI
@@ -140,7 +140,7 @@ fun StarsRow(modifier: Modifier = Modifier, stars: List<Boolean>) {
             Icon(
                 if (it) Icons.Default.Star else Icons.Outlined.Star,
                 "Star",
-                tint = if (it) bgColor else lightLilaColor,
+                tint = if (it) yellowColor else darkColor,
             )
         }
     }

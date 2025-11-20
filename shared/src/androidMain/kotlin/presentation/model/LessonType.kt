@@ -3,6 +3,6 @@ package presentation.model
 import kotlinx.serialization.Serializable
 
 @Serializable
-enum class LessonType {
-    BUBBLE, TRANSLATE, CROSSWORD
+enum class LessonType(val btnName: String) {
+    BUBBLE ("Bubble"), TRANSLATE("Translate"), CROSSWORD ("Crossword")
 }

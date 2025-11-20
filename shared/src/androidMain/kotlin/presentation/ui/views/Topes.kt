@@ -120,10 +120,6 @@ fun AccountTopView(
     Column(
         Modifier
             .fillMaxWidth()
-            .background(
-                color = bgColor,
-                shape = RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp)
-            )
             .padding(bottom = 18.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(12.dp)

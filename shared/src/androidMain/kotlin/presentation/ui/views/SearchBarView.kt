@@ -11,8 +11,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,7 +19,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.presentation.ui.AppTheme
-import com.presentation.ui.bgColor
+import com.presentation.ui.fieldColors
+import presentation.ui.AppTypography
 
 @Composable
 fun SearchBarView(
@@ -33,42 +33,41 @@ fun SearchBarView(
     Row(
         modifier = Modifier
             .then(modifier)
-            .fillMaxWidth()
-            .background(
-                color = bgColor,
-                shape = RoundedCornerShape(24.dp)
-            ),
+            .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        TextField(
-            value = query,
-            onValueChange = onQueryChange,
+        OutlinedTextField(
             modifier = Modifier
                 .weight(1f)
                 .background(Color.Transparent),
+            value = query,
+            onValueChange = onQueryChange,
             singleLine = true,
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = Color.Transparent,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedContainerColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent
-            )
+            textStyle = AppTypography.titleMedium,
+            shape = RoundedCornerShape(32.dp),
+            trailingIcon = {
+                if (query.isNotEmpty()) {
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = "Clear Icon",
+                        modifier = Modifier
+                            .clickable { onClearClick() }
+                            .padding(end = 8.dp),
+                        tint = MaterialTheme.colorScheme.onBackground
+                    )
+                } else {
+                    Icon(
+                        imageVector = Icons.Default.Search,
+                        contentDescription = "Filter Icon",
+                        modifier = Modifier
+                            .clickable { onFilterClick() }
+                            .padding(end = 8.dp),
+                        tint = MaterialTheme.colorScheme.onBackground
+                    )
+                }
+            },
+            colors = fieldColors()
         )
-        if (query.isNotEmpty()) {
-            Icon(
-                imageVector = Icons.Default.Close,
-                contentDescription = "Clear Icon",
-                modifier = Modifier.clickable { onClearClick() }.padding(end = 12.dp),
-                tint = MaterialTheme.colorScheme.onBackground
-            )
-        } else {
-            Icon(
-                imageVector = Icons.Default.Search,
-                contentDescription = "Filter Icon",
-                modifier = Modifier.clickable { onFilterClick() }.padding(end = 12.dp),
-                tint = MaterialTheme.colorScheme.onBackground
-            )
-        }
     }
 }
 
@@ -77,7 +76,7 @@ fun SearchBarView(
 fun SearchBarViewPreview() {
     AppTheme {
         SearchBarView(
-            Modifier,
+            Modifier.padding(16.dp),
             query = "Wort",
         )
     }

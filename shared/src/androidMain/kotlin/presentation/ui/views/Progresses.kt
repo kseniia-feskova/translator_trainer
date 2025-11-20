@@ -39,6 +39,7 @@ import com.presentation.ui.AppTheme
 import presentation.ui.AppTypography
 import com.presentation.ui.accentColor
 import com.presentation.ui.bgColor
+import com.presentation.ui.darkColor
 import com.presentation.ui.lightLilaColor
 import com.presentation.ui.secondaryColor
 import com.presentation.ui.whiteColor
@@ -49,7 +50,7 @@ import kotlinx.coroutines.launch
 fun Loader(modifier: Modifier = Modifier) {
     CircularProgressIndicator(
         modifier = modifier,
-        color = bgColor,
+        color = darkColor,
         strokeWidth = 6.dp,
         trackColor = Color.White,
     )
