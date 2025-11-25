@@ -28,5 +28,6 @@ sealed class HomeIntent {
 
 enum class HomeError(@StringRes val msg: Int) {
     INTERNET_CONNECTION_ERROR(R.string.internet_connection_error),
-    DEFAULT(R.string.default_error)
+    DEFAULT(R.string.default_error),
+    TRANSLATION_ERROR(R.string.error_translate)
 }

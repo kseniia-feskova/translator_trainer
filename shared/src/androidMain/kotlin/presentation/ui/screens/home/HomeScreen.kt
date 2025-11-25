@@ -62,7 +62,6 @@ import com.presentation.ui.gradientBrush
 import com.presentation.ui.onSurfaceLight
 import com.presentation.ui.redDarkColor
 import com.presentation.ui.views.Loader
-import com.presentation.ui.whiteColor
 import com.presentation.ui.yellowColor
 import presentation.navigation.BottomNavigationBar
 import presentation.ui.AppTypography
@@ -122,13 +121,7 @@ fun HomeScreen(
             }
 
             Spacer(modifier = Modifier.height(18.dp))
-            Column(
-                modifier = Modifier
-                    .background(
-                        color = whiteColor.copy(alpha = 0.7f),
-                        shape = RoundedCornerShape(24.dp)
-                    )
-            ) {
+            Column {
                 Spacer(Modifier.height(24.dp))
 
                 if (state.originalLanguage != null) {
@@ -282,7 +275,7 @@ fun ListOfAlterTranslates(
     onAlterTextSelected: (String) -> Unit = {},
 ) {
     LazyColumn(modifier = modifier) {
-        itemsIndexed(alterTranslates) { index, item ->
+        itemsIndexed(alterTranslates) { _, item ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.clickable(true) {
@@ -333,7 +326,7 @@ fun LanguageSwitch(
         modifier = Modifier
             .then(modifier)
             .wrapContentSize()
-            .clickable { /* Игнорируем клики по Box, обработка ниже */ },
+            .clickable {},
     ) {
         Box(
             modifier = Modifier

@@ -3,6 +3,7 @@ package presentation.ui.screens.auth
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import domain.translate.ITranslateModelProvider
 import presentation.usecases.auth.ILoginUseCase
 import presentation.usecases.auth.IRegisterUseCase
 import presentation.usecases.auth.ISetGuestUseCase
@@ -12,6 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import mapper.toData
 import presentation.model.FirebaseUser
 import presentation.usecases.auth.IRegisterWithFirebaseUseCase
 
@@ -21,7 +23,8 @@ class AuthViewModel(
     private val registerByFirebase: IRegisterWithFirebaseUseCase,
     private val getCourses: IGetAllCoursesUseCase,
     private val coursesPrefs: ICoursesOnPrefsUseCases,
-    private val guestPrefs: ISetGuestUseCase
+    private val guestPrefs: ISetGuestUseCase,
+    private val translatorProvider: ITranslateModelProvider
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AuthUIState())
@@ -138,6 +141,12 @@ class AuthViewModel(
                 _uiState.update { it.copy(isLoading = false) }
             } else {
                 coursesPrefs.saveOne(courses.first())
+                translatorProvider.downloadModel(
+                    courses.first().originalLanguage.toData(),
+                    courses.first().translateLanguage.toData()
+                ) {
+                    Log.e("AuthVM", "Download model error $it")
+                }
                 goToHome()
                 _uiState.update { it.copy(isLoading = false) }
             }

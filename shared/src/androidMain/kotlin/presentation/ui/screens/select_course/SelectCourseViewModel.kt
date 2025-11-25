@@ -6,16 +6,19 @@ import androidx.lifecycle.viewModelScope
 import presentation.model.CourseUI
 import com.presentation.usecases.auth.ILogoutUseCase
 import com.presentation.usecases.course.IAddCourseUseCase
+import domain.translate.ITranslateModelProvider
 import presentation.usecases.course.ICoursesOnPrefsUseCases
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import mapper.toData
 
 class SelectCourseViewModel(
     private val getCourses: ICoursesOnPrefsUseCases,
     private val logout: ILogoutUseCase,
-    private val addCourse: IAddCourseUseCase
+    private val addCourse: IAddCourseUseCase,
+    private val translatorProvider: ITranslateModelProvider
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SelectCourseUIState())
@@ -57,6 +60,12 @@ class SelectCourseViewModel(
             }
             val response = addCourse.invoke(state.selectedCourse, true)
             if (response.isSuccess) {
+                translatorProvider.downloadModel(
+                    state.selectedCourse.originalLanguage.toData(),
+                    state.selectedCourse.translateLanguage.toData()
+                ) {
+                    Log.e("SelectCourseVM", "Download model error $it")
+                }
                 goToHome()
             } else {
                 Log.e("SelectCourseVM", "save course error = ${response}")

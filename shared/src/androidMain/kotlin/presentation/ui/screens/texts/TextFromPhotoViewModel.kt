@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import presentation.model.CourseUI
-import com.presentation.usecases.ITranslateWordUseCase
+import presentation.usecases.ITranslateWordUseCase
 import presentation.usecases.course.ICoursesOnPrefsUseCases
 import com.presentation.usecases.words.IAddWordUseCase
 import presentation.utils.Language
@@ -55,20 +55,26 @@ class TextFromPhotoViewModel(
             val origin = _uiState.value.originalLanguage
             val res = _uiState.value.resLanguage
             if (origin != null && res != null) {
-                val translatedText = translateWord.invoke(
+                translateWord.invoke(
                     text = formated,
                     originalLanguage = origin,
-                    resLanguage = res
+                    resLanguage = res,
+                    onSuccess = { translated ->
+                        _uiState.update {
+                            it.copy(
+                                loading = false,
+                                translate = translated,
+                                original = text,
+                                allWords = text.split(Regex("\\s+|[,.!?;:()]"))
+                                    .filter { it.isNotBlank() }
+                            )
+                        }
+                    },
+                    onError = {
+                        Log.e("TextFromPhoto", "Translate Error $it")
+                    }
                 )
 
-                _uiState.update {
-                    it.copy(
-                        loading = false,
-                        translate = translatedText?.translating.toString(),
-                        original = text,
-                        allWords = text.split(Regex("\\s+|[,.!?;:()]")).filter { it.isNotBlank() }
-                    )
-                }
             }
         }
     }
@@ -98,7 +104,8 @@ class TextFromPhotoViewModel(
         }
 
     }
-//TODO: save several words from text photo
+
+    //TODO: save several words from text photo
     fun saveWords() {
         val list = _uiState.value.selectedWords
         list.map {
@@ -106,12 +113,12 @@ class TextFromPhotoViewModel(
                 val origin = _uiState.value.originalLanguage
                 val res = _uiState.value.resLanguage
                 if (origin != null && res != null) {
-                    val translatedText = translateWord.invoke(
-                        text = it,
-                        originalLanguage = origin,
-                        resLanguage = res
-                    )
-                    val response = addWordUseCase.invoke(it, translatedText?.translating.toString())
+//                    val translatedText = translateWord.invoke(
+//                        text = it,
+//                        originalLanguage = origin,
+//                        resLanguage = res
+//                    )
+//                    val response = addWordUseCase.invoke(it, translatedText?.translating.toString())
 //                if (response.isSuccess) {
 //                    val savedWord = response.getOrNull()
 //                    if (savedWord != null) {

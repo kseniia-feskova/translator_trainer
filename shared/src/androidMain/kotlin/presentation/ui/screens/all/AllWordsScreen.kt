@@ -31,6 +31,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import com.presentation.ui.AppTheme
 import com.presentation.ui.darkColor
+import com.presentation.ui.gradientBrush
 import presentation.ui.views.BaseTopView
 import com.presentation.ui.views.Loader
 import com.presentation.ui.views.SearchBarView
@@ -55,7 +56,9 @@ fun AllWordsScreen(
     onBackPressed: () -> Unit = {}
 ) {
 
-    Column(modifier = Modifier) {
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .background(brush = gradientBrush)) {
 
         BaseTopView(
             title = ALL_WORDS,

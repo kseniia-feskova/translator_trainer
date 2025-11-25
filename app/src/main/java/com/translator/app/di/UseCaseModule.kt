@@ -1,4 +1,4 @@
-import com.presentation.usecases.ITranslateWordUseCase
+import presentation.usecases.ITranslateWordUseCase
 import presentation.usecases.auth.ICreateFromGuestUseCase
 import com.presentation.usecases.auth.IDeleteUseCase
 import com.presentation.usecases.auth.ILogoutUseCase

@@ -1,15 +1,18 @@
 package com.translator.app.di
 
 import data.api.TranslateService
+import domain.translate.ITranslateModelProvider
+import domain.translate.TranslateModelProvider
 import okhttp3.OkHttpClient
+import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.bind
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-
-private const val GOOGLE_API = "https://translate.googleapis.com"
 private const val MY_MEMORY_API = "https://api.mymemory.translated.net"
 val translateModule = module {
+    //TODO: Remove?
     single<TranslateService> {
         Retrofit.Builder()
             .client(get<OkHttpClient>())
@@ -18,4 +21,7 @@ val translateModule = module {
             .build()
             .create(TranslateService::class.java)
     }
+
+    singleOf(::TranslateModelProvider) bind ITranslateModelProvider::class
+
 }

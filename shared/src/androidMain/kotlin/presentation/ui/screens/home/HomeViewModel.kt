@@ -1,8 +1,9 @@
 package presentation.ui.screens.home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.presentation.usecases.ITranslateWordUseCase
+import presentation.usecases.ITranslateWordUseCase
 import presentation.usecases.course.ICoursesOnPrefsUseCases
 import com.presentation.usecases.words.IAddWordUseCase
 import com.presentation.usecases.words.IGetWordByOriginal
@@ -26,6 +27,11 @@ class HomeViewModel(
     private val _uiState = MutableStateFlow(HomeUIState())
     val uiState = _uiState.asStateFlow()
     private var course: CourseUI? = null
+
+    override fun onCleared() {
+        translateWord.closeResources()
+        super.onCleared()
+    }
 
     init {
         viewModelScope.launch {
@@ -112,22 +118,34 @@ class HomeViewModel(
             val origin = _uiState.value.originalLanguage
             val res = _uiState.value.resLanguage
             if (origin != null && res != null) {
-                val translate = translateWord.invoke(
+                translateWord.invoke(
                     text = text,
                     originalLanguage = origin,
-                    resLanguage = res
-                )
-                if (translate != null) {
-                    _uiState.update {
-                        it.copy(
-                            translatedText = translate.translating,
-                            altTranslates = translate.altTranslate,
-                            showGlow = true,
-                            loading = false,
-                            error = null
+                    resLanguage = res,
+                    { translated ->
+                            _uiState.update {
+                                it.copy(
+                                    translatedText = translated,
+                                    altTranslates = emptyList(),
+                                    showGlow = true,
+                                    loading = false,
+                                    error = null
+                                )
+                            }
+                    },
+                    onError = { exception ->
+                        _uiState.update {
+                            it.copy(
+                                showGlow = true,
+                                loading = false,
+                                error = HomeError.TRANSLATION_ERROR
+                            )
+                        }
+                        Log.e(
+                            "HomeViewModel", "Error $exception"
                         )
                     }
-                }
+                )
             }
         }
     }
@@ -165,7 +183,7 @@ class HomeViewModel(
                 }
             } else {
                 val error = wordResult.exceptionOrNull()?.message
-                if (error == NEW_WORD) {
+                if (error == NEW_WORD || error == "Failed to connect") {
                     translateText(origin)
                 } else {
                     handleError(wordResult)
@@ -193,7 +211,7 @@ class HomeViewModel(
                 }
             } else {
                 val error = wordResult.exceptionOrNull()?.message
-                if (error == NEW_WORD) {
+                if (error == NEW_WORD || error == "Failed to connect") {
                     translateText(translated)
                 } else {
                     handleError(wordResult)
