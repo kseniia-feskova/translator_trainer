@@ -31,20 +31,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import com.example.translatortrainer.shared.R
 import com.presentation.ui.AppTheme
-import presentation.ui.AppTypography
 import com.presentation.ui.accentColor
-import com.presentation.ui.bgColor
 import com.presentation.ui.darkColor
-import com.presentation.ui.lightLilaColor
 import com.presentation.ui.secondaryColor
 import com.presentation.ui.whiteColor
+import com.presentation.ui.yellowColor
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import presentation.ui.AppTypography
 
 @Composable
 fun Loader(modifier: Modifier = Modifier) {
@@ -110,16 +107,13 @@ fun ProgressForSet(
     ) {
         Text(
             text = stringResource(R.string.known_words_subtitle, current, all),
-            style = AppTypography.titleLarge.copy(
-                color = bgColor,
-                fontSize = TextUnit(18f, TextUnitType.Sp)
-            )
+            style = AppTypography.titleMedium.copy(color = darkColor)
         )
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(
-                    color = lightLilaColor,
+                    color = darkColor,
                     shape = RoundedCornerShape(8.dp)
                 )
                 .height(14.dp)
@@ -129,7 +123,7 @@ fun ProgressForSet(
                 modifier = Modifier
                     .fillMaxHeight()
                     .background(
-                        color = bgColor,
+                        color = yellowColor,
                         shape = RoundedCornerShape(8.dp)
                     )
                     .fillMaxWidth(width)

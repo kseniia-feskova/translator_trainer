@@ -4,6 +4,7 @@ import data.model.words.update.UpdateWordStatusRequest
 import data.prefs.IDataStoreManager
 import data.repository.word.IWordApiRepository
 import data.repository.word.IWordDaoRepository
+import domain.cache.ISetsCacheProvider
 import domain.token.ICheckToken
 import domain.token.ITokenRefresher
 import mapper.toStatus
@@ -17,7 +18,8 @@ class UpdateStatusUseCase(
     private val dao: IWordDaoRepository,
     private val tokenRefresher: ITokenRefresher,
     private val checkToken: ICheckToken,
-    private val prefs: IDataStoreManager
+    private val prefs: IDataStoreManager,
+    private val cache: ISetsCacheProvider
 ) : IUpdateStatusUseCase {
 
     override suspend fun invoke(wordId: String, level: Level): Result<WordUI> {
@@ -38,6 +40,7 @@ class UpdateStatusUseCase(
         } else if (data == null) {
             Result.failure(Exception("Empty user data"))
         } else {
+            cache.clear() //clear cache for reload on the sets screen
             Result.success(data.toUI())
         }
     }

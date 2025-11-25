@@ -19,7 +19,10 @@ class WordDaoRepository(
     private val setsDao: SetsDao
 ) : IWordDaoRepository {
 
-    override suspend fun addWord(request: AddWordRequest): Result<WordResponse> {
+    override suspend fun addWord(
+        request: AddWordRequest,
+        selectedSetId: String?
+    ): Result<WordResponse> {
         val wordEntity = WordEntity(
             id = UUID.randomUUID().toString(),
             originalText = request.originalText,
@@ -31,6 +34,7 @@ class WordDaoRepository(
         )
         Log.e("WordsDaoRepo", "Add word : $wordEntity")
         dao.addWordToAllWordsSet(wordEntity)
+        selectedSetId?.let { dao.addWordToSet(wordEntity.id, setId = it) }
         return Result(data = wordEntity.toWordResponse())
     }
 

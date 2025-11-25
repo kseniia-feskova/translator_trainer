@@ -20,15 +20,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import com.presentation.ui.AppTheme
+import com.presentation.ui.darkColor
 import presentation.model.WordUI
 import presentation.test.smallList
-import com.presentation.ui.AppTheme
-import com.presentation.ui.primaryColor
 
 @Composable
 fun FlippableCard(
@@ -80,10 +77,8 @@ fun FlippableCard(
                     .graphicsLayer {
                         alpha = animateFront
                     },
-                style = MaterialTheme.typography.bodyLarge,
-                fontWeight = FontWeight.SemiBold,
-                color = primaryColor,
-                fontSize = TextUnit(30f, TextUnitType.Sp)
+                style = MaterialTheme.typography.displayLarge,
+                color = darkColor,
             )
         } else {
             Text(
@@ -94,10 +89,8 @@ fun FlippableCard(
                         rotationX = 180f  // Переворачиваем текст на обратной стороне
                         alpha = animateBack
                     },
-                style = MaterialTheme.typography.bodyLarge,
-                fontWeight = FontWeight.SemiBold,
-                color = primaryColor,
-                fontSize = TextUnit(30f, TextUnitType.Sp)
+                style = MaterialTheme.typography.displayLarge,
+                color = darkColor,
             )
         }
     }

@@ -24,15 +24,15 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.example.translatortrainer.shared.R
-import presentation.model.WordUI
-import presentation.test.smallList
 import com.presentation.ui.AppTheme
-import presentation.ui.AppTypography
 import com.presentation.ui.bgColor
-import com.presentation.ui.lightLilaColor
+import com.presentation.ui.darkColor
 import com.presentation.ui.primaryColor
 import com.presentation.ui.views.FlippableCard
 import com.presentation.ui.views.SwipeCard
+import presentation.model.WordUI
+import presentation.test.smallList
+import presentation.ui.AppTypography
 import presentation.ui.views.buttons.CustomShadowButton
 
 
@@ -63,7 +63,7 @@ fun CardsSet(
                     .align(Alignment.TopCenter)
                     .fillMaxWidth()
                     .background(
-                        color = lightLilaColor.copy(alpha = 0.7f),
+                        color = darkColor.copy(alpha = 0.7f),
                         shape = RoundedCornerShape(24.dp)
                     )
                     .zIndex(2f),

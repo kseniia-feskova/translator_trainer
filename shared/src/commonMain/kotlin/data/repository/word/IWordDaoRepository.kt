@@ -8,7 +8,7 @@ import data.model.words.get.bytranslate.WordByTranslatedRequest
 import data.model.words.update.UpdateWordStatusRequest
 
 interface IWordDaoRepository {
-    suspend fun addWord(request: AddWordRequest): Result<WordResponse>
+    suspend fun addWord(request: AddWordRequest, selectedSetId: String?): Result<WordResponse>
 
     suspend fun getWordByTranslated(request: WordByTranslatedRequest): Result<WordResponse>
 

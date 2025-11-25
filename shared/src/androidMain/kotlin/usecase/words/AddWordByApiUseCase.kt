@@ -32,7 +32,7 @@ class AddWordByApiUseCase(
             targetLanguage = course.targetLanguage,
             courseId = course.id
         )
-        val response = daoRepo.addWord(request)
+        val response = daoRepo.addWord(request, course.selectedSetId)
         val data = response.data
         return (if (response.errorMsg.isNotEmpty()) {
             if (response.errorMsg.contains("Failed to connect")) {

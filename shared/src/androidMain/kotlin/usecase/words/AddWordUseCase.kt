@@ -59,7 +59,7 @@ class AddWordUseCase(
             courseId = course.id
         )
         val response = if (prefs.isGuest() || prefs.isOfflineMode()) {
-            dao.addWord(request)
+            dao.addWord(request, course.selectedSetId)
         } else {
             checkToken.safeApiCallWithRefresh(
                 call = { apiRepo.addWord(request) },

@@ -7,6 +7,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,6 +24,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -30,32 +32,27 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import com.example.translatortrainer.shared.R
 import com.presentation.ui.AppTheme
-import presentation.ui.AppTypography
 import com.presentation.ui.bgColor
 import com.presentation.ui.darkColor
 import com.presentation.ui.gradientBrush
-import com.presentation.ui.lightLilaColor
 import com.presentation.ui.redDarkColor
-import presentation.ui.views.BaseTopView
-import presentation.ui.views.CardsSet
 import com.presentation.ui.views.ProgressForSet
 import presentation.model.LessonType
 import presentation.model.WordUI
 import presentation.navigation.BottomNavigationBar
 import presentation.test.smallList
+import presentation.ui.AppTypography
+import presentation.ui.views.BaseTopView
+import presentation.ui.views.CardsSet
 import presentation.ui.views.buttons.CustomShadowButton
 
 @SuppressLint("ConfigurationScreenWidthHeight")
@@ -108,14 +105,14 @@ fun SetScreen(
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Left",
-                            tint = lightLilaColor
+                            tint = darkColor
                         )
                     }
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Icon(
-                            Icons.AutoMirrored.Filled.ArrowBack,
+                            Icons.AutoMirrored.Filled.ArrowForward,
                             contentDescription = "Right",
-                            tint = lightLilaColor
+                            tint = darkColor
                         )
                     }
                 }
@@ -133,8 +130,7 @@ fun SetScreen(
                         text = stringResource(R.string.sorted_words),
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally),
-                        style = AppTypography.titleSmall.copy(color = bgColor),
-                        fontSize = TextUnit(22f, TextUnitType.Sp)
+                        style = AppTypography.titleLarge.copy(color = darkColor)
                     )
                     Spacer(modifier = Modifier.height(20.dp))
                     CustomShadowButton(
@@ -186,8 +182,13 @@ fun SetScreen(
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter)
                     .background(
-                        Color.White,
-                        shape = RoundedCornerShape(topEnd = 36.dp, topStart = 36.dp)
+                        brush = gradientBrush,
+                        shape = RoundedCornerShape(topEnd = 32.dp, topStart = 32.dp)
+                    )
+                    .border(
+                        width = 1.dp,
+                        color = bgColor,
+                        shape = RoundedCornerShape(topEnd = 32.dp, topStart = 32.dp)
                     )
                     .padding(vertical = 24.dp, horizontal = 16.dp)
             ) {
@@ -225,8 +226,7 @@ fun SetScreen(
                                 .align(Alignment.CenterHorizontally)
                                 .clickable { showCourseSelection(false) },
                             color = darkColor,
-                            style = AppTypography.titleSmall.copy(fontWeight = FontWeight.Bold)
-                        )
+                            style = AppTypography.displaySmall)
 
                     }
                 }

@@ -56,7 +56,9 @@ class AddSetUseCase(
 
     private suspend fun checkLimit(): Boolean {
         val course = prefs.getCourse() ?: return false
-        val allWords = repo.getAllSets(course.id).data?.size ?: 0
+        val allWords =
+            if (prefs.isGuest() || prefs.isOfflineMode()) dao.getAllSets(course.id).data?.size
+                ?: 0 else repo.getAllSets(course.id).data?.size ?: 0
         return allWords < GUEST_MAX_SETS
     }
 }

@@ -2,6 +2,7 @@ package presentation.ui.screens.newset
 
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,6 +20,8 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -49,7 +52,6 @@ import com.presentation.ui.fieldColors
 import com.presentation.ui.gradientBrush
 import com.presentation.ui.redDarkColor
 import com.presentation.ui.views.Loader
-import com.presentation.ui.views.SearchBarView
 import com.presentation.ui.views.SelectingWordWithStatusView
 import com.presentation.ui.yellowColor
 import presentation.model.WordUI
@@ -69,6 +71,7 @@ fun NewSetScreen(
     saveSet: () -> Unit = {},
     searchQuery: (String) -> Unit = {},
     onClearClick: () -> Unit = {},
+    sortedBy:() -> Unit = {},
     navigateUp: () -> Unit = {},
     goToAccount: () -> Unit = {},
     hideLimitsError: () -> Unit = {},
@@ -137,27 +140,36 @@ fun NewSetScreen(
             } else {
                 Spacer(Modifier.height(20.dp))
             }
-            Text(
-                text = stringResource(R.string.selected_words_subtitle, state.countOfSelected),
-                style = AppTypography.titleLarge.copy(
-                    color = darkColor,
-                    fontSize = TextUnit(18f, TextUnitType.Sp),
-                    fontWeight = FontWeight.Medium
-                ),
-                modifier = Modifier.padding(horizontal = 20.dp)
-            )
+            Row() {
+                Text(
+                    text = stringResource(R.string.selected_words_subtitle, state.countOfSelected),
+                    style = AppTypography.titleLarge.copy(
+                        color = darkColor,
+                        fontSize = TextUnit(18f, TextUnitType.Sp),
+                        fontWeight = FontWeight.Medium
+                    ),
+                    modifier = Modifier.padding(horizontal = 20.dp)
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.List,
+                    tint = darkColor,
+                    contentDescription = "LeftIcon",
+                    modifier = Modifier.padding(horizontal = 20.dp).clickable {  }
+                )
+            }
 
 
-            Spacer(Modifier.height(8.dp))
+            //Spacer(Modifier.height(8.dp))
 
-            SearchBarView(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp),
-                query = state.query,
-                onQueryChange = searchQuery,
-                onClearClick = onClearClick,
-            )
+//            SearchBarView(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(horizontal = 20.dp),
+//                query = state.query,
+//                onQueryChange = searchQuery,
+//                onClearClick = onClearClick,
+//            )
 
             Spacer(Modifier.height(12.dp))
 
