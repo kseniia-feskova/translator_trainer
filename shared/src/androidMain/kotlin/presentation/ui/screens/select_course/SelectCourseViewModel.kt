@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import presentation.model.CourseUI
 import com.presentation.usecases.auth.ILogoutUseCase
-import com.presentation.usecases.course.IAddCourseUseCase
+import presentation.usecases.course.IAddCourseUseCase
 import domain.translate.ITranslateModelProvider
 import presentation.usecases.course.ICoursesOnPrefsUseCases
 import kotlinx.coroutines.flow.MutableStateFlow

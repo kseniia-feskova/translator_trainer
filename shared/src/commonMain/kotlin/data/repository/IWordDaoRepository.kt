@@ -7,15 +7,7 @@ import data.model.words.get.bytranslate.WordByOriginalRequest
 import data.model.words.get.bytranslate.WordByTranslatedRequest
 import data.model.words.update.UpdateWordStatusRequest
 
-//TODO: tech-debt #1
-// WTF is wrong with all these repos for words?
-// IWordRepository
-// IWordApiRepository
-// IWordsDaoRepository
-
-
-interface IWordRepository {
-
+interface IWordDaoRepository {
     suspend fun addWord(request: AddWordRequest): Result<WordResponse>
 
     suspend fun getWordByTranslated(request: WordByTranslatedRequest): Result<WordResponse>

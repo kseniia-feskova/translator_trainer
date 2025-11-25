@@ -7,7 +7,9 @@ import data.repos.SetsDaoRepository
 import data.repos.TranslateRepository
 import data.repos.UserRepository
 import data.repos.WordApiRepository
+import data.repos.WordDaoRepository
 import data.repository.ICourseRepository
+import data.repository.IWordDaoRepository
 import data.repository.IWordApiRepository
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
@@ -15,22 +17,11 @@ import org.koin.dsl.module
 
 val repositoryModule = module {
 
-    //singleOf(::DataStoreManager) bind data.prefs.IDataStoreManager::class
-
     singleOf(::TranslateRepository) bind data.repository.ITranslateRepository::class
 
     singleOf(::SetsDaoRepository) bind data.repository.ISetRepository::class
 
-    //TODO: made separated Api and Dao repositories and choose them in useCases
-    factory<data.repository.IWordRepository> {
-        WordApiRepository(get())
-//        val isGuest = get<data.prefs.IDataStoreManager>().isGuestOnRuntime()
-//        if (isGuest == true) {
-//            WordsDaoRepository(get(), get())
-//        } else {
-//            WordApiRepository(get())
-//        }
-    }
+    singleOf(::WordDaoRepository) bind IWordDaoRepository::class
 
     singleOf(::WordApiRepository) bind IWordApiRepository::class
 

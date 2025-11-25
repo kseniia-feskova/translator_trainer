@@ -1,7 +1,7 @@
 package usecase.words
 
 import data.model.words.update.UpdateWordStatusRequest
-import data.repository.IWordRepository
+import data.repository.IWordApiRepository
 import domain.cache.ISetsCacheProvider
 import domain.token.ICheckToken
 import domain.token.ITokenRefresher
@@ -12,7 +12,7 @@ import presentation.model.WordUI
 import presentation.usecases.words.IUpdateStatusUseCase
 
 class UpdateStatusUseCase(
-    private val repo: IWordRepository,
+    private val repo: IWordApiRepository,
     private val cache: ISetsCacheProvider,
     private val tokenRefresher: ITokenRefresher,
     private val checkToken:ICheckToken

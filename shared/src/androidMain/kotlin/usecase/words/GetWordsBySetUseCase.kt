@@ -2,13 +2,13 @@ package usecase.words
 
 import domain.token.ITokenRefresher
 import presentation.usecases.words.IGetWordsBySetUseCase
-import data.repository.IWordRepository
+import data.repository.IWordApiRepository
 import domain.token.ICheckToken
 import mapper.toUI
 import presentation.model.WordUI
 
 class GetWordsBySetUseCase(
-    private val repo: IWordRepository,
+    private val repo: IWordApiRepository,
     private val tokenRefresher: ITokenRefresher,
     private val checkToken: ICheckToken
 ) : IGetWordsBySetUseCase {

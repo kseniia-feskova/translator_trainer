@@ -8,7 +8,6 @@ import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 val Context.dataStore by preferencesDataStore(name = "app_preferences")
@@ -19,6 +18,7 @@ class DataStoreManager(private val context: Context) : IDataStoreManager {
     private val courseKey = stringPreferencesKey("course")
     private val emailKey = stringPreferencesKey("email")
     private val isGuestKey = booleanPreferencesKey("is_guest")
+    private val isOfflineMode = booleanPreferencesKey("is_offline")
     private var isGuest: Boolean? = null
 
     private val userId: Flow<String?> = context.dataStore.data
@@ -44,7 +44,7 @@ class DataStoreManager(private val context: Context) : IDataStoreManager {
             }
         } else {
             context.dataStore.edit { preferences ->
-                preferences[userIdKey] = id.toString()
+                preferences[userIdKey] = id
             }
         }
     }
@@ -117,5 +117,15 @@ class DataStoreManager(private val context: Context) : IDataStoreManager {
         return context.dataStore.data.map { preferences ->
             preferences[courseKey]?.let { Json.decodeFromString<data.model.course.CourseEntity>(it) }
         }.firstOrNull()
+    }
+
+    override suspend fun isOfflineMode(): Boolean {
+        return context.dataStore.data.map { it[isOfflineMode] }.firstOrNull() ?: false
+    }
+
+    override suspend fun setOfflineMode(set: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[isOfflineMode] = set
+        }
     }
 }

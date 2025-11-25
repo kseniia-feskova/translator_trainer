@@ -1,9 +1,9 @@
 package usecase.auth
 
 import presentation.usecases.auth.ICreateFromGuestUseCase
-import com.presentation.usecases.course.IAddCourseUseCase
+import presentation.usecases.course.IAddCourseUseCase
 import com.presentation.usecases.words.IAddWordByApiUseCase
-import data.repository.IWordRepository
+import data.repository.IWordApiRepository
 import domain.CanNotCreateCourseException
 import domain.CanNotCreateSetException
 import domain.CanNotCreateUserException
@@ -17,7 +17,7 @@ import presentation.usecases.sets.IGetAllSetsUseCase
 class CreateFromGuestUseCase(
     private val registerUseCase: IRegisterUseCase,
     private val courseUseCase: IAddCourseUseCase,
-    private val wordsRepo: IWordRepository,
+    private val wordsRepo: IWordApiRepository,
     private val saveWord: IAddWordByApiUseCase,
     private val sets: IGetAllSetsUseCase,
     private val addSet: IAddSetUseCase

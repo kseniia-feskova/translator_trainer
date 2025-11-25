@@ -7,13 +7,14 @@ import data.model.words.add.AddWordRequest
 import data.model.words.get.bytranslate.WordByOriginalRequest
 import data.model.words.get.bytranslate.WordByTranslatedRequest
 import data.model.words.update.UpdateWordStatusRequest
+
 import data.repository.IWordApiRepository
 import data.safeCall
 import java.util.UUID
 
 class WordApiRepository(
     private val apiService: ApiService
-) : data.repository.IWordRepository, IWordApiRepository {
+) : IWordApiRepository {
 
     override suspend fun addWord(request: AddWordRequest): Result<WordResponse> {
         return safeCall(request = { apiService.saveWorld(request) })

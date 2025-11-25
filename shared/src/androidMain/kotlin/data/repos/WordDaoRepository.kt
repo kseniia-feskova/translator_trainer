@@ -7,16 +7,17 @@ import data.model.words.add.AddWordRequest
 import data.model.words.get.bytranslate.WordByOriginalRequest
 import data.model.words.get.bytranslate.WordByTranslatedRequest
 import data.model.words.update.UpdateWordStatusRequest
+import data.repository.IWordDaoRepository
 import data.room.SetsDao
 import data.room.WordDao
 import data.room.model.WordEntity
 import mapper.toWordResponse
 import java.util.UUID
 
-class WordsDaoRepository(
+class WordDaoRepository(
     private val dao: WordDao,
     private val setsDao: SetsDao
-) : data.repository.IWordRepository {
+) : IWordDaoRepository {
 
     override suspend fun addWord(request: AddWordRequest): Result<WordResponse> {
         val wordEntity = WordEntity(

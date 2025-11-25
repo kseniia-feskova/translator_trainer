@@ -1,6 +1,6 @@
 package usecase.course
 
-import com.presentation.usecases.course.IAddCourseUseCase
+import presentation.usecases.course.IAddCourseUseCase
 import data.model.course.CourseEntity
 import data.model.course.add.AddCourseRequest
 import data.model.sets.AddSetRequest
@@ -26,8 +26,7 @@ class AddCourseUseCase(
 ) : IAddCourseUseCase {
 
     override suspend fun invoke(course: CourseUI, needToCreateCourse: Boolean): Result<CourseUI> {
-        val isGuest = dataStore.isGuest()
-        return if (isGuest) {
+        return if (dataStore.isGuest() || dataStore.isOfflineMode()) {
             val allWordsSet = daoSets.addSet(
                 AddSetRequest(
                     name = ALL_WORDS,

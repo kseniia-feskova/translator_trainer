@@ -1,13 +1,13 @@
 package usecase.words
 
-import data.repository.IWordRepository
+import data.repository.IWordApiRepository
 import domain.cache.ISetsCacheProvider
 import domain.token.ICheckToken
 import domain.token.ITokenRefresher
 import presentation.usecases.words.IDeleteWordUseCase
 
 class DeleteWordUseCase(
-    private val repo: IWordRepository,
+    private val repo: IWordApiRepository,
     private val tokenRefresher: ITokenRefresher,
     private val cacheProvider: ISetsCacheProvider,
     private val checkToken:ICheckToken

@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import presentation.model.CourseUI
 import presentation.usecases.ITranslateWordUseCase
 import presentation.usecases.course.ICoursesOnPrefsUseCases
-import com.presentation.usecases.words.IAddWordUseCase
+import presentation.usecases.words.IAddWordUseCase
 import presentation.utils.Language
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

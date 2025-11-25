@@ -10,14 +10,19 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import androidx.credentials.Credential
 import androidx.credentials.CredentialManager
@@ -36,13 +41,15 @@ import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.presentation.ui.AppTheme
-import com.presentation.viewmodel.MainViewModel
+import com.presentation.ui.darkColor
+import com.presentation.ui.yellowColor
 import com.translator.app.di.databaseModule
 import com.translator.app.di.networkModule
 import com.translator.app.di.preferencesModule
 import com.translator.app.di.repositoryModule
 import com.translator.app.di.translateModule
 import com.translator.app.di.viewModelModule
+import com.translator.app.network.hasInternet
 import kotlinx.coroutines.launch
 import mapper.toDomain
 import org.koin.android.ext.android.inject
@@ -54,7 +61,9 @@ import presentation.model.LessonType
 import presentation.navigation.BottomNavigationBar
 import presentation.navigation.LeafScreen
 import presentation.navigation.TranslatorAppContainer
+import presentation.ui.AppTypography
 import presentation.ui.screens.auth.navigateToAuth
+import presentation.viewmodel.MainViewModel
 import useCaseModule
 
 class MainActivity : AppCompatActivity() {
@@ -81,6 +90,7 @@ class MainActivity : AppCompatActivity() {
             val navController = rememberNavController()
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val currentRoute = navBackStackEntry?.destination?.route?.lowercase()
+            val isNetworkConnected by viewModel.isNetworkConnected.collectAsState(hasInternet(context = this))
 
             LaunchedEffect(Unit) {
                 viewModel.isUserAuthorized.collect {
@@ -114,6 +124,19 @@ class MainActivity : AppCompatActivity() {
                     modifier = Modifier
                         .fillMaxSize()
                         .systemBarsPadding(),
+                    topBar = {
+                        if (!isNetworkConnected) {
+                            Text(
+                                "No internet connection",
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(color = yellowColor.copy(alpha = 0.5f))
+                                    .padding(12.dp),
+                                color = darkColor,
+                                style = AppTypography.displaySmall
+                            )
+                        }
+                    },
                     content = { padding ->
                         Box(modifier = Modifier.padding(padding)) {
                             TranslatorAppContainer(
@@ -211,7 +234,6 @@ class MainActivity : AppCompatActivity() {
         FirebaseAuth.getInstance()
             .signInWithCredential(credential)
             .addOnSuccessListener { authResult ->
-                val user = authResult.user
                 onSuccess(authResult.user?.toDomain())
             }
             .addOnFailureListener { e ->

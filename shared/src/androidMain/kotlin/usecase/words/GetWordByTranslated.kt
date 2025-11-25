@@ -1,16 +1,18 @@
 package usecase.words
 
-import com.presentation.usecases.words.IGetWordByTranslated
+import presentation.usecases.words.IGetWordByTranslated
 import data.model.words.get.bytranslate.WordByTranslatedRequest
 import data.prefs.IDataStoreManager
-import data.repository.IWordRepository
+import data.repository.IWordDaoRepository
+import data.repository.IWordApiRepository
 import domain.token.ICheckToken
 import domain.token.ITokenRefresher
 import mapper.toUI
 import presentation.model.WordUI
 
 class GetWordByTranslated(
-    private val repo: IWordRepository,
+    private val repo: IWordApiRepository,
+    private val dao: IWordDaoRepository,
     private val prefs: IDataStoreManager,
     private val tokenRefresher: ITokenRefresher,
     private val checkToken: ICheckToken
@@ -24,9 +26,13 @@ class GetWordByTranslated(
             translate = translated
         )
 
-        val response = checkToken.safeApiCallWithRefresh(
-            call = { repo.getWordByTranslated(request) },
-            onTokenExpired = { tokenRefresher.refreshToken() })
+        val response = if (prefs.isGuest() || prefs.isOfflineMode()) {
+            dao.getWordByTranslated(request)
+        } else {
+            checkToken.safeApiCallWithRefresh(
+                call = { repo.getWordByTranslated(request) },
+                onTokenExpired = { tokenRefresher.refreshToken() })
+        }
 
         val data = response.data
 

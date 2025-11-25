@@ -5,9 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import presentation.usecases.ITranslateWordUseCase
 import presentation.usecases.course.ICoursesOnPrefsUseCases
-import com.presentation.usecases.words.IAddWordUseCase
-import com.presentation.usecases.words.IGetWordByOriginal
-import com.presentation.usecases.words.IGetWordByTranslated
+import presentation.usecases.words.IAddWordUseCase
+import presentation.usecases.words.IGetWordByOriginal
+import presentation.usecases.words.IGetWordByTranslated
 import presentation.utils.Language
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

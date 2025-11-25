@@ -22,4 +22,7 @@ interface IDataStoreManager {
 
     suspend fun saveEmail(email: String)
     suspend fun getEmail(): String?
+
+    suspend fun isOfflineMode(): Boolean
+    suspend fun setOfflineMode(set: Boolean)
 }

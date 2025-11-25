@@ -13,16 +13,15 @@ import presentation.ui.screens.lesson.success.SuccessLessonViewModel
 import presentation.ui.screens.select_course.SelectCourseViewModel
 import presentation.ui.screens.splash.SplashViewModel
 import com.presentation.ui.screens.texts.TextFromPhotoViewModel
-import com.presentation.viewmodel.MainViewModel
-import org.koin.androidx.viewmodel.dsl.viewModel
-import org.koin.androidx.viewmodel.dsl.viewModelOf
+import org.koin.core.module.dsl.viewModel
+import org.koin.core.module.dsl.viewModelOf
+import presentation.viewmodel.MainViewModel
 import org.koin.dsl.module
 
 
 val viewModelModule = module {
 
     viewModel { SplashViewModel(get(), get(), get()) }
-
     viewModelOf(::MainViewModel)
     viewModelOf(::HomeViewModel)
     viewModelOf(::SetsViewModel)

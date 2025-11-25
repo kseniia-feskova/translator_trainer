@@ -1,20 +1,23 @@
 package usecase.words
 
-import com.presentation.usecases.words.IGetWordByOriginal
+import presentation.usecases.words.IGetWordByOriginal
 import data.model.words.get.bytranslate.WordByOriginalRequest
 import data.prefs.IDataStoreManager
-import data.repository.IWordRepository
+import data.repository.IWordDaoRepository
+import data.repository.IWordApiRepository
 import domain.token.ICheckToken
 import domain.token.ITokenRefresher
 import mapper.toUI
 import presentation.model.WordUI
 
 class GetWordByOriginal(
-    private val repo: IWordRepository,
+    private val repo: IWordApiRepository,
+    private val dao: IWordDaoRepository,
     private val prefs: IDataStoreManager,
     private val tokenRefresher: ITokenRefresher,
     private val checkToken: ICheckToken
 ) : IGetWordByOriginal {
+
     override suspend fun invoke(original: String): Result<WordUI> {
         val course = prefs.getCourse() ?: return Result.failure(Exception("No course selected"))
 
@@ -22,14 +25,14 @@ class GetWordByOriginal(
             courseId = course.id,
             original = original
         )
-
-        val response = checkToken.safeApiCallWithRefresh(
-            call = { repo.getWordByOriginal(request) },
-            onTokenExpired = { tokenRefresher.refreshToken() })
-
+        val response = if (prefs.isGuest() || prefs.isOfflineMode()) {
+            dao.getWordByOriginal(request)
+        } else {
+            checkToken.safeApiCallWithRefresh(
+                call = { repo.getWordByOriginal(request) },
+                onTokenExpired = { tokenRefresher.refreshToken() })
+        }
         val data = response.data
-
-
         return if (response.errorMsg.isNotEmpty()) {
             if (response.errorMsg.contains("Failed to connect")) {
                 Result.failure(Exception("Failed to connect"))

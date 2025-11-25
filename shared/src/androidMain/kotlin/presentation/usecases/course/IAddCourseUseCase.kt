@@ -1,4 +1,4 @@
-package com.presentation.usecases.course
+package presentation.usecases.course
 
 import presentation.model.CourseUI
 

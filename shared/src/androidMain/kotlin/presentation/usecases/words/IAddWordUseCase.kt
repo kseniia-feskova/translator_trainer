@@ -1,4 +1,4 @@
-package com.presentation.usecases.words
+package presentation.usecases.words
 
 import presentation.model.WordUI
 

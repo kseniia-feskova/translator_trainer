@@ -5,9 +5,11 @@ import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.translator.app.BuildConfig
+import com.translator.app.network.NetworkConnectivityObserver
 import data.api.ApiService
 import data.api.AuthInterceptor
 import data.prefs.TokenStorage
+import network.INetworkConnectivityObserver
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
@@ -58,4 +60,6 @@ val networkModule = module {
     single { provideOkHttpClient(get()) } // Создает OkHttpClient
     single { provideRetrofit(get()) } // Создает Retrofit
     single<ApiService> { get<Retrofit>().create(ApiService::class.java) }
+
+    single<INetworkConnectivityObserver> { NetworkConnectivityObserver(get<Context>()) }
 }

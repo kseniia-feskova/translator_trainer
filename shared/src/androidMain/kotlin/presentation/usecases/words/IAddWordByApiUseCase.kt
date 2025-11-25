@@ -9,4 +9,8 @@ interface IAddWordByApiUseCase {
         translatedText: String
     ): Result<WordUI>
 
+    suspend fun invokeOffline(
+        originalText: String,
+        translatedText: String
+    ): Result<WordUI>
 }

@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -124,6 +126,7 @@ fun AccountTopView(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
+        Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = stringResource(R.string.account_title),
             style = MaterialTheme.typography.displayMedium,
@@ -195,7 +198,7 @@ fun BaseTopView(
             .fillMaxWidth()
             .background(
                 color = bgColor,
-                shape = RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp)
+                shape = RoundedCornerShape(bottomStart = 32.dp, bottomEnd = 32.dp)
             ),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically

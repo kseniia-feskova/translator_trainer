@@ -1,13 +1,14 @@
 package usecase.words
 
 import domain.GuestLimitException
-import com.presentation.usecases.words.IAddWordUseCase
-import com.presentation.usecases.words.IGetWordByOriginal
-import com.presentation.usecases.words.IGetWordByTranslated
+import presentation.usecases.words.IAddWordUseCase
+import presentation.usecases.words.IGetWordByOriginal
+import presentation.usecases.words.IGetWordByTranslated
 import com.presentation.utils.GUEST_MAX_WORDS
 import data.model.words.add.AddWordRequest
 import data.prefs.IDataStoreManager
-import data.repository.IWordRepository
+import data.repository.IWordDaoRepository
+import data.repository.IWordApiRepository
 import domain.cache.ISetsCacheProvider
 import domain.token.ICheckToken
 import domain.token.ITokenRefresher
@@ -15,7 +16,8 @@ import mapper.toUI
 import presentation.model.WordUI
 
 class AddWordUseCase(
-    private val apiRepo: IWordRepository,
+    private val apiRepo: IWordApiRepository,
+    private val dao: IWordDaoRepository,
     private val prefs: IDataStoreManager,
     private val cache: ISetsCacheProvider,
     private val tokenRefresher: ITokenRefresher,
@@ -56,10 +58,14 @@ class AddWordUseCase(
             targetLanguage = course.targetLanguage,
             courseId = course.id
         )
-        val response = checkToken.safeApiCallWithRefresh(
-            call = { apiRepo.addWord(request) },
-            onTokenExpired = { tokenRefresher.refreshToken() }
-        )
+        val response = if (prefs.isGuest() || prefs.isOfflineMode()) {
+            dao.addWord(request)
+        } else {
+            checkToken.safeApiCallWithRefresh(
+                call = { apiRepo.addWord(request) },
+                onTokenExpired = { tokenRefresher.refreshToken() }
+            )
+        }
         val data = response.data
         return (if (response.errorMsg.isNotEmpty()) {
             if (response.errorMsg.contains("Failed to connect")) {
