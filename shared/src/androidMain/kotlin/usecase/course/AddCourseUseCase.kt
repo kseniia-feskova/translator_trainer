@@ -1,12 +1,11 @@
 package usecase.course
 
-import presentation.usecases.course.IAddCourseUseCase
 import data.model.course.CourseEntity
 import data.model.course.add.AddCourseRequest
 import data.model.sets.AddSetRequest
 import data.prefs.IDataStoreManager
 import data.repository.ICourseRepository
-import data.repository.ISetRepository
+import data.repository.set.ISetDaoRepository
 import domain.ALL_WORDS
 import domain.token.ICheckToken
 import domain.token.ITokenRefresher
@@ -14,13 +13,14 @@ import kotlinx.coroutines.flow.firstOrNull
 import mapper.toData
 import mapper.toUI
 import presentation.model.CourseUI
+import presentation.usecases.course.IAddCourseUseCase
 import presentation.usecases.course.ICoursesOnPrefsUseCases
 
 class AddCourseUseCase(
     private val repo: ICourseRepository,
     private val tokenRefresher: ITokenRefresher,
     private val dataStore: IDataStoreManager,
-    private val daoSets: ISetRepository,
+    private val daoSets: ISetDaoRepository,
     private val checkToken: ICheckToken,
     private val coursesOnPrefs: ICoursesOnPrefsUseCases
 ) : IAddCourseUseCase {

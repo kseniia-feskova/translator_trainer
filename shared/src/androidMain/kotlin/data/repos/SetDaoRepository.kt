@@ -3,17 +3,17 @@ package data.repos
 import data.model.base.Result
 import data.model.sets.AddSetRequest
 import data.model.sets.SetResponse
-import data.repository.ISetRepository
+import data.repository.set.ISetDaoRepository
 import data.room.SetsDao
 import data.room.WordDao
 import data.room.model.SetOfWords
 import data.room.model.toCommon
 import java.util.UUID
 
-class SetsDaoRepository(
+class SetDaoRepository(
     private val dao: SetsDao,
     private val wordsDao: WordDao
-) : ISetRepository {
+) : ISetDaoRepository {
 
     override suspend fun addSet(request: AddSetRequest): Result<SetResponse> {
         val setOfWords = SetOfWords(

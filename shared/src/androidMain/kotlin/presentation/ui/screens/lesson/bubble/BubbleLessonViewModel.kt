@@ -65,7 +65,7 @@ class BubbleLessonViewModel(
                     getBubble(
                         screenWidthPx = screenWidth,
                         screenHeightPx = screenHeight,
-                        sizeKoef = (it.word.length + 5) * 20f,
+                        sizeKoef = (it.word.length + 4) * 16f,
                         color = it.bgColor,
                         word = it.word,
                         wordId = it.wordId,

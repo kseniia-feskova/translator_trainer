@@ -1,4 +1,4 @@
-package data.repository
+package data.repository.word
 
 import data.model.base.Result
 import data.model.words.WordResponse

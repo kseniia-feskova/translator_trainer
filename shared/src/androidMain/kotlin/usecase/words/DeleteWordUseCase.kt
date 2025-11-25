@@ -1,6 +1,6 @@
 package usecase.words
 
-import data.repository.IWordApiRepository
+import data.repository.word.IWordApiRepository
 import domain.cache.ISetsCacheProvider
 import domain.token.ICheckToken
 import domain.token.ITokenRefresher

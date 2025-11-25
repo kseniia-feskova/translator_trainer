@@ -8,7 +8,7 @@ class SetsCacheProvider : ISetsCacheProvider {
 
     private val _sets = MutableStateFlow<List<SetResponse>?>(null)
 
-    override fun addSets(newList: List<SetResponse>?) {
+    override fun updateSets(newList: List<SetResponse>?) {
         _sets.update { newList }
     }
 

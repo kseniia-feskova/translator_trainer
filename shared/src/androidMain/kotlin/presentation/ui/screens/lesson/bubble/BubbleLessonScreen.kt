@@ -83,7 +83,7 @@ fun BubbleScreenPreview() {
                     getBubble(
                         screenWidthPx = screenWidth,
                         screenHeightPx = screenHeight,
-                        sizeKoef = (it.word.length + 5) * 20f,
+                        sizeKoef = (it.word.length + 5) * 5f,
                         color = it.bgColor,
                         word = it.word,
                         wordId = it.wordId,
@@ -458,7 +458,7 @@ data class BubbleWitText(
     val textColor: Color
 ) {
     val textSize: Float
-        get() = 40f //  size / 4f // Размер текста зависит от размера пузыря
+        get() = 30f //  size / 4f // Размер текста зависит от размера пузыря
 
     fun updatePosition(
         screenWidth: Float,

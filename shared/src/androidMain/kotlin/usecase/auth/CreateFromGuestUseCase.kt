@@ -3,7 +3,7 @@ package usecase.auth
 import presentation.usecases.auth.ICreateFromGuestUseCase
 import presentation.usecases.course.IAddCourseUseCase
 import com.presentation.usecases.words.IAddWordByApiUseCase
-import data.repository.IWordApiRepository
+import data.repository.word.IWordApiRepository
 import domain.CanNotCreateCourseException
 import domain.CanNotCreateSetException
 import domain.CanNotCreateUserException

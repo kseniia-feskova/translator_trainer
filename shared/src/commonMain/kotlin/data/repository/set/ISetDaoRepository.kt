@@ -1,10 +1,10 @@
-package data.repository
+package data.repository.set
 
 import data.model.base.Result
 import data.model.sets.AddSetRequest
 import data.model.sets.SetResponse
 
-interface ISetRepository {
+interface ISetDaoRepository {
 
     suspend fun addSet(request: AddSetRequest): Result<SetResponse>
 

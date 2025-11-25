@@ -55,7 +55,7 @@ import com.presentation.ui.gradientBrush
 import com.presentation.ui.lightLilaColor
 import com.presentation.ui.redDarkColor
 import com.presentation.ui.whiteColor
-import com.presentation.utils.GUEST_MAX_WORDS
+import presentation.utils.GUEST_MAX_WORDS
 import presentation.navigation.BottomNavigationBar
 import presentation.test.dummyCourses
 import presentation.ui.AppTypography

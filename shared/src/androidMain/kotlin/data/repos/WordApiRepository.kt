@@ -8,7 +8,7 @@ import data.model.words.get.bytranslate.WordByOriginalRequest
 import data.model.words.get.bytranslate.WordByTranslatedRequest
 import data.model.words.update.UpdateWordStatusRequest
 
-import data.repository.IWordApiRepository
+import data.repository.word.IWordApiRepository
 import data.safeCall
 import java.util.UUID
 

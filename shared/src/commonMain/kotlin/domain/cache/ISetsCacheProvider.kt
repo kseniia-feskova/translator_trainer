@@ -3,7 +3,7 @@ package domain.cache
 import data.model.sets.SetResponse
 
 interface ISetsCacheProvider {
-    fun addSets(newList: List<SetResponse>?)
+    fun updateSets(newList: List<SetResponse>?)
 
     fun getSets(): List<SetResponse>?
 

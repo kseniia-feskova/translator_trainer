@@ -4,11 +4,11 @@ import domain.GuestLimitException
 import presentation.usecases.words.IAddWordUseCase
 import presentation.usecases.words.IGetWordByOriginal
 import presentation.usecases.words.IGetWordByTranslated
-import com.presentation.utils.GUEST_MAX_WORDS
+import presentation.utils.GUEST_MAX_WORDS
 import data.model.words.add.AddWordRequest
 import data.prefs.IDataStoreManager
-import data.repository.IWordDaoRepository
-import data.repository.IWordApiRepository
+import data.repository.word.IWordDaoRepository
+import data.repository.word.IWordApiRepository
 import domain.cache.ISetsCacheProvider
 import domain.token.ICheckToken
 import domain.token.ITokenRefresher

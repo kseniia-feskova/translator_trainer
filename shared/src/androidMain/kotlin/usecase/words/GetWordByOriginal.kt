@@ -3,8 +3,8 @@ package usecase.words
 import presentation.usecases.words.IGetWordByOriginal
 import data.model.words.get.bytranslate.WordByOriginalRequest
 import data.prefs.IDataStoreManager
-import data.repository.IWordDaoRepository
-import data.repository.IWordApiRepository
+import data.repository.word.IWordDaoRepository
+import data.repository.word.IWordApiRepository
 import domain.token.ICheckToken
 import domain.token.ITokenRefresher
 import mapper.toUI

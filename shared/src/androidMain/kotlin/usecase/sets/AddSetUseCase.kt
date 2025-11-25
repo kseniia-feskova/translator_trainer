@@ -1,10 +1,11 @@
 package usecase.sets
 
 import domain.GuestLimitException
-import com.presentation.utils.GUEST_MAX_SETS
+import presentation.utils.GUEST_MAX_SETS
 import data.model.sets.AddSetRequest
 import data.prefs.IDataStoreManager
-import data.repository.ISetRepository
+import data.repository.set.ISetApiRepository
+import data.repository.set.ISetDaoRepository
 import domain.cache.ISetsCacheProvider
 import domain.token.ICheckToken
 import domain.token.ITokenRefresher
@@ -13,7 +14,8 @@ import presentation.model.SetOfCards
 import presentation.usecases.sets.IAddSetUseCase
 
 class AddSetUseCase(
-    private val repo: ISetRepository,
+    private val repo: ISetApiRepository,
+    private val dao: ISetDaoRepository,
     private val cache: ISetsCacheProvider,
     private val tokenRefresher: ITokenRefresher,
     private val prefs: IDataStoreManager,
@@ -32,9 +34,13 @@ class AddSetUseCase(
             }
         }
         val request = AddSetRequest(name, isDefault, courseId, listOfWords)
-        val response = checkToken.safeApiCallWithRefresh(
-            call = { repo.addSet(request) },
-            onTokenExpired = { tokenRefresher.refreshToken() })
+        val response = if (prefs.isGuest() || prefs.isOfflineMode()) {
+            dao.addSet(request)
+        } else {
+            checkToken.safeApiCallWithRefresh(
+                call = { repo.addSet(request) },
+                onTokenExpired = { tokenRefresher.refreshToken() })
+        }
         val data = response.data
         return if (response.errorMsg.isNotEmpty()) {
             if (response.errorMsg.contains("Failed to connect")) {

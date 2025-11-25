@@ -27,7 +27,7 @@ class TokenRefresher(
                 if (response.errorMsg == ERROR_TOKEN_EXPIRED) {
                     println("refreshToken: Code = 401")
                     authRepo.logout()
-                    cache.addSets(null)
+                    cache.clear()
                     prefs.saveUserId(null)
                 } else {
                     println("TokenRefresher: Can not refresh token. Error msg = ${response.errorMsg}")
@@ -37,7 +37,7 @@ class TokenRefresher(
         } else {
             println("refreshToken: Token is null(")
             authRepo.logout()
-            cache.addSets(null)
+            cache.updateSets(null)
             prefs.saveUserId(null)
             return false
         }

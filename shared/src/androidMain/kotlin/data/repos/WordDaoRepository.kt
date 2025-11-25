@@ -7,7 +7,7 @@ import data.model.words.add.AddWordRequest
 import data.model.words.get.bytranslate.WordByOriginalRequest
 import data.model.words.get.bytranslate.WordByTranslatedRequest
 import data.model.words.update.UpdateWordStatusRequest
-import data.repository.IWordDaoRepository
+import data.repository.word.IWordDaoRepository
 import data.room.SetsDao
 import data.room.WordDao
 import data.room.model.WordEntity
