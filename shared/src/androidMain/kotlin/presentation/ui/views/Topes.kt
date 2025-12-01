@@ -48,6 +48,7 @@ import com.presentation.ui.AppTheme
 import presentation.ui.AppTypography
 import com.presentation.ui.bgColor
 import com.presentation.ui.darkColor
+import com.presentation.ui.redDarkColor
 import com.presentation.ui.whiteColor
 
 @Composable
@@ -265,11 +266,10 @@ fun TopViewPreview() {
                     "Статистика",
                     leftIcon = Icons.Default.ArrowBack,
                 )
-                AccountTopView(name = "test@gmail.com")
-//
-//                LessonTopView(3)
-//                LessonTopView(2)
-//                LessonTopView(1)
+
+                LessonTopView(3)
+                LessonTopView(2)
+                LessonTopView(1)
             }
         }
     }
@@ -285,8 +285,8 @@ fun LessonTopView(
         modifier = Modifier
             .fillMaxWidth()
             .background(
-                color = bgColor,
-                shape = RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp)
+                color = bgColor.copy(alpha = 0.3f),
+                shape = RoundedCornerShape(bottomStart = 32.dp, bottomEnd = 32.dp)
             ),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
@@ -296,8 +296,8 @@ fun LessonTopView(
                 Icon(
                     imageVector = Icons.Default.Star,
                     contentDescription = "LeftIcon",
-                    tint = Color.Red,
-                    modifier = Modifier.padding(horizontal = 4.dp)
+                    tint = redDarkColor,
+                    modifier = Modifier.size(36.dp).padding(horizontal = 4.dp)
                 )
             }
         }
@@ -315,7 +315,7 @@ fun LessonTopView(
             modifier = Modifier
                 .padding(16.dp)
                 .clickable { onPauseClicked() },
-            tint = whiteColor
+            tint = darkColor
         )
     }
 }

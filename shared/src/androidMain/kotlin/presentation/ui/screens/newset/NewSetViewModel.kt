@@ -22,6 +22,7 @@ class NewSetViewModel(
     val uiState = _uiState.asStateFlow()
 
     private var allWords = mapOf<WordUI, Boolean>()
+    private var isFiltered = false
 
     init {
         viewModelScope.launch {
@@ -47,7 +48,23 @@ class NewSetViewModel(
     fun handleIntent(intent: NewSetIntent) {
         when (intent) {
             NewSetIntent.ClearSearch -> clearQuery()
-            NewSetIntent.FilterClicked -> {}
+            NewSetIntent.FilterClicked -> {
+                if (!isFiltered) {
+                    _uiState.update {
+                        it.copy(
+                            words = allWords
+                        )
+                    }
+                } else {
+                    _uiState.update {
+                        it.copy(
+                            words = getSortedWords()
+                        )
+                    }
+                }
+                isFiltered = !isFiltered
+            }
+
             is NewSetIntent.SaveSet -> saveSet(intent.onSetSaved)
             is NewSetIntent.SelectWord -> selectWord(intent.word)
             is NewSetIntent.NameChange -> changeName(intent.name)
@@ -55,6 +72,16 @@ class NewSetViewModel(
             is NewSetIntent.SearchWord -> searchQuery(intent.query)
             NewSetIntent.HideLimitsError -> _uiState.update { it.copy(limitsError = false) }
         }
+    }
+
+    fun getSortedWords(): Map<WordUI, Boolean> {
+        return allWords
+            .toList()
+            .sortedWith(
+                compareBy<Pair<WordUI, Boolean>> { it.first.level }
+                    .thenBy { it.first.originalText }
+            )
+            .toMap()
     }
 
     private fun saveSet(onSetSaved: () -> Unit) {

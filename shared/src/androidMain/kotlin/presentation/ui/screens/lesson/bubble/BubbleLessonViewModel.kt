@@ -24,6 +24,7 @@ class BubbleLessonViewModel(
     private val updateStatusUseCase: IUpdateStatusUseCase,
     private val updateSetsUseCase: IUpdateSetsUseCase
 ) : ViewModel() {
+
     private val _bubbles = MutableStateFlow<List<BubbleWitText>>(emptyList())
     val bubbles: StateFlow<List<BubbleWitText>> = _bubbles.asStateFlow()
 
@@ -44,21 +45,54 @@ class BubbleLessonViewModel(
     private val _lives = MutableStateFlow(3)
     val lives = _lives.asStateFlow()
 
+    private val _time = MutableStateFlow(TIMER)
+    val time = _time.asStateFlow()
+
+    init {
+        startTheTimer()
+    }
+
     fun onPauseClicked() {
         _onPause.update { !it }
+        if (!_onPause.value) {
+            startTheTimer()
+        }
+    }
+
+    fun startTheTimer() {
+        viewModelScope.launch {
+            while (_time.value > 0L && !_onPause.value && !_lessonFailed.value) {
+                delay(1000L)
+                _time.update { it - 1000L }
+            }
+
+            if (_time.value == 0L) {
+                if (_bubbles.value.find { it.isVisible } == null) {
+                    _lessonComplete.update { true }
+                } else {
+                    _lessonFailed.update { true }
+                }
+            }
+        }
     }
 
     fun initializeBubbles(screenWidth: Float, screenHeight: Float) {
         viewModelScope.launch {
             val response = getWordsBySetUseCase.invoke(setId)
             if (response.isSuccess) {
-                val words = response.getOrNull()?.filter { it.level != Level.KNOW }
+                val wordsInResponse = response.getOrNull()?.filter { it.level != Level.KNOW }
+                if (wordsInResponse != null) {
+                    this@BubbleLessonViewModel.words.addAll(words)
+                }
+                val words = if (wordsInResponse?.isEmpty() == true) {
+                    response.getOrNull()?.shuffled()?.take(10)
+                } else {
+                    wordsInResponse
+                }
                 val selected = words?.map {
                     it.toBubbles()
                 }?.flatten()
-                if (words != null) {
-                    this@BubbleLessonViewModel.words.addAll(words)
-                }
+
                 Log.e("BubbleLessonVM", "selected = $selected")
 
                 val list = selected?.map {
@@ -86,9 +120,16 @@ class BubbleLessonViewModel(
     }
 
     fun reload() {
+        _time.update { TIMER }
         _lives.update { 3 }
         _lessonFailed.update { false }
-        _bubbles.update { it.map { it.copy(isVisible = true, isWrong = null, isSelected = false) } }
+        _onPause.update { false }
+        _bubbles.update {
+            it.map {
+                it.copy(isVisible = true, isWrong = null, isSelected = false)
+            }.shuffled()
+        }
+        startTheTimer()
     }
 
     fun onBubbleClick(bubbleId: String) {
@@ -97,11 +138,9 @@ class BubbleLessonViewModel(
         if (bubble == null) return
 
         if (selectedBubbles.find { it.id == bubbleId } != null) {
-            // 🔵 Убираем подсветку и возобновляем движение
             selectedBubbles.removeIf { it.id == bubbleId }
             updateBubbleState(currentBubbles, bubble.copy(isSelected = false), null)
         } else if (selectedBubbles.size < 2) {
-            // 📌 Добавляем пузырь в выбор
             selectedBubbles.add(bubble.copy(isSelected = true))
             updateBubbleState(currentBubbles, bubble.copy(isSelected = true), null)
 
@@ -189,5 +228,9 @@ class BubbleLessonViewModel(
 
     private fun checkFail() {
         _lessonFailed.update { _lives.value == 0 }
+    }
+
+    companion object {
+        private const val TIMER = 30000L
     }
 }

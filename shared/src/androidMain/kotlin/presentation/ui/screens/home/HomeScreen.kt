@@ -46,6 +46,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -303,38 +304,40 @@ fun ListOfAlterTranslates(
 
 @Composable
 fun LanguageSwitch(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     originLang: Language,
     translateLang: Language,
     onClick: (Language) -> Unit
 ) {
-    // Фиксируем первоначальные названия языков при первом рендере
+    var firstWidthPx by remember { mutableStateOf(0) }
+    var secondWidthPx by remember { mutableStateOf(0) }
+
+    val firstWidth = with(LocalDensity.current) { firstWidthPx.toDp() }
+    val secondWidth = with(LocalDensity.current) { secondWidthPx.toDp() }
+
     val firstText = stringResource(remember { originLang }.getRes())
     val secondText = stringResource(remember { translateLang }.getRes())
     var selectedLanguage by remember { mutableStateOf(firstText) }
     val transition = updateTransition(targetState = selectedLanguage, label = "Language Transition")
 
-    val backgroundOffset by transition.animateDp(label = "Background Offset") { language ->
-        if (language == firstText) 0.dp else (firstText.length * 14f).dp // Смещение фона
+    val backgroundWidth by transition.animateDp { state ->
+        if (state == firstText) firstWidth + 16.dp + 12.dp // padding
+        else secondWidth + 16.dp + 12.dp
     }
 
-    val backgroundWidth by transition.animateDp(label = "Background Width") { language ->
-        if (language == firstText) (firstText.length * 14f).dp else (secondText.length * 14f).dp  // Можно подстроить под разную длину слов
+    val backgroundOffset by transition.animateDp { state ->
+        if (state == firstText) 0.dp else firstWidth + 16.dp + 12.dp
     }
 
     Box(
-        modifier = Modifier
-            .then(modifier)
-            .wrapContentSize()
-            .clickable {},
+        modifier = modifier.wrapContentSize()
     ) {
         Box(
             modifier = Modifier
-                .align(Alignment.CenterStart)
-                .offset(x = backgroundOffset)
+                .offset(backgroundOffset)
                 .width(backgroundWidth)
                 .height(40.dp)
-                .background(yellowColor, shape = RoundedCornerShape(8.dp))
+                .background(yellowColor, RoundedCornerShape(8.dp))
         )
 
         SelectLanguages(
@@ -350,10 +353,13 @@ fun LanguageSwitch(
             onSecondClick = { language, secondText ->
                 selectedLanguage = secondText
                 onClick(language)
-            }
+            },
+            onFirstTextLayout = { firstWidthPx = it },
+            onSecondTextLayout = { secondWidthPx = it }
         )
     }
 }
+
 
 @Composable
 fun SelectLanguages(
@@ -364,6 +370,8 @@ fun SelectLanguages(
     secondText: String,
     onFirstClick: (Language, String) -> Unit,
     onSecondClick: (Language, String) -> Unit,
+    onFirstTextLayout: (Int) -> Unit,
+    onSecondTextLayout: (Int) -> Unit,
 ) {
     Log.e("SelectLanguages", "origin = $originLang, translate = $translateLang")
     Row(modifier = modifier) {
@@ -379,7 +387,10 @@ fun SelectLanguages(
                     )
                 },
             color = onSurfaceLight,
-            style = AppTypography.displaySmall
+            style = AppTypography.displaySmall,
+            onTextLayout = { res ->
+                onFirstTextLayout(res.size.width)
+            },
         )
 
         Spacer(Modifier.width(8.dp))
@@ -395,7 +406,10 @@ fun SelectLanguages(
                     )
                 },
             color = onSurfaceLight,
-            style = AppTypography.displaySmall
+            style = AppTypography.displaySmall,
+            onTextLayout = { res ->
+                onSecondTextLayout(res.size.width)
+            },
         )
     }
 }
@@ -453,8 +467,8 @@ fun MainScreenWithSavedButtonPreview() {
                         inputText = "Katze",
                         translatedText = "Котик",
                         altTranslates = listOf("Кот", "Кошак"),
-                        originalLanguage = Language.GERMAN,
-                        resLanguage = Language.RUSSIAN,
+                        originalLanguage = Language.RUSSIAN,
+                        resLanguage = Language.GERMAN,
                         isWordSaved = true,
                     )
                 )

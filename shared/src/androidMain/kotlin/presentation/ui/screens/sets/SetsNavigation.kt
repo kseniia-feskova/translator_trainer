@@ -11,13 +11,14 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import presentation.navigation.LeafScreen
 import org.koin.androidx.compose.koinViewModel
+import presentation.model.LessonType
 
 fun NavGraphBuilder.setsScreen(
     navigateToSelectedSet: (String, String) -> Unit,
     navigateToAllWordsSet: (String) -> Unit,
     navigateToHome: () -> Unit,
     createNewSet: () -> Unit,
-    createRandomLesson: () -> Unit,
+    navigateToLesson: (String, LessonType) -> Unit = { _, _ -> },
 ) {
     composable(route = LeafScreen.Sets.route) {
         SetsRoute(
@@ -25,7 +26,7 @@ fun NavGraphBuilder.setsScreen(
             navigateToAllWordsSet,
             navigateToHome,
             createNewSet,
-            createRandomLesson,
+            navigateToLesson,
         )
     }
 }
@@ -36,7 +37,7 @@ fun SetsRoute(
     navigateToAllWordsSet: (String) -> Unit,
     navigateToHome: () -> Unit,
     createNewSet: () -> Unit,
-    createRandomLesson: () -> Unit,
+    navigateToLesson: (String, LessonType) -> Unit = { _, _ -> },
     viewModel: SetsViewModel = koinViewModel()
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -59,7 +60,9 @@ fun SetsRoute(
         },
         navigateToHome = navigateToHome,
         createNewSet = createNewSet,
-        createRandomLesson = createRandomLesson,
+        createRandomLesson = {
+            viewModel.createRandomLesson(navigateToLesson)
+        },
     )
 
 }

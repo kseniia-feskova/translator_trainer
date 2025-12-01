@@ -45,7 +45,7 @@ fun NewSetRoute(
         onClearClick = { viewModel.handleIntent(NewSetIntent.ClearSearch) },
         navigateUp = navigateUp,
         goToAccount = goToAccount,
-        hideLimitsError = {viewModel.handleIntent(NewSetIntent.HideLimitsError)},
-
-        )
+        hideLimitsError = { viewModel.handleIntent(NewSetIntent.HideLimitsError) },
+        sortedBy = { viewModel.handleIntent(NewSetIntent.FilterClicked) }
+    )
 }

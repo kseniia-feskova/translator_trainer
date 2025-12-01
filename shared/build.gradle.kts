@@ -68,7 +68,7 @@ kotlin {
             implementation("com.google.android.gms:play-services-auth:21.4.0")
 
             //Language ML kit
-            implementation ("com.google.mlkit:translate:17.0.2")
+            implementation ("com.google.mlkit:translate:17.0.3")
             implementation("com.google.mlkit:text-recognition:16.0.1")
 
 

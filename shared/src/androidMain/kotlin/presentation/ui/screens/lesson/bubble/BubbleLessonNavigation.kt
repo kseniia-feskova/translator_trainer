@@ -45,6 +45,7 @@ fun BubbleLessonRoute(
     val lessonFailed = viewModel.lessonFailed.collectAsState()
     val onPause = viewModel.onPause.collectAsState()
     val lives = viewModel.lives.collectAsState()
+    val time = viewModel.time.collectAsState()
     BubbleLessonScreen(
         mBubbles = state.value,
         isLessonCompleted = lessonComplete.value,
@@ -57,6 +58,7 @@ fun BubbleLessonRoute(
         reload = viewModel::reload,
         navigateToSuccess = { viewModel.navigateToSuccess(navigateToSuccess) },
         navigateUp = navigateUp,
+        time = time.value,
     )
 
 }

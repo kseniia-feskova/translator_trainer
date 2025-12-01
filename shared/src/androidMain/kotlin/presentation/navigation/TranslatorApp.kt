@@ -131,7 +131,12 @@ private fun NavGraphBuilder.setsNav(navController: NavHostController) {
             },
             navigateToHome = navController::navigateToHome,
             createNewSet = { navController.navigateToNewSet() },
-            createRandomLesson = {}
+            navigateToLesson = { id, type ->
+                when (type) {
+                    LessonType.BUBBLE -> navController.navigateToBubbleLesson(id)
+                    else -> navController.navigateToBubbleLesson(id)
+                }
+            }
         )
 
         setScreen(

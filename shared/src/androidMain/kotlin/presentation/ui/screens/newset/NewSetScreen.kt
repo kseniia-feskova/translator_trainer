@@ -71,7 +71,7 @@ fun NewSetScreen(
     saveSet: () -> Unit = {},
     searchQuery: (String) -> Unit = {},
     onClearClick: () -> Unit = {},
-    sortedBy:() -> Unit = {},
+    sortedBy: () -> Unit = {},
     navigateUp: () -> Unit = {},
     goToAccount: () -> Unit = {},
     hideLimitsError: () -> Unit = {},
@@ -154,8 +154,12 @@ fun NewSetScreen(
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.List,
                     tint = darkColor,
-                    contentDescription = "LeftIcon",
-                    modifier = Modifier.padding(horizontal = 20.dp).clickable {  }
+                    contentDescription = "SortIcon",
+                    modifier = Modifier
+                        .padding(horizontal = 20.dp)
+                        .clickable {
+                            sortedBy()
+                        }
                 )
             }
 

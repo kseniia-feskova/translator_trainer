@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import presentation.model.LessonType
 
 class SetsViewModel(
     private val getAllSets: IGetAllSetsUseCase,
@@ -60,5 +61,15 @@ class SetsViewModel(
             else -> SetsError.DEFAULT
         }
         _uiState.update { it.copy(error = errorMsg, loading = false) }
+    }
+
+    fun createRandomLesson(
+        navigateToLesson: (String, LessonType) -> Unit = { _, _ -> },
+    ) {
+        val type = LessonType.BUBBLE//LessonType.entries.random()
+        val setId = _uiState.value.allWordsSet
+        if (setId != null) {
+            navigateToLesson(setId, type)
+        }
     }
 }

@@ -25,7 +25,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -77,7 +76,6 @@ fun SetScreen(
     ) {
         BaseTopView(
             title = state.name,
-            rightIcon = Icons.Default.Edit,
             leftIcon = Icons.AutoMirrored.Default.ArrowBack,
             onRightClick = navigateToEdit,
             onLeftClick = navigateUp
@@ -176,65 +174,78 @@ fun SetScreen(
             ),
             exit = slideOutVertically(targetOffsetY = { it }, animationSpec = tween(1000))
         ) {
-            Column(
+            SelectLessonType(
                 modifier = Modifier
                     .height(screenHeight * 0.5f)
                     .fillMaxWidth()
-                    .align(Alignment.BottomCenter)
-                    .background(
-                        brush = gradientBrush,
-                        shape = RoundedCornerShape(topEnd = 32.dp, topStart = 32.dp)
-                    )
-                    .border(
-                        width = 1.dp,
-                        color = bgColor,
-                        shape = RoundedCornerShape(topEnd = 32.dp, topStart = 32.dp)
-                    )
-                    .padding(vertical = 24.dp, horizontal = 16.dp)
-            ) {
-                Text(
-                    stringResource(R.string.select_lesson_title),
-                    style = AppTypography.displaySmall,
-                    color = darkColor,
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                )
-
-
-                Spacer(modifier = Modifier.height(32.dp))
-                Box(modifier = Modifier.fillMaxSize()) {
-                    LazyColumn {
-                        items(LessonType.entries.toTypedArray()) { lesson ->
-                            CustomShadowButton(
-                                text = lesson.btnName,
-                                onClick = {
-                                    showCourseSelection(false)
-                                    startCourse(lesson)
-                                }
-                            )
-                            Spacer(modifier = Modifier.height(12.dp))
-                        }
-                    }
-
-                    Column(
-                        modifier = Modifier
-                            .align(Alignment.BottomCenter)
-                            .padding(top = 32.dp)
-                    ) {
-                        Text(
-                            stringResource(R.string.close_btn),
-                            modifier = Modifier
-                                .align(Alignment.CenterHorizontally)
-                                .clickable { showCourseSelection(false) },
-                            color = darkColor,
-                            style = AppTypography.displaySmall)
-
-                    }
-                }
-            }
+                    .align(Alignment.BottomCenter),
+                showCourseSelection = showCourseSelection,
+                startCourse = startCourse
+            )
         }
     }
 }
 
+@Composable
+fun SelectLessonType(
+    modifier: Modifier,
+    showCourseSelection: (Boolean) -> Unit = {},
+    startCourse: (LessonType) -> Unit = {}
+) {
+    Column(
+        modifier = modifier
+            .background(
+                brush = gradientBrush,
+                shape = RoundedCornerShape(topEnd = 32.dp, topStart = 32.dp)
+            )
+            .border(
+                width = 1.dp,
+                color = bgColor,
+                shape = RoundedCornerShape(topEnd = 32.dp, topStart = 32.dp)
+            )
+            .padding(vertical = 24.dp, horizontal = 16.dp)
+    ) {
+        Text(
+            stringResource(R.string.select_lesson_title),
+            style = AppTypography.displaySmall,
+            color = darkColor,
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        )
+
+
+        Spacer(modifier = Modifier.height(32.dp))
+        Box(modifier = Modifier.fillMaxSize()) {
+            LazyColumn {
+                items(LessonType.entries.toTypedArray()) { lesson ->
+                    CustomShadowButton(
+                        text = lesson.btnName,
+                        onClick = {
+                            showCourseSelection(false)
+                            startCourse(lesson)
+                        }
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+                }
+            }
+
+            Column(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(top = 32.dp)
+            ) {
+                Text(
+                    stringResource(R.string.close_btn),
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .clickable { showCourseSelection(false) },
+                    color = darkColor,
+                    style = AppTypography.displaySmall
+                )
+
+            }
+        }
+    }
+}
 
 @Preview(showBackground = true, backgroundColor = 0xFF000999)
 @Composable

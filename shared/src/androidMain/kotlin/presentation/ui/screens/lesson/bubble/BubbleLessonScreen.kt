@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -36,18 +37,21 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.presentation.ui.AppTheme
-import presentation.ui.AppTypography
 import com.presentation.ui.bgColor
 import com.presentation.ui.darkColor
+import com.presentation.ui.gradientBrush
 import com.presentation.ui.lightLilaColor
-import presentation.ui.views.LessonTopView
-import com.presentation.ui.whiteColor
+import com.presentation.ui.redDarkColor
 import com.presentation.utils.toPx
 import presentation.model.WordUI
 import presentation.test.smallList
+import presentation.ui.AppTypography
+import presentation.ui.views.LessonTopView
+import presentation.utils.toTimeFormat
 import kotlin.math.cos
 import kotlin.math.roundToInt
 import kotlin.math.sin
@@ -90,7 +94,14 @@ fun BubbleScreenPreview() {
                         textColor = it.textColor
                     )
                 }.shuffled()
-                BubbleLessonScreen(bubbles, isLessonCompleted = false, false, false, 3)
+                BubbleLessonScreen(
+                    bubbles,
+                    isLessonCompleted = false,
+                    isLessonFailed = false,
+                    isPaused = false,
+                    lives = 3,
+                    time = 60L
+                )
             }
         }
     }
@@ -124,6 +135,7 @@ fun OnFailPreview() {
 @Composable
 fun BubbleLessonScreen(
     mBubbles: List<BubbleWitText>,
+    time: Long,
     isLessonCompleted: Boolean,
     isLessonFailed: Boolean,
     isPaused: Boolean,
@@ -183,29 +195,43 @@ fun BubbleLessonScreen(
         initializeBubbles(screenWidth, screenHeight)
     }
 
-    LaunchedEffect(Unit) {
-        while (!isPausedAnimation) {
-            withFrameNanos { frameTimeNanos ->
-                if (lastFrameTimeNanos == 0L) {
-                    lastFrameTimeNanos = frameTimeNanos
-                    return@withFrameNanos
-                }
+    LaunchedEffect(isPausedAnimation) {
+        if (!isPausedAnimation) {
+            lastFrameTimeNanos = 0L
 
-                val deltaTime = (frameTimeNanos - lastFrameTimeNanos) / 1_000_000_000f
-                lastFrameTimeNanos = frameTimeNanos
-                animatedBubbles = animatedBubbles.mapNotNull { point ->
-                    if (!point.isSelected) {
+            while (true) {
+                withFrameNanos { frameTimeNanos ->
+                    if (lastFrameTimeNanos == 0L) {
+                        lastFrameTimeNanos = frameTimeNanos
+                        return@withFrameNanos
+                    }
+
+                    val deltaTime = (frameTimeNanos - lastFrameTimeNanos) / 1_000_000_000f
+                    lastFrameTimeNanos = frameTimeNanos
+
+                    animatedBubbles = animatedBubbles.mapNotNull { point ->
+                        if (!point.isSelected) {
+                            point.updatePosition(
+                                screenWidth,
+                                screenHeight,
+                                deltaTime,
+                                bounced = true
+                            )
+                        } else point
+                    }
+
+                    emptyBubbles = emptyBubbles.mapNotNull { point ->
                         point.updatePosition(
                             screenWidth,
                             screenHeight,
                             deltaTime,
                             bounced = true
                         )
-                    } else point
+                    }
                 }
 
-                emptyBubbles = emptyBubbles.mapNotNull { point ->
-                    point.updatePosition(screenWidth, screenHeight, deltaTime, bounced = true)
+                if (isPausedAnimation) {
+                    break
                 }
             }
         }
@@ -240,7 +266,6 @@ fun BubbleLessonScreen(
 
         if (isLessonFailed) {
             OnFailScreen(tryAgain = {
-                animatedBubbles = emptyList()
                 emptyBubbles = getEmptyBubbles(
                     screenWidthPx = screenWidth,
                     screenHeightPx = screenHeight,
@@ -249,6 +274,26 @@ fun BubbleLessonScreen(
                 reload()
 
             }, onCloseLesson = navigateUp)
+        }
+
+        if (!isPaused && !isLessonFailed) {
+            if (time > 0L) {
+                Text(
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(32.dp),
+                    text = time.toTimeFormat(),
+                    style = AppTypography.titleMedium
+                )
+            } else {
+                Text(
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(32.dp),
+                    text = "Time is over",
+                    style = AppTypography.titleMedium
+                )
+            }
         }
     }
 }
@@ -261,7 +306,7 @@ fun OnPauseScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(bgColor.copy(alpha = 0.8f))
+            .background(brush = gradientBrush)
     ) {
         Column(
             modifier = Modifier.align(Alignment.Center),
@@ -270,9 +315,10 @@ fun OnPauseScreen(
             Icon(
                 Icons.Default.Info,
                 contentDescription = "Pause",
-                tint = whiteColor,
+                tint = darkColor,
                 modifier = Modifier.size(64.dp)
             )
+            Spacer(Modifier.height(8.dp))
 
             Text("Paused", style = AppTypography.displayLarge)
 
@@ -280,14 +326,17 @@ fun OnPauseScreen(
 
             Text(
                 "Continue",
-                style = AppTypography.titleLarge.copy(color = whiteColor),
+                style = AppTypography.titleLarge.copy(color = darkColor),
                 modifier = Modifier.clickable {
                     onContinue()
                 })
             Spacer(Modifier.height(18.dp))
             Text(
                 "End lesson",
-                style = AppTypography.titleLarge.copy(color = darkColor),
+                style = AppTypography.titleLarge.copy(
+                    color = redDarkColor,
+                    fontWeight = FontWeight.SemiBold
+                ),
                 modifier = Modifier.clickable {
                     onCloseLesson()
                 })
@@ -303,7 +352,7 @@ fun OnFailScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(bgColor.copy(alpha = 0.8f))
+            .background(brush = gradientBrush)
     ) {
         Column(
             modifier = Modifier.align(Alignment.Center),
@@ -312,9 +361,10 @@ fun OnFailScreen(
             Icon(
                 Icons.Default.Close,
                 contentDescription = "Fail",
-                tint = whiteColor,
-                modifier = Modifier.size(64.dp)
+                tint = redDarkColor,
+                modifier = Modifier.size(100.dp)
             )
+            Spacer(Modifier.height(8.dp))
 
             Text("You failed", style = AppTypography.displayLarge)
 
@@ -322,25 +372,25 @@ fun OnFailScreen(
 
             Text(
                 "Try again",
-                style = AppTypography.titleLarge.copy(color = whiteColor),
-                modifier = Modifier.clickable {
-                    tryAgain()
-                })
+                style = AppTypography.titleLarge.copy(color = darkColor),
+                modifier = Modifier.clickable { tryAgain() })
             Spacer(Modifier.height(18.dp))
             Text(
                 "Main menu",
                 style = AppTypography.titleLarge.copy(color = darkColor),
-                modifier = Modifier.clickable {
-                    onCloseLesson()
-                })
+                modifier = Modifier.clickable { onCloseLesson() })
         }
     }
 }
 
 @Composable
 fun BubbleCanvas(bubbles: List<BubbleWitText>, emptyBubbles: List<Bubble>) {
-    //.e("BubbleCanvas", "bubbles = $bubbles")
-    Canvas(Modifier.fillMaxSize()) {
+    Canvas(
+        Modifier
+            .fillMaxWidth()
+            .background(brush = gradientBrush)
+    ) {
+
         emptyBubbles.forEach { bubble ->
             drawCircle(
                 color = bubble.color,

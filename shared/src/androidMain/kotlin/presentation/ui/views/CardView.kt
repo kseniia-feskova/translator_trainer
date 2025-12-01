@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.example.translatortrainer.shared.R
 import com.presentation.ui.AppTheme
-import com.presentation.ui.bgColor
 import com.presentation.ui.darkColor
 import com.presentation.ui.primaryColor
 import com.presentation.ui.views.FlippableCard
@@ -97,7 +96,7 @@ fun CardsSet(
                     text = stringResource(R.string.sorted_words),
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally),
-                    style = AppTypography.titleSmall.copy(color = bgColor),
+                    style = AppTypography.titleSmall.copy(color = darkColor),
                     fontSize = TextUnit(22f, TextUnitType.Sp)
                 )
                 CustomShadowButton(
