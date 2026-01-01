@@ -69,8 +69,6 @@ fun NewSetScreen(
     onSaveCheckBoxChange: (Boolean) -> Unit = {},
     selectWord: (WordUI) -> Unit = {},
     saveSet: () -> Unit = {},
-    searchQuery: (String) -> Unit = {},
-    onClearClick: () -> Unit = {},
     sortedBy: () -> Unit = {},
     navigateUp: () -> Unit = {},
     goToAccount: () -> Unit = {},
@@ -81,7 +79,6 @@ fun NewSetScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(gradientBrush)
-            .padding(bottom = 12.dp)
     ) {
         if (state.limitsError) {
             GuestLimitsDialog(
@@ -140,7 +137,7 @@ fun NewSetScreen(
             } else {
                 Spacer(Modifier.height(20.dp))
             }
-            Row() {
+            Row {
                 Text(
                     text = stringResource(R.string.selected_words_subtitle, state.countOfSelected),
                     style = AppTypography.titleLarge.copy(

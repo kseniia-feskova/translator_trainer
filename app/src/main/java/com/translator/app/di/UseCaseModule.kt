@@ -22,6 +22,7 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 import presentation.usecases.IAccountUseCase
 import presentation.usecases.IGetAccountUseCase
+import presentation.usecases.auth.ICheckUserUseCase
 import presentation.usecases.auth.ILoginUseCase
 import presentation.usecases.auth.IRegisterUseCase
 import presentation.usecases.auth.IRegisterWithFirebaseUseCase
@@ -52,6 +53,7 @@ import usecase.words.AddWordByApiUseCase
 import usecase.words.GetWordsBySetUseCase
 import usecase.words.UpdateStatusUseCase
 import usecase.TranslateWordUseCase
+import usecase.auth.CheckUserUseCase
 import usecase.sets.GetAllSetsUseCase
 import usecase.sets.AddSetUseCase
 import usecase.sets.UpdateSetsUseCase
@@ -119,4 +121,6 @@ val useCaseModule = module {
     singleOf(::SetGuestUseCase) bind ISetGuestUseCase::class
 
     singleOf(::CreateFromGuestUseCase) bind ICreateFromGuestUseCase::class
+
+    singleOf(::CheckUserUseCase) bind ICheckUserUseCase::class
 }

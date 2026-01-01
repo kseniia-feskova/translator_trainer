@@ -1,9 +1,12 @@
+import java.util.Properties
+import kotlin.apply
+
 plugins {
 
     kotlin("multiplatform")
     id("com.android.library")
     kotlin("plugin.serialization") version "2.1.21"
-    id("org.jetbrains.kotlin.plugin.compose") version "2.2.21" // или нужная версия
+    id("org.jetbrains.kotlin.plugin.compose") version "2.3.0" // или нужная версия
     id("com.google.devtools.ksp") version "2.1.21-2.0.1"
     id("com.google.gms.google-services")
 
@@ -50,12 +53,12 @@ kotlin {
             implementation("com.squareup.retrofit2:converter-gson:3.0.0")
 
             // Compose
-            implementation("androidx.compose.runtime:runtime-android:1.9.5")
+            implementation("androidx.compose.runtime:runtime-android:1.10.0")
             implementation("androidx.navigation:navigation-runtime-android:2.9.6")
             implementation("androidx.compose.material3:material3-android:1.4.0")
             implementation("androidx.compose.material:material-icons-core:1.7.8")
-            implementation("androidx.wear.compose:compose-navigation:1.5.5")
-            implementation("androidx.compose.ui:ui-tooling-preview-android:1.9.5")
+            implementation("androidx.wear.compose:compose-navigation:1.5.6")
+            implementation("androidx.compose.ui:ui-tooling-preview-android:1.10.0")
             implementation("androidx.navigation:navigation-compose:2.9.6")
 
             implementation("io.coil-kt:coil-compose:2.7.0")
@@ -68,7 +71,7 @@ kotlin {
             implementation("com.google.android.gms:play-services-auth:21.4.0")
 
             //Language ML kit
-            implementation ("com.google.mlkit:translate:17.0.3")
+            implementation("com.google.mlkit:translate:17.0.3")
             implementation("com.google.mlkit:text-recognition:16.0.1")
 
 
@@ -83,7 +86,26 @@ android {
     defaultConfig {
         minSdk = 26
     }
+    val localProps = Properties().apply {
+        val file = File(rootDir, "local.properties")
+        if (file.exists()) {
+            load(file.inputStream())
+        }
+    }
+    flavorDimensions += "version"
+    productFlavors {
+        val googleClientId: String = localProps.getProperty("CLIENT_ID") ?: throw GradleException("CLIENT_ID is missing in local.properties")
 
+        create("dev") {
+            buildConfigField("String", "BASE_URL", "\"http://10.0.2.2:8080/api/\"")
+            buildConfigField("String", "CLIENT_ID", "\"$googleClientId\"")
+        }
+
+        create("qa") {
+            buildConfigField("String", "BASE_URL", "\"http://35.159.225.33:8080/api/\"")
+            buildConfigField("String", "CLIENT_ID", "\"$googleClientId\"")
+        }
+    }
     buildFeatures {
         buildConfig = true
     }
@@ -100,5 +122,5 @@ android {
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
 }
 dependencies {
-    debugImplementation("androidx.compose.ui:ui-tooling:1.9.5")
+    debugImplementation("androidx.compose.ui:ui-tooling:1.10.0")
 }

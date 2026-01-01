@@ -1,5 +1,8 @@
 package presentation.navigation
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -68,10 +71,37 @@ sealed class LeafScreen(val route: String) {
     object NewSet : LeafScreen("newset")
 }
 
+fun String?.isBottomNavigationNeeded(): Boolean {
+    if (this == null) return false
+    return when {
+        startsWith(LeafScreen.NewSet.route) -> false
+        startsWith(LeafScreen.Login.route) -> false
+        startsWith(LeafScreen.VerifyEmail.route) -> false
+        startsWith(LeafScreen.SelectCourse.route) -> false
+        startsWith(LeafScreen.Splash.route) -> false
+        contains(LeafScreen.BubbleLesson("").javaClass.simpleName) -> false
+        contains(LeafScreen.SuccessLesson(LessonType.BUBBLE, 0).javaClass.simpleName) -> false
+        else -> true
+    }
+}
+
+@Composable
+fun AnimatedBottomBar(
+    bottomBarVisible: Boolean,
+    navController: NavController
+) {
+    AnimatedVisibility(
+        visible = bottomBarVisible,
+        enter = slideInVertically { it },
+        exit = slideOutVertically { it }
+    ) {
+        BottomNavigationBar(navController = navController)
+    }
+}
+
 @Composable
 fun BottomNavigationBar(bgColor: Color = Color.White, navController: NavController) {
     NavigationBar(
-        modifier = Modifier.height(60.dp),
         containerColor = bgColor
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -79,6 +109,7 @@ fun BottomNavigationBar(bgColor: Color = Color.White, navController: NavControll
 
         RootScreen.entries.forEach { item ->
             NavigationBarItem(
+                modifier = Modifier.height(48.dp),
                 selected = currentDestination?.matchDestination(item.route) ?: false,
                 onClick = {
                     val currentRoute = currentDestination?.parent?.route

@@ -10,8 +10,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import org.koin.androidx.compose.koinViewModel
-import presentation.model.FirebaseUser
 import presentation.navigation.LeafScreen
+import presentation.viewmodel.MainUiEvent
 
 fun NavController.navigateToAuth(
     navOptions: NavOptions? = null,
@@ -23,7 +23,7 @@ fun NavGraphBuilder.authScreen(
     goToCourses: () -> Unit,
     goToHome: () -> Unit,
     goToVerification: () -> Unit,
-    onGoogleClick: (onSuccess: (FirebaseUser?) -> Unit) -> Unit
+    onGoogleClick: (MainUiEvent) -> Unit
 ) {
     composable(
         route = LeafScreen.Login.route,
@@ -43,7 +43,7 @@ fun AuthRoute(
     goToCourses: () -> Unit,
     goToHome: () -> Unit,
     goToVerification: () -> Unit,
-    onGoogleClick: (onSuccess: (FirebaseUser?) -> Unit) -> Unit,
+    onGoogleClick: (MainUiEvent) -> Unit,
     viewModel: AuthViewModel = koinViewModel()
 ) {
     val state = viewModel.uiState.collectAsState()
@@ -63,10 +63,7 @@ fun AuthRoute(
         },
         onGuestSelected = { viewModel.handleIntent(AuthIntent.SaveAsGuest(goToCourses)) },
         onGoogleSignClick = {
-            onGoogleClick {
-                viewModel.handleIntent(AuthIntent.GoogleSign(it, goToCourses = goToCourses, goToHome = goToHome))
-            }
+            onGoogleClick.invoke(MainUiEvent.SignInWithGoogle)
         }
     )
-
 }

@@ -41,8 +41,6 @@ fun NewSetRoute(
         onSaveCheckBoxChange = { viewModel.handleIntent(NewSetIntent.SaveCheckBoxChange(it)) },
         selectWord = { viewModel.handleIntent(NewSetIntent.SelectWord(it)) },
         saveSet = { viewModel.handleIntent(NewSetIntent.SaveSet(navigateUp)) },
-        searchQuery = { viewModel.handleIntent(NewSetIntent.SearchWord(it)) },
-        onClearClick = { viewModel.handleIntent(NewSetIntent.ClearSearch) },
         navigateUp = navigateUp,
         goToAccount = goToAccount,
         hideLimitsError = { viewModel.handleIntent(NewSetIntent.HideLimitsError) },

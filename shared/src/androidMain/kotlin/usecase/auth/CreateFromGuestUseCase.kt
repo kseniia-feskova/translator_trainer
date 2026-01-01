@@ -1,30 +1,34 @@
 package usecase.auth
 
-import presentation.usecases.auth.ICreateFromGuestUseCase
-import presentation.usecases.course.IAddCourseUseCase
 import com.presentation.usecases.words.IAddWordByApiUseCase
-import data.repository.word.IWordApiRepository
+import data.repository.word.IWordDaoRepository
+import domain.ALL_WORDS
 import domain.CanNotCreateCourseException
 import domain.CanNotCreateSetException
 import domain.CanNotCreateUserException
 import domain.WordDoesNotExist
 import presentation.model.CourseUI
 import presentation.model.SetOfCards
+import presentation.usecases.auth.ICreateFromGuestUseCase
 import presentation.usecases.auth.IRegisterUseCase
+import presentation.usecases.course.IAddCourseUseCase
 import presentation.usecases.sets.IAddSetUseCase
 import presentation.usecases.sets.IGetAllSetsUseCase
 
 class CreateFromGuestUseCase(
     private val registerUseCase: IRegisterUseCase,
     private val courseUseCase: IAddCourseUseCase,
-    private val wordsRepo: IWordApiRepository,
+    private val wordsRepo: IWordDaoRepository,
     private val saveWord: IAddWordByApiUseCase,
     private val sets: IGetAllSetsUseCase,
     private val addSet: IAddSetUseCase
-): ICreateFromGuestUseCase {
+) : ICreateFromGuestUseCase {
 
+    //TODO refactor is needed
     override suspend fun invoke(email: String, password: String, course: CourseUI): Result<String> {
         val allWords = wordsRepo.getAllWords().data
+        val allSets = sets.invoke(course.id)
+        val sets = allSets.getOrNull()
         val userFromBack = register(email, password)
         if (userFromBack.isFailure) {
             return userFromBack
@@ -33,12 +37,10 @@ class CreateFromGuestUseCase(
         if (courseFromBack.isFailure) {
             return courseFromBack
         }
-
         val userId = userFromBack.getOrNull() ?: return Result.failure(CanNotCreateUserException())
         val courseId = courseFromBack.getOrNull() ?: return Result.failure(
             CanNotCreateCourseException()
         )
-
         val allWordsIds = mutableListOf<String?>()
         allWords?.forEach {
             val savedWord = saveWord.invoke(
@@ -49,24 +51,29 @@ class CreateFromGuestUseCase(
         }
 
         if (allWordsIds.size != allWords?.size) return Result.failure(WordDoesNotExist())
-
-        val allSets = sets.invoke(course.id)
-        val sets = allSets.getOrNull()
+        if (sets?.size == 1) {
+            return Result.success(userId)
+        }
         val setsResults = mutableListOf<Result<SetOfCards?>>()
         if (allSets.isSuccess && !sets.isNullOrEmpty()) {
             sets.forEach {
-                setsResults.add(
-                    addSet.invoke(
-                        name = it.title,
-                        isDefault = it.isDefault,
-                        courseId = courseId,
-                        //TODO: bottleneck!!!
-                        listOfWords = it.words.mapNotNull { word ->
-                            val index = allWords.indexOfFirst { it.id == word.id }
-                            allWordsIds[index]
-                        }
+                if (it.title != ALL_WORDS) {
+                    setsResults.add(
+                        addSet.invoke(
+                            name = it.title,
+                            isDefault = it.isDefault,
+                            courseId = courseId,
+                            //TODO: bottleneck!!!
+                            listOfWords = it.words.mapNotNull { word ->
+                                val index =
+                                    allWords.indexOfFirst { it.translatedText == word.resText }
+                                if (index > 0 && index < allWordsIds.size) {
+                                    allWordsIds[index]
+                                } else null
+                            }
+                        )
                     )
-                )
+                }
             }
             if (setsResults.contains(Result.failure(Throwable()))) {
                 return Result.failure(CanNotCreateSetException())

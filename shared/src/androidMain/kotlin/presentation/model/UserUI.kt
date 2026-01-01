@@ -7,3 +7,9 @@ data class UserUI(
     val photo: String? = null,
     val courses: List<CourseUI> = emptyList()
 )
+
+sealed class UserResult {
+    data class Existing(val user: UserUI) : UserResult()
+    object New : UserResult()
+    data class Error(val message: String) : UserResult()
+}
