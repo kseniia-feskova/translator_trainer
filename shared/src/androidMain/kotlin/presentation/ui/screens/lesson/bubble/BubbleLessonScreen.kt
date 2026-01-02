@@ -50,8 +50,8 @@ import com.presentation.utils.toPx
 import presentation.model.WordUI
 import presentation.test.smallList
 import presentation.ui.AppTypography
-import presentation.ui.views.LessonTopView
-import presentation.utils.toTimeFormat
+import presentation.ui.screens.lesson.base.BaseLessonScreen
+import presentation.ui.screens.lesson.base.BaseLessonState
 import kotlin.math.cos
 import kotlin.math.roundToInt
 import kotlin.math.sin
@@ -96,11 +96,13 @@ fun BubbleScreenPreview() {
                 }.shuffled()
                 BubbleLessonScreen(
                     bubbles,
-                    isLessonCompleted = false,
-                    isLessonFailed = false,
-                    isPaused = false,
-                    lives = 3,
-                    time = 60L
+                    BaseLessonState(
+                        isLessonCompleted = false,
+                        isLessonFailed = false,
+                        isPaused = false,
+                        lives = 3,
+                        time = 60L
+                    )
                 )
             }
         }
@@ -135,18 +137,31 @@ fun OnFailPreview() {
 @Composable
 fun BubbleLessonScreen(
     mBubbles: List<BubbleWitText>,
-    time: Long,
-    isLessonCompleted: Boolean,
-    isLessonFailed: Boolean,
-    isPaused: Boolean,
-    lives: Int,
+    baseState: BaseLessonState,
     initializeBubbles: (Float, Float) -> Unit = { _, _ -> },
     onBubbleClick: (String) -> Unit = {},
     onPauseClick: () -> Unit = {},
     reload: () -> Unit = {},
     navigateUp: () -> Unit = {},
     navigateToSuccess: () -> Unit = { }
+) {
+    BaseLessonScreen(
+        baseState,
+        onPauseClick,
+        reload,
+        navigateUp,
+        navigateToSuccess
+    ) {
+        BubblesWordsView(baseState.isPaused, mBubbles, initializeBubbles, onBubbleClick)
+    }
+}
 
+@Composable
+fun BubblesWordsView(
+    isPaused: Boolean,
+    mBubbles: List<BubbleWitText>,
+    initializeBubbles: (Float, Float) -> Unit = { _, _ -> },
+    onBubbleClick: (String) -> Unit = {}
 ) {
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp.toPx()
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp.toPx()
@@ -236,8 +251,6 @@ fun BubbleLessonScreen(
             }
         }
     }
-
-
     Box(
         Modifier
             .fillMaxSize()
@@ -251,50 +264,7 @@ fun BubbleLessonScreen(
                 }
             }
     ) {
-        if (isLessonCompleted) {
-            navigateToSuccess()
-        }
         BubbleCanvas(animatedBubbles, emptyBubbles)
-        LessonTopView(lives) {
-            onPauseClick()
-        }
-        if (isPaused) {
-            OnPauseScreen(onContinue = {
-                onPauseClick()
-            }, navigateUp)
-        }
-
-        if (isLessonFailed) {
-            OnFailScreen(tryAgain = {
-                emptyBubbles = getEmptyBubbles(
-                    screenWidthPx = screenWidth,
-                    screenHeightPx = screenHeight,
-                    count = 15
-                )
-                reload()
-
-            }, onCloseLesson = navigateUp)
-        }
-
-        if (!isPaused && !isLessonFailed) {
-            if (time > 0L) {
-                Text(
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .padding(32.dp),
-                    text = time.toTimeFormat(),
-                    style = AppTypography.titleMedium
-                )
-            } else {
-                Text(
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .padding(32.dp),
-                    text = "Time is over",
-                    style = AppTypography.titleMedium
-                )
-            }
-        }
     }
 }
 

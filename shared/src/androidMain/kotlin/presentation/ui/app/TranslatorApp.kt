@@ -34,6 +34,8 @@ import presentation.ui.screens.home.homeScreen
 import presentation.ui.screens.home.navigateToHome
 import presentation.ui.screens.lesson.bubble.bubbleLessonScreen
 import presentation.ui.screens.lesson.bubble.navigateToBubbleLesson
+import presentation.ui.screens.lesson.match.matchLessonScreen
+import presentation.ui.screens.lesson.match.navigateToMatchLesson
 import presentation.ui.screens.lesson.success.navigateToSuccessLesson
 import presentation.ui.screens.lesson.success.successLessonScreen
 import presentation.ui.screens.newset.navigateToNewSet
@@ -171,6 +173,7 @@ private fun NavGraphBuilder.setsNav(navController: NavHostController) {
             navigateToLesson = { id, type ->
                 when (type) {
                     LessonType.BUBBLE -> navController.navigateToBubbleLesson(id)
+                    LessonType.MATCH -> navController.navigateToMatchLesson(id)
                     else -> navController.navigateToBubbleLesson(id)
                 }
             }
@@ -180,6 +183,7 @@ private fun NavGraphBuilder.setsNav(navController: NavHostController) {
             navigateToLesson = { id, type ->
                 when (type) {
                     LessonType.BUBBLE -> navController.navigateToBubbleLesson(id)
+                    LessonType.MATCH -> navController.navigateToMatchLesson(id)
                     else -> navController.navigateToBubbleLesson(id)
                 }
             },
@@ -199,9 +203,13 @@ private fun NavGraphBuilder.setsNav(navController: NavHostController) {
             navigateToSuccess = { type, words ->
                 navController.navigateToSuccessLesson(words, type)
             },
-            navigateUp = {
-                navController.navigateUp()
-            })
+            navigateUp = { navController.navigateUp() })
+
+        matchLessonScreen(
+            navigateToSuccess = { type, words ->
+                navController.navigateToSuccessLesson(words, type)
+            },
+            navigateUp = { navController.navigateUp() })
 
         allWordsScreen {
             navController.navigateUp()

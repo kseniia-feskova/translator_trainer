@@ -41,24 +41,15 @@ fun BubbleLessonRoute(
     viewModel: BubbleLessonViewModel = koinViewModel()
 ) {
     val state = viewModel.bubbles.collectAsState()
-    val lessonComplete = viewModel.lessonComplete.collectAsState(false)
-    val lessonFailed = viewModel.lessonFailed.collectAsState()
-    val onPause = viewModel.onPause.collectAsState()
-    val lives = viewModel.lives.collectAsState()
-    val time = viewModel.time.collectAsState()
+    val baseState = viewModel.baseState.collectAsState()
     BubbleLessonScreen(
         mBubbles = state.value,
-        isLessonCompleted = lessonComplete.value,
-        isLessonFailed = lessonFailed.value,
-        lives = lives.value,
-        isPaused = onPause.value,
+        baseState = baseState.value,
         initializeBubbles = viewModel::initializeBubbles,
         onBubbleClick = viewModel::onBubbleClick,
         onPauseClick = viewModel::onPauseClicked,
         reload = viewModel::reload,
         navigateToSuccess = { viewModel.navigateToSuccess(navigateToSuccess) },
         navigateUp = navigateUp,
-        time = time.value,
     )
-
 }

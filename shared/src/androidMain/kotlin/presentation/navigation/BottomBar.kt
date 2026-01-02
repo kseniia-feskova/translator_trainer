@@ -58,6 +58,8 @@ sealed class LeafScreen(val route: String) {
 
     @Serializable
     data class BubbleLesson(val setId: String) : LeafScreen("bubble")
+    @Serializable
+    data class MatchLesson(val setId: String) : LeafScreen("match")
 
     @Serializable
     data class SuccessLesson(
@@ -80,6 +82,7 @@ fun String?.isBottomNavigationNeeded(): Boolean {
         startsWith(LeafScreen.SelectCourse.route) -> false
         startsWith(LeafScreen.Splash.route) -> false
         contains(LeafScreen.BubbleLesson("").javaClass.simpleName) -> false
+        contains(LeafScreen.MatchLesson("").javaClass.simpleName) -> false
         contains(LeafScreen.SuccessLesson(LessonType.BUBBLE, 0).javaClass.simpleName) -> false
         else -> true
     }

@@ -66,7 +66,7 @@ class SetsViewModel(
     fun createRandomLesson(
         navigateToLesson: (String, LessonType) -> Unit = { _, _ -> },
     ) {
-        val type = LessonType.BUBBLE//LessonType.entries.random()
+        val type = LessonType.entries.random()
         val setId = _uiState.value.allWordsSet
         if (setId != null) {
             navigateToLesson(setId, type)

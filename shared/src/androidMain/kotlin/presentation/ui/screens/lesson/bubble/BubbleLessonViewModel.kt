@@ -1,12 +1,8 @@
 package presentation.ui.screens.lesson.bubble
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.presentation.usecases.sets.IUpdateSetsUseCase
-import presentation.usecases.words.IGetWordsBySetUseCase
-import presentation.usecases.words.IUpdateStatusUseCase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,88 +10,52 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import presentation.model.LessonType
-import presentation.model.Level
-import presentation.model.WordUI
+import presentation.ui.screens.lesson.base.BaseLessonState
+import presentation.ui.screens.lesson.base.BaseLessonViewModel
+import presentation.usecases.words.IGetWordsBySetUseCase
+import presentation.usecases.words.IUpdateStatusUseCase
 
 
 class BubbleLessonViewModel(
     savedStateHandle: SavedStateHandle,
-    private val getWordsBySetUseCase: IGetWordsBySetUseCase,
-    private val updateStatusUseCase: IUpdateStatusUseCase,
-    private val updateSetsUseCase: IUpdateSetsUseCase
-) : ViewModel() {
+    getWordsBySetUseCase: IGetWordsBySetUseCase,
+    updateStatusUseCase: IUpdateStatusUseCase,
+    updateSetsUseCase: IUpdateSetsUseCase
+) : BaseLessonViewModel(
+    savedStateHandle,
+    getWordsBySetUseCase,
+    updateStatusUseCase,
+    updateSetsUseCase
+) {
 
     private val _bubbles = MutableStateFlow<List<BubbleWitText>>(emptyList())
     val bubbles: StateFlow<List<BubbleWitText>> = _bubbles.asStateFlow()
 
-    private val _lessonComplete = MutableStateFlow(false)
-    val lessonComplete = _lessonComplete.asStateFlow()
-
-    private val _lessonFailed = MutableStateFlow(false)
-    val lessonFailed = _lessonFailed.asStateFlow()
-
-    private val _onPause = MutableStateFlow(false)
-    val onPause = _onPause.asStateFlow()
-
-    private val setId = savedStateHandle.setId
+    override val _baseState = MutableStateFlow(BaseLessonState(time = TIMER))
+    val baseState = _baseState.asStateFlow()
 
     private val selectedBubbles = mutableListOf<BubbleWitText>()
-    private val words = mutableListOf<WordUI>()
 
-    private val _lives = MutableStateFlow(3)
-    val lives = _lives.asStateFlow()
-
-    private val _time = MutableStateFlow(TIMER)
-    val time = _time.asStateFlow()
+    override fun checkIfLessonCompleted(): Boolean = _bubbles.value.find { it.isVisible } == null
 
     init {
         startTheTimer()
     }
 
-    fun onPauseClicked() {
-        _onPause.update { !it }
-        if (!_onPause.value) {
-            startTheTimer()
-        }
-    }
-
-    fun startTheTimer() {
-        viewModelScope.launch {
-            while (_time.value > 0L && !_onPause.value && !_lessonFailed.value) {
-                delay(1000L)
-                _time.update { it - 1000L }
-            }
-
-            if (_time.value == 0L) {
-                if (_bubbles.value.find { it.isVisible } == null) {
-                    _lessonComplete.update { true }
-                } else {
-                    _lessonFailed.update { true }
-                }
-            }
+    override fun reload(time: Long) {
+        super.reload(TIMER)
+        _bubbles.update {
+            it.map {
+                it.copy(isVisible = true, isWrong = null, isSelected = false)
+            }.shuffled()
         }
     }
 
     fun initializeBubbles(screenWidth: Float, screenHeight: Float) {
         viewModelScope.launch {
-            val response = getWordsBySetUseCase.invoke(setId)
-            if (response.isSuccess) {
-                val wordsInResponse = response.getOrNull()?.filter { it.level != Level.KNOW }
-                if (wordsInResponse != null) {
-                    this@BubbleLessonViewModel.words.addAll(words)
-                }
-                val words = if (wordsInResponse?.isEmpty() == true) {
-                    response.getOrNull()?.shuffled()?.take(10)
-                } else {
-                    wordsInResponse
-                }
-                val selected = words?.map {
-                    it.toBubbles()
-                }?.flatten()
-
-                Log.e("BubbleLessonVM", "selected = $selected")
-
-                val list = selected?.map {
+            initializeWords {
+                val selected = words.map { it.toBubbles() }.flatten()
+                val list = selected.map {
                     getBubble(
                         screenWidthPx = screenWidth,
                         screenHeightPx = screenHeight,
@@ -105,31 +65,15 @@ class BubbleLessonViewModel(
                         wordId = it.wordId,
                         textColor = it.textColor
                     )
-                }?.shuffled() ?: emptyList()
-                Log.e("BubbleLessonVM", "list = $list")
+                }.shuffled()
                 _bubbles.update { list }
-            } else {
-                //handleError(words)
             }
         }
     }
 
     fun navigateToSuccess(navigate: (LessonType, Int) -> Unit) {
-        _lessonComplete.update { false }
+        super.navigateToSuccess()
         navigate(LessonType.BUBBLE, _bubbles.value.size / 2)
-    }
-
-    fun reload() {
-        _time.update { TIMER }
-        _lives.update { 3 }
-        _lessonFailed.update { false }
-        _onPause.update { false }
-        _bubbles.update {
-            it.map {
-                it.copy(isVisible = true, isWrong = null, isSelected = false)
-            }.shuffled()
-        }
-        startTheTimer()
     }
 
     fun onBubbleClick(bubbleId: String) {
@@ -182,8 +126,12 @@ class BubbleLessonViewModel(
                     first.copy(isWrong = null, isSelected = false),
                     second.copy(isWrong = null, isSelected = false)
                 )
-                _lives.update { it - 1 }
-                checkFail()
+                _baseState.update {
+                    it.copy(
+                        lives = it.lives.dec(),
+                        isLessonFailed = it.lives.dec() == 0
+                    )
+                }
                 selectedBubbles.clear()
             }
         }
@@ -215,19 +163,12 @@ class BubbleLessonViewModel(
     private fun checkEmpty() {
         viewModelScope.launch {
             updateWords()
-            _lessonComplete.update { _bubbles.value.find { it.isVisible } == null }
+            _baseState.update {
+                it.copy(
+                    isLessonCompleted = _bubbles.value.find { it.isVisible } == null
+                )
+            }
         }
-    }
-
-    private suspend fun updateWords() {
-        words.forEach {
-            updateStatusUseCase.invoke(it.id, level = it.level.inc())
-        }
-        updateSetsUseCase.invoke()
-    }
-
-    private fun checkFail() {
-        _lessonFailed.update { _lives.value == 0 }
     }
 
     companion object {

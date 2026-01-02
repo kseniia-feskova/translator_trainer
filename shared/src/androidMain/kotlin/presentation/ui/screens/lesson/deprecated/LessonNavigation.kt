@@ -1,4 +1,4 @@
-package presentation.ui.screens.lesson
+package presentation.ui.screens.lesson.deprecated
 /*
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
