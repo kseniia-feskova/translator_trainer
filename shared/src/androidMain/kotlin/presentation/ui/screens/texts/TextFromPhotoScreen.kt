@@ -12,6 +12,7 @@ import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -45,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import com.example.translatortrainer.shared.R
 import presentation.ui.AppTypography
 import com.presentation.ui.bgColor
+import com.presentation.ui.gradientBrush
 import com.presentation.ui.screens.texts.TextFromPhotoUI
 import presentation.ui.views.buttons.CustomShadowButton
 import presentation.ui.screens.home.LanguageSwitch
@@ -129,7 +131,9 @@ fun TextRecognitionScreen(
             }
         }
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .background(gradientBrush)) {
         Column(
             modifier = Modifier
                 .fillMaxSize()

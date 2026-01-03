@@ -52,7 +52,7 @@ import com.presentation.ui.fieldColors
 import com.presentation.ui.gradientBrush
 import com.presentation.ui.redDarkColor
 import com.presentation.ui.views.Loader
-import com.presentation.ui.views.SelectingWordWithStatusView
+import presentation.ui.views.SelectingWordWithStatusView
 import com.presentation.ui.yellowColor
 import presentation.model.WordUI
 import presentation.navigation.BottomNavigationBar

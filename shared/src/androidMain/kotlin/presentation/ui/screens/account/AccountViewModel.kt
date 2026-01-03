@@ -53,7 +53,6 @@ class AccountViewModel(
                         allSetsCount = sets?.size ?: 0,
                         allWordsCount = allSet?.words?.size ?: 0
                     )
-                    Log.e("AccountViewModel", "Guest = $guestData")
                     _uiState.update {
                         it.copy(loading = false, guestData = guestData)
                     }

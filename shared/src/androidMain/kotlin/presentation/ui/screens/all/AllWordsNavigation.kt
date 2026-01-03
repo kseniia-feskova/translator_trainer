@@ -8,8 +8,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import presentation.navigation.LeafScreen
 import org.koin.androidx.compose.koinViewModel
+import presentation.navigation.LeafScreen
 
 
 fun NavController.navigateToAllWords(
@@ -44,17 +44,10 @@ fun AllWordsRoute(
         searchQuery = { viewModel.handleIntent(AllWordsIntent.Search(it)) },
         onClearClick = { viewModel.handleIntent(AllWordsIntent.ClearSearch) },
         onFilterClick = { viewModel.handleIntent(AllWordsIntent.Filter) },
-        onDismissRequest = { viewModel.handleIntent(AllWordsIntent.CloseDialog) },
         onEdit = { viewModel.handleIntent(AllWordsIntent.Edit(it)) },
-        onWordSelected = { word, offset ->
-            viewModel.handleIntent(
-                AllWordsIntent.WordSelected(
-                    word,
-                    offset
-                )
-            )
-        },
         onDelete = { viewModel.handleIntent(AllWordsIntent.Delete(it)) },
+        onRevealed = { viewModel.handleIntent(AllWordsIntent.OnActionsRevealed(it)) },
+        onCollapsed = { viewModel.handleIntent(AllWordsIntent.OnCollapsed(it)) },
         onBackPressed = navigateUp
     )
 }

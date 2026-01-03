@@ -1,16 +1,16 @@
 package presentation.ui.screens.all
 
-import androidx.compose.ui.geometry.Offset
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import presentation.model.WordUI
-import presentation.usecases.words.IDeleteWordUseCase
-import presentation.usecases.words.IGetWordsBySetUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import presentation.model.WordUI
+import presentation.model.WordViewData
+import presentation.usecases.words.IDeleteWordUseCase
+import presentation.usecases.words.IGetWordsBySetUseCase
 
 class AllWordsViewModel(
     savedStateHandle: SavedStateHandle,
@@ -32,7 +32,7 @@ class AllWordsViewModel(
                 allWords.clear()
                 allWords.addAll(words.sortedBy { it.level })
                 _uiState.update {
-                    it.copy(words = allWords, loading = false)
+                    it.copy(words = allWords.map { WordViewData(it, false) }, loading = false)
                 }
             } else {
                 //TODO: handle error case
@@ -43,10 +43,10 @@ class AllWordsViewModel(
     fun handleIntent(intent: AllWordsIntent) {
         when (intent) {
             AllWordsIntent.ClearSearch -> clearQuery()
-            AllWordsIntent.CloseDialog -> closeWordMenu()
             is AllWordsIntent.Delete -> deleteWord(intent.word)
             is AllWordsIntent.Search -> searchQuery(intent.query)
-            is AllWordsIntent.WordSelected -> selectWord(intent.selected, intent.dialogOffset)
+            is AllWordsIntent.OnActionsRevealed -> revealOptions(intent.word)
+            is AllWordsIntent.OnCollapsed -> collapseOptions(intent.word)
             is AllWordsIntent.Edit -> {
                 //   navigateWithWordID intent.word.id
             }
@@ -66,20 +66,47 @@ class AllWordsViewModel(
         }
         if (query.isNotEmpty()) {
             val filtered = searchByQuery(query)
-            _uiState.update { it.copy(words = filtered, loading = false) }
-        } else _uiState.update { it.copy(words = allWords, loading = false) }
-    }
-
-
-    private fun clearQuery() {
-        _uiState.update {
-            it.copy(loading = false, query = "", words = allWords)
+            _uiState.update {
+                it.copy(
+                    words = filtered.map { WordViewData(it, false) },
+                    loading = false
+                )
+            }
+        } else _uiState.update {
+            it.copy(
+                words = allWords.map { WordViewData(it, false) },
+                loading = false
+            )
         }
     }
 
-    private fun closeWordMenu() {
+    private fun revealOptions(word: WordViewData) {
+        _uiState.update { state ->
+            state.copy(
+                words = state.words.map { wordInList ->
+                    if (wordInList.data == word.data) {
+                        wordInList.copy(isOptionRevealed = true)
+                    } else wordInList
+                }
+            )
+        }
+    }
+
+    private fun collapseOptions(word: WordViewData) {
+        _uiState.update { state ->
+            state.copy(
+                words = state.words.map { wordInList ->
+                    if (wordInList.data == word.data) {
+                        wordInList.copy(isOptionRevealed = false)
+                    } else wordInList
+                }
+            )
+        }
+    }
+
+    private fun clearQuery() {
         _uiState.update {
-            it.copy(selectedItem = null, popupOffset = null)
+            it.copy(loading = false, query = "", words = allWords.map { WordViewData(it, false) })
         }
     }
 
@@ -93,19 +120,10 @@ class AllWordsViewModel(
                     allWords.clear()
                     allWords.addAll(words.sortedBy { it.level })
                     _uiState.update {
-                        it.copy(words = allWords, loading = false)
+                        it.copy(words = allWords.map { WordViewData(it, false) }, loading = false)
                     }
                 }
             }
-        }
-    }
-
-    private fun selectWord(word: WordUI?, offset: Offset?) {
-        _uiState.update {
-            it.copy(
-                selectedItem = word,
-                popupOffset = offset
-            )
         }
     }
 

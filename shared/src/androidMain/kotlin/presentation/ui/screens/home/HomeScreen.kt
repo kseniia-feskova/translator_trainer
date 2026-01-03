@@ -373,7 +373,6 @@ fun SelectLanguages(
     onFirstTextLayout: (Int) -> Unit,
     onSecondTextLayout: (Int) -> Unit,
 ) {
-    Log.e("SelectLanguages", "origin = $originLang, translate = $translateLang")
     Row(modifier = modifier) {
         val first = stringResource(originLang.getRes())
         Text(

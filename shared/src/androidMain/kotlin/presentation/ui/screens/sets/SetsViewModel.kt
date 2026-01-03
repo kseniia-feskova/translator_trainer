@@ -28,7 +28,6 @@ class SetsViewModel(
             _uiState.update { it.copy(loading = true) }
             val course = coursePrefs.getCourse()
             if (course != null) {
-                Log.e("SetsViewModel", "reload, course = ${course.id} ")
                 val response = getAllSets.invoke(course.id)
                 val allWords = course.allWordsId
                 if (response.isSuccess) {

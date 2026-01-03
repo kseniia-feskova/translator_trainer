@@ -6,6 +6,7 @@ import presentation.model.CourseUI
 import presentation.model.Level
 import presentation.model.SetOfCards
 import presentation.model.WordUI
+import presentation.model.WordViewData
 import java.util.UUID
 
 
@@ -14,6 +15,19 @@ val smallList = listOf(
     WordUI(UUID.randomUUID().toString(), "deutsches Wort", "немецкое слово", Level.getRandom()),
     WordUI(UUID.randomUUID().toString(), "Katze", "Котик", Level.getRandom()),
     WordUI(UUID.randomUUID().toString(), "Mutter", "Мама", Level.getRandom())
+)
+
+val smallListViews = listOf(
+    WordViewData(
+        WordUI(
+            UUID.randomUUID().toString(),
+            "deutsches Wort",
+            "немецкое слово",
+            Level.getRandom()
+        )
+    ),
+    WordViewData(WordUI(UUID.randomUUID().toString(), "Katze", "Котик", Level.getRandom())),
+    WordViewData(WordUI(UUID.randomUUID().toString(), "Mutter", "Мама", Level.getRandom()))
 )
 
 val mockSetOfCard = SetOfCards(

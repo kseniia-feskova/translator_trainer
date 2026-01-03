@@ -9,4 +9,7 @@ data class WordUI(
   //  val date: Date = Date()
 )
 
-
+data class WordViewData(
+    val data: WordUI,
+    val isOptionRevealed: Boolean = false
+)

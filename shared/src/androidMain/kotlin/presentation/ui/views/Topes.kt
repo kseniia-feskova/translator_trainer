@@ -2,7 +2,6 @@ package presentation.ui.views
 
 
 import android.net.Uri
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -45,11 +44,11 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.translatortrainer.shared.R
 import com.presentation.ui.AppTheme
-import presentation.ui.AppTypography
 import com.presentation.ui.bgColor
 import com.presentation.ui.darkColor
 import com.presentation.ui.redDarkColor
 import com.presentation.ui.whiteColor
+import presentation.ui.AppTypography
 
 @Composable
 fun HomeTopView(
@@ -119,7 +118,6 @@ fun AccountTopView(
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
     val imageSize = screenHeight * 0.12f
 
-    Log.e("AccountTopView", "Photo = $photo")
     Column(
         Modifier
             .fillMaxWidth()
