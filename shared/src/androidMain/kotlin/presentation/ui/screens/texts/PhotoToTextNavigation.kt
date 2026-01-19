@@ -9,6 +9,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import presentation.navigation.LeafScreen
 import org.koin.androidx.compose.koinViewModel
+import presentation.ui.screens.texts.TextFromPhotoViewModel
 import presentation.ui.screens.texts.TextRecognitionScreen
 
 fun NavGraphBuilder.photoToText(
@@ -26,9 +27,9 @@ fun PhotoToTextRoute(
     val state = viewModel.uiState.collectAsState()
     TextRecognitionScreen(
         state = state.value,
-        onTranslate = viewModel::translateText,
         onSelect = viewModel::onSelect,
-        onSaveClick = viewModel::saveWords,
-        onLanguageChange = viewModel::changeLanguages
+        onSaveClick = viewModel::saveWord,
+        onLanguageChange = viewModel::changeLanguages,
+        recognizeText = viewModel::recognizeText
     )
 }

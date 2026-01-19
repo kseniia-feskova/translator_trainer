@@ -33,9 +33,10 @@ abstract class BaseLessonViewModel(
             if (response.isSuccess) {
                 val newWords = response.getOrNull()?.filter { it.level != Level.KNOW }
                 if (newWords.isNullOrEmpty()) {
-                    words.addAll(response.getOrNull()?.shuffled()?.take(10) ?: emptyList())
+                    //TODO: replace count of words with variable, that depends from the difficulty level
+                    words.addAll(response.getOrNull()?.shuffled()?.take(5) ?: emptyList())
                 } else {
-                    words.addAll(newWords.take(10).toList())
+                    words.addAll(newWords.take(5).toList())
                 }
                 setWords()
             }

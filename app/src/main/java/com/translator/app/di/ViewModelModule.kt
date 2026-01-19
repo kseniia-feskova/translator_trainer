@@ -12,7 +12,7 @@ import presentation.ui.screens.lesson.bubble.BubbleLessonViewModel
 import presentation.ui.screens.lesson.success.SuccessLessonViewModel
 import presentation.ui.screens.select_course.SelectCourseViewModel
 import presentation.ui.screens.splash.SplashViewModel
-import com.presentation.ui.screens.texts.TextFromPhotoViewModel
+import presentation.ui.screens.texts.TextFromPhotoViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.module.dsl.viewModelOf
 import presentation.viewmodel.MainViewModel

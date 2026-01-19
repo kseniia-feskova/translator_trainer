@@ -13,6 +13,7 @@ import network.INetworkConnectivityObserver
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
+import presentation.ui.screens.texts.TextRecognizer
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
@@ -41,6 +42,7 @@ fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
 
 val networkModule = module {
 
+    //TODO: Update with SharedPreferences + own cypher
     single<SharedPreferences> {
         val masterKey = MasterKey.Builder(get<Context>())
             .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
@@ -62,4 +64,6 @@ val networkModule = module {
     single<ApiService> { get<Retrofit>().create(ApiService::class.java) }
 
     single<INetworkConnectivityObserver> { NetworkConnectivityObserver(get<Context>()) }
+
+    single<TextRecognizer> { TextRecognizer() }
 }

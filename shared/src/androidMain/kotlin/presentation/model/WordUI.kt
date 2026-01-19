@@ -13,3 +13,20 @@ data class WordViewData(
     val data: WordUI,
     val isOptionRevealed: Boolean = false
 )
+
+data class WordSelection(
+    val id: String,
+    val originalText: String,
+    val resText: String,
+    val isSaved: Boolean = false
+)
+
+fun WordUI.toSelection(): WordSelection {
+    return WordSelection(
+        id = id,
+        originalText = originalText,
+        resText = resText,
+        isSaved = false
+    )
+}
+
