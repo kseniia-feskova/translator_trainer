@@ -1,28 +1,10 @@
 package domain.translate
 
-import com.google.mlkit.nl.translate.TranslateLanguage
 import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.Translator
 import com.google.mlkit.nl.translate.TranslatorOptions
 import data.translate.Language
 import domain.mapper.toTranslatorModel
-
-//TODO add more or make dynamic for different languages
-private fun createRuToDeTranslator() =
-    Translation.getClient(
-        TranslatorOptions.Builder()
-            .setSourceLanguage(TranslateLanguage.RUSSIAN)
-            .setTargetLanguage(TranslateLanguage.GERMAN)
-            .build()
-    )
-
-private fun createDeToRuTranslator() =
-    Translation.getClient(
-        TranslatorOptions.Builder()
-            .setSourceLanguage(TranslateLanguage.GERMAN)
-            .setTargetLanguage(TranslateLanguage.RUSSIAN)
-            .build()
-    )
 
 interface ITranslateModelProvider {
     fun translate(
@@ -53,12 +35,12 @@ class TranslateModelProvider : ITranslateModelProvider {
         onSuccess: (String) -> Unit,
         onError: (Exception) -> Unit
     ) {
-        if (sourceLanguage == Language.RUSSIAN && targetLanguage == Language.GERMAN) {
-            translateRuToDe(text, onSuccess, onError)
-        }
-        if (sourceLanguage == Language.GERMAN && targetLanguage == Language.RUSSIAN) {
-            translateDeToRu(text, onSuccess, onError)
-        }
+        translateWithModel(
+            text,
+            sourceLanguage.toTranslatorModel(),
+            targetLanguage.toTranslatorModel(),
+            onSuccess, onError
+        )
     }
 
     override fun downloadModel(
@@ -75,21 +57,19 @@ class TranslateModelProvider : ITranslateModelProvider {
 
     }
 
-    fun translateRuToDe(text: String, callback: (String) -> Unit, onError: (Exception) -> Unit) {
-        translator = createRuToDeTranslator()
-        translator?.run {
-            downloadModelIfNeeded()
-                .addOnSuccessListener {
-                    translator?.translate(text)
-                        ?.addOnSuccessListener { callback(it) }
-                        ?.addOnFailureListener { callback("Ошибка перевода: ${it.message}") }
-                }
-                .addOnFailureListener { onError(it) }
-        }
-    }
-
-    fun translateDeToRu(text: String, callback: (String) -> Unit, onError: (Exception) -> Unit) {
-        translator = createDeToRuTranslator()
+    fun translateWithModel(
+        text: String,
+        sourceLanguage: String,
+        targetLanguage: String,
+        callback: (String) -> Unit,
+        onError: (Exception) -> Unit
+    ) {
+        translator = Translation.getClient(
+            TranslatorOptions.Builder()
+                .setSourceLanguage(sourceLanguage)
+                .setTargetLanguage(targetLanguage)
+                .build()
+        )
         translator?.run {
             downloadModelIfNeeded()
                 .addOnSuccessListener {

@@ -10,6 +10,7 @@ enum class Language(val code: String) {
     AUTO("auto"),
 
     GERMAN("de"),
+    ENGLISH("en"),
     RUSSIAN("ru"),
     FRENCH("fr");
 

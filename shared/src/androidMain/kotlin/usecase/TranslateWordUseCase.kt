@@ -20,7 +20,8 @@ class TranslateWordUseCase(
             text,
             originalLanguage.toData(),
             resLanguage.toData(),
-            onSuccess, onError
+            onSuccess,
+            onError
         )
     }
 

@@ -74,5 +74,14 @@ val dummyCourses = listOf(
         id = UUID.randomUUID().toString(),
         allWordsId = null,
         selectedSetId = null
+    ),
+    CourseUI(
+        originalLanguage = Language.ENGLISH,
+        translateLanguage = Language.RUSSIAN,
+        originalFlag = R.drawable.ic_en,
+        translatedFlag = R.drawable.ic_ru,
+        id = UUID.randomUUID().toString(),
+        allWordsId = null,
+        selectedSetId = null
     )
 )

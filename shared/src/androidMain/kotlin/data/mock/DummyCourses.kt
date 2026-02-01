@@ -24,5 +24,19 @@ val dummyCourses = listOf(
         id = "3",
         allWordsId = null,
         selectedSetId = null
+    ),
+    CourseEntity(
+        sourceLanguage = Language.RUSSIAN.code,
+        targetLanguage = Language.ENGLISH.code,
+        id = "4",
+        allWordsId = null,
+        selectedSetId = null
+    ),
+    CourseEntity(
+        sourceLanguage = Language.ENGLISH.code,
+        targetLanguage = Language.GERMAN.code,
+        id = "5",
+        allWordsId = null,
+        selectedSetId = null
     )
 )

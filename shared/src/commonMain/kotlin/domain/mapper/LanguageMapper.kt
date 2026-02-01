@@ -7,6 +7,7 @@ fun Language.toTranslatorModel(): String {
     return when (this) {
         Language.GERMAN -> TranslateLanguage.GERMAN
         Language.FRENCH -> TranslateLanguage.FRENCH
+        Language.ENGLISH -> TranslateLanguage.ENGLISH
         else -> TranslateLanguage.RUSSIAN
     }
 }

@@ -65,6 +65,7 @@
 
     <string name="russian">Russian</string>
     <string name="french">French</string>
+    <string name="english">English</string>
     <string name="german">German</string>
 
     <!-- Guest mode -->
