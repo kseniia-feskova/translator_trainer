@@ -2,6 +2,8 @@ package usecase.course
 
 import data.mock.dummyCourses
 import data.prefs.IDataStoreManager
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import mapper.toData
 import mapper.toUI
 import presentation.model.CourseUI
@@ -27,6 +29,10 @@ class CoursesOnPrefsUseCases(private val dataStorage: IDataStoreManager) : ICour
 
     override suspend fun getCourse(): CourseUI? {
         return dataStorage.getCourse()?.toUI()
+    }
+
+    override fun getCourseFlow(): Flow<CourseUI?> = flow {
+        emit(dataStorage.getCourse()?.toUI())
     }
 
 }

@@ -31,6 +31,7 @@ import presentation.usecases.course.ICoursesOnPrefsUseCases
 import presentation.usecases.course.IGetAllCoursesUseCase
 import presentation.usecases.sets.IAddSetUseCase
 import presentation.usecases.sets.IGetAllSetsUseCase
+import presentation.usecases.sets.IGetAllWordsIdUseCase
 import presentation.usecases.words.IDeleteWordUseCase
 import presentation.usecases.words.IGetWordsBySetUseCase
 import presentation.usecases.words.IUpdateStatusUseCase
@@ -61,6 +62,7 @@ import usecase.user.AccountUseCase
 import usecase.auth.SetGuestUseCase
 import usecase.auth.CreateFromGuestUseCase
 import usecase.auth.RegisterWithFirebaseUseCase
+import usecase.sets.GetAllWordsIdUseCase
 
 val useCaseModule = module {
 
@@ -87,6 +89,8 @@ val useCaseModule = module {
     singleOf(::TranslateWordUseCase) bind ITranslateWordUseCase::class
 
     singleOf(::GetAllSetsUseCase) bind IGetAllSetsUseCase::class
+
+    singleOf(::GetAllWordsIdUseCase) bind IGetAllWordsIdUseCase::class
 
     singleOf(::DeleteWordUseCase) bind IDeleteWordUseCase::class
 

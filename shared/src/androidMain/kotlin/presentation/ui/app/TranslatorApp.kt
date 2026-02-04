@@ -174,7 +174,6 @@ private fun NavGraphBuilder.setsNav(navController: NavHostController) {
                 when (type) {
                     LessonType.BUBBLE -> navController.navigateToBubbleLesson(id)
                     LessonType.MATCH -> navController.navigateToMatchLesson(id)
-                    else -> navController.navigateToBubbleLesson(id)
                 }
             }
         )
@@ -184,7 +183,6 @@ private fun NavGraphBuilder.setsNav(navController: NavHostController) {
                 when (type) {
                     LessonType.BUBBLE -> navController.navigateToBubbleLesson(id)
                     LessonType.MATCH -> navController.navigateToMatchLesson(id)
-                    else -> navController.navigateToBubbleLesson(id)
                 }
             },
             navigateToEdit = {},

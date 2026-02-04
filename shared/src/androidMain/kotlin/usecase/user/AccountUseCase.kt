@@ -2,6 +2,8 @@ package usecase.user
 
 import presentation.usecases.IAccountUseCase
 import data.prefs.IDataStoreManager
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class AccountUseCase(
     private val prefs: IDataStoreManager
@@ -9,6 +11,10 @@ class AccountUseCase(
 
     override suspend fun getUserId(): String? {
         return prefs.getUserId()
+    }
+
+    override fun getUserIdFlow(): Flow<String?> = flow {
+        emit(prefs.getUserId())
     }
 
 }

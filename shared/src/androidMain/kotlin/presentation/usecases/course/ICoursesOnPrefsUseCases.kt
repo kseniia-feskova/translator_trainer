@@ -1,5 +1,6 @@
 package presentation.usecases.course
 
+import kotlinx.coroutines.flow.Flow
 import presentation.model.CourseUI
 
 interface ICoursesOnPrefsUseCases {
@@ -13,5 +14,6 @@ interface ICoursesOnPrefsUseCases {
     suspend fun resetCourse()
 
     suspend fun getCourse(): CourseUI?
+    fun getCourseFlow(): Flow<CourseUI?>
 
 }

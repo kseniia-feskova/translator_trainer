@@ -20,14 +20,14 @@ class CreateFromGuestUseCase(
     private val courseUseCase: IAddCourseUseCase,
     private val wordsRepo: IWordDaoRepository,
     private val saveWord: IAddWordByApiUseCase,
-    private val sets: IGetAllSetsUseCase,
+    private val getAllSets: IGetAllSetsUseCase,
     private val addSet: IAddSetUseCase
 ) : ICreateFromGuestUseCase {
 
     //TODO refactor is needed
     override suspend fun invoke(email: String, password: String, course: CourseUI): Result<String> {
         val allWords = wordsRepo.getAllWords().data
-        val allSets = sets.invoke(course.id)
+        val allSets = getAllSets.invoke()
         val sets = allSets.getOrNull()
         val userFromBack = register(email, password)
         if (userFromBack.isFailure) {

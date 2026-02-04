@@ -17,47 +17,60 @@ import presentation.usecases.course.ICoursesOnPrefsUseCases
 import presentation.usecases.sets.IGetAllSetsUseCase
 import domain.ALL_WORDS
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import presentation.model.FirebaseUser
 import presentation.usecases.auth.IRegisterWithFirebaseUseCase
 
 class AccountViewModel(
+    coursePrefs: ICoursesOnPrefsUseCases,
+    getSets: IGetAllSetsUseCase,
     private val getDetails: IGetAccountUseCase,
     private val logout: ILogoutUseCase,
     private val deleteAccount: IDeleteUseCase,
     private val guestUseCase: ISetGuestUseCase,
     private val accountPrefs: IAccountUseCase,
-    private val coursePrefs: ICoursesOnPrefsUseCases,
-    private val getSets: IGetAllSetsUseCase,
     private val createUser: ICreateFromGuestUseCase,
     private val registerByFirebase: IRegisterWithFirebaseUseCase
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(AccountUIState(loading = true))
-    val uiState = _uiState.asStateFlow()
-
     private val _authState = MutableStateFlow<AuthUIState?>(null)
     val authState = _authState.asStateFlow()
 
+    private val isGuestMode = guestUseCase.isGuestModeFlow()
+    private val course = coursePrefs.getCourseFlow()
+    private val guestDataFlow = getSets.invokeFlow().map { sets ->
+        val allWordsSet = sets.find { it.title == ALL_WORDS }
+        GuestData(
+            allSetsCount = sets.size,
+            allWordsCount = allWordsSet?.words?.size ?: 0,
+            course = null
+        )
+    }
+
+    private val _uiState = MutableStateFlow(AccountUIState(loading = true))
+    val uiState = _uiState.asStateFlow()
+
+    val guestUiState = combine(
+        isGuestMode, course, guestDataFlow
+    ) { isGuestMode, course, guestData ->
+        if (isGuestMode) {
+            guestData.copy(course = course)
+        } else {
+            null
+        }
+    }.stateIn(
+        viewModelScope, SharingStarted.WhileSubscribed(5000), null
+    )
+
     init {
         viewModelScope.launch {
-            if (guestUseCase.isGuestMode()) {
-                val course = coursePrefs.getCourse()
-                if (course != null) {
-                    val sets = getSets.invoke(course.id).getOrNull()
-                    val allSet = sets?.find { it.title == ALL_WORDS }
-                    val guestData = GuestData(
-                        course = course,
-                        allSetsCount = sets?.size ?: 0,
-                        allWordsCount = allSet?.words?.size ?: 0
-                    )
-                    _uiState.update {
-                        it.copy(loading = false, guestData = guestData)
-                    }
-                }
-            } else {
+            if (!guestUseCase.isGuestMode()) {
                 val userId = accountPrefs.getUserId()
                 if (userId != null) {
                     val response = getDetails.invoke(userId)

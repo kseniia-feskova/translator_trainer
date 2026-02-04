@@ -1,9 +1,11 @@
 package presentation.usecases.sets
 
+import kotlinx.coroutines.flow.Flow
 import presentation.model.SetOfCards
 
 interface IGetAllSetsUseCase {
 
-    suspend fun invoke(courseId: String): Result<List<SetOfCards>>
+    fun invokeFlow(): Flow<List<SetOfCards>>
+    suspend fun invoke(): Result<List<SetOfCards>>
 
 }

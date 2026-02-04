@@ -1,5 +1,7 @@
 package presentation.usecases.auth
 
+import kotlinx.coroutines.flow.Flow
+
 interface ISetGuestUseCase {
 
     suspend fun setGuest()
@@ -7,5 +9,6 @@ interface ISetGuestUseCase {
     suspend fun resetGuest()
 
     suspend fun isGuestMode(): Boolean
+    fun isGuestModeFlow(): Flow<Boolean>
 
 }

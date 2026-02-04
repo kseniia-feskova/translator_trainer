@@ -8,6 +8,8 @@ import data.room.SetsDao
 import data.room.WordDao
 import data.room.model.SetOfWords
 import data.room.model.toCommon
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import java.util.UUID
 
 class SetDaoRepository(
@@ -37,6 +39,22 @@ class SetDaoRepository(
         )
     }
 
+    override suspend fun saveSets(sets: List<SetResponse>) {
+        sets.map { set ->
+            set.words.forEach {
+                wordsDao.addWordToSet(wordId = it.id, setId = set.id)
+            }
+            dao.insertSet(
+                SetOfWords(
+                    id = set.id,
+                    words = set.words.map { it.id },
+                    name = set.name,
+                    isDefault = set.isDefault
+                )
+            )
+        }
+    }
+
     override suspend fun getAllSets(courseId: String): Result<List<SetResponse>> {
         return Result(data = dao.getAllSets().map {
             SetResponse(
@@ -46,5 +64,25 @@ class SetDaoRepository(
                 words = it.words.map { word -> word.toCommon() }
             )
         })
+    }
+
+    override suspend fun getAllSetsFlow(courseId: String): Flow<List<SetResponse>> {
+        return dao.observeSets()
+            .map { sets ->
+                sets
+                    .filter { it.words.firstOrNull { it.courseId == courseId } != null }
+                    .map {
+                        SetResponse(
+                            id = it.set.id,
+                            isDefault = it.set.isDefault,
+                            name = it.set.name,
+                            words = it.words.map { word -> word.toCommon() }
+                        )
+                    }
+            }
+    }
+
+    override suspend fun isSetsEmpty(courseId: String): Boolean {
+        return dao.getAllSets().isEmpty()
     }
 }

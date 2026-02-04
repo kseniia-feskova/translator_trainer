@@ -380,43 +380,44 @@ fun GuestDataView(modifier: Modifier = Modifier, guestData: GuestData?) {
             .then(modifier)
     ) {
         Text("Limits", style = MaterialTheme.typography.titleMedium.copy(color = darkColor))
-        Row(
-            modifier = Modifier,
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Text(
-                "Current course:",
-                style = MaterialTheme.typography.titleSmall.copy(color = darkColor)
-            )
-            Icon(
-                modifier = Modifier
-                    .height(24.dp)
-                    .border(
-                        width = 1.dp,
-                        color = fieldBorderColor,
-                        shape = RoundedCornerShape(4.dp)
-                    )
-                    .clip(RoundedCornerShape(4.dp)),
-                painter = painterResource(guestData.course.originalFlag),
-                contentDescription = null,
-                tint = Color.Unspecified
-            )
-            Icon(
-                modifier = Modifier
-                    .height(24.dp)
-                    .border(
-                        width = 1.dp,
-                        color = fieldBorderColor,
-                        shape = RoundedCornerShape(4.dp)
-                    )
-                    .clip(RoundedCornerShape(4.dp)),
-                painter = painterResource(guestData.course.translatedFlag),
-                contentDescription = null,
-                tint = Color.Unspecified
-            )
+        if (guestData.course != null) {
+            Row(
+                modifier = Modifier,
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text(
+                    "Current course:",
+                    style = MaterialTheme.typography.titleSmall.copy(color = darkColor)
+                )
+                Icon(
+                    modifier = Modifier
+                        .height(24.dp)
+                        .border(
+                            width = 1.dp,
+                            color = fieldBorderColor,
+                            shape = RoundedCornerShape(4.dp)
+                        )
+                        .clip(RoundedCornerShape(4.dp)),
+                    painter = painterResource(guestData.course.originalFlag),
+                    contentDescription = null,
+                    tint = Color.Unspecified
+                )
+                Icon(
+                    modifier = Modifier
+                        .height(24.dp)
+                        .border(
+                            width = 1.dp,
+                            color = fieldBorderColor,
+                            shape = RoundedCornerShape(4.dp)
+                        )
+                        .clip(RoundedCornerShape(4.dp)),
+                    painter = painterResource(guestData.course.translatedFlag),
+                    contentDescription = null,
+                    tint = Color.Unspecified
+                )
+            }
         }
-
         Row(
             modifier = Modifier,
             verticalAlignment = Alignment.CenterVertically,

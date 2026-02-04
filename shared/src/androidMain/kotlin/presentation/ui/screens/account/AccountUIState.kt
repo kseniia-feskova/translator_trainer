@@ -21,7 +21,7 @@ data class AccountBtnsState(
 
 @Stable
 data class GuestData(
-    val course: CourseUI,
+    val course: CourseUI? = null,
     val allWordsCount: Int,
     val allSetsCount: Int
 )

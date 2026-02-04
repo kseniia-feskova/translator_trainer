@@ -42,6 +42,7 @@ fun AccountRoute(
 ) {
     val authState by viewModel.authState.collectAsState()
     val state by viewModel.uiState.collectAsState()
+    val guestState by viewModel.guestUiState.collectAsState()
 
     val onEditClicked = remember { { viewModel.handleIntent(AccountIntent.EditClicked) } }
     val changeTheme = remember { { viewModel.handleIntent(AccountIntent.ChangeTheme) } }
@@ -64,7 +65,7 @@ fun AccountRoute(
     AccountScreen(
         name = state.name.toString(),
         image = state.image,
-        guestData = state.guestData,
+        guestData = guestState,
         btnsState = state.btnsState,
         authState = authState != null,
         authUIState = authState,

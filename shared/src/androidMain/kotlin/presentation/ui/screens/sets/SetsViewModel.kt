@@ -3,70 +3,64 @@ package presentation.ui.screens.sets
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import presentation.usecases.course.ICoursesOnPrefsUseCases
 import presentation.usecases.sets.IGetAllSetsUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 import presentation.model.LessonType
+import presentation.usecases.sets.IGetAllWordsIdUseCase
 
 class SetsViewModel(
-    private val getAllSets: IGetAllSetsUseCase,
-    private val coursePrefs: ICoursesOnPrefsUseCases
+    getAllSets: IGetAllSetsUseCase,
+    getAllWordsId: IGetAllWordsIdUseCase
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(SetsUIState())
-    val uiState = _uiState.asStateFlow()
+    private val setsUiWithSetsFlow = getAllSets.invokeFlow()
+        .map { sets -> SetsUIState(sets = sets, loading = false) }
+        .catch { emit(SetsUIState(error = handleError(it))) }
+        .onStart { emit(SetsUIState(loading = true)) }
 
-    init {
-        reload()
-    }
+    private val selectedSetId = MutableStateFlow<String?>(null)
+    private val allWordsId = getAllWordsId.invoke()
 
-    fun reload() {
-        viewModelScope.launch {
-            _uiState.update { it.copy(loading = true) }
-            val course = coursePrefs.getCourse()
-            if (course != null) {
-                val response = getAllSets.invoke(course.id)
-                val allWords = course.allWordsId
-                if (response.isSuccess) {
-                    val sets = response.getOrNull() ?: emptyList()
-                    _uiState.update {
-                        it.copy(
-                            allWordsSet = allWords,
-                            sets = if (sets.isNotEmpty() && sets[0].words.isEmpty()) emptyList() else sets,
-                            loading = false
-                        )
-                    }
-                } else {
-                    handleError(response)
-                }
-            } else {
-                _uiState.update { it.copy(loading = false) }
-            }
+    val uiState =
+        combine(
+            setsUiWithSetsFlow,
+            selectedSetId,
+            allWordsId
+        ) { setsUIState, selected, allWordsId ->
+            setsUIState.copy(
+                selectedSetId = selected,
+                allWordsSet = allWordsId
+            )
         }
-    }
+            .stateIn(
+                viewModelScope,
+                SharingStarted.WhileSubscribed(5000),
+                SetsUIState(loading = true)
+            )
 
     fun isAllWordsSelected(setId: String): Boolean {
-        Log.e("SetsViewModel", "SetId = $setId, all words = ${_uiState.value.allWordsSet}")
-        return _uiState.value.allWordsSet == setId
+        Log.e("SetsViewModel", "SetId = $setId, all words = ${uiState.value.allWordsSet}")
+        return uiState.value.allWordsSet == setId
     }
 
-    private fun <T> handleError(response: Result<T>) {
-        val error = response.exceptionOrNull()
-        val errorMsg = when (error?.message) {
+    private fun handleError(throwable: Throwable): SetsError {
+        return when (throwable.message) {
             "Failed to connect" -> SetsError.INTERNET_CONNECTION_ERROR
             else -> SetsError.DEFAULT
         }
-        _uiState.update { it.copy(error = errorMsg, loading = false) }
     }
 
     fun createRandomLesson(
         navigateToLesson: (String, LessonType) -> Unit = { _, _ -> },
     ) {
         val type = LessonType.entries.random()
-        val setId = _uiState.value.allWordsSet
+        val setId = uiState.value.selectedSetId
         if (setId != null) {
             navigateToLesson(setId, type)
         }
