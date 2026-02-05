@@ -12,7 +12,7 @@ import java.util.UUID
 
 // не самая полезная вещь, но вдруг нужны будут тестовые наборы, хотя они тут очень неудобно собираються
 val smallList = listOf(
-    WordUI(UUID.randomUUID().toString(), "deutsches Wort", "немецкое слово", Level.getRandom()),
+    WordUI(UUID.randomUUID().toString(), "deutsches Wort lange als satz", "немецкое слово", Level.getRandom()),
     WordUI(UUID.randomUUID().toString(), "Katze", "Котик", Level.getRandom()),
     WordUI(UUID.randomUUID().toString(), "Mutter", "Мама", Level.getRandom())
 )

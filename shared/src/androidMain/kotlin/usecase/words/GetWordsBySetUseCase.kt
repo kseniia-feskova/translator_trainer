@@ -1,13 +1,18 @@
 package usecase.words
 
 import data.prefs.IDataStoreManager
-import domain.token.ITokenRefresher
-import presentation.usecases.words.IGetWordsBySetUseCase
 import data.repository.word.IWordApiRepository
 import data.repository.word.IWordDaoRepository
 import domain.token.ICheckToken
+import domain.token.ITokenRefresher
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import mapper.toUI
 import presentation.model.WordUI
+import presentation.usecases.words.IGetWordsBySetUseCase
 
 class GetWordsBySetUseCase(
     private val repo: IWordApiRepository,
@@ -34,5 +39,25 @@ class GetWordsBySetUseCase(
             Result.failure(Exception("Empty user data"))
         } else Result.success(data.map { it.toUI() })
 
+    }
+
+    override fun invokeFlow(setId: String): Flow<Result<List<WordUI>>> = flow {
+        val response = if (!prefs.isOfflineMode() && !prefs.isGuest()) {
+            checkToken.safeApiCallWithRefresh(
+                call = { repo.getWordsBySet(setId) },
+                onTokenExpired = { tokenRefresher.refreshToken() }
+            )
+        } else {
+            dao.getWordsBySetFlow(setId).first()
+        }
+        emitAll(dao.getWordsBySetFlow(setId).map { result ->
+            if (result.data != null) {
+                Result.success(result.data.map { it.toUI() })
+            } else {
+                if (response.errorMsg.contains("Failed to connect")) {
+                    Result.failure(Exception("Failed to connect"))
+                } else Result.failure(Exception(response.errorMsg))
+            }
+        })
     }
 }

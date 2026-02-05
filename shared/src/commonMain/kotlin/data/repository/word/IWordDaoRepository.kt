@@ -6,6 +6,7 @@ import data.model.words.add.AddWordRequest
 import data.model.words.get.bytranslate.WordByOriginalRequest
 import data.model.words.get.bytranslate.WordByTranslatedRequest
 import data.model.words.update.UpdateWordStatusRequest
+import kotlinx.coroutines.flow.Flow
 
 interface IWordDaoRepository {
     suspend fun addWord(request: AddWordRequest, selectedSetId: String?): Result<WordResponse>
@@ -17,6 +18,7 @@ interface IWordDaoRepository {
     suspend fun getAllWords(): Result<List<WordResponse>>
 
     suspend fun getWordsBySet(setId: String): Result<List<WordResponse>>
+    suspend fun getWordsBySetFlow(setId: String): Flow<Result<List<WordResponse>>>
 
     suspend fun updateStatus(
         wordId: String,

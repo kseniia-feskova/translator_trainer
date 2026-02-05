@@ -11,6 +11,8 @@ import data.repository.word.IWordDaoRepository
 import data.room.SetsDao
 import data.room.WordDao
 import data.room.model.WordEntity
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import mapper.toWordResponse
 import java.util.UUID
 
@@ -59,6 +61,17 @@ class WordDaoRepository(
     override suspend fun getWordsBySet(setId: String): Result<List<WordResponse>> {
         val set = setsDao.getSetById(setId) ?: return Result(errorMsg = "Set does not exist")
         return Result(data = set.words.map { it.toWordResponse() })
+    }
+
+    override suspend fun getWordsBySetFlow(setId: String): Flow<Result<List<WordResponse>>> {
+        return setsDao.observeSetById(setId)
+            .map { set ->
+                if (set == null) {
+                    Result(errorMsg = "Set does not exist")
+                } else {
+                    Result(set.words.map { it.toWordResponse() })
+                }
+            }
     }
 
     override suspend fun updateStatus(

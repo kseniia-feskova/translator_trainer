@@ -60,9 +60,7 @@ class SetsViewModel(
         navigateToLesson: (String, LessonType) -> Unit = { _, _ -> },
     ) {
         val type = LessonType.entries.random()
-        val setId = uiState.value.selectedSetId
-        if (setId != null) {
-            navigateToLesson(setId, type)
-        }
+        val setId = uiState.value.sets.shuffled()[0].id
+        navigateToLesson(setId, type)
     }
 }

@@ -23,5 +23,8 @@ interface SetsDao {
 
     @Query("SELECT * FROM sets_of_words WHERE id = :id")
     suspend fun getSetById(id: String): SetWithWords?
+
+    @Query("SELECT * FROM sets_of_words WHERE id = :id")
+    fun observeSetById(id: String): Flow<SetWithWords?>
 }
 
