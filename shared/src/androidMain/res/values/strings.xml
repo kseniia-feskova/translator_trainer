@@ -76,4 +76,8 @@
     <!-- Verify email code -->
     <string name="wrong_code_error">Verification code is not correct</string>
 
+    <!-- Lessons -->
+    <string name="dictation_input_label">Input the translation</string>
+    <string name="dictation_send_button_label">Send</string>
+
 </resources>

@@ -17,6 +17,8 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.core.module.dsl.viewModelOf
 import presentation.viewmodel.MainViewModel
 import org.koin.dsl.module
+import presentation.ui.screens.lesson.dictation.DictationLessonViewModel
+import presentation.ui.screens.lesson.dictation.result.DictationResultViewModel
 import presentation.ui.screens.lesson.match.MatchLessonViewModel
 
 
@@ -35,6 +37,8 @@ val viewModelModule = module {
     viewModelOf(::SelectCourseViewModel)
     viewModelOf(::BubbleLessonViewModel)
     viewModelOf(::MatchLessonViewModel)
+    viewModelOf(::DictationLessonViewModel)
+    viewModelOf(::DictationResultViewModel)
     viewModelOf(::SuccessLessonViewModel)
     viewModelOf(::TextFromPhotoViewModel)
 }

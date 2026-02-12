@@ -59,7 +59,7 @@ import kotlin.math.roundToInt
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun WordWithStatusView(
+fun SwipeableWordWithStatusView(
     modifier: Modifier = Modifier,
     word: WordViewData,
     onRevealed: (WordViewData) -> Unit = {},
@@ -86,39 +86,47 @@ fun WordWithStatusView(
             )
         }
     ) {
-        Row(
-            modifier = Modifier
-                .then(modifier)
-                .fillMaxWidth()
-                .background(
-                    color = Color.White,
-                    shape = RoundedCornerShape(20.dp)
-                )
-                .clipToBounds()
-        ) {
-            Column(
-                modifier = Modifier
-                    .padding(horizontal = 12.dp, vertical = 20.dp)
-                    .weight(1f)
-                    .align(Alignment.CenterVertically)
-            ) {
-                Text(
-                    text = word.data.originalText,
-                    style = AppTypography.titleLarge.copy(color = darkColor)
-                )
-                Text(
-                    text = word.data.resText,
-                    style = AppTypography.titleSmall.copy(color = darkColor)
-                )
-            }
+        WordWithStatus(modifier, word.data)
+    }
+}
 
-            StarsRow(
-                modifier = Modifier
-                    .align(Alignment.CenterVertically)
-                    .padding(12.dp),
-                stars = word.data.level.convertToStars()
+@Composable
+fun WordWithStatus(
+    modifier: Modifier = Modifier,
+    word: WordUI
+) {
+    Row(
+        modifier = Modifier
+            .then(modifier)
+            .fillMaxWidth()
+            .background(
+                color = Color.White,
+                shape = RoundedCornerShape(20.dp)
+            )
+            .clipToBounds()
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 12.dp, vertical = 20.dp)
+                .weight(1f)
+                .align(Alignment.CenterVertically)
+        ) {
+            Text(
+                text = word.originalText,
+                style = AppTypography.titleLarge.copy(color = darkColor)
+            )
+            Text(
+                text = word.resText,
+                style = AppTypography.titleSmall.copy(color = darkColor)
             )
         }
+
+        StarsRow(
+            modifier = Modifier
+                .align(Alignment.CenterVertically)
+                .padding(12.dp),
+            stars = word.level.convertToStars()
+        )
     }
 }
 
@@ -180,7 +188,7 @@ fun SelectingWordWithStatusView(
 
 @Composable
 @Preview
-fun WordWithStatusPreview() {
+fun SwipeableWordWithStatusPreview() {
     AppTheme {
         Surface {
             Column(
@@ -194,9 +202,14 @@ fun WordWithStatusPreview() {
                     isSelected = false
                 )
 
-                WordWithStatusView(
+                SwipeableWordWithStatusView(
                     modifier = Modifier.padding(12.dp),
                     word = WordViewData(smallList.first(), false),
+                )
+
+                WordWithStatus(
+                    modifier = Modifier.padding(12.dp),
+                    word = smallList.first(),
                 )
             }
         }

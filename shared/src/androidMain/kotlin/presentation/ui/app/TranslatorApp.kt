@@ -34,6 +34,10 @@ import presentation.ui.screens.home.homeScreen
 import presentation.ui.screens.home.navigateToHome
 import presentation.ui.screens.lesson.bubble.bubbleLessonScreen
 import presentation.ui.screens.lesson.bubble.navigateToBubbleLesson
+import presentation.ui.screens.lesson.dictation.dictationLessonScreen
+import presentation.ui.screens.lesson.dictation.navigateToDictationLesson
+import presentation.ui.screens.lesson.dictation.result.dictationResultScreen
+import presentation.ui.screens.lesson.dictation.result.navigateToDictationResult
 import presentation.ui.screens.lesson.match.matchLessonScreen
 import presentation.ui.screens.lesson.match.navigateToMatchLesson
 import presentation.ui.screens.lesson.success.navigateToSuccessLesson
@@ -174,6 +178,7 @@ private fun NavGraphBuilder.setsNav(navController: NavHostController) {
                 when (type) {
                     LessonType.BUBBLE -> navController.navigateToBubbleLesson(id)
                     LessonType.MATCH -> navController.navigateToMatchLesson(id)
+                    LessonType.DICTATION -> navController.navigateToDictationLesson(id)
                 }
             }
         )
@@ -183,6 +188,7 @@ private fun NavGraphBuilder.setsNav(navController: NavHostController) {
                 when (type) {
                     LessonType.BUBBLE -> navController.navigateToBubbleLesson(id)
                     LessonType.MATCH -> navController.navigateToMatchLesson(id)
+                    LessonType.DICTATION -> navController.navigateToDictationLesson(id)
                 }
             },
             navigateToEdit = {},
@@ -191,6 +197,13 @@ private fun NavGraphBuilder.setsNav(navController: NavHostController) {
 
 
         successLessonScreen {
+            navController.navigate(LeafScreen.Sets.route) {
+                popUpTo(LeafScreen.Sets.route) { inclusive = true }
+                launchSingleTop = true
+            }
+        }
+
+        dictationResultScreen {
             navController.navigate(LeafScreen.Sets.route) {
                 popUpTo(LeafScreen.Sets.route) { inclusive = true }
                 launchSingleTop = true
@@ -206,6 +219,12 @@ private fun NavGraphBuilder.setsNav(navController: NavHostController) {
         matchLessonScreen(
             navigateToSuccess = { type, words ->
                 navController.navigateToSuccessLesson(words, type)
+            },
+            navigateUp = { navController.navigateUp() })
+
+        dictationLessonScreen(
+            navigateToSuccess = { type ->
+                navController.navigateToDictationResult(type)
             },
             navigateUp = { navController.navigateUp() })
 

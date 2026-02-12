@@ -9,6 +9,11 @@ data class WordUI(
   //  val date: Date = Date()
 )
 
+data class WordResult(
+    val word: WordUI,
+    val translation: String
+)
+
 data class WordViewData(
     val data: WordUI,
     val isOptionRevealed: Boolean = false

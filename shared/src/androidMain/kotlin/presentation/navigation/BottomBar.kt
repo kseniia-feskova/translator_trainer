@@ -58,14 +58,21 @@ sealed class LeafScreen(val route: String) {
 
     @Serializable
     data class BubbleLesson(val setId: String) : LeafScreen("bubble")
+
     @Serializable
     data class MatchLesson(val setId: String) : LeafScreen("match")
+
+    @Serializable
+    data class DictationLesson(val setId: String) : LeafScreen("dictation")
 
     @Serializable
     data class SuccessLesson(
         val type: LessonType,
         val wordsCount: Int
     ) : LeafScreen("success")
+
+    @Serializable
+    data class DictationResult(val type: LessonType) : LeafScreen("dictationResult")
 
     @Serializable
     data class AllWords(val setId: String) : LeafScreen("allWords")
@@ -83,7 +90,9 @@ fun String?.isBottomNavigationNeeded(): Boolean {
         startsWith(LeafScreen.Splash.route) -> false
         contains(LeafScreen.BubbleLesson("").javaClass.simpleName) -> false
         contains(LeafScreen.MatchLesson("").javaClass.simpleName) -> false
+        contains(LeafScreen.DictationLesson("").javaClass.simpleName) -> false
         contains(LeafScreen.SuccessLesson(LessonType.BUBBLE, 0).javaClass.simpleName) -> false
+        contains(LeafScreen.DictationResult(LessonType.DICTATION).javaClass.simpleName) -> false
         else -> true
     }
 }

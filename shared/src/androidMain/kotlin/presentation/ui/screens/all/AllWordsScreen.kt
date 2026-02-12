@@ -36,7 +36,7 @@ import presentation.model.WordUI
 import presentation.model.WordViewData
 import presentation.test.smallListViews
 import presentation.ui.views.BaseTopView
-import presentation.ui.views.WordWithStatusView
+import presentation.ui.views.SwipeableWordWithStatusView
 
 @Composable
 fun AllWordsScreen(
@@ -91,7 +91,7 @@ fun AllWordsScreen(
                 )
         ) {
             items(state.words.toList()) {
-                WordWithStatusView(
+                SwipeableWordWithStatusView(
                     modifier = Modifier.padding(vertical = 6.dp),
                     word = it,
                     onRemove = { onDelete(it.data) },

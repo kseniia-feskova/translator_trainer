@@ -83,4 +83,11 @@ abstract class BaseLessonViewModel(
         updateSetsUseCase.invoke()
     }
 
+    suspend fun updateWords(words: List<WordUI>) {
+        words.forEach {
+            updateStatusUseCase.invoke(it.id, level = it.level.inc())
+        }
+        updateSetsUseCase.invoke()
+    }
+
 }
