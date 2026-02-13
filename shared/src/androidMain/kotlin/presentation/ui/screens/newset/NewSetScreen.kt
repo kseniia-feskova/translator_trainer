@@ -135,8 +135,35 @@ fun NewSetScreen(
                         .padding(bottom = 12.dp)
                 )
             } else {
-                Spacer(Modifier.height(20.dp))
+                Spacer(Modifier.height(12.dp))
             }
+
+            Row(
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Switch(
+                    checked = state.isSaveChecked,
+                    onCheckedChange = onSaveCheckBoxChange,
+                    colors = SwitchDefaults.colors().copy(
+                        uncheckedTrackColor = Color.White,
+                        uncheckedBorderColor = Color.Transparent,
+                        uncheckedThumbColor = darkColor,
+                        checkedTrackColor = darkColor,
+                        checkedThumbColor = yellowColor
+                    )
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = stringResource(R.string.save_words_to_set_checkbox),
+                    style = MaterialTheme.typography.titleSmall.copy(color = darkColor)
+                )
+            }
+
+            Spacer(Modifier.height(12.dp))
+
             Row {
                 Text(
                     text = stringResource(R.string.selected_words_subtitle, state.countOfSelected),
@@ -191,39 +218,13 @@ fun NewSetScreen(
             Spacer(Modifier.height(12.dp))
 
         }
-        Column(
+        CustomShadowButton(
             modifier = Modifier
                 .padding(horizontal = 20.dp, vertical = 16.dp)
-                .align(Alignment.BottomCenter)
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Switch(
-                    checked = state.isSaveChecked,
-                    onCheckedChange = onSaveCheckBoxChange,
-                    colors = SwitchDefaults.colors().copy(
-                        uncheckedTrackColor = Color.White,
-                        uncheckedBorderColor = Color.Transparent,
-                        uncheckedThumbColor = darkColor,
-                        checkedTrackColor = darkColor,
-                        checkedThumbColor = yellowColor
-                    )
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = stringResource(R.string.save_words_to_set_checkbox),
-                    style = MaterialTheme.typography.titleSmall.copy(color = darkColor)
-                )
-            }
-            Spacer(modifier = Modifier.height(8.dp))
-            CustomShadowButton(
-                onClick = { saveSet() },
-                text = stringResource(R.string.save_set_btn)
-            )
-        }
+                .align(Alignment.BottomCenter),
+            onClick = { saveSet() },
+            text = stringResource(R.string.save_set_btn)
+        )
         if (state.loading) {
             Box(modifier = Modifier.fillMaxSize()) {
                 Loader(

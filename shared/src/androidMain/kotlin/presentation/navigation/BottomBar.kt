@@ -88,6 +88,7 @@ fun String?.isBottomNavigationNeeded(): Boolean {
         startsWith(LeafScreen.VerifyEmail.route) -> false
         startsWith(LeafScreen.SelectCourse.route) -> false
         startsWith(LeafScreen.Splash.route) -> false
+        contains(LeafScreen.Set("1", "").route) -> false
         contains(LeafScreen.BubbleLesson("").javaClass.simpleName) -> false
         contains(LeafScreen.MatchLesson("").javaClass.simpleName) -> false
         contains(LeafScreen.DictationLesson("").javaClass.simpleName) -> false
