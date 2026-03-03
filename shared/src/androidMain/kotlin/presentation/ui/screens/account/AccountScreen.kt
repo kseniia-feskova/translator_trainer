@@ -117,7 +117,6 @@ fun AccountScreen(
             }
 
             if (isGuest) {
-                Spacer(modifier = Modifier.height(16.dp))
                 GuestDataView(
                     modifier = Modifier.padding(horizontal = 24.dp),
                     guestData

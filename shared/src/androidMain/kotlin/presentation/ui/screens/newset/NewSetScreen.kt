@@ -19,7 +19,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -52,14 +51,13 @@ import com.presentation.ui.fieldColors
 import com.presentation.ui.gradientBrush
 import com.presentation.ui.redDarkColor
 import com.presentation.ui.views.Loader
-import presentation.ui.views.SelectingWordWithStatusView
 import com.presentation.ui.yellowColor
 import presentation.model.WordUI
 import presentation.navigation.BottomNavigationBar
 import presentation.test.smallList
 import presentation.ui.AppTypography
 import presentation.ui.dialog.GuestLimitsDialog
-import presentation.ui.views.BaseTopView
+import presentation.ui.views.SelectingWordWithStatusView
 import presentation.ui.views.buttons.CustomShadowButton
 
 @Composable
@@ -70,7 +68,6 @@ fun NewSetScreen(
     selectWord: (WordUI) -> Unit = {},
     saveSet: () -> Unit = {},
     sortedBy: () -> Unit = {},
-    navigateUp: () -> Unit = {},
     goToAccount: () -> Unit = {},
     hideLimitsError: () -> Unit = {},
 ) {
@@ -93,11 +90,11 @@ fun NewSetScreen(
         Column(
             modifier = Modifier.padding(bottom = 120.dp)
         ) {
-            BaseTopView(
-                title = stringResource(R.string.new_set_title),
-                leftIcon = Icons.AutoMirrored.Filled.ArrowBack,
-                onLeftClick = navigateUp
-            )
+//            BaseTopView(
+//                title = stringResource(R.string.new_set_title),
+//                leftIcon = Icons.AutoMirrored.Filled.ArrowBack,
+//                onLeftClick = navigateUp
+//            )
             Spacer(Modifier.height(8.dp))
             OutlinedTextField(
                 modifier = Modifier

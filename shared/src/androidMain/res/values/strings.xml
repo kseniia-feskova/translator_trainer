@@ -30,6 +30,7 @@
     <string name="empty_sets_description">You do not have any sets</string>
     <string name="to_translator_btn">To translator</string>
     <string name="random_lesson_btn">Random lesson</string>
+    <string name="create_new_set_btn">Create new set</string>
     <string name="learned_count_label">Learned: %s</string>
 
     <!-- New set -->

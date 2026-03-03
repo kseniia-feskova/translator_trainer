@@ -39,12 +39,12 @@ val AppTypography = Typography(
     ),
     displaySmall = TextStyle(
         fontFamily = MerriweatherFont,
-        fontSize = 16.sp,
+        fontSize = 18.sp,
         color = darkColor
     ),
     titleSmall = TextStyle(
         fontFamily = NunitoFont,
-        fontSize = 14.sp,
+        fontSize = 16.sp,
         color = fieldBorderColor
     ),
     titleLarge = TextStyle(
@@ -65,7 +65,7 @@ val AppTypography = Typography(
     ),
     bodyLarge = TextStyle(
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
+        fontSize = 18.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.15.sp,
         color = onPrimaryColorLight
@@ -73,7 +73,7 @@ val AppTypography = Typography(
     ),
     bodyMedium = TextStyle(
         fontWeight = FontWeight.Medium,
-        fontSize = 14.sp,
+        fontSize = 16.sp,
         lineHeight = 20.sp,
         letterSpacing = 0.25.sp,
         color = onPrimaryColorLight

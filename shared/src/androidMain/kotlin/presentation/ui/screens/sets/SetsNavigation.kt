@@ -6,15 +6,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import org.koin.androidx.compose.koinViewModel
-import presentation.model.LessonType
 import presentation.navigation.LeafScreen
 
 fun NavGraphBuilder.setsScreen(
     navigateToSelectedSet: (String, String) -> Unit,
     navigateToAllWordsSet: (String) -> Unit,
     navigateToHome: () -> Unit,
-    createNewSet: () -> Unit,
-    navigateToLesson: (String, LessonType) -> Unit = { _, _ -> },
+    createNewSet: () -> Unit
 ) {
     composable(route = LeafScreen.Sets.route) {
         SetsRoute(
@@ -22,7 +20,6 @@ fun NavGraphBuilder.setsScreen(
             navigateToAllWordsSet,
             navigateToHome,
             createNewSet,
-            navigateToLesson,
         )
     }
 }
@@ -33,7 +30,6 @@ fun SetsRoute(
     navigateToAllWordsSet: (String) -> Unit,
     navigateToHome: () -> Unit,
     createNewSet: () -> Unit,
-    navigateToLesson: (String, LessonType) -> Unit = { _, _ -> },
     viewModel: SetsViewModel = koinViewModel()
 ) {
     val state = viewModel.uiState.collectAsState()
@@ -48,10 +44,6 @@ fun SetsRoute(
             }
         },
         navigateToHome = navigateToHome,
-        createNewSet = createNewSet,
-        createRandomLesson = {
-            viewModel.createRandomLesson(navigateToLesson)
-        },
+        createNewSet = createNewSet
     )
-
 }

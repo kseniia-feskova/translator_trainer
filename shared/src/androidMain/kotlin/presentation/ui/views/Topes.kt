@@ -64,7 +64,7 @@ fun HomeTopView(
     ) {
         Text(
             text = title,
-            style = AppTypography.displayMedium,
+            style = AppTypography.displaySmall,
             color = darkColor,
             modifier = Modifier
                 .align(Alignment.CenterStart)
@@ -126,11 +126,11 @@ fun AccountTopView(
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = stringResource(R.string.account_title),
-            style = MaterialTheme.typography.displayMedium,
-            modifier = Modifier.padding(horizontal = 16.dp)
-        )
+//        Text(
+//            text = stringResource(R.string.account_title),
+//            style = MaterialTheme.typography.displayMedium,
+//            modifier = Modifier.padding(horizontal = 16.dp)
+//        )
 
         AsyncImage(
             modifier = Modifier
@@ -197,7 +197,7 @@ fun BaseTopView(
             .fillMaxWidth()
             .background(
                 color = bgColor,
-                shape = RoundedCornerShape(bottomStart = 32.dp, bottomEnd = 32.dp)
+                shape = RoundedCornerShape(bottomStart = 8.dp, bottomEnd = 8.dp)
             ),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
@@ -215,9 +215,9 @@ fun BaseTopView(
 
         Text(
             text = title,
-            style = AppTypography.displayMedium,
+            style = AppTypography.displaySmall,
             color = darkColor,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 20.dp)
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
         )
 
         if (rightIcon != null) {

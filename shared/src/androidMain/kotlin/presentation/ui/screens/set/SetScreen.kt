@@ -76,7 +76,6 @@ fun SetScreen(
     ) {
         BaseTopView(
             title = state.name,
-            leftIcon = Icons.AutoMirrored.Default.ArrowBack,
             onRightClick = navigateToEdit,
             onLeftClick = navigateUp
         )

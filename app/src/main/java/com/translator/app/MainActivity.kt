@@ -3,6 +3,7 @@ package com.translator.app
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -68,6 +69,7 @@ class MainActivity : AppCompatActivity() {
             AppTheme {
                 val uiState by viewModel.uiState.collectAsState()
                 Box(modifier = Modifier.fillMaxSize()) {
+                    Log.e("MainActivity", "uiState = ${uiState.isUserAuthorized}")
                     TranslatorAppHost(
                         uiState = uiState,
                         onUiEvent = viewModel::onUiEvent

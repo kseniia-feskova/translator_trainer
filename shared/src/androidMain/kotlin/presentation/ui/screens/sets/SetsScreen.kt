@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -23,26 +21,24 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.translatortrainer.shared.R
-import presentation.navigation.BottomNavigationBar
-import presentation.test.mockListOfSets
 import com.presentation.ui.AppTheme
-import presentation.ui.AppTypography
 import com.presentation.ui.darkColor
 import com.presentation.ui.gradientBrush
 import com.presentation.ui.redDarkColor
-import presentation.ui.views.buttons.CustomShadowButton
-import presentation.ui.views.BackgroundDecorAnimated
-import presentation.ui.views.BaseTopView
 import com.presentation.ui.views.ListOfSetsView
 import com.presentation.ui.views.Loader
+import presentation.navigation.BottomNavigationBar
+import presentation.test.mockListOfSets
+import presentation.ui.AppTypography
+import presentation.ui.views.BackgroundDecorAnimated
+import presentation.ui.views.buttons.CustomShadowButton
 
 @Composable
 fun SetsScreen(
     state: SetsUIState,
     createNewSet: () -> Unit = {},
     navigateToHome: () -> Unit = {},
-    navigateToSelectedSet: (String, String) -> Unit = { _, _ -> },
-    createRandomLesson: () -> Unit = {},
+    navigateToSelectedSet: (String, String) -> Unit = { _, _ -> }
 ) {
     Box(
         modifier = Modifier
@@ -57,11 +53,11 @@ fun SetsScreen(
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            BaseTopView(
-                title = stringResource(R.string.card_sets_title),
-                rightIcon = Icons.Default.Add,
-                onRightClick = { createNewSet() }
-            )
+//            BaseTopView(
+//                title = stringResource(R.string.card_sets_title),
+//                rightIcon = Icons.Default.Add,
+//                onRightClick = { createNewSet() }
+//            )
 
             if (state.error != null) {
                 Text(
@@ -95,14 +91,15 @@ fun SetsScreen(
                 )
             }
         }
+
         CustomShadowButton(
             text = if (state.sets.isEmpty()) stringResource(R.string.to_translator_btn)
-            else stringResource(R.string.random_lesson_btn),
+            else stringResource(R.string.create_new_set_btn),
             onClick = {
                 if (state.sets.isEmpty()) {
                     navigateToHome()
                 } else {
-                    createRandomLesson()
+                    createNewSet()
                 }
             },
             modifier = Modifier

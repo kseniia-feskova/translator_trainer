@@ -1,12 +1,8 @@
 package presentation.ui.screens.home
 
 import android.util.Log
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDp
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -20,7 +16,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -37,7 +32,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -67,7 +61,6 @@ import com.presentation.ui.yellowColor
 import presentation.navigation.BottomNavigationBar
 import presentation.ui.AppTypography
 import presentation.ui.dialog.GuestLimitsDialog
-import presentation.ui.views.HomeTopView
 import presentation.ui.views.buttons.CustomShadowButton
 import presentation.utils.Language
 
@@ -82,10 +75,7 @@ fun HomeScreen(
     onLanguageChange: (Language) -> Unit = {},
     onAlterTextSelected: (String) -> Unit = {}
 ) {
-    var showTopView by remember { mutableStateOf(true) }
     val keyboardController = LocalSoftwareKeyboardController.current
-
-    LaunchedEffect(Unit) { showTopView = true }
 
     Box(
         modifier = Modifier
@@ -108,18 +98,6 @@ fun HomeScreen(
                 .fillMaxWidth()
                 .align(Alignment.TopCenter)
         ) {
-            AnimatedVisibility(
-                modifier = Modifier
-                    .wrapContentHeight(),
-                visible = showTopView,
-                enter = slideInVertically(
-                    initialOffsetY = { -it },
-                    animationSpec = tween(1000)
-                ),
-                exit = fadeOut(animationSpec = tween(500))
-            ) {
-                HomeTopView(stringResource(R.string.home_title))
-            }
 
             Spacer(modifier = Modifier.height(18.dp))
             Column {

@@ -1,8 +1,5 @@
 package presentation.navigation
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -32,11 +29,11 @@ import com.presentation.ui.surfaceLight
 import kotlinx.serialization.Serializable
 import presentation.model.LessonType
 
-enum class RootScreen(val route: String, val iconRes: Int) {
-    Home("home_root", R.drawable.ic_translate),
-    Sets("sets_root", R.drawable.ic_sets),
-    Photo("photo_root", R.drawable.ic_camera),
-    Profile("profile_root", R.drawable.ic_account)
+enum class RootScreen(val route: String, val iconRes: Int, val title: String) {
+    Home("home_root", R.drawable.ic_translate, "Translator"),
+    Sets("sets_root", R.drawable.ic_sets, "Exercises"),
+    Photo("photo_root", R.drawable.ic_camera, "Photo translating"),
+    Profile("profile_root", R.drawable.ic_account, "Profile")
 }
 
 @Serializable
@@ -78,38 +75,6 @@ sealed class LeafScreen(val route: String) {
     data class AllWords(val setId: String) : LeafScreen("allWords")
 
     object NewSet : LeafScreen("newset")
-}
-
-fun String?.isBottomNavigationNeeded(): Boolean {
-    if (this == null) return false
-    return when {
-        startsWith(LeafScreen.NewSet.route) -> false
-        startsWith(LeafScreen.Login.route) -> false
-        startsWith(LeafScreen.VerifyEmail.route) -> false
-        startsWith(LeafScreen.SelectCourse.route) -> false
-        startsWith(LeafScreen.Splash.route) -> false
-        contains(LeafScreen.Set("1", "").route) -> false
-        contains(LeafScreen.BubbleLesson("").javaClass.simpleName) -> false
-        contains(LeafScreen.MatchLesson("").javaClass.simpleName) -> false
-        contains(LeafScreen.DictationLesson("").javaClass.simpleName) -> false
-        contains(LeafScreen.SuccessLesson(LessonType.BUBBLE, 0).javaClass.simpleName) -> false
-        contains(LeafScreen.DictationResult(LessonType.DICTATION).javaClass.simpleName) -> false
-        else -> true
-    }
-}
-
-@Composable
-fun AnimatedBottomBar(
-    bottomBarVisible: Boolean,
-    navController: NavController
-) {
-    AnimatedVisibility(
-        visible = bottomBarVisible,
-        enter = slideInVertically { it },
-        exit = slideOutVertically { it }
-    ) {
-        BottomNavigationBar(navController = navController)
-    }
 }
 
 @Composable

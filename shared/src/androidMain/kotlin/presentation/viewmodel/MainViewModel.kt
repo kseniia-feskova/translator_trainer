@@ -62,6 +62,12 @@ class MainViewModel(
                     _googleSignEffect.send(GoogleSignUiEffect.StartGoogleSignIn)
                 }
             }
+
+            is MainUiEvent.UserAuthorized -> {
+                _uiState.update {
+                    it.copy(isUserAuthorized = true)
+                }
+            }
         }
     }
 
@@ -134,6 +140,7 @@ class MainViewModel(
 
 sealed class MainUiEvent() {
     object SignInWithGoogle : MainUiEvent()
+    object UserAuthorized : MainUiEvent()
 }
 
 sealed interface GoogleSignUiEffect {
