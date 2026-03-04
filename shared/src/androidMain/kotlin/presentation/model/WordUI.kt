@@ -5,8 +5,7 @@ data class WordUI(
     val id: String,
     val originalText: String,
     val resText: String,
-    val level: Level,
-  //  val date: Date = Date()
+    val level: Level
 )
 
 data class WordResult(

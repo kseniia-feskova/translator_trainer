@@ -52,13 +52,16 @@ fun CardSetRoute(
     val state = viewModel.uiState.collectAsState()
     SetScreen(
         state = state.value,
+        events = viewModel.events,
         addWordToKnow = { viewModel.handleIntent(CardSetIntent.AddWordToKnow(it)) },
         addWordToLearn = { viewModel.handleIntent(CardSetIntent.AddWordToLearn(it)) },
         resetCardSet = { viewModel.handleIntent(CardSetIntent.ResetCardSet) },
         startCourse = { navigateToLesson(viewModel.getSetId(), it) },
         showCourseSelection = { viewModel.handleIntent(CardSetIntent.CourseSelection(it)) },
         navigateUp = navigateUp,
-        navigateToEdit = navigateToEdit
+        navigateToEdit = navigateToEdit,
+        downloadSet = { viewModel.handleIntent(CardSetIntent.DownloadCardSet) },
+        exportCsvToUri = { uri, cont -> viewModel.handleIntent(CardSetIntent.ExportFile(uri, cont)) }
     )
 }
 

@@ -1,5 +1,7 @@
 package presentation.ui.screens.set
 
+import android.content.Context
+import android.net.Uri
 import presentation.model.WordUI
 import presentation.ui.screens.auth.BaseError
 
@@ -13,9 +15,15 @@ data class SetUIState(
     val selectLessonVisible: Boolean = false
 )
 
+sealed class SetUIEvent {
+    data object RequestExport : SetUIEvent()
+}
+
 sealed class CardSetIntent {
     data class AddWordToKnow(val word: WordUI) : CardSetIntent()
     data class AddWordToLearn(val word: WordUI) : CardSetIntent()
     data class CourseSelection(val isVisible: Boolean) : CardSetIntent()
     object ResetCardSet : CardSetIntent()
+    object DownloadCardSet : CardSetIntent()
+    data class ExportFile(val uri: Uri, val context: Context) : CardSetIntent()
 }

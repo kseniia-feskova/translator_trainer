@@ -1,7 +1,11 @@
 package presentation.ui.screens.set
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.net.Uri
 import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
@@ -18,6 +22,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -29,10 +34,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -45,6 +52,9 @@ import com.presentation.ui.darkColor
 import com.presentation.ui.gradientBrush
 import com.presentation.ui.redDarkColor
 import com.presentation.ui.views.ProgressForSet
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import presentation.model.LessonType
 import presentation.model.WordUI
 import presentation.navigation.BottomNavigationBar
@@ -58,16 +68,37 @@ import presentation.ui.views.buttons.CustomShadowButton
 @Composable
 fun SetScreen(
     state: SetUIState,
+    events: SharedFlow<SetUIEvent>,
     addWordToKnow: (WordUI) -> Unit = {},
     addWordToLearn: (WordUI) -> Unit = {},
     resetCardSet: () -> Unit = {},
     showCourseSelection: (Boolean) -> Unit = {},
     startCourse: (LessonType) -> Unit = {},
     navigateToEdit: () -> Unit = {},
-    navigateUp: () -> Unit = {}
+    navigateUp: () -> Unit = {},
+    downloadSet: () -> Unit = {},
+    exportCsvToUri: (Uri, Context) -> Unit = { _, _ -> }
 ) {
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
     val cardHeight = screenHeight * 0.25f
+    val context = LocalContext.current
+    val launcher = rememberLauncherForActivityResult(
+        ActivityResultContracts.CreateDocument("text/csv")
+    ) { uri ->
+        uri?.let {
+            exportCsvToUri(it, context)
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        events.collect { event ->
+            when (event) {
+                SetUIEvent.RequestExport -> {
+                    launcher.launch("${state.name}.csv")
+                }
+            }
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -78,6 +109,15 @@ fun SetScreen(
             title = state.name,
             onRightClick = navigateToEdit,
             onLeftClick = navigateUp
+        )
+        Icon(
+            painter = painterResource(id = R.drawable.ic_download), contentDescription = "download",
+            tint = darkColor,
+            modifier = Modifier
+                .padding(horizontal = 10.dp, vertical = 4.dp)
+                .size(30.dp)
+                .align(Alignment.TopEnd)
+                .clickable { downloadSet() }
         )
         Column(modifier = Modifier.align(Alignment.Center)) {
             if (state.words != null) {
@@ -260,7 +300,8 @@ fun CardSetScreenPreview() {
                             smallList.last(),
                             smallList.first()
                         )
-                    )
+                    ),
+                    events = MutableStateFlow<SetUIEvent>(SetUIEvent.RequestExport).asSharedFlow()
                 )
             }
         }, bottomBar = {
@@ -278,9 +319,8 @@ fun EmptyCardSetScreenPreview() {
             Log.e("CardSetScreenPreview", "paddings = $paddings")
             Box(modifier = Modifier.padding(paddings)) {
                 SetScreen(
-                    state = SetUIState(
-                        words = null
-                    )
+                    state = SetUIState(words = null),
+                    events = MutableStateFlow<SetUIEvent>(SetUIEvent.RequestExport).asSharedFlow()
                 )
             }
         }, bottomBar = {
@@ -304,7 +344,8 @@ fun CardSetScreenWithLessonsPreview() {
                             smallList.first()
                         ),
                         selectLessonVisible = true
-                    )
+                    ),
+                    events = MutableStateFlow<SetUIEvent>(SetUIEvent.RequestExport).asSharedFlow()
                 )
             }
         }, bottomBar = {
