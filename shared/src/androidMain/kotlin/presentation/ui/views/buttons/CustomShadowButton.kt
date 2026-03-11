@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -22,6 +23,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import com.presentation.ui.darkColor
 import com.presentation.ui.fieldBorderColor
@@ -82,6 +85,7 @@ fun CustomShadowButton(
                 modifier = Modifier.padding(bottom = 2.dp),
                 text = text,
                 color = darkColor,
+                autoSize = TextAutoSize.StepBased(maxFontSize = TextUnit(16f, TextUnitType.Sp)),
                 style = AppTypography.titleSmall
             )
         }

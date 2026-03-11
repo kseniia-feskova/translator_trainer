@@ -32,7 +32,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -43,7 +42,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.example.translatortrainer.shared.R
 import com.presentation.ui.AppTheme
 import com.presentation.ui.darkColor
@@ -53,7 +51,6 @@ import com.presentation.ui.redDarkColor
 import com.presentation.ui.views.Loader
 import com.presentation.ui.yellowColor
 import presentation.model.WordUI
-import presentation.navigation.BottomNavigationBar
 import presentation.test.bigList
 import presentation.test.smallList
 import presentation.ui.AppTypography
@@ -130,10 +127,7 @@ fun NewSetScreen(
                     style = AppTypography.titleSmall.copy(color = redDarkColor),
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
-                        .padding(bottom = 12.dp)
                 )
-            } else {
-                Spacer(Modifier.height(12.dp))
             }
 
             Row(
@@ -160,7 +154,7 @@ fun NewSetScreen(
                 )
             }
 
-            Spacer(Modifier.height(12.dp))
+            Spacer(Modifier.height(4.dp))
 
             Row {
                 Text(
@@ -197,7 +191,7 @@ fun NewSetScreen(
 //                onClearClick = onClearClick,
 //            )
 
-            Spacer(Modifier.height(12.dp))
+            Spacer(Modifier.height(4.dp))
 
             LazyColumn(
                 modifier = Modifier
@@ -267,9 +261,6 @@ fun NewSetScreenPreview(@PreviewParameter(PreviewProvider::class) state: NewSetU
                     state = state
                 )
             }
-        }, bottomBar = {
-            val context = LocalContext.current
-            BottomNavigationBar(navController = NavController(context))
         })
     }
 }

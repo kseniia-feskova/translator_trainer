@@ -26,6 +26,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import com.presentation.ui.AppTheme
 import com.presentation.ui.darkColor
+import com.presentation.ui.gradientBrush
 import com.presentation.ui.views.Loader
 import com.presentation.ui.views.SearchBarView
 import com.presentation.ui.yellowColor
@@ -49,7 +50,11 @@ fun AllWordsScreen(
     onCollapsed: (WordViewData) -> Unit = {},
 ) {
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(gradientBrush)
+    ) {
 
         BaseTopView(
             title = ALL_WORDS,
