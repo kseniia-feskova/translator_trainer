@@ -17,6 +17,18 @@ val smallList = listOf(
     WordUI(UUID.randomUUID().toString(), "Mutter", "Мама", Level.getRandom())
 )
 
+val bigList = listOf(
+    WordUI(UUID.randomUUID().toString(), "deutsches Wort lange als satz", "немецкое слово", Level.getRandom()),
+    WordUI(UUID.randomUUID().toString(), "Katze", "Котик", Level.getRandom()),
+    WordUI(UUID.randomUUID().toString(), "Mutter", "Мама", Level.getRandom()),
+    WordUI(UUID.randomUUID().toString(), "deutsches Wort lange als satz", "немецкое слово", Level.getRandom()),
+    WordUI(UUID.randomUUID().toString(), "Katze", "Котик", Level.getRandom()),
+    WordUI(UUID.randomUUID().toString(), "Mutter", "Мама", Level.getRandom()),
+    WordUI(UUID.randomUUID().toString(), "deutsches Wort lange als satz", "немецкое слово", Level.getRandom()),
+    WordUI(UUID.randomUUID().toString(), "Katze", "Котик", Level.getRandom()),
+    WordUI(UUID.randomUUID().toString(), "Mutter", "Мама", Level.getRandom())
+)
+
 val smallListViews = listOf(
     WordViewData(
         WordUI(

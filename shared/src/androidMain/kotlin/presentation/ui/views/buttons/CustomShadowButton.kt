@@ -55,6 +55,7 @@ fun CustomShadowButton(
             enabled = isEnabled,
             modifier = Modifier
                 .fillMaxWidth()
+            //    .padding(top = if (isEnabled) 0.dp else 5.dp)
                 .height(50.dp)
                 .clip(shape = RoundedCornerShape(30.dp))
                 .background(if (isEnabled) yellowColor else whiteColor)
@@ -95,7 +96,7 @@ fun CustomShadowButtonPreview(
         Column {
             CustomShadowButton(text = "Test button")
             Spacer(modifier = Modifier.height(12.dp))
-            CustomShadowButton(isEnabled = false, text = "Test button")
+            CustomShadowButton(isEnabled = false, text = "Test button false")
         }
     }
 }

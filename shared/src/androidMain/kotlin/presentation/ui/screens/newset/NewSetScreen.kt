@@ -54,6 +54,7 @@ import com.presentation.ui.views.Loader
 import com.presentation.ui.yellowColor
 import presentation.model.WordUI
 import presentation.navigation.BottomNavigationBar
+import presentation.test.bigList
 import presentation.test.smallList
 import presentation.ui.AppTypography
 import presentation.ui.dialog.GuestLimitsDialog
@@ -88,7 +89,7 @@ fun NewSetScreen(
             )
         }
         Column(
-            modifier = Modifier.padding(bottom = 120.dp)
+            modifier = Modifier.padding(bottom = 80.dp)
         ) {
 //            BaseTopView(
 //                title = stringResource(R.string.new_set_title),
@@ -212,8 +213,6 @@ fun NewSetScreen(
                     )
                 }
             }
-            Spacer(Modifier.height(12.dp))
-
         }
         CustomShadowButton(
             modifier = Modifier
@@ -236,7 +235,7 @@ fun NewSetScreen(
 
 private val listOfStates = listOf(
     NewSetUIState(loading = true),
-    NewSetUIState(words = smallList.take(3).toSelectingMap()),
+    NewSetUIState(words = bigList.take(6).toSelectingMap()),
     NewSetUIState(words = smallList.toSelectingMap()),
     NewSetUIState(
         words = smallList.filter { it.resText == "Mutter" || it.originalText == "Mutter" }

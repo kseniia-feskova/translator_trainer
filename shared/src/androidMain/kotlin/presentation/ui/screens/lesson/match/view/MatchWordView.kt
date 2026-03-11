@@ -5,16 +5,22 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.presentation.ui.AppTheme
+import com.presentation.ui.darkColor
+import com.presentation.ui.whiteColor
 import presentation.ui.screens.lesson.match.GridWithButtons
 import presentation.ui.screens.lesson.match.model.MatchViewData
 import presentation.ui.screens.lesson.match.model.testOriginalData
@@ -50,15 +56,19 @@ fun MatchWordView(
                 enter = fadeIn() + scaleIn(),
                 exit = fadeOut() + scaleOut()
             ) {
-                CustomShadowButton(
-                    modifier = modifier
+                Box(
+                    modifier = Modifier
                         .padding(8.dp)
                         .fillMaxWidth()
                         .padding(8.dp)
-                        .alpha(0.1f),
-                    isEnabled = false,
-                    text = "",
-                    onClick = { }
+                        .height(50.dp)
+                        .clip(shape = RoundedCornerShape(30.dp))
+                        .background(whiteColor)
+                        .border(
+                            1.dp,
+                            color = darkColor.copy(alpha = 0.2f),
+                            shape = RoundedCornerShape(30.dp)
+                        )
                 )
             }
         }
