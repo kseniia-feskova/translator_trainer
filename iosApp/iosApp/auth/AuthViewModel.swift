@@ -48,7 +48,7 @@ final class AuthViewModel: ObservableObject {
         }
     }
 
-    func guestSelected() {
+    func onGuestSelected() {
         // переход в гостевой режим
         print("Guest selected")
     }

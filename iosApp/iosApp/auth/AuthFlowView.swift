@@ -12,6 +12,7 @@ struct AuthScreen: View {
         @StateObject private var viewModel = AuthViewModel()
     
         @State private var showDialog = false
+    
         @Namespace private var animation
         
         var body: some View {
@@ -30,60 +31,52 @@ struct AuthScreen: View {
                         
                         Spacer()
                     }.frame(maxWidth: .infinity, maxHeight: .infinity)
-                    
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 24, style: .continuous)
-                            .fill(gradient)
-                            .padding(.top, 256)
-                            .edgesIgnoringSafeArea(.all)
-                        Group {
-                            if viewModel.state.screenState == .login {
-                                LoginFormView(
-                                    email: viewModel.state.email,
-                                    password: viewModel.state.password,
-                                    error: viewModel.state.error,
-                                    onEmailChanged: viewModel.onEmailChanged,
-                                    onPasswordChanged: viewModel.onPasswordChanged,
-                                    onLoginClicked: viewModel.authClicked,
-                                    onCreateAccountClicked: viewModel.toggleAuthState,
-                                    
-                                )
+                    GeometryReader { geo in
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 24, style: .continuous)
+                                .fill(gradient)
+                                .edgesIgnoringSafeArea(.all)
+                            Group {
+                                if viewModel.state.screenState == .login {
+                                    LoginFormView(
+                                        email: viewModel.state.email,
+                                        password: viewModel.state.password,
+                                        error: viewModel.state.error,
+                                        onEmailChanged: viewModel.onEmailChanged,
+                                        onPasswordChanged: viewModel.onPasswordChanged,
+                                        onLoginClicked: viewModel.authClicked,
+                                        onGuestClicked: { showDialog = true },
+                                        onCreateAccountClicked: viewModel.toggleAuthState,
+                                        
+                                    )
                                     .transition(.asymmetric(
                                         insertion: .move(edge: .trailing),
                                         removal: .move(edge: .leading)
                                     ))
-                            } else {
-                                RegisterFlowView(
-                                    email: viewModel.state.email,
-                                    password: viewModel.state.password,
-                                    error: viewModel.state.error,
-                                    onEmailChanged: viewModel.onEmailChanged,
-                                    onPasswordChanged: viewModel.onPasswordChanged,
-                                    onRegisterClicked: viewModel.authClicked,
-                                    onLoginClicked: viewModel.toggleAuthState
-                                )
+                                } else {
+                                    RegisterFlowView(
+                                        email: viewModel.state.email,
+                                        password: viewModel.state.password,
+                                        error: viewModel.state.error,
+                                        onEmailChanged: viewModel.onEmailChanged,
+                                        onPasswordChanged: viewModel.onPasswordChanged,
+                                        onRegisterClicked: viewModel.authClicked,
+                                        onGuestClicked: { showDialog = true },
+                                        onLoginClicked: viewModel.toggleAuthState
+                                    )
                                     .transition(.asymmetric(
                                         insertion: .move(edge: .leading),
                                         removal: .move(edge: .trailing)
                                     ))
+                                }
                             }
-                        }
-                        .animation(.easeInOut(duration: 1.0), value: viewModel.state.screenState)
+                            .animation(.easeInOut(duration: 1.0), value: viewModel.state.screenState)
+                        }.frame(height: geo.size.height * 0.75)
+                            .frame(maxHeight: .infinity, alignment: .bottom)
                     }
                 }
                 
-                // Диалог
-                if showDialog {
-                    Color.black.opacity(0.5).ignoresSafeArea()
-//                    GuestDialog(
-//                        onConfirm: {
-//                            showDialog = false
-//                            // TODO: guest mode logic
-//                        },
-//                        onDismiss: { showDialog = false }
-//                    )
-                }
-                
+
                 // Лоадер
                 if viewModel.state.isLoading {
                     ProgressView().scaleEffect(2)
@@ -91,6 +84,14 @@ struct AuthScreen: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(AppColor.background.edgesIgnoringSafeArea(.all))
+            .alert("Гостевой режим!", isPresented: $showDialog) {
+                Button("Войти") {
+                    viewModel.onGuestSelected()
+                }
+                Button("Отмена", role: .cancel) { }
+            } message: {
+                Text("Вы заходите как гость, а значит функционал будет ограничен.\nПо желанию, Вы сможете создать аккаунт и сберечь все данные.\nПриятного пользования.")
+            }
         }
     }
 

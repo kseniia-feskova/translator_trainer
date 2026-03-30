@@ -34,8 +34,9 @@ struct LoginFormView: View {
     
     var body: some View {
         VStack {
-            Spacer(minLength: 20)
-            
+
+            Spacer().frame(height: 20)
+
             Text(String(localized: "login_subtitle"))
                 .foregroundColor(AppColor.dark)
                 .font(AppTypography.displayMedium)
@@ -115,11 +116,11 @@ struct LoginFormView: View {
                 .foregroundColor(.gray)
                 .padding(.vertical, 16)
             
-//            Button("Continue as Guest", action: onGuestClicked)
-//                .padding()
-//                .frame(maxWidth: .infinity)
-//                .background(Color.gray.opacity(0.2))
-//                .cornerRadius(8)
+            CustomShadowButton(
+                text: "Сontinue as Guest",
+                isEnabled: true,
+                onClick: onGuestClicked
+            )
             
 //            Button {
 //                // Google sign in
