@@ -3,7 +3,7 @@ package presentation.ui.screens.lesson.base
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.presentation.usecases.sets.IUpdateSetsUseCase
+import domain.usecases.sets.IUpdateSetsUseCase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -11,8 +11,10 @@ import kotlinx.coroutines.launch
 import presentation.model.Level
 import presentation.model.WordUI
 import presentation.ui.screens.lesson.bubble.setId
-import presentation.usecases.words.IGetWordsBySetUseCase
-import presentation.usecases.words.IUpdateStatusUseCase
+import domain.usecases.words.IGetWordsBySetUseCase
+import domain.usecases.words.IUpdateStatusUseCase
+import mapper.toStatus
+import mapper.toUI
 
 abstract class BaseLessonViewModel(
     savedStateHandle: SavedStateHandle,
@@ -31,10 +33,11 @@ abstract class BaseLessonViewModel(
         viewModelScope.launch {
             val response = getWordsBySetUseCase.invoke(setId)
             if (response.isSuccess) {
-                val newWords = response.getOrNull()?.filter { it.level != Level.KNOW }
+                val allWords =  response.getOrNull()?.map { it.toUI() }
+                val newWords = allWords?.filter { it.level != Level.KNOW }
                 if (newWords.isNullOrEmpty()) {
                     //TODO: replace count of words with variable, that depends from the difficulty level
-                    words.addAll(response.getOrNull()?.shuffled()?.take(5) ?: emptyList())
+                    words.addAll(allWords?.shuffled()?.take(5) ?: emptyList())
                 } else {
                     words.addAll(newWords.take(5).toList())
                 }
@@ -78,14 +81,14 @@ abstract class BaseLessonViewModel(
 
     suspend fun updateWords() {
         words.forEach {
-            updateStatusUseCase.invoke(it.id, level = it.level.inc())
+            updateStatusUseCase.invoke(it.id, level = it.level.inc().toStatus())
         }
         updateSetsUseCase.invoke()
     }
 
     suspend fun updateWords(words: List<WordUI>) {
         words.forEach {
-            updateStatusUseCase.invoke(it.id, level = it.level.inc())
+            updateStatusUseCase.invoke(it.id, level = it.level.inc().toStatus())
         }
         updateSetsUseCase.invoke()
     }

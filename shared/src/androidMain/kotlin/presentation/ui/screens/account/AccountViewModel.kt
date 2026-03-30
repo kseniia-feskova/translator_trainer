@@ -7,14 +7,14 @@ import androidx.lifecycle.viewModelScope
 import presentation.ui.screens.auth.AuthError
 import presentation.ui.screens.auth.AuthScreenState
 import presentation.ui.screens.auth.AuthUIState
-import presentation.usecases.IAccountUseCase
-import presentation.usecases.IGetAccountUseCase
-import presentation.usecases.auth.ICreateFromGuestUseCase
-import com.presentation.usecases.auth.IDeleteUseCase
-import com.presentation.usecases.auth.ILogoutUseCase
-import presentation.usecases.auth.ISetGuestUseCase
-import presentation.usecases.course.ICoursesOnPrefsUseCases
-import presentation.usecases.sets.IGetAllSetsUseCase
+import domain.usecases.IAccountUseCase
+import domain.usecases.IGetAccountUseCase
+import domain.usecases.auth.ICreateFromGuestUseCase
+import domain.usecases.auth.IDeleteUseCase
+import domain.usecases.auth.ILogoutUseCase
+import domain.usecases.auth.ISetGuestUseCase
+import domain.usecases.course.ICoursesOnPrefsUseCases
+import domain.usecases.sets.IGetAllSetsUseCase
 import domain.ALL_WORDS
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -25,7 +25,9 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import presentation.model.FirebaseUser
-import presentation.usecases.auth.IRegisterWithFirebaseUseCase
+import domain.usecases.auth.IRegisterWithFirebaseUseCase
+import mapper.toData
+import mapper.toUI
 
 class AccountViewModel(
     coursePrefs: ICoursesOnPrefsUseCases,
@@ -43,9 +45,9 @@ class AccountViewModel(
     val authState = _authState.asStateFlow()
 
     private val isGuestMode = guestUseCase.isGuestModeFlow()
-    private val course = coursePrefs.getCourseFlow()
+    private val course = coursePrefs.getCourseFlow().map { it?.toUI() }
     private val guestDataFlow = getSets.invokeFlow().map { sets ->
-        val allWordsSet = sets.find { it.title == ALL_WORDS }
+        val allWordsSet = sets.find { it.name == ALL_WORDS }
         GuestData(
             allSetsCount = sets.size,
             allWordsCount = allWordsSet?.words?.size ?: 0,
@@ -75,7 +77,7 @@ class AccountViewModel(
                 if (userId != null) {
                     val response = getDetails.invoke(userId)
                     if (response.isSuccess) {
-                        val user = response.getOrNull()
+                        val user = response.getOrNull()?.toUI()
                         if (user != null) {
                             _uiState.update {
                                 it.copy(
@@ -169,7 +171,7 @@ class AccountViewModel(
                 val password = _authState.value?.password ?: return
                 val course = _uiState.value.guestData?.course ?: return
                 viewModelScope.launch {
-                    val result = createUser.invoke(email, password, course)
+                    val result = createUser.invoke(email, password, course.toData())
                     if (result.isFailure) {
                         handleError(result)
                     } else {
@@ -234,7 +236,7 @@ class AccountViewModel(
             return
         }
         viewModelScope.launch {
-            val response = registerByFirebase.invoke(firebaseUser)
+            val response = registerByFirebase.invoke(firebaseUser.toData())
             if (!response.isSuccess) {
                 handleError(response)
                 return@launch

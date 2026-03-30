@@ -14,8 +14,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import presentation.model.WordUI
 import presentation.model.WordViewData
-import presentation.usecases.words.IDeleteWordUseCase
-import presentation.usecases.words.IGetWordsBySetUseCase
+import domain.usecases.words.IDeleteWordUseCase
+import domain.usecases.words.IGetWordsBySetUseCase
+import mapper.toUI
 
 class AllWordsViewModel(
     savedStateHandle: SavedStateHandle,
@@ -28,11 +29,11 @@ class AllWordsViewModel(
     private val setUiFlow = getWords.invokeFlow(setId)
         .map { result ->
             Log.e("AllWordsVM", "setUiFlow, result = $result")
-            val words = result.getOrNull()
+            val words = result.getOrNull()?.map { it.toUI() }
             if (result.isSuccess && words != null) {
                 words
             } else {
-                emptyList()
+                emptyList<WordUI>()
             }
         }
         .catch {

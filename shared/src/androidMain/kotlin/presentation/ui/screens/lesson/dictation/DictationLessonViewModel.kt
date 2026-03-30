@@ -2,7 +2,7 @@ package presentation.ui.screens.lesson.dictation
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.presentation.usecases.sets.IUpdateSetsUseCase
+import domain.usecases.sets.IUpdateSetsUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -13,8 +13,8 @@ import presentation.model.WordResult
 import presentation.model.WordUI
 import presentation.ui.screens.lesson.base.BaseLessonState
 import presentation.ui.screens.lesson.base.BaseLessonViewModel
-import presentation.usecases.words.IGetWordsBySetUseCase
-import presentation.usecases.words.IUpdateStatusUseCase
+import domain.usecases.words.IGetWordsBySetUseCase
+import domain.usecases.words.IUpdateStatusUseCase
 
 class DictationLessonViewModel(
     savedStateHandle: SavedStateHandle,

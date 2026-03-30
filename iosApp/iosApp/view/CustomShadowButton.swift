@@ -18,7 +18,7 @@ struct CustomShadowButton: View {
             // Тень кнопки (аналог Spacer с фоном в Compose)
             if isEnabled {
                 RoundedRectangle(cornerRadius: 30)
-                    .fill(AppColor.fieldBorderColor)
+                    .fill(AppColor.dark)
                     .frame(height: 48)
                     .offset(y: 5)
             }
@@ -49,6 +49,49 @@ struct CustomShadowButton: View {
     }
 }
 
+struct SecondShadowButton: View {
+    var text: String
+    var icon: Image? = nil
+    var isEnabled: Bool = true
+    var onClick: () -> Void = {}
+
+    var body: some View {
+        ZStack(alignment: .top) {
+            // Тень кнопки (аналог Spacer с фоном в Compose)
+            if isEnabled {
+                RoundedRectangle(cornerRadius: 30)
+                    .fill(AppColor.dark)
+                    .frame(height: 48)
+                    .offset(y: 5)
+            }
+            
+            Button(action: onClick) {
+                HStack {
+                    if let icon = icon {
+                        icon
+                            .resizable()
+                            .frame(width: 24, height: 24)
+                        Spacer().frame(width: 8)
+                    }
+                    Text(text)
+                        .foregroundColor(isEnabled ? AppColor.dark : AppColor.lightLilaColor)
+                        .font(AppTypography.titleSmall)
+                        .padding(.bottom, 2)
+                }
+                .frame(maxWidth: .infinity, minHeight: 50)
+            }
+            .background(isEnabled ? AppColor.background : AppColor.white)
+            .cornerRadius(30)
+            .overlay(
+                RoundedRectangle(cornerRadius: 30)
+                    .stroke(AppColor.fieldBorderColor, lineWidth: 1)
+            )
+            .disabled(!isEnabled)
+        }
+    }
+}
+
+
 struct CustomButton_Previews: PreviewProvider {
     static var previews: some View {
         
@@ -71,6 +114,15 @@ struct CustomButton_Previews: PreviewProvider {
                     print("Button pressed")
                 }
             )
+            
+            SecondShadowButton(
+                text: "Second",
+                isEnabled: true,
+                onClick: {
+                    print("Button pressed")
+                }
+            )
+            
             
             Spacer()
 

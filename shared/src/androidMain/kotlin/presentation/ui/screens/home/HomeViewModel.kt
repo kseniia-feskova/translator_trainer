@@ -3,16 +3,18 @@ package presentation.ui.screens.home
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import presentation.usecases.ITranslateWordUseCase
-import presentation.usecases.course.ICoursesOnPrefsUseCases
-import presentation.usecases.words.IAddWordUseCase
-import presentation.usecases.words.IGetWordByOriginal
-import presentation.usecases.words.IGetWordByTranslated
+import domain.usecases.ITranslateWordUseCase
+import domain.usecases.course.ICoursesOnPrefsUseCases
+import domain.usecases.words.IAddWordUseCase
+import domain.usecases.words.IGetWordByOriginal
+import domain.usecases.words.IGetWordByTranslated
 import presentation.utils.Language
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import mapper.toData
+import mapper.toUI
 import presentation.model.CourseUI
 
 
@@ -35,7 +37,7 @@ class HomeViewModel(
 
     init {
         viewModelScope.launch {
-            course = coursesPrefs.getCourse()
+            course = coursesPrefs.getCourse()?.toUI()
             course?.let { course ->
                 _uiState.update {
                     it.copy(
@@ -79,7 +81,7 @@ class HomeViewModel(
                 addWordUseCase.invoke(word.translatedText, word.inputText)
             }
             if (response.isSuccess) {
-                val savedWord = response.getOrNull()
+                val savedWord = response.getOrNull()?.toUI()
                 if (savedWord != null) {
                     _uiState.update { it.copy(loading = false, isWordSaved = true, error = null) }
                 } else {
@@ -101,7 +103,7 @@ class HomeViewModel(
                 addWordUseCase.invoke(alterText, word.inputText)
             }
             if (response.isSuccess) {
-                val savedWord = response.getOrNull()
+                val savedWord = response.getOrNull()?.toUI()
                 if (savedWord != null) {
                     _uiState.update { it.copy(loading = false, isWordSaved = true, error = null) }
                 } else {
@@ -120,18 +122,18 @@ class HomeViewModel(
             if (origin != null && res != null) {
                 translateWord.invoke(
                     text = text,
-                    originalLanguage = origin,
-                    resLanguage = res,
+                    originalLanguage = origin.toData(),
+                    resLanguage = res.toData(),
                     { translated ->
-                            _uiState.update {
-                                it.copy(
-                                    translatedText = translated,
-                                    altTranslates = emptyList(),
-                                    showGlow = true,
-                                    loading = false,
-                                    error = null
-                                )
-                            }
+                        _uiState.update {
+                            it.copy(
+                                translatedText = translated,
+                                altTranslates = emptyList(),
+                                showGlow = true,
+                                loading = false,
+                                error = null
+                            )
+                        }
                     },
                     onError = { exception ->
                         _uiState.update {
@@ -168,7 +170,7 @@ class HomeViewModel(
         viewModelScope.launch {
             val wordResult = findWordByOrigin.invoke(origin)
             if (wordResult.isSuccess) {
-                val word = wordResult.getOrNull()
+                val word = wordResult.getOrNull()?.toUI()
                 if (word == null) {
                     translateText(origin)
                 } else {
@@ -196,7 +198,7 @@ class HomeViewModel(
         viewModelScope.launch {
             val wordResult = findWordByTranslate.invoke(translated)
             if (wordResult.isSuccess) {
-                val word = wordResult.getOrNull()
+                val word = wordResult.getOrNull()?.toUI()
                 if (word == null) {
                     translateText(translated)
                 } else {

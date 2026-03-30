@@ -1,19 +1,18 @@
 package usecase.words
 
-import domain.GuestLimitException
-import presentation.usecases.words.IAddWordUseCase
-import presentation.usecases.words.IGetWordByOriginal
-import presentation.usecases.words.IGetWordByTranslated
-import presentation.utils.GUEST_MAX_WORDS
+import data.model.words.WordResponse
 import data.model.words.add.AddWordRequest
 import data.prefs.IDataStoreManager
-import data.repository.word.IWordDaoRepository
 import data.repository.word.IWordApiRepository
+import data.repository.word.IWordDaoRepository
+import domain.GuestLimitException
 import domain.cache.ISetsCacheProvider
 import domain.token.ICheckToken
 import domain.token.ITokenRefresher
-import mapper.toUI
-import presentation.model.WordUI
+import domain.usecases.words.IAddWordUseCase
+import domain.usecases.words.IGetWordByOriginal
+import domain.usecases.words.IGetWordByTranslated
+import presentation.utils.GUEST_MAX_WORDS
 
 class AddWordUseCase(
     private val apiRepo: IWordApiRepository,
@@ -29,7 +28,7 @@ class AddWordUseCase(
     override suspend fun invoke(
         originalText: String,
         translatedText: String
-    ): Result<WordUI> {
+    ): Result<WordResponse> {
         if (prefs.isGuest()) {
             if (!checkLimit()) {
                 return Result.failure(GuestLimitException())
@@ -75,7 +74,7 @@ class AddWordUseCase(
             Result.failure(Exception("Empty user data"))
         } else {
             cache.clear()
-            Result.success(data.toUI())
+            Result.success(data)
         })
     }
 

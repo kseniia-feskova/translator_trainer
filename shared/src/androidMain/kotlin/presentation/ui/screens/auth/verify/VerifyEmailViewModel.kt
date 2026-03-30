@@ -4,9 +4,9 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.translatortrainer.shared.R
-import com.presentation.usecases.auth.verify.IDeleteCodeUseCase
-import com.presentation.usecases.auth.verify.IResendCodeUseCase
-import presentation.usecases.auth.verify.IVerifyCodeUseCase
+import domain.usecases.auth.verify.IDeleteCodeUseCase
+import domain.usecases.auth.verify.IResendCodeUseCase
+import domain.usecases.auth.verify.IVerifyCodeUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update

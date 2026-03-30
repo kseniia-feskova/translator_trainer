@@ -4,15 +4,16 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import presentation.model.CourseUI
-import com.presentation.usecases.auth.ILogoutUseCase
-import presentation.usecases.course.IAddCourseUseCase
+import domain.usecases.auth.ILogoutUseCase
 import domain.translate.ITranslateModelProvider
-import presentation.usecases.course.ICoursesOnPrefsUseCases
+import domain.usecases.course.IAddCourseUseCase
+import domain.usecases.course.ICoursesOnPrefsUseCases
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import mapper.toData
+import mapper.toUI
 
 class SelectCourseViewModel(
     private val getCourses: ICoursesOnPrefsUseCases,
@@ -26,7 +27,7 @@ class SelectCourseViewModel(
 
     init {
         viewModelScope.launch {
-            val savedCourses = getCourses.getAll()
+            val savedCourses = getCourses.getAll().map { it.toUI() }
             _uiState.update {
                 it.copy(
                     courses = savedCourses,
@@ -58,7 +59,7 @@ class SelectCourseViewModel(
                 Log.e("handleContinue", "Selected course is null")
                 return@launch
             }
-            val response = addCourse.invoke(state.selectedCourse, true)
+            val response = addCourse.invoke(state.selectedCourse.toData(), true)
             if (response.isSuccess) {
                 translatorProvider.downloadModel(
                     state.selectedCourse.originalLanguage.toData(),

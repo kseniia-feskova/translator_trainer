@@ -1,14 +1,13 @@
 package usecase.words
 
-import presentation.usecases.words.IGetWordByTranslated
+import data.model.words.WordResponse
 import data.model.words.get.bytranslate.WordByTranslatedRequest
 import data.prefs.IDataStoreManager
-import data.repository.word.IWordDaoRepository
 import data.repository.word.IWordApiRepository
+import data.repository.word.IWordDaoRepository
 import domain.token.ICheckToken
 import domain.token.ITokenRefresher
-import mapper.toUI
-import presentation.model.WordUI
+import domain.usecases.words.IGetWordByTranslated
 
 class GetWordByTranslated(
     private val repo: IWordApiRepository,
@@ -18,7 +17,7 @@ class GetWordByTranslated(
     private val checkToken: ICheckToken
 ) : IGetWordByTranslated {
 
-    override suspend fun invoke(translated: String): Result<WordUI> {
+    override suspend fun invoke(translated: String): Result<WordResponse> {
         val course = prefs.getCourse() ?: return Result.failure(Exception("No course selected"))
 
         val request = WordByTranslatedRequest(
@@ -42,7 +41,7 @@ class GetWordByTranslated(
             } else Result.failure(Exception(response.errorMsg))
         } else if (data == null) {
             Result.failure(Exception("Empty user data"))
-        } else Result.success(data.toUI())
+        } else Result.success(data)
 
     }
 }

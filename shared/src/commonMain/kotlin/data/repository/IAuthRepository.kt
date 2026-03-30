@@ -1,6 +1,7 @@
 package data.repository
 
 import data.model.auth.AuthResponse
+import data.model.auth.FirebaseAuthRequest
 import data.model.base.Result
 
 interface IAuthRepository {
@@ -12,11 +13,5 @@ interface IAuthRepository {
     suspend fun verify(email: String, code: String): Result<AuthResponse>
     suspend fun resendCode(email: String): Result<AuthResponse>
     suspend fun clearCode(email: String)
-    suspend fun registerWithFirebase(
-        uuid: String? = null,
-        email: String? = null,
-        displayName: String? = null,
-        photo: String? = null,
-        phone: String? = null
-    ): Result<AuthResponse>
+    suspend fun registerWithFirebase(request: FirebaseAuthRequest): Result<AuthResponse>
 }

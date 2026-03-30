@@ -1,6 +1,6 @@
 package data.api
 
-import data.model.UserEntity
+import data.model.user.UserEntity
 import data.model.auth.AuthRequest
 import data.model.auth.AuthResponse
 import data.model.auth.FirebaseAuthRequest

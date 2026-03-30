@@ -1,6 +1,6 @@
 package data.repository
 
-import data.model.UserEntity
+import data.model.user.UserEntity
 import data.model.base.Result
 
 interface IUserRepository {

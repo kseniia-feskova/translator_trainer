@@ -4,13 +4,15 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import presentation.model.WordUI
-import presentation.usecases.course.ICoursesOnPrefsUseCases
-import presentation.usecases.sets.IAddSetUseCase
-import presentation.usecases.words.IGetWordsBySetUseCase
+import domain.usecases.course.ICoursesOnPrefsUseCases
+import domain.usecases.sets.IAddSetUseCase
+import domain.usecases.words.IGetWordsBySetUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import mapper.toData
+import mapper.toUI
 
 class NewSetViewModel(
     private val getAllWords: IGetWordsBySetUseCase,
@@ -28,12 +30,12 @@ class NewSetViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(loading = true) }
             if (allWords.isEmpty()) {
-                val allWordsId = coursePrefs.getCourse()?.allWordsId
+                val allWordsId = coursePrefs.getCourse()?.toUI()?.allWordsId
                 Log.e("NewSet", "All words = $allWordsId")
                 if (allWordsId != null) {
                     val response = getAllWords.invoke(allWordsId)
                     if (response.isSuccess) {
-                        allWords = response.getOrNull()?.toSelectingMap() ?: emptyMap()
+                        allWords = response.getOrNull()?.map { it.toUI() }?.toSelectingMap() ?: emptyMap()
                         _uiState.update { it.copy(words = allWords, loading = false) }
                     } else {
                         handleError(response)
@@ -90,7 +92,7 @@ class NewSetViewModel(
             viewModelScope.launch {
                 val data = _uiState.value
                 val wordsId = data.words.filter { it.value }.keys.map { it.id }
-                val course = coursePrefs.getCourse()
+                val course = coursePrefs.getCourse()?.toUI()
 
                 if (course != null) {
                     val response = saveSet.invoke(
@@ -101,7 +103,7 @@ class NewSetViewModel(
                     )
                     if (response.isSuccess) {
                         if (data.isSaveChecked) {
-                            coursePrefs.saveOne(course.copy(selectedSetId = response.getOrNull()?.id.toString()))
+                            coursePrefs.saveOne(course.copy(selectedSetId = response.getOrNull()?.id.toString()).toData())
                         }
                         _uiState.update { it.copy(loading = false) }
                         onSetSaved()

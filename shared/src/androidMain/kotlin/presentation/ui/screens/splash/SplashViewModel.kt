@@ -2,9 +2,9 @@ package presentation.ui.screens.splash
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import presentation.usecases.auth.ILoginUseCase
-import presentation.usecases.auth.ISetGuestUseCase
-import presentation.usecases.course.ICoursesOnPrefsUseCases
+import domain.usecases.auth.ILoginUseCase
+import domain.usecases.auth.ISetGuestUseCase
+import domain.usecases.course.ICoursesOnPrefsUseCases
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow

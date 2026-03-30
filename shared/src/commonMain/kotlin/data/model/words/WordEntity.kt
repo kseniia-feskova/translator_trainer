@@ -1,5 +1,6 @@
 package data.model.words
 
+//TODO: get rid of and replace with WordResponse
 data class WordEntity(
     val id: String,
     val originalText: String,

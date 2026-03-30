@@ -1,15 +1,14 @@
 package usecase.words
 
-import com.presentation.usecases.words.IAddWordByApiUseCase
+import data.model.words.WordResponse
 import data.model.words.add.AddWordRequest
 import data.prefs.IDataStoreManager
-import data.repository.word.IWordDaoRepository
 import data.repository.word.IWordApiRepository
+import data.repository.word.IWordDaoRepository
 import domain.cache.ISetsCacheProvider
 import domain.token.ICheckToken
 import domain.token.ITokenRefresher
-import mapper.toUI
-import presentation.model.WordUI
+import domain.usecases.words.IAddWordByApiUseCase
 
 class AddWordByApiUseCase(
     private val apiRepo: IWordApiRepository,
@@ -23,7 +22,7 @@ class AddWordByApiUseCase(
     override suspend fun invokeOffline(
         originalText: String,
         translatedText: String
-    ): Result<WordUI> {
+    ): Result<WordResponse> {
         val course = prefs.getCourse() ?: return Result.failure(Exception("Prefs are empty. Check them, please"))
         val request = AddWordRequest(
             originalText = originalText,
@@ -42,11 +41,11 @@ class AddWordByApiUseCase(
             Result.failure(Exception("Empty user data"))
         } else {
             cache.clear()
-            Result.success(data.toUI())
+            Result.success(data)
         })
     }
 
-    override suspend fun invoke(originalText: String, translatedText: String): Result<WordUI> {
+    override suspend fun invoke(originalText: String, translatedText: String): Result<WordResponse> {
         val course = prefs.getCourse()
             ?: return Result.failure(Exception("Prefs are empty. Check them, please"))
         val request = AddWordRequest(
@@ -69,7 +68,7 @@ class AddWordByApiUseCase(
             Result.failure(Exception("Empty user data"))
         } else {
             cache.clear()
-            Result.success(data.toUI())
+            Result.success(data)
         })
     }
 }

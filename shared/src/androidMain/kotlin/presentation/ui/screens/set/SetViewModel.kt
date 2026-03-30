@@ -20,8 +20,10 @@ import presentation.ui.screens.set.SetUIEvent
 import presentation.ui.screens.set.SetUIState
 import presentation.ui.screens.set.setId
 import presentation.ui.screens.set.setName
-import presentation.usecases.words.IGetWordsBySetUseCase
-import presentation.usecases.words.IUpdateStatusUseCase
+import domain.usecases.words.IGetWordsBySetUseCase
+import domain.usecases.words.IUpdateStatusUseCase
+import mapper.toStatus
+import mapper.toUI
 
 class SetViewModel(
     savedStateHandle: SavedStateHandle,
@@ -52,7 +54,7 @@ class SetViewModel(
         viewModelScope.launch {
             val response = getWords.invoke(setId)
             if (response.isSuccess) {
-                val words = response.getOrNull() ?: emptyList()
+                val words = response.getOrNull()?.map { it.toUI() } ?: emptyList()
                 allWords.addAll(words)
                 knownWords.addAll(words.filter { it.level == Level.KNOW })
                 _uiState.update {
@@ -92,9 +94,9 @@ class SetViewModel(
 
     private fun addWordToKnow(word: WordUI) {
         viewModelScope.launch {
-            val result = updateWord.invoke(word.id, level = Level.KNOW)
+            val result = updateWord.invoke(word.id, level = Level.KNOW.toStatus())
             if (result.isSuccess) {
-                result.getOrNull()?.let {
+                result.getOrNull()?.toUI()?.let {
                     if (!knownWords.contains(it)) {
                         knownWords.add(it)
                     }
@@ -110,9 +112,9 @@ class SetViewModel(
 
     private fun addWordToLearn(word: WordUI) {
         viewModelScope.launch {
-            val result = updateWord.invoke(word.id, level = Level.NEW)
+            val result = updateWord.invoke(word.id, level = Level.NEW.toStatus())
             if (result.isSuccess) {
-                result.getOrNull()?.let { word ->
+                result.getOrNull()?.toUI()?.let { word ->
                     knownWords.removeIf { it.id == word.id }
                     index++
                     updateUI()

@@ -1,7 +1,7 @@
 package data.repos
 
 import data.api.ApiService
-import data.model.UserEntity
+import data.model.user.UserEntity
 import data.model.base.Result
 import data.repository.IUserRepository
 import data.safeCall

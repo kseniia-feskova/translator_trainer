@@ -3,7 +3,7 @@ package presentation.ui.screens.sets
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import presentation.usecases.sets.IGetAllSetsUseCase
+import domain.usecases.sets.IGetAllSetsUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.catch
@@ -12,7 +12,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import presentation.model.LessonType
-import presentation.usecases.sets.IGetAllWordsIdUseCase
+import domain.usecases.sets.IGetAllWordsIdUseCase
+import mapper.toUI
 
 class SetsViewModel(
     getAllSets: IGetAllSetsUseCase,
@@ -20,7 +21,7 @@ class SetsViewModel(
 ) : ViewModel() {
 
     private val setsUiWithSetsFlow = getAllSets.invokeFlow()
-        .map { sets -> SetsUIState(sets = sets, loading = false) }
+        .map { sets -> SetsUIState(sets = sets.map { it.toUI() }, loading = false) }
         .catch { emit(SetsUIState(error = handleError(it))) }
         .onStart { emit(SetsUIState(loading = true)) }
 

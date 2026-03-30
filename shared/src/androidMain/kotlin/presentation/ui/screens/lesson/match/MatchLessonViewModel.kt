@@ -3,7 +3,9 @@ package presentation.ui.screens.lesson.match
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.presentation.usecases.sets.IUpdateSetsUseCase
+import domain.usecases.sets.IUpdateSetsUseCase
+import domain.usecases.words.IGetWordsBySetUseCase
+import domain.usecases.words.IUpdateStatusUseCase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,8 +15,6 @@ import presentation.model.LessonType
 import presentation.ui.screens.lesson.base.BaseLessonState
 import presentation.ui.screens.lesson.base.BaseLessonViewModel
 import presentation.ui.screens.lesson.match.model.MatchViewData
-import presentation.usecases.words.IGetWordsBySetUseCase
-import presentation.usecases.words.IUpdateStatusUseCase
 import java.util.UUID
 
 class MatchLessonViewModel(

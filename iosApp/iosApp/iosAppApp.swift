@@ -7,16 +7,66 @@
 
 import SwiftUI
 
+final class AppState: ObservableObject {
+    @Published var isAuthorized: Bool = false
+}
+
 @main
 struct iosAppApp: App {
     @AppStorage("isLoggedIn") var isLoggedIn = false
 
     var body: some Scene {
-        WindowGroup {
-            if isLoggedIn {
-               // MainTabView() // экран с 4 табами
+        WindowGroup { RootView() }
+    }
+}
+
+
+struct RootView: View {
+    
+    @StateObject var appState = AppState()
+    
+    var body: some View {
+        Group {
+            if appState.isAuthorized {
+               // AuthorizedAppView()
             } else {
-                AuthScreen() // выбор языка, логин, регистрация
+                UnauthorizedAppView(appState: appState)
+            }
+        }
+    }
+}
+
+enum AuthRoute: Hashable {
+    case splash
+    case auth
+}
+
+struct UnauthorizedAppView: View {
+    
+    @ObservedObject var appState: AppState
+    
+    @State private var path: [AuthRoute] = []
+    
+    var body: some View {
+        NavigationStack(path: $path) {
+            
+            SplashView(
+                onFinished: {
+                    path.append(.auth)
+                }
+            )
+            
+            .navigationDestination(for: AuthRoute.self) { route in
+                switch route {
+                case .auth:
+                    AuthScreen(
+                        onLoginSuccess: {
+                            appState.isAuthorized = true
+                        }
+                    )
+                case .splash:
+                    EmptyView()
+                }
             }
         }
     }

@@ -1,5 +1,7 @@
 package usecase.words
 
+import data.model.words.WordResponse
+import data.model.words.WordStatus
 import data.model.words.update.UpdateWordStatusRequest
 import data.prefs.IDataStoreManager
 import data.repository.word.IWordApiRepository
@@ -7,11 +9,7 @@ import data.repository.word.IWordDaoRepository
 import domain.cache.ISetsCacheProvider
 import domain.token.ICheckToken
 import domain.token.ITokenRefresher
-import mapper.toStatus
-import mapper.toUI
-import presentation.model.Level
-import presentation.model.WordUI
-import presentation.usecases.words.IUpdateStatusUseCase
+import domain.usecases.words.IUpdateStatusUseCase
 
 class UpdateStatusUseCase(
     private val repo: IWordApiRepository,
@@ -22,13 +20,13 @@ class UpdateStatusUseCase(
     private val cache: ISetsCacheProvider
 ) : IUpdateStatusUseCase {
 
-    override suspend fun invoke(wordId: String, level: Level): Result<WordUI> {
+    override suspend fun invoke(wordId: String, level: WordStatus): Result<WordResponse> {
 
         val response = if (prefs.isGuest() || prefs.isOfflineMode()) {
-            dao.updateStatus(wordId, UpdateWordStatusRequest(level.toStatus()))
+            dao.updateStatus(wordId, UpdateWordStatusRequest(level))
         } else {
             checkToken.safeApiCallWithRefresh(
-                call = { repo.updateStatus(wordId, UpdateWordStatusRequest(level.toStatus())) },
+                call = { repo.updateStatus(wordId, UpdateWordStatusRequest(level)) },
                 onTokenExpired = { tokenRefresher.refreshToken() })
         }
         val data = response.data
@@ -41,7 +39,7 @@ class UpdateStatusUseCase(
             Result.failure(Exception("Empty user data"))
         } else {
             cache.clear() //clear cache for reload on the sets screen
-            Result.success(data.toUI())
+            Result.success(data)
         }
     }
 

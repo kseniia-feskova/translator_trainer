@@ -3,19 +3,21 @@ package presentation.ui.screens.auth
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import data.translate.Language
+import data.translate.languageOf
 import domain.translate.ITranslateModelProvider
-import presentation.usecases.auth.ILoginUseCase
-import presentation.usecases.auth.IRegisterUseCase
-import presentation.usecases.auth.ISetGuestUseCase
-import presentation.usecases.course.ICoursesOnPrefsUseCases
-import presentation.usecases.course.IGetAllCoursesUseCase
+import domain.usecases.auth.ILoginUseCase
+import domain.usecases.auth.IRegisterUseCase
+import domain.usecases.auth.IRegisterWithFirebaseUseCase
+import domain.usecases.auth.ISetGuestUseCase
+import domain.usecases.course.ICoursesOnPrefsUseCases
+import domain.usecases.course.IGetAllCoursesUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import mapper.toData
 import presentation.model.FirebaseUser
-import presentation.usecases.auth.IRegisterWithFirebaseUseCase
 
 class AuthViewModel(
     private val login: ILoginUseCase,
@@ -108,7 +110,7 @@ class AuthViewModel(
             return
         }
         viewModelScope.launch {
-            val response = registerByFirebase.invoke(firebaseUser)
+            val response = registerByFirebase.invoke(firebaseUser.toData())
             if (!response.isSuccess) {
                 handleError(response)
                 return@launch
@@ -142,8 +144,8 @@ class AuthViewModel(
             } else {
                 coursesPrefs.saveOne(courses.first())
                 translatorProvider.downloadModel(
-                    courses.first().originalLanguage.toData(),
-                    courses.first().translateLanguage.toData()
+                    languageOf(courses.first().sourceLanguage)?: Language.AUTO,
+                    languageOf(courses.first().targetLanguage) ?: Language.AUTO
                 ) {
                     Log.e("AuthVM", "Download model error $it")
                 }

@@ -18,10 +18,11 @@ import network.INetworkConnectivityObserver
 import network.NetworkStatus
 import presentation.model.FirebaseUser
 import presentation.model.UserResult
-import presentation.usecases.auth.ICheckUserUseCase
-import presentation.usecases.auth.ILoginUseCase
-import presentation.usecases.auth.ISetGuestUseCase
-import presentation.usecases.course.ICoursesOnPrefsUseCases
+import domain.usecases.auth.ICheckUserUseCase
+import domain.usecases.auth.ILoginUseCase
+import domain.usecases.auth.ISetGuestUseCase
+import domain.usecases.course.ICoursesOnPrefsUseCases
+import mapper.toUI
 
 class MainViewModel(
     private val login: ILoginUseCase,
@@ -75,7 +76,7 @@ class MainViewModel(
         if (user == null || user.uuid == null) return
 
         viewModelScope.launch {
-            val result = checkGoogleUser.invoke(user.uuid)
+            val result = checkGoogleUser.invoke(user.uuid).toUI()
 
             when (result) {
                 is UserResult.Existing -> {

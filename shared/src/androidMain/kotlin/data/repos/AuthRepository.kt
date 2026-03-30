@@ -103,20 +103,8 @@ class AuthRepository(
     }
 
     override suspend fun registerWithFirebase(
-        uuid: String?,
-        email: String?,
-        displayName: String?,
-        photo: String?,
-        phone: String?
+       request: FirebaseAuthRequest
     ): Result<AuthResponse> {
-        val request =
-            FirebaseAuthRequest(
-                uuid = uuid,
-                email = email,
-                displayName = displayName,
-                photo = photo,
-                phone = phone
-            )
         return safeCall(
             request = { service.loginWithFirebase(request) },
             onSuccess = { body ->

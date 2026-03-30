@@ -7,7 +7,7 @@ import data.repository.word.IWordDaoRepository
 import domain.cache.ISetsCacheProvider
 import domain.token.ICheckToken
 import domain.token.ITokenRefresher
-import presentation.usecases.words.IDeleteWordUseCase
+import domain.usecases.words.IDeleteWordUseCase
 
 class DeleteWordUseCase(
     private val repo: IWordApiRepository,

@@ -10,9 +10,11 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import presentation.model.CourseUI
 import presentation.model.WordSelection
-import presentation.usecases.ITranslateWordUseCase
-import presentation.usecases.course.ICoursesOnPrefsUseCases
-import presentation.usecases.words.IAddWordUseCase
+import domain.usecases.ITranslateWordUseCase
+import domain.usecases.course.ICoursesOnPrefsUseCases
+import domain.usecases.words.IAddWordUseCase
+import mapper.toData
+import mapper.toUI
 import presentation.utils.Language
 import java.util.UUID
 
@@ -39,7 +41,7 @@ class TextFromPhotoViewModel(
 
     init {
         viewModelScope.launch {
-            course = coursesPrefs.getCourse()
+            course = coursesPrefs.getCourse()?.toUI()
             course?.let { course ->
                 _uiState.update {
                     it.copy(
@@ -61,8 +63,8 @@ class TextFromPhotoViewModel(
             if (origin != null && res != null) {
                 translateWord.invoke(
                     text = formated,
-                    originalLanguage = origin,
-                    resLanguage = res,
+                    originalLanguage = origin.toData(),
+                    resLanguage = res.toData(),
                     onSuccess = { translated ->
                         _uiState.update {
                             it.copy(
@@ -111,8 +113,8 @@ class TextFromPhotoViewModel(
                 viewModelScope.launch {
                     translateWord.invoke(
                         text,
-                        originalLanguage = originalLanguage,
-                        resLanguage = resLanguage,
+                        originalLanguage = originalLanguage.toData(),
+                        resLanguage = resLanguage.toData(),
                         onSuccess = {
                             val selected = _uiState.value.selectedWords.toMutableList()
                             selected.add(
@@ -146,7 +148,7 @@ class TextFromPhotoViewModel(
                 addWordUseCase.invoke(word.resText, word.originalText)
             }
             if (response.isSuccess) {
-                val savedWord = response.getOrNull()
+                val savedWord = response.getOrNull()?.toUI()
                 if (savedWord != null) {
                     val selected = _uiState.value.selectedWords.toMutableList()
                     _uiState.update {
