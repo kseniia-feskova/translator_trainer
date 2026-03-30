@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct AuthScreen: View {
+    
         @StateObject private var viewModel = AuthViewModel()
-        @State private var state = AuthUIState()
+    
         @State private var showDialog = false
         @Namespace private var animation
         
@@ -17,14 +18,14 @@ struct AuthScreen: View {
             ZStack{
                 ZStack {
                     VStack {
-                        Text(state.screenState == .login
+                        Text(viewModel.state.screenState == .login
                              ? String(localized: "login_title")
                              : String(localized: "register_title"))
                         .foregroundColor(AppColor.dark)
                         .font(AppTypography.displayLarge)
                         .frame(maxWidth: .infinity, alignment: .center)
                                                 
-                        CirclesView(isRegister: state.screenState == .register)
+                        CirclesView(isRegister: viewModel.state.screenState == .register)
                             .frame(height: 256)
                         
                         Spacer()
@@ -36,21 +37,38 @@ struct AuthScreen: View {
                             .padding(.top, 256)
                             .edgesIgnoringSafeArea(.all)
                         Group {
-                            if state.screenState == .login {
-                                LoginFormView()
+                            if viewModel.state.screenState == .login {
+                                LoginFormView(
+                                    email: viewModel.state.email,
+                                    password: viewModel.state.password,
+                                    error: viewModel.state.error,
+                                    onEmailChanged: viewModel.onEmailChanged,
+                                    onPasswordChanged: viewModel.onPasswordChanged,
+                                    onLoginClicked: viewModel.authClicked,
+                                    onCreateAccountClicked: viewModel.toggleAuthState,
+                                    
+                                )
                                     .transition(.asymmetric(
                                         insertion: .move(edge: .trailing),
                                         removal: .move(edge: .leading)
                                     ))
                             } else {
-                                RegisterFlowView()
+                                RegisterFlowView(
+                                    email: viewModel.state.email,
+                                    password: viewModel.state.password,
+                                    error: viewModel.state.error,
+                                    onEmailChanged: viewModel.onEmailChanged,
+                                    onPasswordChanged: viewModel.onPasswordChanged,
+                                    onRegisterClicked: viewModel.authClicked,
+                                    onLoginClicked: viewModel.toggleAuthState
+                                )
                                     .transition(.asymmetric(
                                         insertion: .move(edge: .leading),
                                         removal: .move(edge: .trailing)
                                     ))
                             }
                         }
-                        .animation(.easeInOut(duration: 1.0), value: state.screenState)
+                        .animation(.easeInOut(duration: 1.0), value: viewModel.state.screenState)
                     }
                 }
                 
@@ -67,7 +85,7 @@ struct AuthScreen: View {
                 }
                 
                 // Лоадер
-                if state.isLoading {
+                if viewModel.state.isLoading {
                     ProgressView().scaleEffect(2)
                 }
             }

@@ -48,16 +48,29 @@
 
     },
     "register_title" : {
-      "extractionState" : "manual"
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nice to meet you"
+          }
+        }
+      }
     },
     "Sign up" : {
 
     },
-    "Signup with e-mail" : {
-
-    },
-    "Welcome back" : {
-
+    "signup_subtitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Signup with e-mail"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

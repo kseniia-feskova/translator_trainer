@@ -8,33 +8,35 @@
 import SwiftUI
 
 struct RegisterFlowView: View {
+    
     @State private var passwordVisible = false
-    @State private var state = AuthUIState()
+    
+    let email: String
+    let password: String
+    let error: AuthError?
     
     var onEmailChanged: (String) -> Void = { _ in }
     var onPasswordChanged: (String) -> Void = { _ in }
-    var onLoginClicked: () -> Void = {}
+    var onRegisterClicked: () -> Void = {}
     var onGuestClicked: () -> Void = {}
-    var onCreateAccountClicked: () -> Void = {}
+    var onLoginClicked: () -> Void = {}
     
     var body: some View {
         VStack {
             Spacer(minLength: 20)
             
-            Text("Signup with e-mail")
-                .font(.system(size: 22, weight: .bold))
-                .foregroundColor(Color.blue)
+            Text(String(localized: "signup_subtitle"))
+                .foregroundColor(AppColor.dark)
+                .font(AppTypography.displayMedium)
                 .frame(maxWidth: .infinity, alignment: .center)
+    
             
             Spacer().frame(height: 16)
             
             // Email field
             TextField("Email", text: Binding(
-                get: { state.email },
-                set: {
-                    state.email = $0
-                    onEmailChanged($0)
-                }
+                get: { email },
+                set: { onEmailChanged($0) }
             ))
             .padding()
             .background(Color(UIColor.secondarySystemBackground))
@@ -43,7 +45,7 @@ struct RegisterFlowView: View {
             .textInputAutocapitalization(.never)
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
-                    .stroke(state.error == .emptyFields && state.email.isEmpty ? Color.red : Color.gray,lineWidth: 1)
+                    .stroke(error == .emptyFields && email.isEmpty ? Color.red : Color.gray,lineWidth: 1)
             )
             
             Spacer().frame(height: 16)
@@ -52,19 +54,13 @@ struct RegisterFlowView: View {
             HStack {
                 if passwordVisible {
                     TextField("Password", text: Binding(
-                        get: { state.password },
-                        set: {
-                            state.password = $0
-                            onPasswordChanged($0)
-                        }
+                        get: { password },
+                        set: { onPasswordChanged($0) }
                     ))
                 } else {
                     SecureField("Password", text: Binding(
-                        get: { state.password },
-                        set: {
-                            state.password = $0
-                            onPasswordChanged($0)
-                        }
+                        get: { password },
+                        set: { onPasswordChanged($0) }
                     ))
                 }
                 
@@ -81,7 +77,7 @@ struct RegisterFlowView: View {
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
                     .stroke(
-                        (state.error == .emptyFields && state.password.isEmpty) || state.error == .wrongPassword ? Color.red : Color.gray,
+                        (error == .emptyFields && password.isEmpty) || error == .wrongPassword ? Color.red : Color.gray,
                         lineWidth: 1
                     )
             )
@@ -95,7 +91,7 @@ struct RegisterFlowView: View {
                     .foregroundColor(.blue)
             }
             
-            if let error = state.error {
+            if let error = error {
                 Text(error.message)
                     .foregroundColor(.red)
                     .font(.footnote)
@@ -131,24 +127,18 @@ struct RegisterFlowView: View {
             Spacer()
             
             VStack {
-                Button(action: onCreateAccountClicked) {
+                Button(action: onLoginClicked) {
                     Text("Login with account")
-                        .fontWeight(.bold)
-                        .foregroundColor(.blue)
-                        .font(.system(size: 16))
+                        .font(AppTypography.titleSmall)
+                        .foregroundColor(AppColor.dark)
                 }
                 .padding(.bottom, 8)
                 
-                Button(action: onLoginClicked) {
-                    Text("Sign up")
-                        .fontWeight(.semibold)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(12)
-                        .shadow(radius: 4)
-                }
+                CustomShadowButton(
+                    text: "Sign up",
+                    isEnabled: true,
+                    onClick: onRegisterClicked
+                )
             }
         }
         .padding(.horizontal, 20)
@@ -157,7 +147,9 @@ struct RegisterFlowView: View {
 
 struct RegisterFlowView_Previews: PreviewProvider {
     static var previews: some View {
-        RegisterFlowView()
+        RegisterFlowView(
+            email: "test", password: "12345", error: nil
+        )
     }
 }
 

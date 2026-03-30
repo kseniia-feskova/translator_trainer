@@ -23,6 +23,7 @@ import com.presentation.ui.redDarkColor
 import presentation.ui.AppTypography
 import presentation.ui.views.OrView
 import presentation.ui.views.buttons.CustomShadowButton
+import presentation.ui.views.buttons.SecondShadowButton
 import presentation.ui.views.input.OutlinedTextField
 import presentation.ui.views.input.OutlinedTextFieldWithVisibility
 
@@ -89,7 +90,7 @@ fun LoginForm(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            CustomShadowButton(
+            SecondShadowButton(
                 isEnabled = true,
                 text = stringResource(R.string.guest_button),
                 onClick = onGuestClicked
@@ -97,7 +98,7 @@ fun LoginForm(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            CustomShadowButton(
+            SecondShadowButton(
                 isEnabled = true,
                 text = "Continue with Google",
                 icon = painterResource(R.drawable.ic_google),

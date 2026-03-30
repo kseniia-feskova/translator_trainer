@@ -12,24 +12,39 @@ enum AuthScreenState {
     case register
 }
 
+
+struct AuthUIState {
+    var email: String = ""
+    var password: String = ""
+    var error: AuthError?
+    var screenState: AuthScreenState = AuthScreenState.login
+    var isLoading: Bool = false
+}
+
 final class AuthViewModel: ObservableObject {
-    @Published var screenState: AuthScreenState = .login
-    @Published var email: String = ""
-    @Published var password: String = ""
-    @Published var isLoading: Bool = false
-    @Published var error: String? = nil
+    
+    @Published var state: AuthUIState = AuthUIState()
     @Published var showGuestDialog: Bool = false
 
     func toggleAuthState() {
         withAnimation(.easeInOut(duration: 0.5)) {
-            screenState = (screenState == .login) ? .register : .login
+            state.screenState = (state.screenState == .login) ? .register : .login
         }
+    }
+    
+    func onEmailChanged(_ value: String){
+        state.email = value
+    }
+    
+    func onPasswordChanged(_ value: String){
+        state.password = value
     }
 
     func authClicked() {
-        isLoading = true
+        print("authClicked, state: \(state)")
+        state.isLoading = true
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
-            self.isLoading = false
+            self.state.isLoading = false
         }
     }
 

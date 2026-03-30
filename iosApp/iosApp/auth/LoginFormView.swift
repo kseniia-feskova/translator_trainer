@@ -6,14 +6,6 @@
 //
 import SwiftUI
 
-struct AuthUIState {
-    var email: String = ""
-    var password: String = ""
-    var error: AuthError?
-    var screenState: AuthScreenState = AuthScreenState.login
-    var isLoading: Bool = false
-}
-
 enum AuthError: Error {
     case emptyFields
     case wrongPassword
@@ -27,8 +19,12 @@ enum AuthError: Error {
 }
 
 struct LoginFormView: View {
+    
     @State private var passwordVisible = false
-    @State private var state = AuthUIState()
+
+    let email: String
+    let password: String
+    let error: AuthError?
     
     var onEmailChanged: (String) -> Void = { _ in }
     var onPasswordChanged: (String) -> Void = { _ in }
@@ -50,11 +46,8 @@ struct LoginFormView: View {
             
             // Email field
             TextField("Email", text: Binding(
-                get: { state.email },
-                set: {
-                    state.email = $0
-                    onEmailChanged($0)
-                }
+                get: { email },
+                set: { onEmailChanged($0) }
             ))
             .padding()
             .background(Color(UIColor.secondarySystemBackground))
@@ -63,7 +56,7 @@ struct LoginFormView: View {
             .textInputAutocapitalization(.never)
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
-                    .stroke(state.error == .emptyFields && state.email.isEmpty ? Color.red : Color.gray, lineWidth: 1)
+                    .stroke(error == .emptyFields && email.isEmpty ? Color.red : Color.gray, lineWidth: 1)
             )
             
             Spacer().frame(height: 16)
@@ -72,19 +65,13 @@ struct LoginFormView: View {
             HStack {
                 if passwordVisible {
                     TextField("Password", text: Binding(
-                        get: { state.password },
-                        set: {
-                            state.password = $0
-                            onPasswordChanged($0)
-                        }
+                        get: { password },
+                        set: { onPasswordChanged($0) }
                     ))
                 } else {
                     SecureField("Password", text: Binding(
-                        get: { state.password },
-                        set: {
-                            state.password = $0
-                            onPasswordChanged($0)
-                        }
+                        get: { password },
+                        set: { onPasswordChanged($0) }
                     ))
                 }
                 
@@ -101,7 +88,7 @@ struct LoginFormView: View {
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
                     .stroke(
-                        (state.error == .emptyFields && state.password.isEmpty) || state.error == .wrongPassword ? Color.red : Color.gray,
+                        (error == .emptyFields && password.isEmpty) || error == .wrongPassword ? Color.red : Color.gray,
                         lineWidth: 1
                     )
             )
@@ -115,7 +102,7 @@ struct LoginFormView: View {
                     .foregroundColor(.blue)
             }
             
-            if let error = state.error {
+            if let error = error {
                 Text(error.message)
                     .foregroundColor(.red)
                     .font(.footnote)
@@ -161,8 +148,8 @@ struct LoginFormView: View {
                 CustomShadowButton(
                     text: "Login",
                     isEnabled: true,
-                    onClick: { print("Button pressed") }
-                )
+                    onClick: onLoginClicked 
+                    )
                 }
             }
         .padding(.horizontal, 20)
@@ -171,6 +158,8 @@ struct LoginFormView: View {
 
 struct LoginFormView_Previews: PreviewProvider {
     static var previews: some View {
-        LoginFormView()
+        LoginFormView(
+            email: "test", password: "12345", error: nil
+        )
     }
 }

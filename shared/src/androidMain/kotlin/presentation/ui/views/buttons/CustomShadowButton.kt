@@ -26,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import com.presentation.ui.bgColor
 import com.presentation.ui.darkColor
 import com.presentation.ui.fieldBorderColor
 import com.presentation.ui.whiteColor
@@ -92,6 +93,66 @@ fun CustomShadowButton(
     }
 }
 
+@Composable
+fun SecondShadowButton(
+    modifier: Modifier = Modifier,
+    text: String,
+    icon: Painter? = null,
+    onClick: () -> Unit = {},
+    isEnabled: Boolean = true,
+) {
+    Box(modifier = modifier) {
+        if (isEnabled) {
+            Spacer(
+                modifier = Modifier
+                    .padding(top = 5.dp)
+                    .height(48.dp)
+                    .fillMaxWidth()
+                    .background(
+                        shape = RoundedCornerShape(30.dp),
+                        color = fieldBorderColor
+                    )
+            )
+        }
+        Button(
+            onClick = { onClick() },
+            enabled = isEnabled,
+            modifier = Modifier
+                .fillMaxWidth()
+                //    .padding(top = if (isEnabled) 0.dp else 5.dp)
+                .height(50.dp)
+                .clip(shape = RoundedCornerShape(30.dp))
+                .background(whiteColor)
+                .border(
+                    1.dp,
+                    color = fieldBorderColor,
+                    shape = RoundedCornerShape(30.dp)
+                ),
+            colors = ButtonDefaults.buttonColors().copy(
+                containerColor = bgColor,
+                disabledContainerColor = whiteColor
+            )
+        ) {
+            if (icon != null) {
+                Icon(
+                    modifier = Modifier.size(24.dp),
+                    painter = icon,
+                    contentDescription = "Icon",
+                    tint = Color.Unspecified
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+            }
+            Text(
+                modifier = Modifier.padding(bottom = 2.dp),
+                text = text,
+                color = darkColor,
+                autoSize = TextAutoSize.StepBased(maxFontSize = TextUnit(16f, TextUnitType.Sp)),
+                style = AppTypography.titleSmall
+            )
+        }
+    }
+}
+
 @Preview
 @Composable
 fun CustomShadowButtonPreview(
@@ -101,6 +162,10 @@ fun CustomShadowButtonPreview(
             CustomShadowButton(text = "Test button")
             Spacer(modifier = Modifier.height(12.dp))
             CustomShadowButton(isEnabled = false, text = "Test button false")
+            Spacer(modifier = Modifier.height(12.dp))
+            SecondShadowButton(isEnabled = true, text = "Second button")
+            Spacer(modifier = Modifier.height(12.dp))
+            SecondShadowButton(isEnabled = false, text = "Second button disabled")
         }
     }
 }
