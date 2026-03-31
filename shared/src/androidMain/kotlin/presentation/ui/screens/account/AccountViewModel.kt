@@ -28,6 +28,7 @@ import presentation.model.FirebaseUser
 import domain.usecases.auth.IRegisterWithFirebaseUseCase
 import mapper.toData
 import mapper.toUI
+import presentation.viewmodel.MainUiEvent
 
 class AccountViewModel(
     coursePrefs: ICoursesOnPrefsUseCases,
@@ -145,7 +146,7 @@ class AccountViewModel(
                         _uiState.update {
                             it.copy(btnsState = AccountBtnsState(showLogoutDialog = false))
                         }
-                        intent.goToAuth()
+                        intent.goToAuth(MainUiEvent.Logout)
                     }
                 } else {
                     _uiState.update {

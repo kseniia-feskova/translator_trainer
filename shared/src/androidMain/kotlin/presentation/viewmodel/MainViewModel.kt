@@ -64,9 +64,16 @@ class MainViewModel(
                 }
             }
 
+            //TODO: Need to be sure that user is authorized AND has a selected course!
             is MainUiEvent.UserAuthorized -> {
                 _uiState.update {
                     it.copy(isUserAuthorized = true)
+                }
+            }
+
+            is MainUiEvent.Logout -> {
+                _uiState.update {
+                    it.copy(isUserAuthorized = false, showSplash = false)
                 }
             }
         }
@@ -142,6 +149,8 @@ class MainViewModel(
 sealed class MainUiEvent() {
     object SignInWithGoogle : MainUiEvent()
     object UserAuthorized : MainUiEvent()
+
+    object Logout : MainUiEvent()
 }
 
 sealed interface GoogleSignUiEffect {

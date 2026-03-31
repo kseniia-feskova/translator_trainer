@@ -1,7 +1,9 @@
 package data.model.words
 
 import data.model.course.CourseEntity
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class WordResponse(
     val id: String,
     val originalText: String,

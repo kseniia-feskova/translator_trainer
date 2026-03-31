@@ -20,7 +20,6 @@ class ResendCodeUseCase(
                 Result.success(Unit)
             } else {
                 Result.failure(Exception("Can not change verification code"))
-
             }
         }
     }

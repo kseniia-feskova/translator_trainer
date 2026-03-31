@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.compose.runtime.Stable
 import presentation.model.CourseUI
 import presentation.model.FirebaseUser
+import presentation.viewmodel.MainUiEvent
 
 data class AccountUIState(
     val name: String? = null,
@@ -30,7 +31,7 @@ sealed class AccountIntent {
     data object EditClicked : AccountIntent()
     data object AddLanguage : AccountIntent()
     data object ChangeTheme : AccountIntent()
-    data class Logout(val goToAuth: () -> Unit) : AccountIntent()
+    data class Logout(val goToAuth: (MainUiEvent) -> Unit) : AccountIntent()
     data object DeleteAccount : AccountIntent()
     data object DismissDialog : AccountIntent()
 

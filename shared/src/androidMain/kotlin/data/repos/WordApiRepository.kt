@@ -7,10 +7,8 @@ import data.model.words.add.AddWordRequest
 import data.model.words.get.bytranslate.WordByOriginalRequest
 import data.model.words.get.bytranslate.WordByTranslatedRequest
 import data.model.words.update.UpdateWordStatusRequest
-
 import data.repository.word.IWordApiRepository
 import data.safeCall
-import java.util.UUID
 
 class WordApiRepository(
     private val apiService: ApiService
@@ -23,7 +21,7 @@ class WordApiRepository(
     override suspend fun getWordByTranslated(request: WordByTranslatedRequest): Result<WordResponse> {
         return safeCall(request = {
             apiService.getWordByTranslated(
-                UUID.fromString(request.courseId),
+                request.courseId,
                 request.translate
             )
         })
@@ -32,7 +30,7 @@ class WordApiRepository(
     override suspend fun getWordByOriginal(request: WordByOriginalRequest): Result<WordResponse> {
         return safeCall(request = {
             apiService.getWordByOriginal(
-                UUID.fromString(request.courseId),
+                request.courseId,
                 request.original
             )
         })

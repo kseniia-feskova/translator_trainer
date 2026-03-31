@@ -19,6 +19,10 @@ kotlin {
         }
     }
 
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
+
     sourceSets {
         commonMain.dependencies {
             implementation("org.jetbrains.kotlin:kotlin-stdlib:2.2.21")
@@ -26,6 +30,16 @@ kotlin {
             implementation("io.insert-koin:koin-core:4.1.1") // KMM поддержка
             // Используй kotlinx.serialization, если нужно
             implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
+
+            //Ktor
+            implementation("io.ktor:ktor-client-core:2.3.7")
+            implementation("io.ktor:ktor-client-content-negotiation:2.3.7")
+            implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.7")
+            implementation("io.ktor:ktor-client-logging:2.3.7")
+        }
+
+        iosMain.dependencies {
+            implementation("io.ktor:ktor-client-darwin:2.3.7")
         }
 
         androidMain.dependencies {
@@ -48,9 +62,11 @@ kotlin {
             implementation("io.insert-koin:koin-androidx-compose:4.1.1")
 
             //Retrofit
-            implementation("com.google.code.gson:gson:2.13.2")
-            implementation("com.squareup.retrofit2:retrofit:3.0.0")
-            implementation("com.squareup.retrofit2:converter-gson:3.0.0")
+            implementation("io.ktor:ktor-client-okhttp:2.3.7")
+
+//            implementation("com.google.code.gson:gson:2.13.2")
+//            implementation("com.squareup.retrofit2:retrofit:3.0.0")
+//            implementation("com.squareup.retrofit2:converter-gson:3.0.0")
 
             // Compose
             implementation("androidx.compose.runtime:runtime-android:1.10.0")

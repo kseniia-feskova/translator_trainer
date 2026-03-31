@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import com.presentation.ui.AppTheme
 import com.translator.app.di.databaseModule
-import com.translator.app.di.networkModule
+import di.networkModule
 import com.translator.app.di.preferencesModule
 import com.translator.app.di.repositoryModule
 import com.translator.app.di.translateModule

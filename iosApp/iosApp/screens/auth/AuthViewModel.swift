@@ -10,6 +10,16 @@ import Combine
 
 final class AuthViewModel: ObservableObject {
     
+    /*
+     private val login: ILoginUseCase,
+         private val register: IRegisterUseCase,
+         private val registerByFirebase: IRegisterWithFirebaseUseCase,
+         private val getCourses: IGetAllCoursesUseCase,
+         private val coursesPrefs: ICoursesOnPrefsUseCases,
+         private val guestPrefs: ISetGuestUseCase,
+         private val translatorProvider: ITranslateModelProvider
+     */
+    
     @Published var state: AuthUIState = AuthUIState()
     let event = PassthroughSubject<AuthEvent, Never>()
       

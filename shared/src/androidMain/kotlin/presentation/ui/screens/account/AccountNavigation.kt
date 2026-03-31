@@ -20,7 +20,7 @@ fun NavController.navigateToAccount(
 }
 
 fun NavGraphBuilder.accountScreen(
-    toLogin: () -> Unit,
+    toLogin: (MainUiEvent) -> Unit,
     toHome: () -> Unit,
     onGoogleClick: (MainUiEvent) -> Unit
 ) {
@@ -36,7 +36,7 @@ fun NavGraphBuilder.accountScreen(
 @Composable
 fun AccountRoute(
     viewModel: AccountViewModel = koinViewModel(),
-    toLogin: () -> Unit,
+    toLogin: (MainUiEvent) -> Unit,
     toHome: () -> Unit,
     onGoogleClick: (MainUiEvent) -> Unit,
 ) {

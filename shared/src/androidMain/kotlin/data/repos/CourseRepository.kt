@@ -1,11 +1,10 @@
 package data.repos
 
 import data.api.ApiService
+import data.model.base.Result
 import data.model.course.CourseEntity
 import data.repository.ICourseRepository
 import data.safeCall
-import data.model.base.Result
-import java.util.UUID
 
 class CourseRepository(private val apiService: ApiService) : ICourseRepository {
 
@@ -18,7 +17,7 @@ class CourseRepository(private val apiService: ApiService) : ICourseRepository {
     }
 
     override suspend fun getAllCoursesForUser(userId: String): Result<List<CourseEntity>> {
-        return safeCall(request = { apiService.getAllCourses(UUID.fromString(userId)) })
+        return safeCall(request = { apiService.getAllCourses(userId) })
     }
 
 }
