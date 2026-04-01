@@ -4,6 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import data.model.words.WordStatus
 import java.util.UUID
+import kotlin.String
 
 @Entity(tableName = "words")
 data class WordEntity(
@@ -21,14 +22,15 @@ fun WordEntity.toCommon(): data.model.words.WordEntity {
         id = id,
         originalText = originalText,
         translatedText = translatedText,
-        status = status,
-        sourceLanguage = sourceLanguage,
-        targetLanguage = targetLanguage,
-        courseId = courseId
+        status = status
     )
 }
 
-fun data.model.words.WordEntity.toAndroid(): WordEntity {
+fun data.model.words.WordEntity.toDao(
+     sourceLanguage: String,
+     targetLanguage: String,
+     courseId: String
+): WordEntity {
     return WordEntity(
         id = id,
         originalText = originalText,
@@ -39,5 +41,4 @@ fun data.model.words.WordEntity.toAndroid(): WordEntity {
         courseId = courseId
     )
 }
-
 

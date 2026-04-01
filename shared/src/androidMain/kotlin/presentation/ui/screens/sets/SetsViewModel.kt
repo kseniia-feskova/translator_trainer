@@ -34,6 +34,7 @@ class SetsViewModel(
             selectedSetId,
             allWordsId
         ) { setsUIState, selected, allWordsId ->
+            Log.e("SetsViewModel", "setsUi = $setsUIState")
             setsUIState.copy(
                 selectedSetId = selected,
                 allWordsSet = allWordsId

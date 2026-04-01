@@ -52,8 +52,7 @@ class WordApiRepository(
     }
 
     override suspend fun delete(wordId: String) =
-        safeCall(request = { apiService.deleteWord(wordId) })
-
+        safeCall<Unit>(request = { apiService.deleteWord(wordId) })
 
 }
 

@@ -1,5 +1,8 @@
 package data.model.course.add
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class AddCourseRequest(
     val name: String,
     val userId: String,

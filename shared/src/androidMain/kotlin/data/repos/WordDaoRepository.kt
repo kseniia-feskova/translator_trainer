@@ -83,7 +83,7 @@ class WordDaoRepository(
         return Result(data = newValue.toWordResponse())
     }
 
-    override suspend fun delete(wordId: String): Result<Void> {
+    override suspend fun delete(wordId: String): Result<Unit> {
         dao.deleteWordById(wordId)
         return Result()
     }

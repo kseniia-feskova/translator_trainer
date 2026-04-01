@@ -16,6 +16,7 @@ class LoginUseCase(private val repo: IAuthRepository, private val dataStore: IDa
         } else {
             val userId = response.data?.uuid
             if (userId != null) {
+                dataStore.saveCourse(null)
                 dataStore.saveUserId(userId)
                 Result.success(userId)
             } else {

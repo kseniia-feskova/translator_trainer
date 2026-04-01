@@ -38,11 +38,12 @@ class GetAllSetsUseCase(
                     response.data?.let {
                         cache.updateSets(it)
                         dao.saveSets(it)
+                        emit(it)
                     }
                 } else {
                     dao.getAllSetsFlow(course.id).first()
+                    emitAll(dao.getAllSetsFlow(course.id))
                 }
-                emitAll(dao.getAllSetsFlow(course.id))
             }
         }
     }

@@ -1,48 +1,52 @@
 package data
 
-import android.util.Log
-import data.api.UnauthorizedException
+import data.model.base.ErrorResponse
 import data.model.base.Result
 import domain.token.TokenRefresher.Companion.ERROR_TOKEN_EXPIRED
-import io.ktor.client.plugins.ClientRequestException
-import io.ktor.client.statement.bodyAsText
+import io.ktor.client.call.body
+import io.ktor.client.statement.HttpResponse
+import io.ktor.http.isSuccess
+import java.io.IOException
 
-suspend fun <T> safeCall(
-    request: suspend () -> T,
+
+suspend inline fun <reified T> safeCall(
+    request: suspend () -> HttpResponse,
     onSuccess: (T) -> Unit = {},
     onRefresh: () -> Unit = {}
 ): Result<T> {
     return try {
-        val response: T? = request()
-        if (response != null) {
-            onSuccess(response)
-            Result(data = response)
+        val response: HttpResponse = request()
+        if (response.status.isSuccess()) {
+            val body = response.body<T>()
+            if (body != null) {
+                onSuccess(body)
+                Result(data = body)
+            } else {
+                Result(errorMsg = "Empty data")
+            }
         } else {
-            Result(errorMsg = "Empty data")
+            if (response.status.value == 401) {
+                onRefresh()
+                return Result(errorMsg = ERROR_TOKEN_EXPIRED)
+            }
+            val errorResponse = extractErrorMessage(response)
+            Result(errorMsg = errorResponse.toString())
         }
-    } catch (_: UnauthorizedException) {
-        onRefresh()
-        return Result(errorMsg = ERROR_TOKEN_EXPIRED)
-    } catch (e: ClientRequestException) {
-        Result(errorMsg = e.response.bodyAsText())
     } catch (e: Exception) {
-        Log.e("Extentions", "safeCall exception = ${e.message}")
         Result(errorMsg = e.message.toString())
     }
 }
 
-//fun <T> extractErrorMessage(response: Response<T>): String? {
-//    val errorBody = response.errorBody()
-//    return if (errorBody != null) {
-//        try {
-//            val gson = Gson()
-//            val errorResponse = gson.fromJson(errorBody.string(), ErrorResponse::class.java)
-//            errorResponse.details.message
-//        } catch (e: IOException) {
-//            e.printStackTrace()
-//            null // Возвращаем null, если произошла ошибка парсинга
-//        }
-//    } else {
-//        null // Возвращаем null, если errorBody отсутствует
-//    }
-//}
+suspend fun extractErrorMessage(response: HttpResponse): String? {
+    val errorBody = response.body<ErrorResponse?>()
+    return if (errorBody != null) {
+        try {
+            errorBody.details.message
+        } catch (e: IOException) {
+            e.printStackTrace()
+            null // Возвращаем null, если произошла ошибка парсинга
+        }
+    } else {
+        null // Возвращаем null, если errorBody отсутствует
+    }
+}

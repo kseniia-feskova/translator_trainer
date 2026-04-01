@@ -137,6 +137,7 @@ class AuthViewModel(
                 return@launch
             }
             val courses = response.getOrNull() ?: return@launch
+            Log.e("AuthViewModel", "courses = $courses")
             if (courses.size != 1) {
                 coursesPrefs.saveAll(courses)
                 goToCourses()

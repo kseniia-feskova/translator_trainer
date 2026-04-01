@@ -47,7 +47,12 @@ class AuthRepository(
         password: String
     ): Result<AuthResponse> {
         val request =
-            data.model.auth.AuthRequest(email = email, username = username, password = password)
+            data.model.auth.AuthRequest(
+                email = email,
+                username = username,
+                password = password,
+                phone = email
+            )
         return safeCall({
             service.login(request)
         }, onSuccess = { body ->
@@ -93,7 +98,7 @@ class AuthRepository(
     }
 
     override suspend fun clearCode(email: String) {
-        safeCall({ service.clearCode(email) }, onSuccess = {})
+        safeCall<Unit>({ service.clearCode(email) }, onSuccess = {})
     }
 
     override suspend fun logout() {
@@ -103,7 +108,7 @@ class AuthRepository(
     }
 
     override suspend fun registerWithFirebase(
-       request: FirebaseAuthRequest
+        request: FirebaseAuthRequest
     ): Result<AuthResponse> {
         return safeCall(
             request = { service.loginWithFirebase(request) },

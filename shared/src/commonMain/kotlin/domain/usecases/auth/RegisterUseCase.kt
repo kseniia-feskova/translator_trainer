@@ -20,6 +20,7 @@ class RegisterUseCase(
         } else {
             val userId = response.data?.uuid
             if (userId != null) {
+                dataStore.saveCourse(null)
                 dataStore.resetGuestMode()
                 dataStore.saveUserId(userId)
                 Result.success(userId)

@@ -8,8 +8,5 @@ data class WordEntity(
     val id: String,
     val originalText: String,
     val translatedText: String,
-    val status: WordStatus,
-    val sourceLanguage: String,
-    val targetLanguage: String,
-    val courseId: String
+    val status: WordStatus
 )
