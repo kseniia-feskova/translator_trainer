@@ -15,11 +15,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.example.translatortrainer.shared.R
 import com.presentation.ui.AppTheme
 import com.presentation.ui.darkColor
@@ -27,7 +25,6 @@ import com.presentation.ui.gradientBrush
 import com.presentation.ui.redDarkColor
 import com.presentation.ui.views.ListOfSetsView
 import com.presentation.ui.views.Loader
-import presentation.navigation.BottomNavigationBar
 import presentation.test.mockListOfSets
 import presentation.ui.AppTypography
 import presentation.ui.views.BackgroundDecorAnimated
@@ -128,9 +125,6 @@ fun SetsScreenEmptyPreview() {
                     SetsUIState(emptyList())
                 )
             }
-        }, bottomBar = {
-            val context = LocalContext.current
-            BottomNavigationBar(navController = NavController(context))
         }
         )
     }
@@ -146,9 +140,6 @@ fun SetsScreenPreview() {
                     SetsUIState(mockListOfSets)
                 )
             }
-        }, bottomBar = {
-            val context = LocalContext.current
-            BottomNavigationBar(navController = NavController(context))
         }
         )
     }

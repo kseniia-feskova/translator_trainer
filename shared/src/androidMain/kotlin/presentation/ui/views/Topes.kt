@@ -17,8 +17,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Favorite
@@ -257,12 +257,12 @@ fun TopViewPreview() {
                 BaseTopView("Новые карточки", rightIcon = Icons.Default.Add)
                 BaseTopView(
                     "Набор карточек №1",
-                    leftIcon = Icons.AutoMirrored.Filled.ArrowBack,
+                    leftIcon = Icons.Filled.ArrowBack,
                     rightIcon = Icons.Default.Edit
                 )
                 BaseTopView(
                     "Статистика",
-                    leftIcon = Icons.AutoMirrored.Filled.ArrowBack,
+                    leftIcon = Icons.Filled.ArrowBack,
                 )
 
                 LessonTopView(3)

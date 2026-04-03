@@ -39,14 +39,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.example.translatortrainer.shared.R
 import com.presentation.ui.AppTheme
 import com.presentation.ui.darkColor
@@ -58,7 +56,6 @@ import com.presentation.ui.onSurfaceLight
 import com.presentation.ui.redDarkColor
 import com.presentation.ui.views.Loader
 import com.presentation.ui.yellowColor
-import presentation.navigation.BottomNavigationBar
 import presentation.ui.AppTypography
 import presentation.ui.dialog.GuestLimitsDialog
 import presentation.ui.views.buttons.CustomShadowButton
@@ -424,9 +421,6 @@ fun MainScreenWithButtonPreview() {
                     )
                 )
             }
-        }, bottomBar = {
-            val context = LocalContext.current
-            BottomNavigationBar(navController = NavController(context))
         }
         )
     }
@@ -450,11 +444,6 @@ fun MainScreenWithSavedButtonPreview() {
                     )
                 )
             }
-        }, bottomBar = {
-            val context = LocalContext.current
-            BottomNavigationBar(
-                bgColor = Color(0xFFB9C3FF), navController = NavController(context)
-            )
         }
         )
     }

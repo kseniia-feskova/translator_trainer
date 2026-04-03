@@ -28,8 +28,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -44,7 +44,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import androidx.navigation.NavController
 import com.example.translatortrainer.shared.R
 import com.presentation.ui.AppTheme
 import com.presentation.ui.bgColor
@@ -57,7 +56,6 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import presentation.model.LessonType
 import presentation.model.WordUI
-import presentation.navigation.BottomNavigationBar
 import presentation.test.smallList
 import presentation.ui.AppTypography
 import presentation.ui.views.BaseTopView
@@ -140,14 +138,14 @@ fun SetScreen(
                 ) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Icon(
-                            Icons.AutoMirrored.Filled.ArrowBack,
+                            Icons.Filled.ArrowBack,
                             contentDescription = "Left",
                             tint = darkColor
                         )
                     }
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Icon(
-                            Icons.AutoMirrored.Filled.ArrowForward,
+                            Icons.Filled.ArrowForward,
                             contentDescription = "Right",
                             tint = darkColor
                         )
@@ -304,9 +302,8 @@ fun CardSetScreenPreview() {
                     events = MutableStateFlow<SetUIEvent>(SetUIEvent.RequestExport).asSharedFlow()
                 )
             }
-        }, bottomBar = {
-            BottomNavigationBar(navController = NavController(LocalContext.current))
-        })
+        }
+        )
     }
 }
 
@@ -323,8 +320,6 @@ fun EmptyCardSetScreenPreview() {
                     events = MutableStateFlow<SetUIEvent>(SetUIEvent.RequestExport).asSharedFlow()
                 )
             }
-        }, bottomBar = {
-            BottomNavigationBar(navController = NavController(LocalContext.current))
         })
     }
 }
@@ -348,8 +343,6 @@ fun CardSetScreenWithLessonsPreview() {
                     events = MutableStateFlow<SetUIEvent>(SetUIEvent.RequestExport).asSharedFlow()
                 )
             }
-        }, bottomBar = {
-            BottomNavigationBar(navController = NavController(LocalContext.current))
         })
     }
 }

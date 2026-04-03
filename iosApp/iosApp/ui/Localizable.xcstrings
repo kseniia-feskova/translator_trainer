@@ -1,14 +1,50 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "Before we star" : {
+
+    },
     "Create Account" : {
 
     },
     "Email" : {
 
     },
+    "english" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "English"
+          }
+        }
+      }
+    },
     "Forgot password?" : {
 
+    },
+    "french" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "French"
+          }
+        }
+      }
+    },
+    "german" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "German"
+          }
+        }
+      }
     },
     "Hello, world!" : {
 
@@ -54,6 +90,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nice to meet you"
+          }
+        }
+      }
+    },
+    "russian" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Russian"
           }
         }
       }

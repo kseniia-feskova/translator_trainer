@@ -21,7 +21,34 @@ final class AuthViewModel: ObservableObject {
      */
     
     @Published var state: AuthUIState = AuthUIState()
+    
     let event = PassthroughSubject<AuthEvent, Never>()
+    
+
+//    private let loginUseCase: LoginUseCaseWrapper
+//
+//    init(loginUseCase: LoginUseCaseWrapper) {
+//        self.loginUseCase = loginUseCase
+//    }
+
+    func login(email: String, password: String) {
+//        loginUseCase.login(
+//            email: email,
+//            username: email,
+//            password: password
+//        ) { userId, error in
+//            
+//            if let error = error {
+//                print("Error: \(error)")
+//                return
+//            }
+//
+//            if let userId = userId {
+//                print("Success: \(userId)")
+//            }
+//        }
+    }
+    
       
     func authClicked() {
         state.isLoading = true
@@ -47,3 +74,5 @@ final class AuthViewModel: ObservableObject {
 
 
 }
+
+

@@ -37,7 +37,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -45,7 +44,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.example.translatortrainer.shared.R
 import com.presentation.ui.AppTheme
 import com.presentation.ui.bgColor
@@ -55,8 +53,6 @@ import com.presentation.ui.gradientBrush
 import com.presentation.ui.lightLilaColor
 import com.presentation.ui.redDarkColor
 import com.presentation.ui.whiteColor
-import presentation.utils.GUEST_MAX_WORDS
-import presentation.navigation.BottomNavigationBar
 import presentation.test.dummyCourses
 import presentation.ui.AppTypography
 import presentation.ui.screens.auth.AuthScreenState
@@ -64,6 +60,7 @@ import presentation.ui.screens.auth.AuthUIState
 import presentation.ui.screens.auth.RegisterForm
 import presentation.ui.views.AccountTopView
 import presentation.ui.views.buttons.CustomShadowButton
+import presentation.utils.GUEST_MAX_WORDS
 
 @Composable
 fun AccountScreen(
@@ -458,9 +455,6 @@ fun AccountScreenPreview() {
             Box(modifier = Modifier.padding(paddings)) {
                 AccountScreen("KseniiaFeskova@Gmail.com", null)
             }
-        }, bottomBar = {
-            val context = LocalContext.current
-            BottomNavigationBar(navController = NavController(context))
         }
         )
     }
@@ -479,9 +473,6 @@ fun AccountScreenGuestPreview() {
                     guestData = GuestData(dummyCourses.first(), 10, 2)
                 )
             }
-        }, bottomBar = {
-            val context = LocalContext.current
-            BottomNavigationBar(navController = NavController(context))
         }
         )
     }
@@ -502,9 +493,6 @@ fun AccountScreenGuestAuthPreview() {
                     authState = true
                 )
             }
-        }, bottomBar = {
-            val context = LocalContext.current
-            BottomNavigationBar(navController = NavController(context))
         }
         )
     }
@@ -524,9 +512,6 @@ fun AccountScreenWithDialogPreview() {
                     btnsState = AccountBtnsState(showLogoutDialog = true),
                 )
             }
-        }, bottomBar = {
-            val context = LocalContext.current
-            BottomNavigationBar(navController = NavController(context))
         }
         )
     }

@@ -1,31 +1,7 @@
 package presentation.navigation
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemDefaults
-import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.navigation.NavDestination
-import androidx.wear.compose.navigation.currentBackStackEntryAsState
 import com.example.translatortrainer.shared.R
-import com.presentation.ui.AppTheme
-import com.presentation.ui.accentColorLight
-import com.presentation.ui.onSurfaceLight
-import com.presentation.ui.surfaceLight
 import kotlinx.serialization.Serializable
 import presentation.model.LessonType
 
@@ -77,64 +53,65 @@ sealed class LeafScreen(val route: String) {
     object NewSet : LeafScreen("newset")
 }
 
-@Composable
-fun BottomNavigationBar(bgColor: Color = Color.White, navController: NavController) {
-    NavigationBar(
-        containerColor = bgColor
-    ) {
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentDestination = navBackStackEntry?.destination
-
-        RootScreen.entries.forEach { item ->
-            NavigationBarItem(
-                modifier = Modifier.height(48.dp),
-                selected = currentDestination?.matchDestination(item.route) ?: false,
-                onClick = {
-                    val currentRoute = currentDestination?.parent?.route
-                    if (currentRoute == item.route) {
-                        navController.navigate(item.route) {
-                            popUpTo(item.route) { inclusive = true }
-                            launchSingleTop = true
-                        }
-                    } else {
-                        navController.navigate(item.route) {
-                            popUpTo(navController.graph.startDestinationId) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
-                    }
-                },
-                icon = {
-                    Icon(
-                        painterResource(item.iconRes),
-                        contentDescription = null,
-                        modifier = Modifier.size(28.dp)
-                    )
-                },
-                colors = NavigationBarItemDefaults.colors().copy(
-                    selectedIconColor = onSurfaceLight,
-                    selectedIndicatorColor = Color.Transparent,
-                    unselectedIconColor = accentColorLight,
-                ),
-            )
-        }
-    }
-}
-
-@Composable
-@Preview
-fun BottomBarPreview() {
-    AppTheme {
-        Surface {
-            Column(modifier = Modifier.background(surfaceLight)) {
-                Spacer(modifier = Modifier.size(30.dp))
-                BottomNavigationBar(navController = NavController(LocalContext.current))
-            }
-        }
-    }
-}
+//@Composable
+//fun BottomNavigationBar(bgColor: Color = Color.White) {
+//    val navController = rememberNavController()
+//    NavigationBar(
+//        containerColor = bgColor
+//    ) {
+//        val navBackStackEntry by navController.currentBackStackEntryAsState()
+//        val currentDestination = navBackStackEntry?.destination
+//
+//        RootScreen.entries.forEach { item ->
+//            NavigationBarItem(
+//                modifier = Modifier.height(48.dp),
+//                selected = currentDestination?.matchDestination(item.route) ?: false,
+//                onClick = {
+//                    val currentRoute = currentDestination?.parent?.route
+//                    if (currentRoute == item.route) {
+//                        navController.navigate(item.route) {
+//                            popUpTo(item.route) { inclusive = true }
+//                            launchSingleTop = true
+//                        }
+//                    } else {
+//                        navController.navigate(item.route) {
+//                            popUpTo(navController.graph.startDestinationId) {
+//                                saveState = true
+//                            }
+//                            launchSingleTop = true
+//                            restoreState = true
+//                        }
+//                    }
+//                },
+//                icon = {
+//                    Icon(
+//                        painterResource(item.iconRes),
+//                        contentDescription = null,
+//                        modifier = Modifier.size(28.dp)
+//                    )
+//                },
+//                colors = NavigationBarItemDefaults.colors().copy(
+//                    selectedIconColor = onSurfaceLight,
+//                    selectedIndicatorColor = Color.Transparent,
+//                    unselectedIconColor = accentColorLight,
+//                ),
+//            )
+//        }
+//    }
+//}
+//
+//@Composable
+//@Preview
+//fun BottomBarPreview() {
+//    AppTheme {
+//        Surface {
+//            Column(modifier = Modifier.background(surfaceLight)) {
+//                Spacer(modifier = Modifier.size(30.dp))
+//                BottomNavigationBar()
+//            }
+//        }
+//    }
+//}
 
 fun NavDestination?.matchDestination(route: String): Boolean {
     var currentDestination = this

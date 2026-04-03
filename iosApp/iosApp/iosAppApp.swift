@@ -59,11 +59,7 @@ struct UnauthorizedAppView: View {
             .navigationDestination(for: AuthRoute.self) { route in
                 switch route {
                 case .auth:
-                    AuthScreen(
-                        onLoginSuccess: {
-                            appState.isAuthorized = true
-                        }
-                    )
+                    SelecteCourseScreen()
                 case .splash:
                     EmptyView()
                 }
