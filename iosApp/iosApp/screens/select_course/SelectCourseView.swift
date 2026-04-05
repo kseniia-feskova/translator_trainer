@@ -50,10 +50,6 @@ struct SelecteCourseScreen: View {
                     }.frame(height: geo.size.height * 0.65)
                         .frame(maxHeight: .infinity, alignment: .bottom)
                 }
-                
-                if viewModel.state.isLoading {
-                    ProgressView().scaleEffect(2)
-                }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
 

@@ -1,6 +1,6 @@
 package presentation.model
 
-import presentation.utils.Language
+import presentation.Language
 import kotlinx.serialization.Serializable
 
 @Serializable

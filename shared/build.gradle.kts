@@ -5,8 +5,6 @@ import java.util.Properties
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
-    alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.android.library)
     alias(libs.plugins.ksp)
@@ -21,7 +19,7 @@ kotlin {
         }
     }
 
-    val xcfName = "sharedKit"
+    val xcfName = "Shared"
 
     iosX64()
     iosArm64()
@@ -30,7 +28,6 @@ kotlin {
     targets.withType<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget> {
         binaries.framework {
             baseName = xcfName
-            isStatic = true
         }
     }
 
@@ -60,7 +57,6 @@ kotlin {
                 implementation(libs.ktor.client.okhttp)
                 implementation(libs.datastore.preferences)
                 implementation(libs.room.runtime)
-                implementation(libs.bundles.compose)
                 implementation(libs.compose.material3)
                 implementation(libs.bundles.navigation)
                 implementation(libs.bundles.koin.android)

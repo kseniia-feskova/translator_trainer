@@ -1,11 +1,11 @@
 package domain.usecases.auth
 
-import android.util.Log
 import data.model.user.UserEntity
 import data.model.user.UserResult
 import data.repository.IUserRepository
 import data.translate.Language
 import data.translate.languageOf
+import domain.Logger
 import domain.translate.ITranslateModelProvider
 import domain.usecases.course.ICoursesOnPrefsUseCases
 import domain.usecases.course.IGetAllCoursesUseCase
@@ -43,7 +43,7 @@ class CheckUserUseCase(
                 languageOf(courses.first().sourceLanguage)?: Language.AUTO,
                 languageOf(courses.first().targetLanguage) ?: Language.AUTO
             ) {
-                Log.e("AuthVM", "Download model error $it")
+                Logger.e("AuthVM", "Download model error $it")
             }
             return UserResult.Existing(user)
         }

@@ -1,7 +1,5 @@
 package domain.usecases
 
-import java.util.UUID
-
 interface IAddSetWordCrossRefUseCase {
-    suspend fun invoke(wordID: UUID, setID: UUID)
+    suspend fun invoke(wordID: String, setID: String)
 }

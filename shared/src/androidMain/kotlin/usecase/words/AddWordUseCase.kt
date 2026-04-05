@@ -12,7 +12,7 @@ import domain.token.ITokenRefresher
 import domain.usecases.words.IAddWordUseCase
 import domain.usecases.words.IGetWordByOriginal
 import domain.usecases.words.IGetWordByTranslated
-import presentation.utils.GUEST_MAX_WORDS
+import presentation.GUEST_MAX_WORDS
 
 class AddWordUseCase(
     private val apiRepo: IWordApiRepository,

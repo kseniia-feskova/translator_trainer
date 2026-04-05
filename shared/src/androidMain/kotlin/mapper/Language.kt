@@ -1,6 +1,6 @@
 package mapper
 
-import presentation.utils.Language
+import presentation.Language
 
 fun Language.toData(): data.translate.Language {
     return when (this) {

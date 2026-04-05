@@ -6,7 +6,7 @@ import data.api.provideHttpClient
 import data.prefs.ITokenStorage
 import data.prefs.TokenStorage
 import org.koin.dsl.module
-import presentation.ui.screens.texts.TextRecognizer
+import presentation.TextRecognizer
 
 val networkModule = module {
 

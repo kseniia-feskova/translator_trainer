@@ -1,7 +1,7 @@
 package presentation.test
 
 import com.example.translatortrainer.shared.R
-import presentation.utils.Language
+import presentation.Language
 import presentation.model.CourseUI
 import presentation.model.Level
 import presentation.model.SetOfCards

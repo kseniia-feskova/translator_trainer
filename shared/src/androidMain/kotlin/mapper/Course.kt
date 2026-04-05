@@ -2,8 +2,8 @@ package mapper
 
 import data.model.course.CourseEntity
 import presentation.model.CourseUI
-import presentation.utils.getLanguageByCode
-import presentation.utils.getResourceByCode
+import presentation.getLanguageByCode
+import presentation.getResourceByCode
 
 fun CourseEntity.toUI(): CourseUI {
     return CourseUI(

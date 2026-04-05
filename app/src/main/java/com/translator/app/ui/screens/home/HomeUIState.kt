@@ -1,0 +1,33 @@
+package com.translator.app.ui.screens.home
+
+import androidx.annotation.StringRes
+import com.example.translatortrainer.shared.R
+import presentation.Language
+
+data class HomeUIState(
+    val loading: Boolean = false,
+    val inputText: String = "",
+    val translatedText: String = "",
+    val altTranslates: List<String>? = null,
+    val showGlow: Boolean = false,
+    val originalLanguage: Language? = null,
+    val resLanguage: Language? = null,
+    val isWordSaved: Boolean = false,
+    val error: HomeError? = null,
+    val limitsError: Boolean = false
+)
+
+sealed class HomeIntent {
+    data class InputText(val text: String) : HomeIntent()
+    object EnterText : HomeIntent()
+    object SaveWord : HomeIntent()
+    data class ChangeLanguages(val selectedLang: Language) : HomeIntent()
+    object HideLimitsError : HomeIntent()
+    data class AlterTranslateSave(val alterText: String) : HomeIntent()
+}
+
+enum class HomeError(@StringRes val msg: Int) {
+    INTERNET_CONNECTION_ERROR(R.string.internet_connection_error),
+    DEFAULT(R.string.default_error),
+    TRANSLATION_ERROR(R.string.error_translate)
+}

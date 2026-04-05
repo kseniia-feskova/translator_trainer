@@ -18,7 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
-import com.presentation.ui.AppTheme
+import com.translator.app.ui.AppTheme
 import com.translator.app.di.databaseModule
 import di.networkModule
 import com.translator.app.di.preferencesModule
@@ -31,7 +31,7 @@ import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.logger.Level
-import presentation.ui.app.TranslatorAppHost
+import com.translator.app.ui.app.TranslatorAppHost
 import presentation.viewmodel.GoogleSignUiEffect
 import presentation.viewmodel.MainViewModel
 import useCaseModule
