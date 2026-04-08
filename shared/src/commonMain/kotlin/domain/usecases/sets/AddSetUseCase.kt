@@ -5,7 +5,7 @@ import data.model.sets.SetResponse
 import data.prefs.IDataStoreManager
 import data.repository.set.ISetApiRepository
 import data.repository.set.ISetDaoRepository
-import domain.GuestLimitException
+import domain.utils.GuestLimitException
 import domain.cache.ISetsCacheProvider
 import domain.token.ICheckToken
 import domain.token.ITokenRefresher

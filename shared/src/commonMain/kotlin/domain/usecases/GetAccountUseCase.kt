@@ -1,7 +1,7 @@
 package domain.usecases
 
 import data.model.user.UserEntity
-import data.repository.IUserRepository
+import data.repository.user.IUserRepository
 import domain.token.ICheckToken
 import domain.token.ITokenRefresher
 

@@ -1,6 +1,5 @@
 package com.translator.app.ui.screens.account
 
-import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,7 +14,7 @@ import domain.usecases.auth.ILogoutUseCase
 import domain.usecases.auth.ISetGuestUseCase
 import domain.usecases.course.ICoursesOnPrefsUseCases
 import domain.usecases.sets.IGetAllSetsUseCase
-import domain.ALL_WORDS
+import domain.utils.ALL_WORDS
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
@@ -29,6 +28,7 @@ import domain.usecases.auth.IRegisterWithFirebaseUseCase
 import mapper.toData
 import mapper.toUI
 import presentation.viewmodel.MainUiEvent
+import androidx.core.net.toUri
 
 class AccountViewModel(
     coursePrefs: ICoursesOnPrefsUseCases,
@@ -84,7 +84,7 @@ class AccountViewModel(
                                 it.copy(
                                     loading = false,
                                     name = user.username,
-                                    image = if (user.photo == null) null else Uri.parse(user.photo)
+                                    image = if (user.photo == null) null else user.photo?.toUri()
                                 )
                             }
                         } else {

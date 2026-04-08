@@ -2,7 +2,7 @@ package domain.usecases.auth
 
 import data.model.auth.FirebaseAuthRequest
 import data.prefs.IDataStoreManager
-import data.repository.IAuthRepository
+import data.repository.auth.IAuthRepository
 
 class RegisterWithFirebaseUseCase(
     private val repo: IAuthRepository,

@@ -6,6 +6,10 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import data.prefs.IDataStoreManager
+import domain.usecases.auth.ICheckUserUseCase
+import domain.usecases.auth.ISetGuestUseCase
+import domain.usecases.course.ICoursesOnPrefsUseCases
+import domain.usecases.user.IListenUserIdUseCase
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,18 +18,14 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import mapper.toUI
 import network.INetworkConnectivityObserver
 import network.NetworkStatus
 import presentation.model.FirebaseUser
 import presentation.model.UserResult
-import domain.usecases.auth.ICheckUserUseCase
-import domain.usecases.auth.ILoginUseCase
-import domain.usecases.auth.ISetGuestUseCase
-import domain.usecases.course.ICoursesOnPrefsUseCases
-import mapper.toUI
 
 class MainViewModel(
-    private val login: ILoginUseCase,
+    private val listenUserId: IListenUserIdUseCase,
     private val guestUseCase: ISetGuestUseCase,
     private val coursesPrefs: ICoursesOnPrefsUseCases,
     private val networkObserver: INetworkConnectivityObserver,
@@ -107,7 +107,7 @@ class MainViewModel(
 
     private fun checkAutorization() {
         viewModelScope.launch {
-            login.listenUserId()
+            listenUserId.invoke()
                 .map { userId -> userId != null } // true, если userId не null
                 .distinctUntilChanged()
                 .collect { isAuthorized ->

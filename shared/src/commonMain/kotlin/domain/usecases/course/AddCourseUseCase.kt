@@ -4,12 +4,11 @@ import data.model.course.CourseEntity
 import data.model.course.add.AddCourseRequest
 import data.model.sets.AddSetRequest
 import data.prefs.IDataStoreManager
-import data.repository.ICourseRepository
+import data.repository.course.ICourseRepository
 import data.repository.set.ISetDaoRepository
-import domain.ALL_WORDS
+import domain.utils.ALL_WORDS
 import domain.token.ICheckToken
 import domain.token.ITokenRefresher
-import kotlinx.coroutines.flow.firstOrNull
 
 class AddCourseUseCase(
     private val repo: ICourseRepository,
@@ -35,7 +34,7 @@ class AddCourseUseCase(
             )
             Result.success(course)
         } else {
-            val userId = dataStore.listenUserId().firstOrNull()
+            val userId = dataStore.getUserId()
             if (userId == null) {
                 println("handleContinue: UserId is null")
                 return Result.failure(Exception("UserId is null"))

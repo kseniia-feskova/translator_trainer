@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		DE3659E12F83EB160021D3AA /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = DE3659E02F83EB160021D3AA /* SQLite */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		DEF894522E96F5FB001B29C1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -65,6 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DE3659E12F83EB160021D3AA /* SQLite in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -126,6 +131,7 @@
 			);
 			name = iosApp;
 			packageProductDependencies = (
+				DE3659E02F83EB160021D3AA /* SQLite */,
 			);
 			productName = iosApp;
 			productReference = DEF894432E96F5FA001B29C1 /* iosApp.app */;
@@ -209,6 +215,9 @@
 			);
 			mainGroup = DEF8943A2E96F5FA001B29C1;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				DE3659DF2F83EB160021D3AA /* XCRemoteSwiftPackageReference "SQLite.swift" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = DEF894442E96F5FA001B29C1 /* Products */;
 			projectDirPath = "";
@@ -624,6 +633,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		DE3659DF2F83EB160021D3AA /* XCRemoteSwiftPackageReference "SQLite.swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/stephencelis/SQLite.swift.git";
+			requirement = {
+				kind = upToNextMinorVersion;
+				minimumVersion = 0.16.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		DE3659E02F83EB160021D3AA /* SQLite */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DE3659DF2F83EB160021D3AA /* XCRemoteSwiftPackageReference "SQLite.swift" */;
+			productName = SQLite;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = DEF8943B2E96F5FA001B29C1 /* Project object */;
 }

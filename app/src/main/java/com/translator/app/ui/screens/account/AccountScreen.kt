@@ -60,7 +60,7 @@ import com.translator.app.ui.screens.auth.AuthUIState
 import com.translator.app.ui.screens.auth.RegisterForm
 import com.translator.app.ui.views.AccountTopView
 import com.translator.app.ui.views.buttons.CustomShadowButton
-import presentation.GUEST_MAX_WORDS
+import GUEST_MAX_WORDS
 
 @Composable
 fun AccountScreen(

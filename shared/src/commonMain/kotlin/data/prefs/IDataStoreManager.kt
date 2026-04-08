@@ -1,10 +1,9 @@
 package data.prefs
 
 import data.model.course.CourseEntity
-import kotlinx.coroutines.flow.Flow
 
+// simple local data storage
 interface IDataStoreManager {
-    fun listenUserId(): Flow<String?>
 
     suspend fun saveUserId(id: String?)
     suspend fun getUserId(): String?
@@ -17,7 +16,6 @@ interface IDataStoreManager {
 
     suspend fun setGuestMode()
     suspend fun isGuest(): Boolean
-    fun isGuestOnRuntime(): Boolean?
     suspend fun resetGuestMode()
 
     suspend fun saveEmail(email: String)

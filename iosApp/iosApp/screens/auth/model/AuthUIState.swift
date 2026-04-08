@@ -16,5 +16,12 @@ struct AuthUIState {
     var password: String = ""
     var error: AuthError?
     var screenState: AuthScreenState = AuthScreenState.login
-    var isLoading: Bool = false
+    var isLoading: Bool = false;
+    
+    func fieldsValid() -> Bool {
+        if email.isEmpty || password.isEmpty {
+            return false
+        }
+        return true
+    }
 }

@@ -30,7 +30,7 @@ import com.translator.app.ui.gradientBrush
 import com.presentation.ui.views.Loader
 import com.presentation.ui.views.SearchBarView
 import com.translator.app.ui.yellowColor
-import domain.ALL_WORDS
+import domain.utils.ALL_WORDS
 import presentation.model.Level
 import presentation.model.WordUI
 import presentation.model.WordViewData

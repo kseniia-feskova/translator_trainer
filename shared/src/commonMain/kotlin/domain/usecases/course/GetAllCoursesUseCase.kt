@@ -1,7 +1,7 @@
 package domain.usecases.course
 
 import data.model.course.CourseEntity
-import data.repository.ICourseRepository
+import data.repository.course.ICourseRepository
 import domain.token.ICheckToken
 import domain.token.TokenRefresher
 

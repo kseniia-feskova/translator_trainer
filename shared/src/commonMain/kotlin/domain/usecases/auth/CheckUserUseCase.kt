@@ -2,7 +2,7 @@ package domain.usecases.auth
 
 import data.model.user.UserEntity
 import data.model.user.UserResult
-import data.repository.IUserRepository
+import data.repository.user.IUserRepository
 import data.translate.Language
 import data.translate.languageOf
 import domain.Logger

@@ -1,11 +1,13 @@
 package domain.usecases.auth
 
 import data.prefs.IDataStoreManager
-import data.repository.IAuthRepository
-import kotlinx.coroutines.flow.Flow
+import data.repository.auth.IAuthRepository
+import domain.Logger
 
-class LoginUseCase(private val repo: IAuthRepository, private val dataStore: IDataStoreManager) :
-    ILoginUseCase {
+class LoginUseCase(
+    private val repo: IAuthRepository,
+    private val dataStore: IDataStoreManager
+) : ILoginUseCase {
 
     override suspend fun invoke(email: String, username: String, password: String): Result<String> {
         val response = repo.login(email, username, password)
@@ -16,6 +18,7 @@ class LoginUseCase(private val repo: IAuthRepository, private val dataStore: IDa
         } else {
             val userId = response.data?.uuid
             if (userId != null) {
+                Logger.e("LoginUseCase", "success = $userId")
                 dataStore.saveCourse(null)
                 dataStore.saveUserId(userId)
                 Result.success(userId)
@@ -23,9 +26,5 @@ class LoginUseCase(private val repo: IAuthRepository, private val dataStore: IDa
                 Result.failure(Exception("User does not exist"))
             }
         }
-    }
-
-    override fun listenUserId(): Flow<String?> {
-        return dataStore.listenUserId()
     }
 }

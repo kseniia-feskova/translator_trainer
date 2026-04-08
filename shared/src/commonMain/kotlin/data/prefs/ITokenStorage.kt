@@ -1,5 +1,6 @@
 package data.prefs
 
+// encrypted local storage
 interface ITokenStorage {
 
     fun saveToken(key: String, token: String)

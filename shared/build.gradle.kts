@@ -1,4 +1,3 @@
-import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.util.Properties
@@ -58,6 +57,7 @@ kotlin {
                 implementation(libs.datastore.preferences)
                 implementation(libs.room.runtime)
                 implementation(libs.compose.material3)
+                implementation(libs.security)
                 implementation(libs.bundles.navigation)
                 implementation(libs.bundles.koin.android)
                 implementation(libs.bundles.google.auth)

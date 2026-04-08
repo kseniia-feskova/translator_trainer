@@ -5,46 +5,29 @@
 //  Created by  Kseniia Feskova on 08.10.2025.
 //
 
+
+/*
+ private val login: ILoginUseCase,
+     private val register: IRegisterUseCase,
+     private val registerByFirebase: IRegisterWithFirebaseUseCase,
+     private val getCourses: IGetAllCoursesUseCase,
+     private val coursesPrefs: ICoursesOnPrefsUseCases,
+     private val guestPrefs: ISetGuestUseCase,
+     private val translatorProvider: ITranslateModelProvider
+ */
+
 import SwiftUI
 import Combine
 import Shared
 
 final class AuthViewModel: ObservableObject {
     
-    /*
-     private val login: ILoginUseCase,
-         private val register: IRegisterUseCase,
-         private val registerByFirebase: IRegisterWithFirebaseUseCase,
-         private val getCourses: IGetAllCoursesUseCase,
-         private val coursesPrefs: ICoursesOnPrefsUseCases,
-         private val guestPrefs: ISetGuestUseCase,
-         private val translatorProvider: ITranslateModelProvider
-     */
+    private let loginUseCase: ILoginUseCase = Shared.KoinHelper().getLoginUseCase()
     
-    private let loginUseCase: LoginUseCaseWrapper
     
     @Published var state: AuthUIState = AuthUIState()
     
     let event = PassthroughSubject<AuthEvent, Never>()
-    /**
-     private fun handleAuth(
-            goToCourses: () -> Unit,
-            goToHome: () -> Unit,
-            goToVerification: () -> Unit
-        ) {
-            val state = _uiState.value
-            if (state.fieldsValid()) {
-                _uiState.update { it.copy(isLoading = true) }
-                when (state.screenState) {
-                    AuthScreenState.LOGIN -> login(state, goToCourses, goToHome)
-                    AuthScreenState.REGISTER -> register(state, goToCourses, goToVerification)
-                }
-            } else {
-                _uiState.update { it.copy(error = AuthError.EMPTY_FIELDS) }
-            }
-            _uiState.update { it.copy(isLoading = false) }
-        }*/
-    
       
     func authClicked() {
         if(self.state.fieldsValid()){
@@ -61,7 +44,7 @@ final class AuthViewModel: ObservableObject {
     }
     
     func login() {
-        loginUseCase.login(
+        loginUseCase.invoke(
             email: state.email,
             username: state.email,
             password: state.password
@@ -81,6 +64,26 @@ final class AuthViewModel: ObservableObject {
             }
         }
     }
+    
+    
+    /**
+     private fun handleAuth(
+            goToCourses: () -> Unit,
+            goToHome: () -> Unit,
+            goToVerification: () -> Unit
+        ) {
+            val state = _uiState.value
+            if (state.fieldsValid()) {
+                _uiState.update { it.copy(isLoading = true) }
+                when (state.screenState) {
+                    AuthScreenState.LOGIN -> login(state, goToCourses, goToHome)
+                    AuthScreenState.REGISTER -> register(state, goToCourses, goToVerification)
+                }
+            } else {
+                _uiState.update { it.copy(error = AuthError.EMPTY_FIELDS) }
+            }
+            _uiState.update { it.copy(isLoading = false) }
+        }*/
     
     func register(){
     

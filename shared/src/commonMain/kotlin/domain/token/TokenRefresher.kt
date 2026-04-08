@@ -1,8 +1,9 @@
 package domain.token
 
 import data.prefs.IDataStoreManager
+import data.prefs.ILocalDatabase
 import data.prefs.ITokenStorage
-import data.repository.IAuthRepository
+import data.repository.auth.IAuthRepository
 import domain.cache.ISetsCacheProvider
 
 class TokenRefresher(
@@ -10,6 +11,7 @@ class TokenRefresher(
     private val tokenStorage: ITokenStorage,
     private val cache: ISetsCacheProvider,
     private val prefs: IDataStoreManager,
+    private val localDatabase: ILocalDatabase
 ) : ITokenRefresher {
 
     override suspend fun refreshToken(): Boolean {
@@ -27,6 +29,7 @@ class TokenRefresher(
                 if (response.errorMsg == ERROR_TOKEN_EXPIRED) {
                     println("refreshToken: Code = 401")
                     authRepo.logout()
+                    localDatabase.clearDatabase()
                     cache.clear()
                     prefs.saveUserId(null)
                 } else {
@@ -37,11 +40,13 @@ class TokenRefresher(
         } else {
             println("refreshToken: Token is null(")
             authRepo.logout()
+            localDatabase.clearDatabase()
             cache.updateSets(null)
             prefs.saveUserId(null)
             return false
         }
     }
+
     companion object {
         const val ACCESS_TOKEN = "accessToken"
         const val REFRESH_TOKEN = "refreshToken"

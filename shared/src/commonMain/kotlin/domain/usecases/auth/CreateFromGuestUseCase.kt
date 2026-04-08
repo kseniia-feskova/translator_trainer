@@ -3,11 +3,11 @@ package domain.usecases.auth
 import data.model.course.CourseEntity
 import data.model.sets.SetResponse
 import data.repository.word.IWordDaoRepository
-import domain.ALL_WORDS
-import domain.CanNotCreateCourseException
-import domain.CanNotCreateSetException
-import domain.CanNotCreateUserException
-import domain.WordDoesNotExist
+import domain.utils.ALL_WORDS
+import domain.utils.CanNotCreateCourseException
+import domain.utils.CanNotCreateSetException
+import domain.utils.CanNotCreateUserException
+import domain.utils.WordDoesNotExist
 import domain.usecases.course.IAddCourseUseCase
 import domain.usecases.sets.IAddSetUseCase
 import domain.usecases.sets.IGetAllSetsUseCase

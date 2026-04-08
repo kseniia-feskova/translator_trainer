@@ -1,11 +1,8 @@
 package domain.usecases.auth
 
-import kotlinx.coroutines.flow.Flow
-
 interface ILoginUseCase {
     suspend fun invoke(email: String, username: String, password: String): Result<String>
 
-    fun listenUserId(): Flow<String?>
 }
 
 /*

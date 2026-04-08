@@ -11,7 +11,7 @@ import data.room.model.SetOfWords
 import data.room.model.SetWithWords
 import data.room.model.SetWordCrossRef
 import data.room.model.WordEntity
-import domain.ALL_WORDS
+import domain.utils.ALL_WORDS
 import kotlinx.coroutines.flow.Flow
 
 /*

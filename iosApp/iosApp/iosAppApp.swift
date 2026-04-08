@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Shared
 
 final class AppState: ObservableObject {
     @Published var isAuthorized: Bool = false
@@ -14,7 +15,17 @@ final class AppState: ObservableObject {
 @main
 struct iosAppApp: App {
     @AppStorage("isLoggedIn") var isLoggedIn = false
-
+    
+    init() {
+        do {
+            let storage = TokenStorage()
+            let database = try LocalDatabase()
+            KoinKt.doInitKoin(tokenStorage: storage, localDataBase: database)
+        } catch {
+            print("Database error: \(error)")
+        }
+     }
+        
     var body: some Scene {
         WindowGroup { RootView() }
     }
@@ -39,6 +50,7 @@ struct RootView: View {
 enum AuthRoute: Hashable {
     case splash
     case auth
+    case selectCourse
 }
 
 struct UnauthorizedAppView: View {
@@ -58,10 +70,15 @@ struct UnauthorizedAppView: View {
             
             .navigationDestination(for: AuthRoute.self) { route in
                 switch route {
+                
                 case .auth:
-                    SelecteCourseScreen()
+                    AuthScreen()
+                
                 case .splash:
                     EmptyView()
+                    
+                case .selectCourse:
+                    SelecteCourseScreen()
                 }
             }
         }

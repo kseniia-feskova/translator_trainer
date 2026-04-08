@@ -1,7 +1,7 @@
 package domain.usecases.auth
 
 import data.prefs.IDataStoreManager
-import data.repository.IAuthRepository
+import data.repository.auth.IAuthRepository
 
 class RegisterUseCase(
     private val repo: IAuthRepository,

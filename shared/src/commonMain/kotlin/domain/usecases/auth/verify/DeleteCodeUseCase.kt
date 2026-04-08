@@ -1,7 +1,7 @@
 package domain.usecases.auth.verify
 
 import data.prefs.IDataStoreManager
-import data.repository.IAuthRepository
+import data.repository.auth.IAuthRepository
 
 class DeleteCodeUseCase(
     private val dataStore: IDataStoreManager,

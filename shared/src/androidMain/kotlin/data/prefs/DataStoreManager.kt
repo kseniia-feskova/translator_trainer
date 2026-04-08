@@ -5,7 +5,6 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.json.Json
@@ -19,20 +18,7 @@ class DataStoreManager(private val context: Context) : IDataStoreManager {
     private val emailKey = stringPreferencesKey("email")
     private val isGuestKey = booleanPreferencesKey("is_guest")
     private val isOfflineMode = booleanPreferencesKey("is_offline")
-    private var isGuest: Boolean? = null
-
-    private val userId: Flow<String?> = context.dataStore.data
-        .map { preferences ->
-            if (preferences[userIdKey].isNullOrEmpty()) {
-                null
-            } else {
-                preferences[userIdKey]
-            }
-        }
-
-    private val coursesList = mutableListOf<data.model.course.CourseEntity>()
-
-    override fun listenUserId(): Flow<String?> = userId
+    private val coursesList = mutableListOf<data.model.course.CourseEntity>() //why?
 
     override suspend fun saveUserId(id: String?) {
         context.dataStore.edit { preferences ->
@@ -66,23 +52,16 @@ class DataStoreManager(private val context: Context) : IDataStoreManager {
     override fun getCourses(): List<data.model.course.CourseEntity> = coursesList.toList()
 
     override suspend fun setGuestMode() {
-        isGuest = true
         context.dataStore.edit { preferences ->
             preferences[isGuestKey] = true
         }
     }
 
     override suspend fun isGuest(): Boolean {
-        isGuest = context.dataStore.data.map { prefs -> prefs[isGuestKey] }.firstOrNull() ?: false
-        return isGuest == true
-    }
-
-    override fun isGuestOnRuntime(): Boolean? {
-        return isGuest
+        return context.dataStore.data.map { prefs -> prefs[isGuestKey] }.firstOrNull() ?: false
     }
 
     override suspend fun resetGuestMode() {
-        this.isGuest = false
         context.dataStore.edit { preferences ->
             preferences[isGuestKey] = false
         }
