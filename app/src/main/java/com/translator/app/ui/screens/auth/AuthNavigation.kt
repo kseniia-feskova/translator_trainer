@@ -4,6 +4,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -47,6 +48,17 @@ fun AuthRoute(
     viewModel: AuthViewModel = koinViewModel()
 ) {
     val state = viewModel.uiState.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.navigation.collect { nav ->
+            when (nav) {
+                AuthNav.ToCourses -> goToCourses()
+                AuthNav.ToHome -> goToHome()
+                AuthNav.ToVerification -> goToVerification()
+            }
+        }
+    }
+
     AuthScreen(
         state = state.value,
         onEmailChanged = { viewModel.handleIntent(AuthIntent.OnEmailChanged(it)) },

@@ -10,7 +10,7 @@ import Shared
 
 struct AuthScreen: View {
     
-    @StateObject private var viewModel = AuthViewModel()
+    @StateObject private var viewModel = AuthViewModel(loginUseCase: KoinHelper().getLoginUseCase())
     
     @State private var showDialog = false
     

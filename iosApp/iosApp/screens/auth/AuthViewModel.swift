@@ -22,8 +22,11 @@ import Shared
 
 final class AuthViewModel: ObservableObject {
     
-    private let loginUseCase: ILoginUseCase = Shared.KoinHelper().getLoginUseCase()
+    private let loginUseCase: ILoginUseCase
     
+    init(loginUseCase: ILoginUseCase) {
+        self.loginUseCase = loginUseCase
+    }
     
     @Published var state: AuthUIState = AuthUIState()
     
