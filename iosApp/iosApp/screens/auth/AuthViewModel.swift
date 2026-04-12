@@ -5,110 +5,20 @@
 //  Created by  Kseniia Feskova on 08.10.2025.
 //
 
-
-/*
- private val login: ILoginUseCase,
-     private val register: IRegisterUseCase,
-     private val registerByFirebase: IRegisterWithFirebaseUseCase,
-     private val getCourses: IGetAllCoursesUseCase,
-     private val coursesPrefs: ICoursesOnPrefsUseCases,
-     private val guestPrefs: ISetGuestUseCase,
-     private val translatorProvider: ITranslateModelProvider
- */
-
 import SwiftUI
 import Combine
 import Shared
 
+@MainActor
 final class AuthViewModel: ObservableObject {
     
-    private let loginUseCase: ILoginUseCase
-    
-    init(loginUseCase: ILoginUseCase) {
-        self.loginUseCase = loginUseCase
-    }
-    
     @Published var state: AuthUIState = AuthUIState()
+
+    private lazy var interactor: AuthInteractor = {
+        KoinHelper().getAuthInteractor()
+    }()
     
     let event = PassthroughSubject<AuthEvent, Never>()
-      
-    func authClicked() {
-        if(self.state.fieldsValid()){
-            state.isLoading = true
-            switch(state.screenState){
-            case .login: login()
-            case .register: register()
-            }
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            self.state.isLoading = false
-            self.event.send(.goToSelectCourse)
-        }
-    }
-    
-    func login() {
-        loginUseCase.invoke(
-            email: state.email,
-            username: state.email,
-            password: state.password
-        ) { userId, error in
-            
-            if let error = error {
-                print("Error: \(error)")
-                return
-            }
-            
-            if(error != nil) {
-                self.handlerError()
-            }
-
-            if let userId = userId {
-                print("Success: \(userId)")
-            }
-        }
-    }
-    
-    
-    /**
-     private fun handleAuth(
-            goToCourses: () -> Unit,
-            goToHome: () -> Unit,
-            goToVerification: () -> Unit
-        ) {
-            val state = _uiState.value
-            if (state.fieldsValid()) {
-                _uiState.update { it.copy(isLoading = true) }
-                when (state.screenState) {
-                    AuthScreenState.LOGIN -> login(state, goToCourses, goToHome)
-                    AuthScreenState.REGISTER -> register(state, goToCourses, goToVerification)
-                }
-            } else {
-                _uiState.update { it.copy(error = AuthError.EMPTY_FIELDS) }
-            }
-            _uiState.update { it.copy(isLoading = false) }
-        }*/
-    
-    func register(){
-    
-    }
-    
-    /**
-     private fun <T> handleError(response: Result<T>) {
-            val error = response.exceptionOrNull()
-            val errorMsg = when (error?.message) {
-                "Wrong password" -> AuthError.WRONG_PASSWORD
-                "User does not exist" -> AuthError.USER_DOES_NOT_EXIST
-                "User already exists" -> AuthError.EMAIL_TAKEN
-                "Failed to connect" -> AuthError.INTERNET_CONNECTION_ERROR
-                else -> AuthError.DEFAULT
-            }
-            _uiState.update { it.copy(error = errorMsg, isLoading = false) }
-        }
-     */
-    
-    func handlerError(){
-        
-    }
     
     func toggleAuthState() {
         withAnimation(.easeInOut(duration: 0.5)) {
@@ -123,8 +33,125 @@ final class AuthViewModel: ObservableObject {
     func onPasswordChanged(_ value: String){
         state.password = value
     }
+      
+    func authClicked() {
+        guard state.fieldsValid() else {
+            state.error = AuthError.emptyFields
+            return
+        }
+            
+        state.isLoading = true
+            
+        switch state.screenState {
+        case .login:
+            Task { await login() }
+        case .register:
+            Task { await register() }
+        }
+    }
+    
+    func login() async {
+        do {
+            let result = try await loginAsync(
+                email: state.email,
+                password: state.password
+            )
+            
+            handle(result: result)
+            
+        } catch {
+            print("Error: \(error)")
+            state.isLoading = false
+        }
+    }
+    
+    func loginAsync(email: String, password: String) async throws -> AuthResult {
+        return try await withCheckedThrowingContinuation { continuation in
+            interactor.login(
+                email: email,
+                password: password
+            ) { result, error in
+                
+                if let result = result {
+                    continuation.resume(returning: result as! AuthResult)
+                } else if let error = error {
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+    }
+    
+    func register() async {
+        print("AuthVM, register")
+    }
+    
+    func handle(result: AuthResult) {
+        state.isLoading = false
+        
+        switch result {
+            
+        case is AuthResult.Success:
+            navigateToCourses()
+            
+        case is AuthResult.NeedsCourseSelection:
+            navigateToCourses()
+            
+        case is AuthResult.NeedsVerification:
+            navigateToVerification()
+            
+        case let error as AuthResult.Error:
+            state.error = mapError(error.error)
+            
+        case let home as AuthResult.GoToHome:
+           // downloadModel(course: home.course) - TODO
+            navigateToHome()
+            
+        default:
+            break
+        }
+    }
+    
+    func navigateToCourses() {
+        event.send(.goToSelectCourse)
+    }
 
+    func navigateToHome() {
+        event.send(.goToHome)
+    }
 
+    func navigateToVerification() {
+       // event.send(.goToVerification) - TODO
+    }
+    
+    func mapError(_ error: BaseAuthError) -> AuthError {
+        switch error {
+        case .emptyFields: return .emptyFields
+        case .wrongPassword: return .wrongPassword
+        case .userDoesNotExist: return .userDoesNotExist
+        case .emailTaken: return .emailTaken
+        case .internetConnectionError: return .internetConnectionError
+        default: return .defaultError
+        }
+    }
+    
 }
 
-
+enum AuthError: Error {
+    case emptyFields
+    case wrongPassword
+    case userDoesNotExist
+    case emailTaken
+    case internetConnectionError
+    case defaultError
+    
+    var message: String {
+        switch self {
+        case .emptyFields: return "Please fill in all fields"
+        case .wrongPassword: return "Incorrect password"
+        case .userDoesNotExist: return "User does not exist"
+        case .emailTaken: return "User with this e-mail is already exist"
+        case .internetConnectionError: return "Check your internet connection"
+        case .defaultError: return "Something went wrong"
+        }
+    }
+}

@@ -9,8 +9,8 @@ import SwiftUI
 import Shared
 
 struct AuthScreen: View {
-    
-    @StateObject private var viewModel = AuthViewModel(loginUseCase: KoinHelper().getLoginUseCase())
+        
+    @StateObject private var viewModel = AuthViewModel()
     
     @State private var showDialog = false
     

@@ -6,18 +6,6 @@
 //
 import SwiftUI
 
-enum AuthError: Error {
-    case emptyFields
-    case wrongPassword
-    
-    var message: String {
-        switch self {
-        case .emptyFields: return "Please fill in all fields"
-        case .wrongPassword: return "Incorrect password"
-        }
-    }
-}
-
 struct LoginFormView: View {
     
     @State private var passwordVisible = false

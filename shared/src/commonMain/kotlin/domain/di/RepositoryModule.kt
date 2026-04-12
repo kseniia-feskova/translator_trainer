@@ -10,11 +10,15 @@ import data.repository.user.IUserRepository
 import data.repository.user.UserRepository
 import data.repository.word.IWordApiRepository
 import data.repository.word.WordApiRepository
+import domain.token.CheckToken
+import domain.token.ICheckToken
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val repositoryModule = module {
+
+    singleOf(::CheckToken) bind ICheckToken::class
 
     singleOf(::WordApiRepository) bind IWordApiRepository::class
 

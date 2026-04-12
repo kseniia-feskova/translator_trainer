@@ -5,12 +5,10 @@ import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import data.prefs.DataStoreManager
-import data.CheckToken
 import data.prefs.IDataStoreManager
 import data.prefs.ITokenStorage
 import data.prefs.TokenStorage
 import domain.NetworkConnectivityObserver
-import domain.token.ICheckToken
 import domain.usecases.user.IListenUserIdUseCase
 import network.INetworkConnectivityObserver
 import org.koin.core.module.dsl.singleOf
@@ -23,7 +21,6 @@ import usecase.ListenUserIdUseCase
 val preferencesModule = module {
     singleOf(::ListenUserIdUseCase) bind IListenUserIdUseCase::class
     singleOf(::DataStoreManager) bind IDataStoreManager::class
-    singleOf(::CheckToken) bind ICheckToken::class
     singleOf(::UiDataManager) bind IUiDataManager::class
     //TODO: Update with SharedPreferences + own cypher
     single<SharedPreferences> {

@@ -15,7 +15,7 @@ import io.ktor.client.request.header
 import io.ktor.serialization.kotlinx.json.json
 
 actual object AppConfig {
-    actual val BASE_URL: String = "https://your-production-api.com/"
+    actual val BASE_URL: String = "http://localhost:8080/api/"
 }
 
 actual fun provideHttpClient(tokenProvider: ITokenStorage): HttpClient {

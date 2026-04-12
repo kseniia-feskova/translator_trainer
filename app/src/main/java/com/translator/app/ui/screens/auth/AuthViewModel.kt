@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import mapper.toData
 import presentation.auth.AuthInteractor
 import presentation.auth.AuthResult
 import presentation.auth.BaseAuthError
@@ -117,7 +116,7 @@ class AuthViewModel(
             return
         }
         viewModelScope.launch {
-            handleAuthResult(interactor.loginWithGoogle(firebaseUser.toData()))
+          //  handleAuthResult(interactor.loginWithGoogle(firebaseUser.toData()))
         }
     }
 

@@ -1,10 +1,8 @@
 package presentation.auth
 
-import data.model.auth.FirebaseAuthRequest
 import data.model.course.CourseEntity
 import domain.usecases.auth.ILoginUseCase
 import domain.usecases.auth.IRegisterUseCase
-import domain.usecases.auth.IRegisterWithFirebaseUseCase
 import domain.usecases.auth.ISetGuestUseCase
 import domain.usecases.course.ICoursesOnPrefsUseCases
 import domain.usecases.course.IGetAllCoursesUseCase
@@ -12,7 +10,7 @@ import domain.usecases.course.IGetAllCoursesUseCase
 class AuthInteractor(
     private val login: ILoginUseCase,
     private val register: IRegisterUseCase,
-    private val registerByFirebase: IRegisterWithFirebaseUseCase,
+    //private val registerByFirebase: IRegisterWithFirebaseUseCase, TODO: Find the solution for ios
     private val getCourses: IGetAllCoursesUseCase,
     private val coursesPrefs: ICoursesOnPrefsUseCases,
     private val guestPrefs: ISetGuestUseCase
@@ -44,18 +42,18 @@ class AuthInteractor(
         return AuthResult.Success
     }
 
-    suspend fun loginWithGoogle(data: FirebaseAuthRequest): AuthResult {
-        val response = registerByFirebase.invoke(data)
-
-        if (!response.isSuccess) {
-            return mapError(response)
-        }
-
-        val userId = response.getOrNull()
-            ?: return AuthResult.Error(BaseAuthError.USER_DOES_NOT_EXIST)
-
-        return checkCourses(userId)
-    }
+//    suspend fun loginWithGoogle(data: FirebaseAuthRequest): AuthResult {
+//        val response = registerByFirebase.invoke(data)
+//
+//        if (!response.isSuccess) {
+//            return mapError(response)
+//        }
+//
+//        val userId = response.getOrNull()
+//            ?: return AuthResult.Error(BaseAuthError.USER_DOES_NOT_EXIST)
+//
+//        return checkCourses(userId)
+//    }
 
     suspend fun continueAsGuest(): AuthResult {
         guestPrefs.setGuest()

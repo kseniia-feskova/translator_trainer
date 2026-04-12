@@ -20,7 +20,8 @@ struct iosAppApp: App {
         do {
             let storage = TokenStorage()
             let database = try LocalDatabase()
-            KoinKt.doInitKoin(tokenStorage: storage, localDataBase: database)
+            let dataStorage = DataStoreManagerIOS()
+            KoinKt.doInitKoin(tokenStorage: storage, localDataBase: database, dataStorageManager : dataStorage)
         } catch {
             print("Database error: \(error)")
         }

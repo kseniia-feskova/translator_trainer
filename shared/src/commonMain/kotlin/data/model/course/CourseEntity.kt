@@ -7,6 +7,7 @@ data class CourseEntity(
     val id: String,
     val sourceLanguage: String,
     val targetLanguage: String,
+    val userId: String? = null,
     val allWordsId: String? = null,
     val selectedSetId: String? = null,
 )
