@@ -47,7 +47,7 @@ struct AuthScreen: View {
                                     error: viewModel.state.error,
                                     onEmailChanged: viewModel.onEmailChanged,
                                     onPasswordChanged: viewModel.onPasswordChanged,
-                                    onLoginClicked: viewModel.authClicked,
+                                    onLoginClicked: viewModel.handleAuth,
                                     onGuestClicked: { showDialog = true },
                                     onCreateAccountClicked: viewModel.toggleAuthState,
                                     
@@ -63,7 +63,7 @@ struct AuthScreen: View {
                                     error: viewModel.state.error,
                                     onEmailChanged: viewModel.onEmailChanged,
                                     onPasswordChanged: viewModel.onPasswordChanged,
-                                    onRegisterClicked: viewModel.authClicked,
+                                    onRegisterClicked: viewModel.handleAuth,
                                     onGuestClicked: { showDialog = true },
                                     onLoginClicked: viewModel.toggleAuthState
                                 )
@@ -88,7 +88,7 @@ struct AuthScreen: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(AppColor.background.edgesIgnoringSafeArea(.all))
         .alert("Гостевой режим!", isPresented: $showDialog) {
-            Button("Войти") { goToCourses() }
+            Button("Войти") { Task { await viewModel.handleGuest() } }
             Button("Отмена", role: .cancel) { }
         } message: {
             Text("Вы заходите как гость, а значит функционал будет ограничен.\nПо желанию, Вы сможете создать аккаунт и сберечь все данные.\nПриятного пользования.")

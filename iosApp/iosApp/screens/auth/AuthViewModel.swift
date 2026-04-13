@@ -34,7 +34,7 @@ final class AuthViewModel: ObservableObject {
         state.password = value
     }
       
-    func authClicked() {
+    func handleAuth() {
         guard state.fieldsValid() else {
             state.error = AuthError.emptyFields
             return
@@ -73,7 +73,7 @@ final class AuthViewModel: ObservableObject {
             ) { result, error in
                 
                 if let result = result {
-                    continuation.resume(returning: result as! AuthResult)
+                    continuation.resume(returning: result)
                 } else if let error = error {
                     continuation.resume(throwing: error)
                 }
@@ -83,6 +83,54 @@ final class AuthViewModel: ObservableObject {
     
     func register() async {
         print("AuthVM, register")
+        do {
+            let result = try await registerAsync(
+                email: state.email,
+                password: state.password
+            )
+            handle(result: result)
+        } catch {
+            print("Error: \(error)")
+            state.isLoading = false
+        }
+    }
+    
+    func registerAsync(email: String, password: String) async throws -> AuthResult {
+        return try await withCheckedThrowingContinuation { continuation in
+            interactor.register(
+                email: email,
+                password: password
+            ) { result, error in
+                
+                if let result = result {
+                    continuation.resume(returning: result)
+                } else if let error = error {
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+    }
+    
+    func handleGuest() async {
+        do {
+            let result = try await handleGuestAsync()
+            handle(result: result)
+        } catch {
+            print("Error: \(error)")
+            state.isLoading = false
+        }
+    }
+    
+    func handleGuestAsync() async throws -> AuthResult {
+        return try await withCheckedThrowingContinuation { continuation in
+            interactor.continueAsGuest() { result, error in
+                if let result = result {
+                    continuation.resume(returning: result)
+                } else if let error = error {
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
     }
     
     func handle(result: AuthResult) {
@@ -102,7 +150,7 @@ final class AuthViewModel: ObservableObject {
         case let error as AuthResult.Error:
             state.error = mapError(error.error)
             
-        case let home as AuthResult.GoToHome:
+        case is AuthResult.GoToHome:
            // downloadModel(course: home.course) - TODO
             navigateToHome()
             
@@ -112,6 +160,7 @@ final class AuthViewModel: ObservableObject {
     }
     
     func navigateToCourses() {
+        print("AuthVM message: navigateToCourses")
         event.send(.goToSelectCourse)
     }
 
